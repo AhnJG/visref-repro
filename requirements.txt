@@ -1,0 +1,11 @@
+# GPU runs (Kaggle T4, image torch 2.11.0+cu128; Colab torch 2.11.0+cu130) -- recorded per session in env.json
+torch==2.11.0
+transformers==4.55.0
+huggingface_hub
+pandas
+pyarrow
+pillow
+timm
+einops
+# offline analysis only needs the Python standard library (rescore/report/summarize/llm_extract)
+# kaggle API (optional, for push/pull):  pip install kaggle

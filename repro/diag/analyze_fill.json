@@ -1,0 +1,186 @@
+{
+ "reading_fill": "v3 + LLM",
+ "n_prefix": 976,
+ "n_fill_rows": 994,
+ "acc": {
+  "st": 57.79,
+  "tsr": 60.04,
+  "visref_raw_rank": 59.94,
+  "visref_fill": 60.04
+ },
+ "pairs": {
+  "visref_fill-tsr": {
+   "diff_pp": 0.0,
+   "ci95_pp": [
+    -2.15,
+    2.36
+   ],
+   "a_only": 70,
+   "b_only": 70,
+   "p_mcnemar": 1.0
+  },
+  "visref_fill-visref_raw_rank": {
+   "diff_pp": 0.1,
+   "ci95_pp": [
+    -2.15,
+    2.36
+   ],
+   "a_only": 65,
+   "b_only": 64,
+   "p_mcnemar": 1.0
+  },
+  "visref_fill-st": {
+   "diff_pp": 2.25,
+   "ci95_pp": [
+    -0.31,
+    4.71
+   ],
+   "a_only": 87,
+   "b_only": 65,
+   "p_mcnemar": 0.0882
+  },
+  "visref_raw_rank-tsr": {
+   "diff_pp": -0.1,
+   "ci95_pp": [
+    -2.05,
+    1.95
+   ],
+   "a_only": 43,
+   "b_only": 44,
+   "p_mcnemar": 1.0
+  }
+ },
+ "strata": {
+  "close": {
+   "n": 322,
+   "visref_fill-tsr": [
+    -0.62,
+    [
+     -2.48,
+     1.24
+    ],
+    4,
+    6
+   ],
+   "visref_fill-visref_raw_rank": [
+    0.0,
+    [
+     -1.86,
+     2.17
+    ],
+    5,
+    5
+   ]
+  },
+  "cap": {
+   "n": 629,
+   "visref_fill-tsr": [
+    1.75,
+    [
+     -1.43,
+     5.09
+    ],
+    62,
+    51
+   ],
+   "visref_fill-visref_raw_rank": [
+    1.75,
+    [
+     -1.59,
+     4.93
+    ],
+    57,
+    46
+   ]
+  },
+  "eos": {
+   "n": 25,
+   "visref_fill-tsr": [
+    -36.0,
+    [
+     -64.0,
+     -8.0
+    ],
+    4,
+    13
+   ],
+   "visref_fill-visref_raw_rank": [
+    -40.0,
+    [
+     -64.0,
+     -12.0
+    ],
+    3,
+    13
+   ]
+  }
+ },
+ "diag": {
+  "inject_over_m_q25_50_75": [
+   1.0,
+   1.0,
+   1.0
+  ],
+  "steps_inject_lt_m": 0,
+  "n_steps": 2231,
+  "n_fill_q": [
+   75.0,
+   420.0,
+   834.0
+  ],
+  "tail_rel_spearman_median": -0.101,
+  "mean_k": {
+   "fill": 2.29,
+   "visref": 2.27,
+   "tsr": 2.11
+  },
+  "k1": {
+   "fill": 689,
+   "visref": 694
+  },
+  "stop": {
+   "fill": {
+    "entropy": 907,
+    "kmax": 69
+   },
+   "visref": {
+    "entropy": 898,
+    "kmax": 78
+   }
+  },
+  "reemit_think_end": {
+   "fill": 472,
+   "visref": 453
+  },
+  "af": {
+   "fill": 221,
+   "visref": 224
+  },
+  "step1_end_agree_with_b_main": 874,
+  "mean_think_tokens": {
+   "fill": 1995,
+   "visref": 2019
+  }
+ },
+ "dual_probe": {
+  "n_steps": 2231,
+  "both_finite": 2207,
+  "H_minus_HnoV_median": 0.0006,
+  "stop_withV_continue_noV": 41,
+  "continue_withV_stop_noV": 110,
+  "by_end": {
+   "close": {
+    "n": 403,
+    "flip_any": 8
+   },
+   "cap": {
+    "n": 1764,
+    "flip_any": 129
+   },
+   "eos": {
+    "n": 64,
+    "flip_any": 14
+   }
+  }
+ }
+}

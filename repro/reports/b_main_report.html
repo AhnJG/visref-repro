@@ -1,0 +1,216 @@
+<title>VisRef 1B 재현 결과</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@600;700&family=IBM+Plex+Sans+KR:wght@400;600&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column; numbers sit in tables beside each chart, status strip on top. */
+:root {
+  --bg: #f6f7f9; --panel: #ffffff; --fg: #15191f; --fg2: #4a5361; --muted: #7c8594;
+  --rule: #dfe3ea; --grid: #e8ebf0; --accent: #2a5bd7; --hover: rgba(42, 91, 215, .05);
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a;
+  --ok: #0ca30c; --bad: #d03b3b; --okbg: #e6f4e6; --badbg: #fbe9e9; --warnbg: #fff5dc; --warnfg: #7a5200;
+  --display: "Hahmlet", "Noto Serif KR", "Apple SD Gothic Neo", serif;
+  --body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121519; --panel: #1a1e24; --fg: #eef1f5; --fg2: #b4bcc8; --muted: #8790a0;
+  --rule: #2c323b; --grid: #262b33; --accent: #7aa2ff; --hover: rgba(122, 162, 255, .07);
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+  --okbg: #183018; --badbg: #3a1c1c; --warnbg: #3a2f12; --warnfg: #f2cf7a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121519; --panel: #1a1e24; --fg: #eef1f5; --fg2: #b4bcc8; --muted: #8790a0;
+  --rule: #2c323b; --grid: #262b33; --accent: #7aa2ff; --hover: rgba(122, 162, 255, .07);
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+  --okbg: #183018; --badbg: #3a1c1c; --warnbg: #3a2f12; --warnfg: #f2cf7a; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 15px/1.6 var(--body); }
+.wrap { max-width: 980px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 56px; display: grid; gap: 28px; }
+header { display: grid; gap: 8px; }
+.eyebrow { font: 600 12px/1.4 var(--mono); letter-spacing: .06em; color: var(--muted); text-transform: uppercase; }
+h1 { font: 700 30px/1.25 var(--display); margin: 0; text-wrap: balance; }
+h2 { font: 700 20px/1.3 var(--display); margin: 0; text-wrap: balance; }
+h3 { font: 600 15px/1.4 var(--body); margin: 0; color: var(--fg2); }
+p { margin: 0; max-width: 68ch; color: var(--fg2); }
+.meta { font: 13px/1.6 var(--body); color: var(--muted); max-width: 80ch; }
+.banner { background: var(--warnbg); color: var(--warnfg); border-radius: 6px; padding: 10px 14px; font-size: 14px; }
+section { display: grid; gap: 14px; }
+.panel { background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 18px; display: grid; gap: 14px; min-width: 0; }
+.status { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14px; }
+.pill { font: 600 12px/1 var(--body); padding: 4px 8px; border-radius: 999px; }
+.pill.ok { background: var(--okbg); color: var(--ok); }
+.pill.bad { background: var(--badbg); color: var(--bad); }
+.tablewrap { overflow-x: auto; min-width: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: right; padding: 7px 10px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+thead th { font: 600 12px/1.4 var(--body); color: var(--muted); letter-spacing: .03em; }
+td.num, .num { font-family: var(--mono); }
+.key { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 7px; vertical-align: 0; }
+.key.s1 { background: var(--s1); } .key.s2 { background: var(--s2); } .key.s3 { background: var(--s3); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--fg2); }
+.s1 { --c: var(--s1); } .s2 { --c: var(--s2); } .s3 { --c: var(--s3); }
+/* interval chart: HTML rows, one percentage scale for grid, ticks and marks */
+.ci { display: grid; max-width: 760px; }
+.ci-row { display: grid; grid-template-columns: 92px minmax(0, 1fr); align-items: stretch; height: 50px; }
+.ci-lab { align-self: center; text-align: right; padding-right: 14px; font-weight: 600; font-size: 13px; white-space: nowrap; }
+.ci-track { position: relative; margin-inline: 4px 22px; }
+.ci-track:hover { background: var(--hover); }
+.ci-grid { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--grid); }
+.ci-zero { position: absolute; top: 0; bottom: 0; border-left: 1px dashed var(--fg2); }
+.ci-line { position: absolute; top: 50%; height: 3px; margin-top: -1.5px; border-radius: 2px; background: var(--c); }
+.ci-dot { position: absolute; top: 50%; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%;
+  background: var(--c); box-shadow: 0 0 0 2px var(--panel); }
+.ci-paper { position: absolute; top: 50%; width: 9px; height: 9px; margin: -6px 0 0 -6px; background: var(--panel);
+  border: 1.5px solid var(--fg2); transform: rotate(45deg); }
+.ci-val { position: absolute; bottom: calc(50% + 9px); transform: translateX(-50%); font: 12px/1 var(--mono); color: var(--fg2);
+  background: var(--panel); padding: 1px 3px; border-radius: 3px; }
+.ci-axis { height: 24px; }
+.ci-ticks { position: relative; margin-inline: 4px 22px; }
+.ci-ticks span { position: absolute; top: 6px; transform: translateX(-50%); font-size: 12px; color: var(--muted); white-space: nowrap; }
+/* step-count bars */
+.kc { max-width: 760px; display: grid; gap: 4px; }
+.kc-plot { display: grid; grid-template-columns: 40px minmax(0, 1fr); height: 200px; margin-top: 8px; }
+.kc-y { position: relative; }
+.kc-y span { position: absolute; right: 8px; transform: translateY(50%); font-size: 12px; color: var(--muted); }
+.kc-area { position: relative; }
+.kc-gl { position: absolute; left: 0; right: 0; height: 1px; background: var(--grid); }
+.kc-cols { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); }
+.kc-col { display: flex; align-items: flex-end; justify-content: center; gap: 2px; }
+.kc-col:hover { background: var(--hover); }
+.kc-bar { position: relative; width: min(18px, 40%); border-radius: 3px 3px 0 0; background: var(--c); }
+.kc-x, .kc-xt { font-size: 12px; color: var(--muted); }
+.kc-x { display: grid; grid-template-columns: 40px repeat(10, minmax(0, 1fr)); text-align: center; }
+.kc-xt { text-align: center; padding-left: 40px; }
+/* hover tooltip */
+.tip:hover::after { content: attr(data-tip); position: absolute; z-index: 2; bottom: calc(100% + 6px); left: 50%;
+  transform: translateX(-50%); white-space: nowrap; background: var(--fg); color: var(--bg); font: 12px/1.4 var(--body);
+  padding: 5px 8px; border-radius: 4px; pointer-events: none; }
+.ci-track.tip:hover::after { bottom: auto; top: calc(100% - 4px); }
+.diamond { display: inline-block; width: 9px; height: 9px; border: 1.5px solid var(--fg2); transform: rotate(45deg); margin-right: 8px; }
+ul.notes { margin: 0; padding-left: 18px; color: var(--fg2); display: grid; gap: 6px; max-width: 75ch; }
+code { font-family: var(--mono); font-size: .92em; }
+</style>
+<div class="wrap">
+<header>
+  <div class="eyebrow">MathVista testmini · InternVL3.5-1B · Appendix Table 6</div>
+  <h1>VisRef 1B 재현 결과</h1>
+  <p class="meta">포함 세션: b_main 최종 1,000문항 (채점 v3 + LLM 추출 gemini-3.5-flash-lite, 보완 1·2) · 세 방법이 모두 끝난 문항 1000개 (셔플 순서의 완료된 앞부분) · 생성 2026-10-11 02:23 UTC</p>
+  
+</header>
+
+<section>
+  <h2>사전등록 판정 (최종, 읽기 (a) = 채점 v3 + LLM 추출)</h2>
+  <p>현재 InternVL3.5-1B 운영 구현(ST ≈ 58%)의 MathVista testmini 1,000문항 평가입니다. 정확도 ST 57.8 / TSR 60.1 / VisRef 60.0 (논문 46.1 / 48.5 / 52.0).</p>
+  <div class="panel"><div class="tablewrap"><table>
+    <thead><tr><th>비교</th><th>차이 %p</th><th>95% CI</th><th>앞만 / 뒤만 정답</th><th>McNemar p</th><th>Holm p (주 비교 2개)</th><th>논문 %p</th><th>사전등록 분류</th></tr></thead>
+    <tbody><tr><td>VisRef−ST (주)</td><td class="num">+2.2</td><td class="num">+0.3 ~ +4.1</td><td class="num">60 / 38</td><td class="num">0.033</td><td class="num">0.067</td><td class="num">+5.9</td><td>효과 크기 재현 안 됨 (방향은 같으나 크기 다름)</td></tr><tr><td>VisRef−TSR (주)</td><td class="num">-0.1</td><td class="num">-2.0 ~ +1.7</td><td class="num">44 / 45</td><td class="num">1.000</td><td class="num">1.000</td><td class="num">+3.5</td><td>효과 크기 재현 안 됨</td></tr><tr><td>TSR−ST (보조)</td><td class="num">+2.3</td><td class="num">+0.6 ~ +4.0</td><td class="num">51 / 28</td><td class="num">0.013</td><td class="num">·</td><td class="num">+2.4</td><td>재현됨</td></tr></tbody></table></div>
+    <ul class="notes">
+      <li>분류 정의(사전등록): "재현됨" = 같은 문항 짝 차이의 95% 부트스트랩 CI가 0을 제외하고 논문 값을 포함함 — 논문 수치와 <b>양립</b>한다는 뜻이며 효과 크기의 동등성이나 메커니즘·구현의 충실성을 입증하지 않습니다. "효과 크기 재현 안 됨" = CI가 논문 값을 포함하지 않음. "판정 불가" = CI가 0과 논문 값을 모두 포함.</li>
+      <li>논문 값이 우리 CI 밖이라는 것은 논문 쪽 불확실성을 함께 고려한 두 결과 간 차이 검정이 아닙니다(논문 문항별 결과 없음). 따라서 논문과 우리 결과의 차이는 정식으로 검정하지 못했습니다.</li>
+      <li>시점: 주 비교와 검정(McNemar + Holm)은 결과 전에, CI 분류 기준은 759문항 중간 결과를 확인한 뒤 최종 분석 전에 고정했습니다. 최종 1,000문항에 그 759문항이 포함되므로 이 분류는 결과 노출 전 사전등록 수준의 확증적 판정이 아닙니다. VisRef−TSR의 CI는 논문 +3.5는 배제하지만 작은 양의 이득까지 배제하지는 않고, VisRef−ST는 Holm 보정 후 유의하지 않습니다.</li>
+      <li>범위: TSR 이득에는 생각 예산 연장 효과가 섞여 있습니다(ST 첫 단계 641/1,000이 상한에서 잘림, 이어가기 대부분이 절단 뒤). VisRef는 주입 수/m 중앙값 약 0.2로, DPP 잔차 임계값에 따른 조기 종료 때문에 논문의 |V_k| = m과 다른 확인된 절차 차이가 있습니다. 정지 엔트로피 추정과 추론 텍스트 토큰 표현 Z는 논문에 없어 운영 선택입니다. 따라서 이 결과만으로 논문의 TSR 메커니즘 재현이나 VisRef 자체의 효과 부재를 확정하지 않습니다.</li>
+    </ul>
+  </div>
+  <div class="panel"><h3>채점 읽기별 민감도 (판정에 쓰지 않음)</h3><div class="tablewrap"><table>
+    <thead><tr><th>읽기</th><th>ST %</th><th>TSR %</th><th>VisRef %</th><th>VisRef−ST</th><th>VisRef−TSR</th><th>TSR−ST</th></tr></thead>
+    <tbody><tr><td>(a) v3 + LLM (판정)</td><td class="num">57.8</td><td class="num">60.1</td><td class="num">60.0</td><td class="num">+2.2 (+0.3~+4.1)</td><td class="num">-0.1 (-2.0~+1.7)</td><td class="num">+2.3 (+0.6~+4.0)</td></tr><tr><td>규칙만 v3</td><td class="num">57.8</td><td class="num">60.0</td><td class="num">60.0</td><td class="num">+2.2 (+0.3~+4.1)</td><td class="num">+0.0 (-1.9~+1.8)</td><td class="num">+2.2 (+0.4~+3.9)</td></tr><tr><td>(b) af 앞에서 재채점</td><td class="num">56.0</td><td class="num">58.1</td><td class="num">58.6</td><td class="num">+2.6 (+0.4~+4.9)</td><td class="num">+0.5 (-1.8~+2.8)</td><td class="num">+2.1 (+0.1~+4.1)</td></tr><tr><td>(c) af 행 오답</td><td class="num">44.4</td><td class="num">48.3</td><td class="num">47.4</td><td class="num">+3.0 (+0.5~+5.5)</td><td class="num">-0.9 (-3.3~+1.5)</td><td class="num">+3.9 (+2.0~+5.7)</td></tr></tbody></table></div>
+    <p class="meta">세 읽기 모두 CI 기반 분류는 같습니다. 유의성은 같지 않습니다: (c)에서 VisRef−ST의 Holm p는 약 0.042로 (a)의 0.067과 다릅니다. (c)의 절대값이 논문 ST·TSR에 가깝다는 관찰은 사후 가설입니다(미확인).</p>
+  </div>
+</section>
+<section class="panel" aria-label="실행 점검">
+  <h3>실행 점검</h3>
+  <div class="status">
+    <div><span class="pill ok">통과</span> 오류 0행</div>
+    <div><span class="pill ok">통과</span> 완료 문항 1000개 (첫 세션 기준 40개 이상)</div>
+    <div><span class="pill ok">통과</span> 쓸 수 없는 강제 답 0/1879</div>
+    <div><span class="pill ok">통과</span> CRN: TSR 1단계 정지 730문항 중 ST와 정오 일치 718, 추출 답 일치 714</div>
+  </div>
+  <p class="meta">CRN 점검: 1단계에서 멈춘 TSR은 ST와 같은 문맥·같은 시드로 답합니다. 답 전문이 같은 경우는 491/730이고, 나머지는 fp16 배치 구성 차이로 샘플링이 중간에 갈라진 것입니다.</p>
+  <p class="meta">code_version: <code>d0095f79e691</code> (1824행), <code>f2422d0e72ff</code> (954행), <code>79eef648ebd1</code> (222행) · 79eef648ebd1과 f2422d0e72ff는 세 방법 출력이 같음을 확인(810/810), d0095f79e691은 채점 규칙만 다름(생성 코드 해시 동일)</p>
+  <p class="meta">채점: <code>recorded (per-row, may mix versions)</code></p>
+</section>
+
+<section>
+  <h2>정확도</h2>
+  <p>규칙 추출 기준 정확도와 Wilson 95% 신뢰구간입니다. 마름모는 논문 Table 6의 값입니다. 우리 ST는 공식 InternVL3.5-1B 점수(59.3, 보고서 문장상 thinking 모드 여부는 모호)에 가깝고 논문 ST(46.1)보다 높아서, 절대값보다 방법 간 차이를 비교합니다.</p>
+  <div class="panel">
+    <div class="legend"><span><span class="key s1"></span>ST</span><span><span class="key s2"></span>TSR</span><span><span class="key s3"></span>VisRef</span><span><span class="diamond"></span>논문 Table 6</span></div>
+    <div class="ci" role="img" aria-label="점 추정치와 95% 신뢰구간"><div class="ci-row"><div class="ci-lab">ST</div><div class="ci-track tip" data-tip="ST: 57.8% (95% CI 54.7~60.8) · 논문 46.1%"><span class="ci-grid" style="left:0.00%"></span><span class="ci-grid" style="left:33.33%"></span><span class="ci-grid" style="left:66.67%"></span><span class="ci-grid" style="left:100.00%"></span><span class="ci-line s1" style="left:49.05%;width:20.37%"></span><span class="ci-paper" style="left:20.33%"></span><span class="ci-dot s1" style="left:59.33%"></span><span class="ci-val" style="left:59.33%">57.8</span></div></div><div class="ci-row"><div class="ci-lab">TSR</div><div class="ci-track tip" data-tip="TSR: 60.1% (95% CI 57.0~63.1) · 논문 48.5%"><span class="ci-grid" style="left:0.00%"></span><span class="ci-grid" style="left:33.33%"></span><span class="ci-grid" style="left:66.67%"></span><span class="ci-grid" style="left:100.00%"></span><span class="ci-line s2" style="left:56.77%;width:20.20%"></span><span class="ci-paper" style="left:28.33%"></span><span class="ci-dot s2" style="left:67.00%"></span><span class="ci-val" style="left:67.00%">60.1</span></div></div><div class="ci-row"><div class="ci-lab">VisRef</div><div class="ci-track tip" data-tip="VisRef: 60.0% (95% CI 56.9~63.0) · 논문 52.0%"><span class="ci-grid" style="left:0.00%"></span><span class="ci-grid" style="left:33.33%"></span><span class="ci-grid" style="left:66.67%"></span><span class="ci-grid" style="left:100.00%"></span><span class="ci-line s3" style="left:56.44%;width:20.21%"></span><span class="ci-paper" style="left:40.00%"></span><span class="ci-dot s3" style="left:66.67%"></span><span class="ci-val" style="left:66.67%">60.0</span></div></div><div class="ci-row ci-axis"><div></div><div class="ci-ticks"><span style="left:0.00%">40%</span><span style="left:33.33%">50%</span><span style="left:66.67%">60%</span><span style="left:100.00%">70%</span></div></div></div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>방법</th><th>정답/문항</th><th>정확도 %</th><th>95% CI</th><th>규칙+LLM %</th><th>논문 %</th><th>논문 대비</th></tr></thead>
+      <tbody><tr><td><span class="key s1"></span>ST</td><td class="num">578/1000</td><td class="num">57.8</td><td class="num">54.7–60.8</td><td class="num">57.8</td><td class="num">46.1</td><td class="num">+11.7</td></tr><tr><td><span class="key s2"></span>TSR</td><td class="num">601/1000</td><td class="num">60.1</td><td class="num">57.0–63.1</td><td class="num">60.1</td><td class="num">48.5</td><td class="num">+11.6</td></tr><tr><td><span class="key s3"></span>VisRef</td><td class="num">600/1000</td><td class="num">60.0</td><td class="num">56.9–63.0</td><td class="num">60.0</td><td class="num">52.0</td><td class="num">+8.0</td></tr></tbody></table></div>
+  </div>
+</section>
+
+<section>
+  <h2>방법 간 차이</h2>
+  <p>같은 문항끼리 짝지은 차이(%p)와 부트스트랩 95% 신뢰구간입니다. 불일치 쌍은 한쪽만 맞힌 문항 수이고, p는 McNemar 정확 검정입니다. 마름모는 논문의 차이입니다.</p>
+  <div class="panel">
+    <div class="ci" role="img" aria-label="점 추정치와 95% 신뢰구간"><div class="ci-row"><div class="ci-lab">TSR−ST</div><div class="ci-track tip" data-tip="TSR−ST: 2.3 (95% CI 0.6~4.0) · 논문 2.4"><span class="ci-grid" style="left:0.00%"></span><span class="ci-grid" style="left:25.00%"></span><span class="ci-grid" style="left:50.00%"></span><span class="ci-grid" style="left:75.00%"></span><span class="ci-grid" style="left:100.00%"></span><span class="ci-zero" style="left:50.00%"></span><span class="ci-line s2" style="left:53.00%;width:17.00%"></span><span class="ci-paper" style="left:62.00%"></span><span class="ci-dot s2" style="left:61.50%"></span><span class="ci-val" style="left:61.50%">2.3</span></div></div><div class="ci-row"><div class="ci-lab">VisRef−ST</div><div class="ci-track tip" data-tip="VisRef−ST: 2.2 (95% CI 0.3~4.1) · 논문 5.9"><span class="ci-grid" style="left:0.00%"></span><span class="ci-grid" style="left:25.00%"></span><span class="ci-grid" style="left:50.00%"></span><span class="ci-grid" style="left:75.00%"></span><span class="ci-grid" style="left:100.00%"></span><span class="ci-zero" style="left:50.00%"></span><span class="ci-line s3" style="left:51.50%;width:19.00%"></span><span class="ci-paper" style="left:79.50%"></span><span class="ci-dot s3" style="left:61.00%"></span><span class="ci-val" style="left:61.00%">2.2</span></div></div><div class="ci-row"><div class="ci-lab">VisRef−TSR</div><div class="ci-track tip" data-tip="VisRef−TSR: -0.1 (95% CI -2.0~1.7) · 논문 3.5"><span class="ci-grid" style="left:0.00%"></span><span class="ci-grid" style="left:25.00%"></span><span class="ci-grid" style="left:50.00%"></span><span class="ci-grid" style="left:75.00%"></span><span class="ci-grid" style="left:100.00%"></span><span class="ci-zero" style="left:50.00%"></span><span class="ci-line s3" style="left:40.00%;width:18.50%"></span><span class="ci-paper" style="left:67.50%"></span><span class="ci-dot s3" style="left:49.50%"></span><span class="ci-val" style="left:49.50%">-0.1</span></div></div><div class="ci-row ci-axis"><div></div><div class="ci-ticks"><span style="left:0.00%">-10</span><span style="left:25.00%">-5</span><span style="left:50.00%">0</span><span style="left:75.00%">5</span><span style="left:100.00%">10</span></div></div></div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>비교</th><th>차이 %p</th><th>95% CI</th><th>앞만 정답 / 뒤만 정답</th><th>McNemar p</th><th>논문 %p</th></tr></thead>
+      <tbody><tr><td>TSR−ST</td><td class="num">+2.3</td><td class="num">+0.6 ~ +4.0</td><td class="num">51 / 28</td><td class="num">0.01</td><td class="num">+2.4</td></tr><tr><td>VisRef−ST</td><td class="num">+2.2</td><td class="num">+0.3 ~ +4.1</td><td class="num">60 / 38</td><td class="num">0.03</td><td class="num">+5.9</td></tr><tr><td>VisRef−TSR</td><td class="num">-0.1</td><td class="num">-2.0 ~ +1.7</td><td class="num">44 / 45</td><td class="num">1.00</td><td class="num">+3.5</td></tr></tbody></table></div>
+  </div>
+</section>
+
+
+
+<section>
+  <h2>첫 단계가 끝난 방식별 결과</h2>
+  <p>첫 단계 생각은 세 방법이 같은 것을 나눠 쓰므로, 끝난 방식은 문항의 성질입니다. TSR·VisRef의 이어가기는 대부분 상한에서 잘린 문항에서 일어납니다.</p>
+  <div class="panel"><div class="tablewrap"><table>
+    <thead><tr><th>첫 단계 종료</th><th>문항</th><th>ST %</th><th>TSR %</th><th>VisRef %</th><th>TSR 평균 k</th><th>VisRef 평균 k</th></tr></thead>
+    <tbody><tr><td>자연 종료 (&lt;/think&gt;)</td><td class="num">334 (33%)</td><td class="num">71.3</td><td class="num">71.9</td><td class="num">71.3</td><td class="num">1.03</td><td class="num">1.02</td></tr><tr><td>상한 1024에서 잘림</td><td class="num">641 (64%)</td><td class="num">50.9</td><td class="num">53.7</td><td class="num">53.7</td><td class="num">2.71</td><td class="num">2.91</td></tr><tr><td>EOS로 끝남</td><td class="num">25 (2%)</td><td class="num">56.0</td><td class="num">68.0</td><td class="num">72.0</td><td class="num">1.52</td><td class="num">2.20</td></tr></tbody></table></div></div>
+</section>
+
+<section>
+  <h2>단계 수와 생각 토큰</h2>
+  <p>TSR과 VisRef가 몇 단계에서 멈췄는지의 분포입니다. 정지 통계 H가 δ = 0.25보다 작으면 멈추고, 최대 10단계 또는 생각 토큰 합계 10,240에서 멈춥니다.</p>
+  <div class="panel">
+    <div class="legend"><span><span class="key s2"></span>TSR</span><span><span class="key s3"></span>VisRef</span></div>
+    <div class="kc" role="img" aria-label="단계 수 분포"><div class="kc-plot"><div class="kc-y"><span style="bottom:0.00%">0%</span><span style="bottom:25.00%">20%</span><span style="bottom:50.00%">40%</span><span style="bottom:75.00%">60%</span><span style="bottom:100.00%">80%</span></div><div class="kc-area"><span class="kc-gl" style="bottom:0.00%"></span><span class="kc-gl" style="bottom:25.00%"></span><span class="kc-gl" style="bottom:50.00%"></span><span class="kc-gl" style="bottom:75.00%"></span><span class="kc-gl" style="bottom:100.00%"></span><div class="kc-cols"><div class="kc-col"><span class="kc-bar s2 tip" data-tip="TSR · k=1: 730문항 (73.0%)" style="height:91.25%"></span><span class="kc-bar s3 tip" data-tip="VisRef · k=1: 713문항 (71.3%)" style="height:89.12%"></span></div><div class="kc-col"><span class="kc-bar s2 tip" data-tip="TSR · k=2: 87문항 (8.7%)" style="height:10.87%"></span><span class="kc-bar s3 tip" data-tip="VisRef · k=2: 93문항 (9.3%)" style="height:11.63%"></span></div><div class="kc-col"><span class="kc-bar s2 tip" data-tip="TSR · k=3: 46문항 (4.6%)" style="height:5.75%"></span><span class="kc-bar s3 tip" data-tip="VisRef · k=3: 36문항 (3.6%)" style="height:4.50%"></span></div><div class="kc-col"><span class="kc-bar s2 tip" data-tip="TSR · k=4: 27문항 (2.7%)" style="height:3.38%"></span><span class="kc-bar s3 tip" data-tip="VisRef · k=4: 21문항 (2.1%)" style="height:2.62%"></span></div><div class="kc-col"><span class="kc-bar s2 tip" data-tip="TSR · k=5: 12문항 (1.2%)" style="height:1.50%"></span><span class="kc-bar s3 tip" data-tip="VisRef · k=5: 20문항 (2.0%)" style="height:2.50%"></span></div><div class="kc-col"><span class="kc-bar s2 tip" data-tip="TSR · k=6: 8문항 (0.8%)" style="height:1.00%"></span><span class="kc-bar s3 tip" data-tip="VisRef · k=6: 12문항 (1.2%)" style="height:1.50%"></span></div><div class="kc-col"><span class="kc-bar s2 tip" data-tip="TSR · k=7: 9문항 (0.9%)" style="height:1.12%"></span><span class="kc-bar s3 tip" data-tip="VisRef · k=7: 12문항 (1.2%)" style="height:1.50%"></span></div><div class="kc-col"><span class="kc-bar s2 tip" data-tip="TSR · k=8: 5문항 (0.5%)" style="height:0.62%"></span><span class="kc-bar s3 tip" data-tip="VisRef · k=8: 5문항 (0.5%)" style="height:0.62%"></span></div><div class="kc-col"><span class="kc-bar s2 tip" data-tip="TSR · k=9: 6문항 (0.6%)" style="height:0.75%"></span><span class="kc-bar s3 tip" data-tip="VisRef · k=9: 6문항 (0.6%)" style="height:0.75%"></span></div><div class="kc-col"><span class="kc-bar s2 tip" data-tip="TSR · k=10: 70문항 (7.0%)" style="height:8.75%"></span><span class="kc-bar s3 tip" data-tip="VisRef · k=10: 82문항 (8.2%)" style="height:10.25%"></span></div></div></div></div><div class="kc-x"><span></span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div><div class="kc-xt">단계 수 k (K_max = 10)</div></div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>문항 수</th><th>k=1</th><th>k=2</th><th>k=3</th><th>k=4</th><th>k=5</th><th>k=6</th><th>k=7</th><th>k=8</th><th>k=9</th><th>k=10</th></tr></thead>
+      <tbody><tr><td><span class="key s2"></span>TSR</td><td class="num">730</td><td class="num">87</td><td class="num">46</td><td class="num">27</td><td class="num">12</td><td class="num">8</td><td class="num">9</td><td class="num">5</td><td class="num">6</td><td class="num">70</td></tr><tr><td><span class="key s3"></span>VisRef</td><td class="num">713</td><td class="num">93</td><td class="num">36</td><td class="num">21</td><td class="num">20</td><td class="num">12</td><td class="num">12</td><td class="num">5</td><td class="num">6</td><td class="num">82</td></tr></tbody></table></div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>방법</th><th>평균 k</th><th>2단계 이상</th><th>엔트로피 정지</th><th>최대 단계</th><th>예산</th><th>평균 생각 토큰</th><th>ST 대비</th></tr></thead>
+      <tbody><tr><td><span class="key s1"></span>ST</td><td class="num">1.00</td><td class="num">0 (0%)</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">761</td><td class="num">1.00×</td></tr><tr><td><span class="key s2"></span>TSR</td><td class="num">2.12</td><td class="num">270 (27%)</td><td class="num">934</td><td class="num">66</td><td class="num">0</td><td class="num">1888</td><td class="num">2.48×</td></tr><tr><td><span class="key s3"></span>VisRef</td><td class="num">2.26</td><td class="num">287 (29%)</td><td class="num">922</td><td class="num">78</td><td class="num">0</td><td class="num">2006</td><td class="num">2.64×</td></tr></tbody></table></div>
+    <p class="meta">논문 Fig. 3 판독: VisRef 생각 토큰은 ST의 약 3.5배.</p>
+  </div>
+</section>
+
+<section>
+  <h2>VisRef 주입, 강제 답, 채점</h2>
+  <div class="panel">
+    <h3>다시 넣은 시각 토큰 (VisRef, 단계마다 — 마지막 단계의 선택은 최종 답 직전에 들어감)</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>주입 횟수</th><th>m 중앙값</th><th>Z 고유 토큰 중앙값</th><th>주입 수 중앙값 (25–75%)</th><th>주입 수 / m 중앙값</th><th>m보다 적게 넣음</th><th>주입 = Z 고유 토큰 수</th><th>자연 종료 뒤 H ≥ δ</th></tr></thead>
+      <tbody><tr><td class="num">2261</td><td class="num">537</td><td class="num">144</td>
+        <td class="num">129 (76–159)</td><td class="num">0.20</td>
+        <td class="num">1895/2261</td><td class="num">1899/2261</td><td class="num">35/398</td></tr></tbody>
+    </table></div>
+    <p class="meta">V는 문항의 시각 토큰, Z는 직전 생각 단계의 토큰 임베딩이고 m = ⌊0.3·|V|⌋입니다. 커널 L = (VZᵀ)(VZᵀ)ᵀ의 계수는 Z의 고유 토큰 수를 넘지 못하므로, DPP greedy가 고른 토큰만 넣으면(인용한 Chen 2018 코드와 같은 동작) m보다 적게 들어갈 수 있습니다. 마지막 열은 생각을 스스로 닫은 단계 중 정지 통계가 δ 이상이라 이어간 경우입니다.</p>
+  </div>
+  <div class="panel">
+    <h3>최종 답과 추출</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>방법</th><th>강제 답</th><th>EOS 종료</th><th>af 폴백</th><th>af 유효</th><th>쓸 수 없음</th><th>\boxed 추출</th><th>답 문구 추출</th><th>LLM 추출 대상</th><th>답 안 &lt;/think&gt;</th></tr></thead>
+      <tbody><tr><td><span class="key s1"></span>ST</td><td class="num">641</td><td class="num">413</td><td class="num">239</td><td class="num">239</td><td class="num">0</td><td class="num">841</td><td class="num">139</td><td class="num">20</td><td class="num">129</td></tr><tr><td><span class="key s2"></span>TSR</td><td class="num">625</td><td class="num">452</td><td class="num">187</td><td class="num">187</td><td class="num">0</td><td class="num">864</td><td class="num">121</td><td class="num">15</td><td class="num">121</td></tr><tr><td><span class="key s3"></span>VisRef</td><td class="num">613</td><td class="num">397</td><td class="num">225</td><td class="num">225</td><td class="num">0</td><td class="num">804</td><td class="num">182</td><td class="num">14</td><td class="num">465</td></tr></tbody></table></div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>방법</th><th>답 안 &lt;/think&gt; 전체</th><th>k=1, 마지막 단계 자연 종료</th><th>k=1, 마지막 단계 상한 잘림</th></tr></thead>
+      <tbody><tr><td><span class="key s1"></span>ST</td><td class="num">129/1000 (13%)</td><td class="num">20/334 (6%)</td><td class="num">109/641 (17%)</td></tr><tr><td><span class="key s2"></span>TSR</td><td class="num">121/1000 (12%)</td><td class="num">25/330 (8%)</td><td class="num">62/380 (16%)</td></tr><tr><td><span class="key s3"></span>VisRef</td><td class="num">465/1000 (46%)</td><td class="num">156/329 (47%)</td><td class="num">196/366 (54%)</td></tr></tbody></table></div>
+    <p class="meta">강제 답: 마지막 단계가 상한에서 잘려 <code>Final Answer:</code>로 답하게 한 경우(s1). af 폴백: 답이 EOS 없이 1024토큰에 닿아 <code>**Final Answer** \boxed</code>로 마무리한 경우(DEER). LLM 추출 대상: 규칙으로 답을 못 찾아 마지막 줄을 쓴 행으로, 공식 MathVista 추출 프롬프트로 다시 채점합니다. 답 안 &lt;/think&gt;: 최종 답 안에서 모델이 생각을 다시 열고 닫은 행으로, 채점은 마지막 &lt;/think&gt; 뒤 텍스트로 합니다.</p>
+  </div>
+</section>
+
+<section>
+  <h2>설정과 해석 시 주의</h2>
+  <div class="panel">
+    <ul class="notes">
+      <li>논문 값: thinking 모드, δ = 0.25, m = ⌊0.3·|V|⌋, K_max = 10. 모델 카드 값(논문에 없음): R1 thinking 프롬프트, T = 0.6, top-k 50, top-p 0.95.</li>
+      <li>논문에 없는 운영 선택: 단계 상한 1024 / 합계 10,240 / 답 1024, 정지 통계는 <code>\boxed</code> 답 1개의 토큰 엔트로피 합(T = 1), 잘린 단계의 s1 강제 답과 DEER af 폴백, rank 이상은 채우지 않는 DPP 주입, 규칙 추출 채점.</li>
+      <li>문항 수가 n일 때 짝지은 차이의 오차는 대략 ±1.8%p(불일치율 8% 가정)입니다.</li>
+      <li>s1에 섞인 이전 판 <code>visref_raw</code>(rank 이후를 관련성 r²로 채움, 74문항)는 분석에서 뺐습니다. 새 <code>visref_fill</code>(εI로 m까지 채움)은 별도 사전등록 실험입니다.</li>
+    </ul>
+  </div>
+</section>
+</div>

@@ -1,0 +1,204 @@
+{
+ "scorer_version": "v3_md_colon_emphasis",
+ "n_common_pids": 392,
+ "methods": {
+  "st": {
+   "n": 392,
+   "v1_correct": 231,
+   "v2_correct": 232,
+   "v3_correct": 233,
+   "v1_accuracy_pct": 58.929,
+   "v2_accuracy_pct": 59.184,
+   "v3_accuracy_pct": 59.439,
+   "n_extract_failed_v2": 1,
+   "n_extract_failed_v3": 1
+  },
+  "tsr": {
+   "n": 392,
+   "v1_correct": 238,
+   "v2_correct": 238,
+   "v3_correct": 239,
+   "v1_accuracy_pct": 60.714,
+   "v2_accuracy_pct": 60.714,
+   "v3_accuracy_pct": 60.969,
+   "n_extract_failed_v2": 1,
+   "n_extract_failed_v3": 1
+  },
+  "visref_raw_rank": {
+   "n": 392,
+   "v1_correct": 242,
+   "v2_correct": 242,
+   "v3_correct": 243,
+   "v1_accuracy_pct": 61.735,
+   "v2_accuracy_pct": 61.735,
+   "v3_accuracy_pct": 61.99,
+   "n_extract_failed_v2": 1,
+   "n_extract_failed_v3": 1
+  }
+ },
+ "paired_diff_pp": {
+  "visref_raw_rank-st": {
+   "v2": {
+    "diff_pp": 2.551,
+    "a_only": 27,
+    "b_only": 17
+   },
+   "v3": {
+    "diff_pp": 2.551,
+    "a_only": 26,
+    "b_only": 16
+   }
+  },
+  "tsr-st": {
+   "v2": {
+    "diff_pp": 1.531,
+    "a_only": 17,
+    "b_only": 11
+   },
+   "v3": {
+    "diff_pp": 1.531,
+    "a_only": 16,
+    "b_only": 10
+   }
+  },
+  "visref_raw_rank-tsr": {
+   "v2": {
+    "diff_pp": 1.02,
+    "a_only": 19,
+    "b_only": 15
+   },
+   "v3": {
+    "diff_pp": 1.02,
+    "a_only": 18,
+    "b_only": 14
+   }
+  }
+ },
+ "changed_v3_vs_v2_common": [
+  {
+   "pid": "509",
+   "method": "st",
+   "session": "s1",
+   "v2_correct": 0,
+   "v3_correct": 0,
+   "v2_extracted": ":",
+   "v3_extracted": "B",
+   "v3_rule": "answer_phrase:letter",
+   "_tail": "\n\nThe pie chart shows that Cadet Blue occupies a smaller portion compared to Web Purple, indicating a lower median. Therefore, the answer is:\n\nB) no\n\nAnswered as per the question requirements:  \n**B**"
+  },
+  {
+   "pid": "678",
+   "method": "st",
+   "session": "s3",
+   "v2_correct": 0,
+   "v3_correct": 1,
+   "v2_extracted": "C**",
+   "v3_extracted": "C",
+   "v3_rule": "answer_phrase:letter",
+   "_tail": "\\tan(x) = \\frac{\\text{opposite}}{\\text{adjacent}} = \\frac{16}{10} = 1.6\n\\]  \nTaking the arctangent of 1.6 gives:  \n\\[\nx \\approx \\arctan(1.6) \\approx 58^\\circ\n\\]  \nThus, the correct answer is **C**.\n\nC"
+  },
+  {
+   "pid": "716",
+   "method": "st",
+   "session": "s4",
+   "v2_correct": 0,
+   "v3_correct": 0,
+   "v2_extracted": "A**",
+   "v3_extracted": "A",
+   "v3_rule": "answer_phrase:letter",
+   "_tail": " from the 16-8-16√2 triangle (using Pythagorean theorem with legs 8 and 16):  \n\\[\ny = \\sqrt{8^2 + 16^2} = \\sqrt{64 + 256} = \\sqrt{320} = 16\\sqrt{2}.\n\\]  \nThus, the correct answer is **A**.\n\nA, B, C, D"
+  },
+  {
+   "pid": "765",
+   "method": "st",
+   "session": "s1",
+   "v2_correct": 1,
+   "v3_correct": 1,
+   "v2_extracted": ":",
+   "v3_extracted": "B",
+   "v3_rule": "answer_phrase:letter",
+   "_tail": " and higher ranges. Since Chartreuse's values are more stable and lower than the other categories, it is not the roughest measure. \n\nAnswering based on this reasoning: \n\nThe correct answer is: \n\nB) no"
+  },
+  {
+   "pid": "148",
+   "method": "tsr",
+   "session": "s2",
+   "v2_correct": 0,
+   "v3_correct": 1,
+   "v2_extracted": "D**",
+   "v3_extracted": "D",
+   "v3_rule": "answer_phrase:letter",
+   "_tail": "\n\nThe correct answer is **D**.  \n\nAnswering the question based on this analysis:  \nD  \n"
+  },
+  {
+   "pid": "765",
+   "method": "tsr",
+   "session": "s1",
+   "v2_correct": 1,
+   "v3_correct": 1,
+   "v2_extracted": ":",
+   "v3_extracted": "B",
+   "v3_rule": "answer_phrase:letter",
+   "_tail": " and higher ranges. Since Chartreuse's values are more stable and lower than the other categories, it is not the roughest measure. \n\nAnswering based on this reasoning: \n\nThe correct answer is: \n\nB) no"
+  },
+  {
+   "pid": "26",
+   "method": "visref_raw_rank",
+   "session": "s2",
+   "v2_correct": 1,
+   "v3_correct": 1,
+   "v2_extracted": ":",
+   "v3_extracted": "B",
+   "v3_rule": "answer_phrase:letter",
+   "_tail": "\n\nThe Black category has a value of 10, which is less than the Deep Sky Blue category's value of 18. Therefore, the answer is:\n\nB) no"
+  },
+  {
+   "pid": "281",
+   "method": "visref_raw_rank",
+   "session": "s3",
+   "v2_correct": 1,
+   "v3_correct": 1,
+   "v2_extracted": ":",
+   "v3_extracted": "B",
+   "v3_rule": "answer_phrase:letter",
+   "_tail": "\n\nThe image displays a whole pizza, not a square one. Since the question asks if it was a square pizza, the correct answer is:\n\n**B) No**\n\nAnswered with the required format:\nB"
+  },
+  {
+   "pid": "314",
+   "method": "visref_raw_rank",
+   "session": "s4",
+   "v2_correct": 1,
+   "v3_correct": 1,
+   "v2_extracted": ":",
+   "v3_extracted": "B",
+   "v3_rule": "answer_phrase:letter",
+   "_tail": " 20\n- **Purple**: 10\n- **Pale Green**: 30\n\nThe question asks if Crimson is the minimum. Since Crimson has 20 and Purple has 10, Crimson is not the minimum. Therefore, the correct answer is:\n\n**B) no**"
+  },
+  {
+   "pid": "440",
+   "method": "visref_raw_rank",
+   "session": "s1",
+   "v2_correct": 1,
+   "v3_correct": 1,
+   "v2_extracted": ":",
+   "v3_extracted": "B",
+   "v3_rule": "answer_phrase:letter",
+   "_tail": "partially eaten meal, including fried egg, rice, and tomato sauce. There's a fork on the plate, indicating it's not fully served. Therefore, the plate is not half full. \n\nThe correct answer is:\n\nB) No"
+  },
+  {
+   "pid": "513",
+   "method": "visref_raw_rank",
+   "session": "s3",
+   "v2_correct": 0,
+   "v3_correct": 1,
+   "v2_extracted": ": C",
+   "v3_extracted": "C",
+   "v3_rule": "answer_phrase:letter",
+   "_tail": "\n\nThe answer is: C"
+  }
+ ],
+ "changed_v3_vs_v2_other_methods": [],
+ "n_rows_other_methods": {
+  "visref_raw": 74
+ }
+}

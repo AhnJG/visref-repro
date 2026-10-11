@@ -1,0 +1,3 @@
+| X-22 | 시각 토큰 전부 재주입은 "naive solution"이며 "computationally prohibitive"로 배제(해롭다는 서술 없음). 8B MathVista에서 시각 토큰 ∼1,772 vs 단계당 텍스트 ∼615, 전부 붙이면 지연 2.3배 | `VisRef_fulltext/VisRef_plain.txt` L300, L381-385 | 2026-10-11 | 확인 |
+| X-23 | 선택 수 강제 "enforcing \|Vk\| = m", "We terminate after m iterations" | `VisRef_fulltext/VisRef_plain.txt` L536, L578 | 2026-10-11 | 확인 |
+| X-24 | Fig. 4(b) 본문 "76.1% to 79.2% as m increases from 20% to 30% but plateaus for m ≥ 30%"(8B) / Table 7 Random 67.3, Relevance-only 75.6, DPP 79.3(8B MathVista) — A-8·A-9와 같은 값, 이번 plain 추출본 줄 번호 | `VisRef_fulltext/VisRef_plain.txt` L794-795, L930; L1579-1590 | 2026-10-11 | 확인 |

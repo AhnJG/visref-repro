@@ -1,0 +1,87 @@
+{
+ "data/raw/mathvista_testmini.json": {
+  "url": "https://raw.githubusercontent.com/lupantech/MathVista/main/data/testmini.json",
+  "sha256": "ab0148dca9d401c31cc47f29b3826eec28a76ff155a1c0878d81e8daf0413480",
+  "license": "CC BY-SA 4.0 (MathVista repo)"
+ },
+ "references/sources/mathvista_official_r4/evaluation/extract_answer.py": {
+  "url": "https://raw.githubusercontent.com/lupantech/MathVista/c5acd37d75a8c8f9756cb66c78fe2e54fa2c31fb/evaluation/extract_answer.py",
+  "sha256": "2d2452f3696d4e430b9fe1d299175f96d3e43adf5bf0332ff3768ed8fa7445f8",
+  "license": "CC BY-SA 4.0"
+ },
+ "references/sources/mathvista_official_r4/evaluation/prompts/ext_ans.py": {
+  "url": "https://raw.githubusercontent.com/lupantech/MathVista/c5acd37d75a8c8f9756cb66c78fe2e54fa2c31fb/evaluation/prompts/ext_ans.py",
+  "sha256": "f0954ab88ded815437a99dc181ada8f8d7b126a78bdd095feacfa62d5757526e",
+  "license": "CC BY-SA 4.0"
+ },
+ "references/sources/mathvista_official_r4/evaluation/calculate_score.py": {
+  "url": "https://raw.githubusercontent.com/lupantech/MathVista/c5acd37d75a8c8f9756cb66c78fe2e54fa2c31fb/evaluation/calculate_score.py",
+  "sha256": "e81758991898308c415ea6575a11b9e5fe92444b9d19cd52d098655ffd8ede28",
+  "license": "CC BY-SA 4.0"
+ },
+ "references/sources/mathvista_official_r4/models/gpt.py": {
+  "url": "https://raw.githubusercontent.com/lupantech/MathVista/c5acd37d75a8c8f9756cb66c78fe2e54fa2c31fb/models/gpt.py",
+  "sha256": "e09be1c1ec12730a5a7696655fd24f8bc628e86aa8382c4c735b149b4102a8d6",
+  "license": "CC BY-SA 4.0"
+ },
+ "references/sources/mathvista_official_r4/LICENSE": {
+  "url": "https://raw.githubusercontent.com/lupantech/MathVista/c5acd37d75a8c8f9756cb66c78fe2e54fa2c31fb/LICENSE",
+  "sha256": "da89f9867822be4b8adb1e601d9e9226c195016c6508015eb7593e68ead0c98a",
+  "license": "CC BY-SA 4.0"
+ },
+ "references/sources/vlmevalkit_postprocess_54a063c5/vlmeval/inference.py": {
+  "url": "https://raw.githubusercontent.com/open-compass/VLMEvalKit/54a063c5bf75245c35599daab9826d0a5b8e2671/vlmeval/inference.py",
+  "sha256": "bd4e4f0b3c3708ec0193e310d8428939a5af25603ae4adb9573039e9734e302a",
+  "license": "Apache-2.0 (VLMEvalKit)"
+ },
+ "references/sources/vlmevalkit_postprocess_54a063c5/vlmeval/vlm/base.py": {
+  "url": "https://raw.githubusercontent.com/open-compass/VLMEvalKit/54a063c5bf75245c35599daab9826d0a5b8e2671/vlmeval/vlm/base.py",
+  "sha256": "6937767f07ae577a3b9a9f1a305dcdbec807cbfec60ca724456c5095577dfb95",
+  "license": "Apache-2.0 (VLMEvalKit)"
+ },
+ "references/sources/vlmevalkit_postprocess_54a063c5/vlmeval/config.py": {
+  "url": "https://raw.githubusercontent.com/open-compass/VLMEvalKit/54a063c5bf75245c35599daab9826d0a5b8e2671/vlmeval/config.py",
+  "sha256": "a9f9f36cc68ec90af7da8b14092c1752428022f18b2ffdd2fb1be66ef7a28324",
+  "license": "Apache-2.0 (VLMEvalKit)"
+ },
+ "references/sources/vlmevalkit_postprocess_54a063c5/vlmeval/dataset/image_vqa.py": {
+  "url": "https://raw.githubusercontent.com/open-compass/VLMEvalKit/54a063c5bf75245c35599daab9826d0a5b8e2671/vlmeval/dataset/image_vqa.py",
+  "sha256": "22ad1fa3dedce22dd1daabeb5411cbbe47eb484b73205c0192294b28e67003a6",
+  "license": "Apache-2.0 (VLMEvalKit)"
+ },
+ "references/sources/vlmevalkit_postprocess_54a063c5/vlmeval/dataset/utils/mathvista.py": {
+  "url": "https://raw.githubusercontent.com/open-compass/VLMEvalKit/54a063c5bf75245c35599daab9826d0a5b8e2671/vlmeval/dataset/utils/mathvista.py",
+  "sha256": "36eb5a88b14284d306ca7728563af391ee082589f950d42fbe24b8f7a9fdd8a6",
+  "license": "Apache-2.0 (VLMEvalKit)"
+ },
+ "references/sources/vlmevalkit_postprocess_54a063c5/vlmeval/vlm/internvl/internvl_chat.py": {
+  "url": "https://raw.githubusercontent.com/open-compass/VLMEvalKit/54a063c5bf75245c35599daab9826d0a5b8e2671/vlmeval/vlm/internvl/internvl_chat.py",
+  "sha256": "7ed448a1c32b73358e7f7aafd53308c514527ddabc32211a773eb8670b404eee",
+  "license": "Apache-2.0 (VLMEvalKit)"
+ },
+ "references/sources/vlmevalkit_postprocess_54a063c5/vlmeval/vlm/internvl/utils.py": {
+  "url": "https://raw.githubusercontent.com/open-compass/VLMEvalKit/54a063c5bf75245c35599daab9826d0a5b8e2671/vlmeval/vlm/internvl/utils.py",
+  "sha256": "095e017343427c79c86e35c208632df788de8ddee4fafa4889aec3093c5b577b",
+  "license": "Apache-2.0 (VLMEvalKit)"
+ },
+ "references/sources/cited_code/chen_fast-map-dpp/dpp.py": {
+  "url": "https://raw.githubusercontent.com/laming-chen/fast-map-dpp/master/dpp.py",
+  "sha256": "1596818afc31cb797adf5d31fbe3161c3828e8f4d5a075c75422e2aed019803b",
+  "note": "branch head at collection (2026-10-07); sha256 is of the copy used"
+ },
+ "references/sources/cited_code/chen_fast-map-dpp/dpp_test.py": {
+  "url": "https://raw.githubusercontent.com/laming-chen/fast-map-dpp/master/dpp_test.py",
+  "sha256": "762290e6d27b9b96ca6e8d84e45f0e806edef130d44970bc8322a7dc4b089ee4",
+  "note": "branch head at collection (2026-10-07); sha256 is of the copy used"
+ },
+ "references/sources/cited_code/deer/vanilla_deer.py": {
+  "url": "https://raw.githubusercontent.com/iie-ycx/DEER/main/vanilla_deer.py",
+  "sha256": "8a20fdc45ae3511ca569191f0fa1c82680ed47bdde07f4279d8a0282c6ba0707",
+  "note": "branch head at collection (2026-10-07); sha256 is of the copy used"
+ },
+ "references/sources/cited_code/deer/vllm-deer.py": {
+  "url": "https://raw.githubusercontent.com/iie-ycx/DEER/main/vllm-deer.py",
+  "sha256": "7a11719f968216ef6a2c68bee0e099cc9603428da6209aff3e0ff27422cfd876",
+  "note": "branch head at collection (2026-10-07); sha256 is of the copy used"
+ }
+}

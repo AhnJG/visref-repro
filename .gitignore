@@ -1,0 +1,14 @@
+# secrets
+kaggle.json
+**/kaggle.json
+.env
+# fetched third-party files (see references/SOURCES.json, scripts/fetch_sources.py)
+data/raw/
+references/sources/
+# local scratch
+__pycache__/
+.pytest_cache/
+.DS_Store
+repro/kaggle/runs/*/notebook.ipynb
+repro/kaggle/runs/*/output/src/
+repro/colab/runs/*/*.ipynb

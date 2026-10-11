@@ -1,0 +1,56 @@
+{"id": "38|st", "extraction": "Model response: Based on the provided chart, there are 2 bars that have values smaller than 6.\n\nExtracted answer: 2", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "38|tsr", "extraction": "Model response: Based on the provided chart, there are 2 bars with values smaller than 6.\n\nExtracted answer: 2", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "106|visref_raw_rank", "extraction": "0", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "131|visref_raw_rank", "extraction": "3", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "159|st", "extraction": "To answer this question properly, we would need the image of the graph or the data values for the number of days required to enforce a contract and start a business in 2009 and 2010. Since the image/data is missing, I cannot calculate the exact difference. \n\nPlease provide the necessary data or image to find the integer value.", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "159|tsr", "extraction": "Based on the provided prompt and instructions, it appears the question is incomplete because the image or specific data points are missing. Therefore, the answer cannot be calculated.", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "159|visref_raw_rank", "extraction": "100", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "169|st", "extraction": "5", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "306|visref_raw_rank", "extraction": "B", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "341|tsr", "extraction": "C", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "348|tsr", "extraction": "To find the extracted answer, we look at the model response indicated by the letter choice at the end.\n\nExtracted answer: B", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "352|visref_raw_rank", "extraction": "1", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "360|visref_raw_rank", "extraction": "B", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "411|st", "extraction": "100", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "411|tsr", "extraction": "100", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "429|st", "extraction": "10", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "429|tsr", "extraction": "10", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "513|st", "extraction": "C", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "513|tsr", "extraction": "C", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "559|visref_raw_rank", "extraction": "50", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "560|st", "extraction": "B", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "560|tsr", "extraction": "B", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "608|st", "extraction": "B", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "668|st", "extraction": "B", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "668|tsr", "extraction": "B", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "733|st", "extraction": "45.0", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "733|visref_raw_rank", "extraction": "90.0", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "815|visref_raw_rank", "extraction": "A", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "836|visref_raw_rank", "extraction": "C", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "864|st", "extraction": "10", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "864|tsr", "extraction": "10", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "917|st", "extraction": "Model response: The ratio of the number of procedures to register a business in 2004 to that in 2007 is 1, as both years have the same number of procedures.\n\nExtracted answer: 1", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "917|tsr", "extraction": "1", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "917|visref_raw_rank", "extraction": "To extract the answer from the model response, we look for the final evaluated ratio, which is given as 1.00. However, the prompt asks for an integer answer in the hint. Looking at the value \"1.00\", it represents the integer 1. \n\nExtracted answer: 1", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "943|st", "extraction": "To find the difference between two consecutive major ticks on the Y-axis, we need to inspect the Y-axis of the chart referenced in the context. However, since the image of the chart is not provided in the prompt, let's analyze typical values or standard chart formats for this specific dataset. \n\nLooking at the values mentioned in the text (e.g., 8.5%, 9%, 0.5%, 0.6%), the percentages range from 0% to 10% or similar scale. If the major ticks are spaced by whole integers (like 1, 2, etc.), or if we deduce from standard macroeconomic healthcare expenditure charts, the difference between consecutive major ticks is typically 2 or 5 depending on the scale. Assuming a standard 0 to 10 scale with major ticks at 0, 2, 4, 6, 8, 10, the difference is 2.\n\nExtracted answer: 2", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "995|visref_raw_rank", "extraction": "18.27", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "962|visref_raw_rank", "extraction": "C", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "825|tsr", "extraction": "B", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "47|visref_raw_rank", "extraction": "6", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "347|visref_raw_rank", "extraction": "B", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "956|visref_raw_rank", "extraction": "9", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "377|tsr", "extraction": "B", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "693|tsr", "extraction": "A", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "209|visref_raw_rank", "extraction": "30.1", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "325|tsr", "extraction": "B", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "315|visref_raw_rank", "extraction": "D", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "623|st", "extraction": "C", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "379|visref_raw_rank", "extraction": "A", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "572|visref_raw_rank", "extraction": "5", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "288|st", "extraction": "D", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "523|tsr", "extraction": "D", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "592|tsr", "extraction": "5", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "441|st", "extraction": "9", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "374|tsr", "extraction": "13", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "674|st", "extraction": "B", "finish": "STOP", "model": "gemini-3.5-flash-lite"}
+{"id": "273|tsr", "extraction": "C", "finish": "STOP", "model": "gemini-3.5-flash-lite"}

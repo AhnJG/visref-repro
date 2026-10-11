@@ -1,0 +1,16 @@
+{"id": "360|visref_raw_rank", "extraction": "B", "finish": "STOP", "model": "gemini-3.8-flash"}
+{"id": "560|st", "extraction": "B", "finish": "STOP", "model": "gemini-3.8-flash"}
+{"id": "560|tsr", "extraction": "B", "finish": "STOP", "model": "gemini-3.8-flash"}
+{"id": "836|visref_raw_rank", "extraction": "C", "finish": "STOP", "model": "gemini-3.8-flash"}
+{"id": "169|st", "extraction": "5", "finish": "STOP", "model": "gemini-3.8-flash"}
+{"id": "639|tsr", "extraction": "12", "finish": "STOP", "model": "gemini-3.8-flash"}
+{"id": "733|st", "extraction": "45.0", "finish": "STOP", "model": "gemini-3.8-flash"}
+{"id": "513|st", "extraction": "C", "finish": "STOP", "model": "gemini-3.8-flash"}
+{"id": "513|tsr", "extraction": "C", "finish": "STOP", "model": "gemini-3.8-flash"}
+{"id": "733|visref_raw_rank", "extraction": "90.0", "finish": "STOP", "model": "gemini-3.8-flash"}
+{"id": "917|st", "extraction": "1", "finish": "STOP", "model": "gemini-3.8-flash"}
+{"id": "917|tsr", "extraction": "1", "finish": "STOP", "model": "gemini-3.8-flash"}
+{"id": "917|visref_raw_rank", "extraction": "1", "finish": "STOP", "model": "gemini-3.8-flash"}
+{"id": "608|st", "extraction": "B", "finish": "STOP", "model": "gemini-3.8-flash"}
+{"id": "441|visref_raw_rank", "extraction": "Unable to extract the answer as no model response was provided.", "finish": "STOP", "model": "gemini-3.8-flash"}
+{"id": "579|st", "extraction": "7", "finish": "STOP", "model": "gemini-3.8-flash"}

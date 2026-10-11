@@ -1,0 +1,137 @@
+{
+ "visual_tokens": {
+  "paper_mean_8B": 1772,
+  "recorded_mean": 1961.5,
+  "recompute_matches_recorded": "1000/1000",
+  "configs": {
+   "max_num=6,thumbnail=True": {
+    "mean": 1252.1,
+    "median": 1792.0,
+    "rel_to_paper": -0.293
+   },
+   "max_num=6,thumbnail=False": {
+    "mean": 1053.7,
+    "median": 1536.0,
+    "rel_to_paper": -0.405
+   },
+   "max_num=8,thumbnail=True": {
+    "mean": 1280.5,
+    "median": 1792.0,
+    "rel_to_paper": -0.277
+   },
+   "max_num=8,thumbnail=False": {
+    "mean": 1082.1,
+    "median": 1536.0,
+    "rel_to_paper": -0.389
+   },
+   "max_num=10,thumbnail=True": {
+    "mean": 1351.9,
+    "median": 1792.0,
+    "rel_to_paper": -0.237
+   },
+   "max_num=10,thumbnail=False": {
+    "mean": 1153.5,
+    "median": 1536.0,
+    "rel_to_paper": -0.349
+   },
+   "max_num=12,thumbnail=True": {
+    "mean": 1961.5,
+    "median": 1792.0,
+    "rel_to_paper": 0.107
+   },
+   "max_num=12,thumbnail=False": {
+    "mean": 1755.6,
+    "median": 1536.0,
+    "rel_to_paper": -0.009
+   }
+  }
+ },
+ "answer_handling": {
+  "paper_table6_1B": {
+   "st": 46.1,
+   "tsr": 48.5,
+   "visref_raw_rank": 52.0
+  },
+  "readings": {
+   "a_as_scored": {
+    "acc": {
+     "st": 57.8,
+     "tsr": 60.1,
+     "visref_raw_rank": 60.0
+    },
+    "tsr-st": 2.3,
+    "visref-tsr": -0.1,
+    "abs_gap_to_paper": {
+     "st": 11.7,
+     "tsr": 11.6,
+     "visref_raw_rank": 8.0
+    }
+   },
+   "c_af_rows_wrong": {
+    "acc": {
+     "st": 44.4,
+     "tsr": 48.3,
+     "visref_raw_rank": 47.4
+    },
+    "tsr-st": 3.9,
+    "visref-tsr": -0.9,
+    "abs_gap_to_paper": {
+     "st": -1.7,
+     "tsr": -0.2,
+     "visref_raw_rank": -4.6
+    }
+   },
+   "e_forced_answer_rows_wrong": {
+    "acc": {
+     "st": 25.2,
+     "tsr": 26.4,
+     "visref_raw_rank": 26.9
+    },
+    "tsr-st": 1.2,
+    "visref-tsr": 0.5,
+    "abs_gap_to_paper": {
+     "st": -20.9,
+     "tsr": -22.1,
+     "visref_raw_rank": -25.1
+    }
+   },
+   "f_forced_or_af_wrong": {
+    "acc": {
+     "st": 24.4,
+     "tsr": 25.3,
+     "visref_raw_rank": 26.3
+    },
+    "tsr-st": 0.9,
+    "visref-tsr": 1.0,
+    "abs_gap_to_paper": {
+     "st": -21.7,
+     "tsr": -23.2,
+     "visref_raw_rank": -25.7
+    }
+   }
+  }
+ },
+ "thinking_volume": {
+  "gen_tokens_mean": {
+   "st": 1114,
+   "tsr": 2205,
+   "visref_raw_rank": 2386
+  },
+  "gen_ratio_vs_st": {
+   "st": 1.0,
+   "tsr": 1.98,
+   "visref_raw_rank": 2.14
+  },
+  "paper_latency_ratio_vs_st_8B": {
+   "st": 1.0,
+   "tsr": 1.08,
+   "visref_raw_rank": 1.15
+  },
+  "k1_share": {
+   "st": 1.0,
+   "tsr": 0.73,
+   "visref_raw_rank": 0.713
+  },
+  "st_step1_cap_share": 0.641
+ }
+}

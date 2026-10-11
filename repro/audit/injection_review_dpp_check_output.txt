@@ -1,0 +1,13 @@
+full-rank trial 0 True 10
+full-rank trial 1 True 10
+full-rank trial 2 True 10
+full-rank trial 3 True 10
+full-rank trial 4 True 10
+rank-def trial 0 scale Lmax=2.22e-07 repro 3 chen 3 repro==naive3 True repro==chen True
+rank-def trial 1 scale Lmax=4.41e+04 repro 3 chen 3 repro==naive3 True repro==chen True
+rank-def trial 2 scale Lmax=1.47e+01 repro 3 chen 3 repro==naive3 True repro==chen True
+rank-def trial 3 scale Lmax=3.67e+03 repro 3 chen 3 repro==naive3 True repro==chen True
+rank-def trial 4 scale Lmax=7.65e+04 repro 3 chen 3 repro==naive3 True repro==chen True
+repeated tokens: n_unique=5, n_sel= 5
+dup V rows: 3 in False 7 in False n= 16
+N=256  int(N*0.3)=76  floor=76 | N=512  int(N*0.3)=153  floor=153 | N=768  int(N*0.3)=230  floor=230 | N=1024  int(N*0.3)=307  floor=307 | N=1280  int(N*0.3)=384  floor=384 | N=1536  int(N*0.3)=460  floor=460 | N=1792  int(N*0.3)=537  floor=537 | N=2048  int(N*0.3)=614  floor=614 | N=2304  int(N*0.3)=691  floor=691 | N=2560  int(N*0.3)=768  floor=768 | N=2816  int(N*0.3)=844  floor=844 | N=3072  int(N*0.3)=921  floor=921 | N=3328  int(N*0.3)=998  floor=998 | 

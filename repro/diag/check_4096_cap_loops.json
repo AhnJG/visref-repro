@@ -1,0 +1,41 @@
+{
+ "main_s0": {
+  "n_st": 60,
+  "st_step1_cap": 29,
+  "cap_tokens": [
+   4096
+  ],
+  "cap_correct": 11,
+  "noncap_correct": 22,
+  "all_steps_end": {
+   "close": 93,
+   "cap": 100,
+   "eos": 4
+  },
+  "cap_zlib_lt_0.2_w3000": 14,
+  "noncap_len_ge_w_zlib_lt_0.2_w3000": 0,
+  "cap_zlib_lt_0.2_w4000": 16,
+  "noncap_len_ge_w_zlib_lt_0.2_w4000": 0
+ },
+ "full_s1": {
+  "n_st": 58,
+  "st_step1_cap": 33,
+  "cap_tokens": [
+   4096
+  ],
+  "cap_correct": 15,
+  "noncap_correct": 20,
+  "all_steps_end": {
+   "close": 272,
+   "cap": 155
+  },
+  "cap_zlib_lt_0.2_w3000": 16,
+  "noncap_len_ge_w_zlib_lt_0.2_w3000": 0,
+  "cap_zlib_lt_0.2_w4000": 18,
+  "noncap_len_ge_w_zlib_lt_0.2_w4000": 2
+ },
+ "pid_overlap": {
+  "shared": 52,
+  "union": 66
+ }
+}

@@ -1,0 +1,87 @@
+{
+ "basis": "shuffled-order complete prefix",
+ "n_common": 150,
+ "methods": {
+  "st": {
+   "n": 150,
+   "accuracy": 47.33,
+   "accuracy_all_rows": 47.33,
+   "n_all_rows": 150,
+   "n_error": 0,
+   "paper_1b": 46.1,
+   "mean_k": 1.0,
+   "mean_think_tokens": 961.4,
+   "stop_reason": {
+    "st": 150
+   },
+   "step_end": {
+    "cap": 135,
+    "close": 15
+   },
+   "final_forced_close": 135,
+   "n_final_forced_answer": 135,
+   "n_final_forced_invalid": 64,
+   "n_stop_at_k1": 150,
+   "extract_rule": {
+    "boxed": 138,
+    "answer_phrase": 12
+   },
+   "dpp_frac_mean": null,
+   "mean_n_visual": 2054.8,
+   "mean_wall_s": 271.4,
+   "probe_H_first_step": [],
+   "probe_finish": {},
+   "final_finish": {
+    "cap": 64,
+    "eos": 86
+   },
+   "n_extract_failed": 0,
+   "code_versions": [
+    "d0095f79e691"
+   ],
+   "n_continued": 0,
+   "k_hist": {
+    "1": 150
+   },
+   "mean_gen_tokens": 1556.5,
+   "n_final_inner_think_end": 16,
+   "n_steps": 150,
+   "n_final_question_text": 3,
+   "n_probes": 0,
+   "probe_H_q10_25_50_75_90": null,
+   "n_probe_H_below_delta": 0,
+   "n_entropy_stop_at_k1": 0,
+   "probe_inner_step1": [],
+   "median_tokens_k2plus_step": null,
+   "median_rank_V": null,
+   "median_n_unique_z": null,
+   "median_n_dpp": null,
+   "median_n_inject": null,
+   "median_inject_over_m": null,
+   "by_step1_end": {
+    "close": {
+     "n": 15,
+     "acc": 26.7,
+     "mean_k": 1.0
+    },
+    "cap": {
+     "n": 135,
+     "acc": 49.6,
+     "mean_k": 1.0
+    }
+   },
+   "n_close_probe_H_ge_delta": 0,
+   "n_close_probes": 0,
+   "n_loop_steps": 0,
+   "n_final_forced_valid": 71,
+   "n_final_forced_unusable": 0,
+   "n_final_af": 64,
+   "n_final_af_valid": 64,
+   "median_m": null
+  }
+ },
+ "think_token_ratio_vs_st": {
+  "st": 1.0
+ },
+ "paired": {}
+}

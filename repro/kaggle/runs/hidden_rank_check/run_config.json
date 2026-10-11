@@ -1,0 +1,17 @@
+{
+ "model": "OpenGVLab/InternVL3_5-1B",
+ "model_rev": "2f71cf52542334823e48a46ffba0e2bc9add3446",
+ "data_rev": "2b6ad69445fbb5695c9b165475e8decdbeb97747",
+ "parquet": "data/testmini-00000-of-00001-725687bf7a18d64b.parquet",
+ "kernel": "arki13/visref-hidden-rank-check",
+ "accelerator": null,
+ "timeout": 10800,
+ "source_sha256": {
+  "visref/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "visref/model.py": "3aee14218f27e8960906f5e3665887a5d3e85247e26b04a0456ccc71049860f1",
+  "visref/dpp.py": "f20940dd772c8fdfd0278fd3f3369329b281c9a522c15a01a3b61b935091e554",
+  "diag/hidden_rank_check.py": "881a2d1508136624ecd8f19c3256a18619cc62784442b5da51d441ab678582e7",
+  "diag/hidden_rank_samples.json": "e4d39466cddac49ef13e74f1d0df0e73f88db817c9222db5a67ade9b0dfe3878"
+ },
+ "built_at": "2026-10-07T18:18:20+0000"
+}

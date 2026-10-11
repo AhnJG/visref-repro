@@ -1,0 +1,75 @@
+{
+ "scorer_version": "v3_md_colon_emphasis",
+ "n_ids": 150,
+ "n_done": 150,
+ "n_error": 0,
+ "n_base": 392,
+ "n_cap_base": 245,
+ "diag_step1_end": {
+  "cap": 135,
+  "close": 15,
+  "eos": 0
+ },
+ "af_rows": {
+  "diag": 64,
+  "main": 50
+ },
+ "readings": {
+  "a": {
+   "diag_acc": 47.333333333333336,
+   "main_acc": 49.333333333333336,
+   "diff_pp": -2.0,
+   "diag_only": 15,
+   "main_only": 18,
+   "p_mcnemar": 0.7283324808813632,
+   "af_acc_diag": [
+    32,
+    64
+   ],
+   "af_acc_main": [
+    23,
+    50
+   ],
+   "st_estimate_plain": 56.369047619047635,
+   "st_estimate_forced": 57.61904761904762
+  },
+  "b": {
+   "diag_acc": 40.0,
+   "main_acc": 46.0,
+   "diff_pp": -6.0,
+   "diag_only": 20,
+   "main_only": 29,
+   "p_mcnemar": 0.2528697301676033,
+   "af_acc_diag": [
+    21,
+    64
+   ],
+   "af_acc_main": [
+    18,
+    50
+   ],
+   "st_estimate_plain": 51.785714285714285,
+   "st_estimate_forced": 55.535714285714285
+  },
+  "c": {
+   "diag_acc": 26.0,
+   "main_acc": 34.0,
+   "diff_pp": -8.0,
+   "diag_only": 9,
+   "main_only": 21,
+   "p_mcnemar": 0.04277394525706768,
+   "af_acc_diag": [
+    0,
+    64
+   ],
+   "af_acc_main": [
+    0,
+    50
+   ],
+   "st_estimate_plain": 42.525510204081634,
+   "st_estimate_forced": 47.525510204081634
+  }
+ },
+ "criterion_a_drop_ge_10pp": false,
+ "paper_st": 46.1
+}

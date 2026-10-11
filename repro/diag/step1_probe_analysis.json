@@ -1,0 +1,119 @@
+{
+ "scorer_version": "v4_mc_empty_wrong",
+ "note": "post-hoc exploratory; single T=1 sample per probe",
+ "valid_probes": {
+  "tsr": 997,
+  "visref": 997
+ },
+ "identical_probe_strings": 810,
+ "probe_all": {
+  "n": 1000,
+  "acc_visref": 58.9,
+  "acc_tsr": 57.2,
+  "visref_only": 28,
+  "tsr_only": 11,
+  "p_mcnemar": 0.0095,
+  "diff_ci95": [
+   0.5,
+   3.0
+  ]
+ },
+ "probe_either_continued": {
+  "n": 309,
+  "acc_visref": 36.6,
+  "acc_tsr": 31.1,
+  "visref_only": 28,
+  "tsr_only": 11,
+  "p_mcnemar": 0.0095,
+  "diff_ci95": [
+   1.62,
+   9.39
+  ]
+ },
+ "probe_both_continued": {
+  "n": 248,
+  "acc_visref": 35.5,
+  "acc_tsr": 29.0,
+  "visref_only": 26,
+  "tsr_only": 10,
+  "p_mcnemar": 0.0113,
+  "diff_ci95": [
+   2.02,
+   11.29
+  ]
+ },
+ "probe_both_k1": {
+  "n": 691,
+  "acc_visref": 68.9,
+  "acc_tsr": 68.9,
+  "visref_only": 0,
+  "tsr_only": 0,
+  "p_mcnemar": 1.0,
+  "diff_ci95": [
+   0.0,
+   0.0
+  ]
+ },
+ "final_either_continued": {
+  "n": 309,
+  "acc_visref": 42.4,
+  "acc_tsr": 43.0,
+  "visref_only": 30,
+  "tsr_only": 32,
+  "p_mcnemar": 0.8991,
+  "diff_ci95": [
+   -5.18,
+   4.21
+  ]
+ },
+ "final_both_continued": {
+  "n": 248,
+  "acc_visref": 41.9,
+  "acc_tsr": 42.3,
+  "visref_only": 25,
+  "tsr_only": 26,
+  "p_mcnemar": 1.0,
+  "diff_ci95": [
+   -6.05,
+   5.24
+  ]
+ },
+ "probe_by_st_step1_end": {
+  "close": {
+   "n": 334,
+   "acc_visref": 71.9,
+   "acc_tsr": 71.9,
+   "visref_only": 0,
+   "tsr_only": 0,
+   "p_mcnemar": 1.0,
+   "diff_ci95": [
+    0.0,
+    0.0
+   ]
+  },
+  "cap": {
+   "n": 641,
+   "acc_visref": 51.6,
+   "acc_tsr": 49.1,
+   "visref_only": 27,
+   "tsr_only": 11,
+   "p_mcnemar": 0.0139,
+   "diff_ci95": [
+    0.62,
+    4.37
+   ]
+  },
+  "eos": {
+   "n": 25,
+   "acc_visref": 72.0,
+   "acc_tsr": 68.0,
+   "visref_only": 1,
+   "tsr_only": 0,
+   "p_mcnemar": 1.0,
+   "diff_ci95": [
+    0.0,
+    12.0
+   ]
+  }
+ }
+}

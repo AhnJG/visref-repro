@@ -1,0 +1,734 @@
+{
+ "acc_all": {
+  "st": 57.8,
+  "tsr": 60.1,
+  "visref_raw_rank": 60.0
+ },
+ "paired_all": {
+  "visref-tsr": {
+   "n": 1000,
+   "diff_pp": -0.1,
+   "ci95": [
+    -2.0,
+    1.7
+   ],
+   "win": 44,
+   "lose": 45
+  },
+  "visref-st": {
+   "n": 1000,
+   "diff_pp": 2.2,
+   "ci95": [
+    0.3,
+    4.1
+   ],
+   "win": 60,
+   "lose": 38
+  },
+  "tsr-st": {
+   "n": 1000,
+   "diff_pp": 2.3,
+   "ci95": [
+    0.6,
+    3.9
+   ],
+   "win": 51,
+   "lose": 28
+  }
+ },
+ "first_step_end": {
+  "cap": 641,
+  "close": 334,
+  "eos": 25
+ },
+ "by_first_end": {
+  "close": {
+   "n": 334,
+   "acc": {
+    "st": 71.26,
+    "tsr": 71.86,
+    "visref_raw_rank": 71.26
+   },
+   "visref-tsr": {
+    "n": 334,
+    "diff_pp": -0.6,
+    "ci95": [
+     -1.5,
+     0.0
+    ],
+    "win": 0,
+    "lose": 2
+   },
+   "tsr-st": {
+    "n": 334,
+    "diff_pp": 0.6,
+    "ci95": [
+     0.0,
+     1.5
+    ],
+    "win": 2,
+    "lose": 0
+   }
+  },
+  "cap": {
+   "n": 641,
+   "acc": {
+    "st": 50.86,
+    "tsr": 53.67,
+    "visref_raw_rank": 53.67
+   },
+   "visref-tsr": {
+    "n": 641,
+    "diff_pp": 0.0,
+    "ci95": [
+     -2.65,
+     2.81
+    ],
+    "win": 42,
+    "lose": 42
+   },
+   "tsr-st": {
+    "n": 641,
+    "diff_pp": 2.81,
+    "ci95": [
+     0.16,
+     5.46
+    ],
+    "win": 46,
+    "lose": 28
+   }
+  },
+  "eos": {
+   "n": 25,
+   "acc": {
+    "st": 56.0,
+    "tsr": 68.0,
+    "visref_raw_rank": 72.0
+   },
+   "visref-tsr": {
+    "n": 25,
+    "diff_pp": 4.0,
+    "ci95": [
+     -8.0,
+     16.0
+    ],
+    "win": 2,
+    "lose": 1
+   },
+   "tsr-st": {
+    "n": 25,
+    "diff_pp": 12.0,
+    "ci95": [
+     0.0,
+     24.0
+    ],
+    "win": 3,
+    "lose": 0
+   }
+  }
+ },
+ "k_dist": {
+  "st": {
+   "1": 1000
+  },
+  "tsr": {
+   "10": 70,
+   "1": 730,
+   "2": 87,
+   "3": 46,
+   "7": 9,
+   "4": 27,
+   "5": 12,
+   "8": 5,
+   "6": 8,
+   "9": 6
+  },
+  "visref_raw_rank": {
+   "1": 713,
+   "5": 20,
+   "10": 82,
+   "2": 93,
+   "4": 21,
+   "3": 36,
+   "9": 6,
+   "7": 12,
+   "6": 12,
+   "8": 5
+  }
+ },
+ "step_transitions": {
+  "tsr": {
+   "cap->continue": 1103,
+   "cap->stop": 625,
+   "close->stop": 352,
+   "close->continue": 7,
+   "eos->stop": 23,
+   "eos->continue": 5
+  },
+  "visref_raw_rank": {
+   "cap->stop": 613,
+   "cap->continue": 1214,
+   "close->stop": 366,
+   "close->continue": 32,
+   "eos->stop": 21,
+   "eos->continue": 15
+  }
+ },
+ "k_groups": {
+  "both_k1": {
+   "n": 691,
+   "acc": {
+    "st": 68.16,
+    "tsr": 67.73,
+    "visref_raw_rank": 67.87
+   },
+   "visref-tsr": {
+    "n": 691,
+    "diff_pp": 0.14,
+    "ci95": [
+     -1.3,
+     1.74
+    ],
+    "win": 14,
+    "lose": 13
+   }
+  },
+  "any_k>1": {
+   "n": 309,
+   "acc": {
+    "st": 34.63,
+    "tsr": 43.04,
+    "visref_raw_rank": 42.39
+   },
+   "visref-tsr": {
+    "n": 309,
+    "diff_pp": -0.65,
+    "ci95": [
+     -5.18,
+     4.21
+    ],
+    "win": 30,
+    "lose": 32
+   },
+   "tsr-st": {
+    "n": 309,
+    "diff_pp": 8.41,
+    "ci95": [
+     2.91,
+     13.59
+    ],
+    "win": 50,
+    "lose": 24
+   }
+  }
+ },
+ "visref_k1_vs_st": {
+  "n": 713,
+  "acc": {
+   "st": 67.18,
+   "visref_raw_rank": 67.32
+  },
+  "visref-st": {
+   "n": 713,
+   "diff_pp": 0.14,
+   "ci95": [
+    -1.4,
+    1.68
+   ],
+   "win": 15,
+   "lose": 14
+  },
+  "pred_differs": 38
+ },
+ "tsr_k1_vs_st_noise": {
+  "n": 730,
+  "pred_differs": 16
+ },
+ "injection": {
+  "n_steps": 2261,
+  "n_inject_over_m": {
+   "0.1": 0.1,
+   "0.25": 0.143,
+   "0.5": 0.199,
+   "0.75": 0.6,
+   "0.9": 1.0
+  },
+  "n_inject_over_V": {
+   "0.1": 0.03,
+   "0.25": 0.043,
+   "0.5": 0.06,
+   "0.75": 0.18,
+   "0.9": 0.297
+  },
+  "steps_below_m": 1895,
+  "n_inject_eq_min(m,unique_z,rankV)": 2261,
+  "n_inject": {
+   "0.1": 61,
+   "0.25": 76,
+   "0.5": 129,
+   "0.75": 159,
+   "0.9": 179
+  },
+  "n_visual_dist": {
+   "2304": 16,
+   "3328": 365,
+   "768": 107,
+   "2048": 1,
+   "256": 196,
+   "1792": 226,
+   "1024": 21,
+   "1280": 21,
+   "2816": 31,
+   "2560": 10,
+   "1536": 6
+  }
+ },
+ "dose_visref_minus_tsr_by_stratum": {
+  "cap|V=1024|lt10%": {
+   "n": 3,
+   "sum_diff": 0
+  },
+  "cap|V=1024|lt20%": {
+   "n": 12,
+   "sum_diff": 1
+  },
+  "cap|V=1280|lt10%": {
+   "n": 6,
+   "sum_diff": 0
+  },
+  "cap|V=1280|lt20%": {
+   "n": 5,
+   "sum_diff": 0
+  },
+  "cap|V=1280|lt5%": {
+   "n": 1,
+   "sum_diff": 0
+  },
+  "cap|V=1536|lt10%": {
+   "n": 2,
+   "sum_diff": 0
+  },
+  "cap|V=1536|lt20%": {
+   "n": 1,
+   "sum_diff": 0
+  },
+  "cap|V=1792|lt10%": {
+   "n": 97,
+   "sum_diff": 1
+  },
+  "cap|V=1792|lt20%": {
+   "n": 23,
+   "sum_diff": 1
+  },
+  "cap|V=1792|lt5%": {
+   "n": 8,
+   "sum_diff": 0
+  },
+  "cap|V=2048|lt10%": {
+   "n": 1,
+   "sum_diff": 0
+  },
+  "cap|V=2304|lt10%": {
+   "n": 4,
+   "sum_diff": 0
+  },
+  "cap|V=2560|lt10%": {
+   "n": 4,
+   "sum_diff": 0
+  },
+  "cap|V=2560|lt5%": {
+   "n": 1,
+   "sum_diff": 0
+  },
+  "cap|V=256|ge20%": {
+   "n": 117,
+   "sum_diff": -1
+  },
+  "cap|V=256|lt10%": {
+   "n": 1,
+   "sum_diff": 0
+  },
+  "cap|V=2816|lt10%": {
+   "n": 16,
+   "sum_diff": 1
+  },
+  "cap|V=2816|lt5%": {
+   "n": 9,
+   "sum_diff": 1
+  },
+  "cap|V=3328|lt10%": {
+   "n": 91,
+   "sum_diff": 2
+  },
+  "cap|V=3328|lt5%": {
+   "n": 168,
+   "sum_diff": -2
+  },
+  "cap|V=768|ge20%": {
+   "n": 38,
+   "sum_diff": -3
+  },
+  "cap|V=768|lt10%": {
+   "n": 1,
+   "sum_diff": -1
+  },
+  "cap|V=768|lt20%": {
+   "n": 32,
+   "sum_diff": 0
+  },
+  "close|V=1024|lt10%": {
+   "n": 4,
+   "sum_diff": 0
+  },
+  "close|V=1024|lt20%": {
+   "n": 2,
+   "sum_diff": 0
+  },
+  "close|V=1280|lt10%": {
+   "n": 6,
+   "sum_diff": 0
+  },
+  "close|V=1280|lt20%": {
+   "n": 3,
+   "sum_diff": 0
+  },
+  "close|V=1536|lt10%": {
+   "n": 3,
+   "sum_diff": 0
+  },
+  "close|V=1792|lt10%": {
+   "n": 51,
+   "sum_diff": 0
+  },
+  "close|V=1792|lt20%": {
+   "n": 3,
+   "sum_diff": 0
+  },
+  "close|V=1792|lt5%": {
+   "n": 34,
+   "sum_diff": -1
+  },
+  "close|V=2304|lt10%": {
+   "n": 3,
+   "sum_diff": 0
+  },
+  "close|V=2304|lt5%": {
+   "n": 5,
+   "sum_diff": 0
+  },
+  "close|V=2560|lt10%": {
+   "n": 2,
+   "sum_diff": 0
+  },
+  "close|V=2560|lt5%": {
+   "n": 3,
+   "sum_diff": 0
+  },
+  "close|V=256|ge20%": {
+   "n": 69,
+   "sum_diff": -1
+  },
+  "close|V=256|lt20%": {
+   "n": 9,
+   "sum_diff": 0
+  },
+  "close|V=2816|lt10%": {
+   "n": 2,
+   "sum_diff": 0
+  },
+  "close|V=2816|lt5%": {
+   "n": 4,
+   "sum_diff": 0
+  },
+  "close|V=3328|lt10%": {
+   "n": 6,
+   "sum_diff": 0
+  },
+  "close|V=3328|lt5%": {
+   "n": 91,
+   "sum_diff": 0
+  },
+  "close|V=768|ge20%": {
+   "n": 5,
+   "sum_diff": 0
+  },
+  "close|V=768|lt10%": {
+   "n": 14,
+   "sum_diff": 0
+  },
+  "close|V=768|lt20%": {
+   "n": 15,
+   "sum_diff": 0
+  },
+  "eos|V=1792|lt5%": {
+   "n": 10,
+   "sum_diff": 1
+  },
+  "eos|V=2304|lt5%": {
+   "n": 4,
+   "sum_diff": -1
+  },
+  "eos|V=3328|lt5%": {
+   "n": 9,
+   "sum_diff": 1
+  },
+  "eos|V=768|lt5%": {
+   "n": 2,
+   "sum_diff": 0
+  }
+ },
+ "reemission": {
+  "st": {
+   "cap|reemit": 109,
+   "cap|n": 641,
+   "af": 239,
+   "final_cap": 239,
+   "close|reemit": 20,
+   "close|n": 334,
+   "eos|reemit": 0,
+   "eos|n": 25
+  },
+  "tsr": {
+   "cap|reemit": 96,
+   "cap|n": 625,
+   "af": 187,
+   "final_cap": 187,
+   "close|reemit": 25,
+   "close|n": 352,
+   "eos|reemit": 0,
+   "eos|n": 23
+  },
+  "visref_raw_rank": {
+   "cap|reemit": 308,
+   "cap|n": 613,
+   "af": 225,
+   "final_cap": 225,
+   "close|reemit": 157,
+   "close|n": 366,
+   "eos|reemit": 0,
+   "eos|n": 21
+  }
+ },
+ "continuation_openings": {
+  "tsr": {
+   "top": [
+    [
+     "carefully. The question i",
+     40
+    ],
+    [
+     "carefully. The problem st",
+     21
+    ],
+    [
+     "carefully. Let's consider",
+     20
+    ],
+    [
+     "carefully. Let me conside",
+     13
+    ],
+    [
+     "carefully. The question a",
+     11
+    ],
+    [
+     "carefully. Let's list all",
+     10
+    ],
+    [
+     "carefully.\\n\\nIn triangle",
+     9
+    ],
+    [
+     "carefully. The man is a m",
+     9
+    ],
+    [
+     "carefully. \\n\\nIf the per",
+     9
+    ],
+    [
+     "carefully. The hyena is a",
+     9
+    ],
+    [
+     "carefully. The starting p",
+     8
+    ],
+    [
+     "carefully.\\n\\nAlternative",
+     8
+    ],
+    [
+     "carefully. The table entr",
+     8
+    ],
+    [
+     "carefully. The Weak Safe ",
+     8
+    ],
+    [
+     "carefully. The woman is w",
+     8
+    ]
+   ],
+   "examples": [
+    "carefully. Let me compute it more accurately.\\n\\nx² = (0.40 * ",
+    "carefully:\\n\\nmv₀² = kx²\\n\\nSo x = sqrt( (mv₀²)/k )\\n\\nPlugging in",
+    "carefully. Let me compute the exact value:\\n\\nx² = (0.40 * 0.2",
+    "carefully. 0.00013333... = 13333/1000000000. But 1/750 = 0.0",
+    "carefully. Let me see what the question says:\\n\\n\"by what dist",
+    "carefully. Let me check with exact calculation:\\n\\nx = sqrt(0.",
+    "carefully. Wait, 0.011547 is 0.011547. If we need to round t",
+    "carefully. Wait, 0.011547 meters is 0.011547. The first deci"
+   ]
+  },
+  "visref_raw_rank": {
+   "top": [
+    [
+     "carefully. Let me list al",
+     53
+    ],
+    [
+     "carefully.\\n\\nWait, maybe",
+     47
+    ],
+    [
+     "carefully. The question i",
+     39
+    ],
+    [
+     "carefully.\\n\\nAlternative",
+     37
+    ],
+    [
+     "carefully.\\n\\nWait, the p",
+     22
+    ],
+    [
+     "carefully. Let's consider",
+     21
+    ],
+    [
+     "carefully.\\n\\nWait, perha",
+     19
+    ],
+    [
+     "carefully. Let me conside",
+     17
+    ],
+    [
+     "carefully. Let me count a",
+     17
+    ],
+    [
+     "carefully. The question a",
+     17
+    ],
+    [
+     "carefully. The triangle h",
+     16
+    ],
+    [
+     "carefully. The problem sa",
+     16
+    ],
+    [
+     "carefully.\\n\\nLet me list",
+     14
+    ],
+    [
+     "carefully. The problem me",
+     14
+    ],
+    [
+     "carefully. Let me try to ",
+     13
+    ]
+   ],
+   "examples": [
+    "carefully.\\n\\nThe question is comparing the number of tiny gra",
+    "carefully.\\n\\nThe green bicycle is a tiny object. The question",
+    "carefully.\\n\\nThe question is: Is the number of tiny gray bicy",
+    "carefully.\\n\\nThe question is asking if the number of tiny gra",
+    "carefully.\\n\\nLet me list all objects again:\\n\\n1. Blue cylinder",
+    "carefully.\\n\\nLet me list all objects again in order:\\n\\n1. Blue",
+    "carefully.\\n\\nLet me list all objects again with their positio",
+    "carefully.\\n\\nThe question is: \"How many objects are left?\" af"
+   ]
+  }
+ },
+ "img_mentions_in_continuations": {
+  "tsr": {
+   "segments": 1116,
+   "mention_in_first_400_chars": 132
+  },
+  "visref_raw_rank": {
+   "segments": 1261,
+   "mention_in_first_400_chars": 237
+  }
+ },
+ "step1_H": {
+  "tsr": {
+   "median": 0.003,
+   "ge_delta": 270,
+   "inf": 3
+  },
+  "visref_raw_rank": {
+   "median": 0.007,
+   "ge_delta": 287,
+   "inf": 3
+  }
+ },
+ "step1_decision_cross": {
+  "tsr_cont|vis_stop": 22,
+  "tsr_stop|vis_stop": 691,
+  "tsr_cont|vis_cont": 248,
+  "tsr_stop|vis_cont": 39
+ },
+ "fill": {
+  "rows": 994,
+  "steps_with_dual": 2250,
+  "H_minus_HnoV": {
+   "0.1": -0.166,
+   "0.25": -0.027,
+   "0.5": 0.001,
+   "0.75": 0.07,
+   "0.9": 0.259
+  },
+  "flip": {
+   "V_cont|noV_cont": 1215,
+   "V_stop|noV_stop": 883,
+   "V_cont|noV_stop": 110,
+   "V_stop|noV_cont": 42
+  },
+  "tail_spearman": {
+   "0.1": -0.205,
+   "0.25": -0.154,
+   "0.5": -0.101,
+   "0.75": -0.049,
+   "0.9": 0.007
+  },
+  "n_fill_over_m": {
+   "0.1": 0.0,
+   "0.25": 0.348,
+   "0.5": 0.784,
+   "0.75": 0.857,
+   "0.9": 0.907
+  }
+ },
+ "fill_paired": {
+  "n": 994,
+  "fill-visref_pp": 0.1,
+  "fill-tsr_pp": 0.0,
+  "fill_acc": 60.16
+ },
+ "steps_T_ge_m": {
+  "n": 2261,
+  "T_ge_m": 1957,
+  "unique_z_median": {
+   "0.5": 144
+  }
+ }
+}

@@ -1,0 +1,167 @@
+{"event": "start", "code_version": "f2422d0e72ff", "shard": "0/2", "todo": 1245, "done": 638, "cfg": {"delta": 0.25, "kmax": 10, "vis_frac": 0.3, "think_cap": 1024, "total_think_cap": 10240, "answer_cap": 1024, "max_context": 40960, "min_step_tokens": 256, "probe_cap": 16, "probe_prompt": "\n\n\\boxed", "wait_text": "Wait, think more", "forced_prompt": "\nFinal Answer:", "af_prompt": "\n**Final Answer**\n\\boxed", "af_cap": 100, "cut_sep": "\n", "temperature": 0.6, "top_k": 50, "top_p": 0.95, "seed": 42, "batch": 16, "chunk": 1024, "batch_tokens": 72000, "max_num": 12, "fast_kv": 1}}
+FlashAttention2 is not installed.
+{"event": "fast_kv_check", "ok": true, "match_rows": [true, true]}
+{"event": "round", "elapsed": 112, "active": 5, "groups": [[5, 3511, 3348, 60.8]], "tokens": 3348, "queue": 410, "peak_alloc_gb": 4.71, "peak_reserved_gb": 4.8}
+{"event": "round", "elapsed": 185, "active": 15, "groups": [[12, 4540, 1224, 64.2], [3, 4722, 109, 7.8]], "tokens": 1333, "queue": 410, "peak_alloc_gb": 9.99, "peak_reserved_gb": 10.08}
+{"event": "row", "pid": "284", "method": "st", "correct": 1, "k": 1, "think": 84, "stop": "st", "wall": 137.19, "elapsed": 185}
+{"event": "row", "pid": "799", "method": "st", "correct": 1, "k": 1, "think": 190, "stop": "st", "wall": 136.93, "elapsed": 185}
+{"event": "row", "pid": "369", "method": "st", "correct": 1, "k": 1, "think": 1024, "stop": "st", "wall": 135.71, "elapsed": 185}
+{"event": "row", "pid": "53", "method": "st", "correct": 0, "k": 1, "think": 1024, "stop": "st", "wall": 134.73, "elapsed": 185}
+{"event": "round", "elapsed": 254, "active": 12, "groups": [[12, 4723, 4645, 68.4]], "tokens": 4645, "queue": 409, "peak_alloc_gb": 10.21, "peak_reserved_gb": 10.33}
+{"event": "row", "pid": "862", "method": "st", "correct": 0, "k": 1, "think": 1024, "stop": "st", "wall": 205.22, "elapsed": 254}
+{"event": "row", "pid": "284", "method": "tsr", "correct": 1, "k": 1, "think": 84, "stop": "entropy", "wall": 205.73, "elapsed": 254}
+{"event": "row", "pid": "284", "method": "visref_raw_rank", "correct": 1, "k": 1, "think": 84, "stop": "entropy", "wall": 205.73, "elapsed": 254}
+{"event": "row", "pid": "799", "method": "tsr", "correct": 1, "k": 1, "think": 190, "stop": "entropy", "wall": 205.47, "elapsed": 254}
+{"event": "row", "pid": "799", "method": "visref_raw_rank", "correct": 1, "k": 1, "think": 190, "stop": "entropy", "wall": 205.47, "elapsed": 254}
+{"event": "row", "pid": "369", "method": "tsr", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 204.25, "elapsed": 254}
+{"event": "row", "pid": "53", "method": "tsr", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 203.26, "elapsed": 254}
+{"event": "row", "pid": "53", "method": "visref_raw_rank", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 203.26, "elapsed": 254}
+{"event": "round", "elapsed": 324, "active": 9, "groups": [[9, 5754, 3250, 66.8]], "tokens": 3250, "queue": 406, "peak_alloc_gb": 10.21, "peak_reserved_gb": 10.33}
+{"event": "row", "pid": "369", "method": "visref_raw_rank", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 276.07, "elapsed": 326}
+{"event": "row", "pid": "438", "method": "st", "correct": 0, "k": 1, "think": 1024, "stop": "st", "wall": 140.27, "elapsed": 326}
+{"event": "round", "elapsed": 397, "active": 14, "groups": [[14, 4709, 4140, 70.2]], "tokens": 4140, "queue": 405, "peak_alloc_gb": 11.61, "peak_reserved_gb": 11.74}
+{"event": "row", "pid": "438", "method": "tsr", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 212.11, "elapsed": 398}
+{"event": "row", "pid": "438", "method": "visref_raw_rank", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 212.11, "elapsed": 398}
+{"event": "row", "pid": "827", "method": "st", "correct": 0, "k": 1, "think": 1024, "stop": "st", "wall": 142.52, "elapsed": 398}
+{"event": "row", "pid": "740", "method": "st", "correct": 0, "k": 1, "think": 1024, "stop": "st", "wall": 141.41, "elapsed": 398}
+{"event": "row", "pid": "699", "method": "st", "correct": 0, "k": 1, "think": 1024, "stop": "st", "wall": 140.36, "elapsed": 398}
+{"event": "round", "elapsed": 470, "active": 12, "groups": [[12, 4783, 5977, 70.8]], "tokens": 5977, "queue": 404, "peak_alloc_gb": 11.61, "peak_reserved_gb": 11.74}
+{"event": "row", "pid": "740", "method": "tsr", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 213.96, "elapsed": 470}
+{"event": "row", "pid": "699", "method": "tsr", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 212.91, "elapsed": 470}
+{"event": "row", "pid": "95", "method": "st", "correct": 0, "k": 1, "think": 1024, "stop": "st", "wall": 143.26, "elapsed": 470}
+{"event": "round", "elapsed": 545, "active": 12, "groups": [[12, 5843, 5408, 74.6]], "tokens": 5408, "queue": 403, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "row", "pid": "740", "method": "visref_raw_rank", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 289.51, "elapsed": 546}
+{"event": "round", "elapsed": 674, "active": 14, "groups": [[11, 5620, 3558, 70.1], [3, 5968, 1034, 57.8]], "tokens": 4592, "queue": 402, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "row", "pid": "827", "method": "tsr", "correct": 0, "k": 2, "think": 1944, "stop": "entropy", "wall": 418.71, "elapsed": 674}
+{"event": "row", "pid": "114", "method": "st", "correct": 0, "k": 1, "think": 1024, "stop": "st", "wall": 275.09, "elapsed": 674}
+{"event": "row", "pid": "22", "method": "st", "correct": 1, "k": 1, "think": 268, "stop": "st", "wall": 203.04, "elapsed": 674}
+{"event": "round", "elapsed": 804, "active": 14, "groups": [[10, 5620, 3241, 67.5], [4, 7006, 1501, 61.0]], "tokens": 4742, "queue": 401, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "row", "pid": "862", "method": "visref_raw_rank", "correct": 0, "k": 4, "think": 4096, "stop": "entropy", "wall": 755.32, "elapsed": 804}
+{"event": "row", "pid": "22", "method": "tsr", "correct": 1, "k": 1, "think": 268, "stop": "entropy", "wall": 333.29, "elapsed": 804}
+{"event": "row", "pid": "22", "method": "visref_raw_rank", "correct": 1, "k": 1, "think": 268, "stop": "entropy", "wall": 333.29, "elapsed": 804}
+{"event": "row", "pid": "746", "method": "st", "correct": 1, "k": 1, "think": 210, "stop": "st", "wall": 258.28, "elapsed": 804}
+{"event": "round", "elapsed": 934, "active": 13, "groups": [[10, 6253, 4290, 71.1], [3, 7159, 1030, 58.4]], "tokens": 5320, "queue": 400, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "row", "pid": "746", "method": "tsr", "correct": 1, "k": 1, "think": 210, "stop": "entropy", "wall": 387.85, "elapsed": 934}
+{"event": "row", "pid": "746", "method": "visref_raw_rank", "correct": 1, "k": 1, "think": 210, "stop": "entropy", "wall": 387.85, "elapsed": 934}
+{"event": "round", "elapsed": 1070, "active": 14, "groups": [[10, 6631, 4253, 72.0], [4, 8159, 2054, 64.6]], "tokens": 6307, "queue": 399, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "row", "pid": "109", "method": "st", "correct": 0, "k": 1, "think": 1024, "stop": "st", "wall": 395.41, "elapsed": 1070}
+{"event": "row", "pid": "305", "method": "st", "correct": 1, "k": 1, "think": 57, "stop": "st", "wall": 266.23, "elapsed": 1070}
+{"event": "round", "elapsed": 1207, "active": 14, "groups": [[9, 6631, 2180, 69.9], [5, 8329, 2065, 67.2]], "tokens": 4245, "queue": 399, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "row", "pid": "305", "method": "tsr", "correct": 1, "k": 1, "think": 57, "stop": "entropy", "wall": 403.31, "elapsed": 1207}
+{"event": "row", "pid": "305", "method": "visref_raw_rank", "correct": 1, "k": 1, "think": 57, "stop": "entropy", "wall": 403.31, "elapsed": 1207}
+{"event": "row", "pid": "610", "method": "st", "correct": 0, "k": 1, "think": 1024, "stop": "st", "wall": 273.73, "elapsed": 1207}
+{"event": "round", "elapsed": 1357, "active": 12, "groups": [[8, 7660, 6150, 83.4], [4, 9310, 2054, 65.1]], "tokens": 8204, "queue": 398, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "round", "elapsed": 1493, "active": 14, "groups": [[8, 7586, 1173, 63.0], [6, 9483, 3095, 72.4]], "tokens": 4268, "queue": 398, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "row", "pid": "95", "method": "tsr", "correct": 0, "k": 4, "think": 4096, "stop": "entropy", "wall": 1166.19, "elapsed": 1493}
+{"event": "row", "pid": "975", "method": "st", "correct": 1, "k": 1, "think": 1024, "stop": "st", "wall": 284.54, "elapsed": 1493}
+{"event": "round", "elapsed": 1653, "active": 13, "groups": [[7, 7085, 7168, 85.4], [6, 10342, 2061, 74.1]], "tokens": 9229, "queue": 397, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "row", "pid": "827", "method": "visref_raw_rank", "correct": 1, "k": 5, "think": 5120, "stop": "entropy", "wall": 1397.61, "elapsed": 1653}
+{"event": "round", "elapsed": 1796, "active": 14, "groups": [[8, 7626, 1045, 67.7], [6, 10650, 3084, 76.0]], "tokens": 4129, "queue": 397, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "round", "elapsed": 1949, "active": 14, "groups": [[8, 7627, 5253, 75.4], [6, 10650, 3081, 76.8]], "tokens": 8334, "queue": 397, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "row", "pid": "109", "method": "tsr", "correct": 0, "k": 4, "think": 4096, "stop": "entropy", "wall": 1273.67, "elapsed": 1949}
+{"event": "row", "pid": "212", "method": "st", "correct": 0, "k": 1, "think": 1024, "stop": "st", "wall": 455.45, "elapsed": 1949}
+{"event": "row", "pid": "212", "method": "visref_raw_rank", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 455.45, "elapsed": 1949}
+{"event": "round", "elapsed": 2097, "active": 12, "groups": [[7, 9434, 1139, 71.8], [5, 11786, 3088, 76.1]], "tokens": 4227, "queue": 396, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "row", "pid": "610", "method": "tsr", "correct": 1, "k": 3, "think": 3072, "stop": "entropy", "wall": 1164.21, "elapsed": 2098}
+{"event": "round", "elapsed": 2297, "active": 14, "groups": [[8, 7075, 4366, 69.3], [5, 11783, 2057, 75.7], [1, 11786, 1024, 53.1]], "tokens": 7447, "queue": 395, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "row", "pid": "975", "method": "visref_raw_rank", "correct": 0, "k": 3, "think": 3072, "stop": "entropy", "wall": 1089.14, "elapsed": 2298}
+{"event": "row", "pid": "733", "method": "st", "correct": 0, "k": 1, "think": 1024, "stop": "st", "wall": 348.2, "elapsed": 2298}
+{"event": "round", "elapsed": 2449, "active": 14, "groups": [[8, 7630, 2268, 70.2], [5, 11783, 3081, 77.2], [1, 12918, 3, 4.0]], "tokens": 5352, "queue": 395, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "row", "pid": "975", "method": "tsr", "correct": 0, "k": 3, "think": 3072, "stop": "entropy", "wall": 1240.63, "elapsed": 2449}
+{"event": "row", "pid": "212", "method": "tsr", "correct": 1, "k": 2, "think": 2040, "stop": "entropy", "wall": 956.02, "elapsed": 2449}
+{"event": "row", "pid": "645", "method": "st", "correct": 1, "k": 1, "think": 1024, "stop": "st", "wall": 350.14, "elapsed": 2449}
+{"event": "round", "elapsed": 2598, "active": 12, "groups": [[6, 6026, 2645, 64.1], [5, 12918, 2088, 79.9], [1, 12955, 3, 4.1]], "tokens": 4736, "queue": 394, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "row", "pid": "862", "method": "tsr", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 2549.61, "elapsed": 2598}
+{"event": "row", "pid": "610", "method": "visref_raw_rank", "correct": 1, "k": 5, "think": 5120, "stop": "entropy", "wall": 1664.64, "elapsed": 2598}
+{"event": "round", "elapsed": 2753, "active": 13, "groups": [[8, 6021, 3169, 66.2], [5, 14047, 2873, 87.3]], "tokens": 6042, "queue": 393, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "row", "pid": "114", "method": "tsr", "correct": 1, "k": 8, "think": 8192, "stop": "entropy", "wall": 2354.79, "elapsed": 2754}
+{"event": "row", "pid": "444", "method": "st", "correct": 1, "k": 1, "think": 331, "stop": "st", "wall": 303.71, "elapsed": 2754}
+{"event": "round", "elapsed": 2902, "active": 14, "groups": [[10, 6384, 2637, 70.2], [4, 14124, 2054, 77.4]], "tokens": 4691, "queue": 392, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "row", "pid": "645", "method": "tsr", "correct": 0, "k": 2, "think": 2048, "stop": "entropy", "wall": 803.63, "elapsed": 2903}
+{"event": "row", "pid": "444", "method": "tsr", "correct": 1, "k": 1, "think": 331, "stop": "entropy", "wall": 452.88, "elapsed": 2903}
+{"event": "row", "pid": "444", "method": "visref_raw_rank", "correct": 1, "k": 1, "think": 331, "stop": "entropy", "wall": 452.89, "elapsed": 2903}
+{"event": "round", "elapsed": 3047, "active": 14, "groups": [[9, 6384, 3902, 71.4], [4, 14124, 1050, 67.7], [1, 15194, 3, 4.8]], "tokens": 4955, "queue": 391, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "row", "pid": "699", "method": "visref_raw_rank", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 2789.97, "elapsed": 3047}
+{"event": "row", "pid": "12", "method": "st", "correct": 1, "k": 1, "think": 1024, "stop": "st", "wall": 447.73, "elapsed": 3047}
+{"event": "row", "pid": "12", "method": "visref_raw_rank", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 447.74, "elapsed": 3047}
+{"event": "row", "pid": "513", "method": "st", "correct": 1, "k": 1, "think": 18, "stop": "st", "wall": 292.58, "elapsed": 3047}
+{"event": "round", "elapsed": 3207, "active": 13, "groups": [[8, 6876, 1288, 66.4], [4, 15195, 3078, 87.7], [1, 15288, 3, 5.0]], "tokens": 4369, "queue": 390, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "row", "pid": "12", "method": "tsr", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 607.34, "elapsed": 3207}
+{"event": "row", "pid": "513", "method": "tsr", "correct": 1, "k": 1, "think": 18, "stop": "entropy", "wall": 452.19, "elapsed": 3207}
+{"event": "row", "pid": "513", "method": "visref_raw_rank", "correct": 0, "k": 1, "think": 18, "stop": "entropy", "wall": 452.19, "elapsed": 3207}
+{"event": "row", "pid": "243", "method": "st", "correct": 0, "k": 1, "think": 607, "stop": "st", "wall": 303.88, "elapsed": 3207}
+{"event": "round", "elapsed": 3334, "active": 12, "groups": [[8, 7572, 4258, 72.3], [4, 16226, 516, 54.4]], "tokens": 4774, "queue": 389, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.11}
+{"event": "row", "pid": "95", "method": "visref_raw_rank", "correct": 1, "k": 10, "think": 10240, "stop": "kmax", "wall": 3008.04, "elapsed": 3335}
+{"event": "row", "pid": "114", "method": "visref_raw_rank", "correct": 1, "k": 10, "think": 10240, "stop": "kmax", "wall": 2936.23, "elapsed": 3335}
+{"event": "row", "pid": "243", "method": "tsr", "correct": 0, "k": 1, "think": 607, "stop": "entropy", "wall": 431.99, "elapsed": 3335}
+{"event": "row", "pid": "243", "method": "visref_raw_rank", "correct": 0, "k": 1, "think": 607, "stop": "entropy", "wall": 431.99, "elapsed": 3335}
+{"event": "round", "elapsed": 3484, "active": 12, "groups": [[9, 7905, 4441, 76.5], [3, 13751, 2054, 70.9]], "tokens": 6495, "queue": 387, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "row", "pid": "520", "method": "st", "correct": 1, "k": 1, "think": 1024, "stop": "st", "wall": 436.66, "elapsed": 3484}
+{"event": "row", "pid": "751", "method": "st", "correct": 1, "k": 1, "think": 1024, "stop": "st", "wall": 276.38, "elapsed": 3484}
+{"event": "round", "elapsed": 3627, "active": 14, "groups": [[10, 4718, 3387, 65.6], [4, 14818, 2054, 77.4]], "tokens": 5441, "queue": 387, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "row", "pid": "520", "method": "tsr", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 579.64, "elapsed": 3627}
+{"event": "row", "pid": "520", "method": "visref_raw_rank", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 579.64, "elapsed": 3627}
+{"event": "row", "pid": "751", "method": "tsr", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 419.36, "elapsed": 3627}
+{"event": "round", "elapsed": 3773, "active": 12, "groups": [[8, 5584, 5003, 67.2], [4, 14819, 2060, 78.3]], "tokens": 7063, "queue": 386, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "row", "pid": "751", "method": "visref_raw_rank", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 565.87, "elapsed": 3774}
+{"event": "row", "pid": "747", "method": "st", "correct": 1, "k": 1, "think": 1024, "stop": "st", "wall": 438.62, "elapsed": 3774}
+{"event": "row", "pid": "206", "method": "st", "correct": 0, "k": 1, "think": 1024, "stop": "st", "wall": 437.47, "elapsed": 3774}
+{"event": "round", "elapsed": 3868, "active": 12, "groups": [[8, 5871, 136, 12.6], [4, 15850, 2055, 81.4]], "tokens": 2191, "queue": 385, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "row", "pid": "109", "method": "visref_raw_rank", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 3193.66, "elapsed": 3869}
+{"event": "row", "pid": "788", "method": "st", "correct": 0, "k": 1, "think": 798, "stop": "st", "wall": 240.88, "elapsed": 3869}
+{"event": "round", "elapsed": 4006, "active": 13, "groups": [[10, 5871, 5317, 71.1], [3, 11108, 1036, 65.8]], "tokens": 6353, "queue": 384, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "row", "pid": "788", "method": "tsr", "correct": 0, "k": 1, "think": 798, "stop": "entropy", "wall": 378.57, "elapsed": 4006}
+{"event": "row", "pid": "788", "method": "visref_raw_rank", "correct": 0, "k": 1, "think": 798, "stop": "entropy", "wall": 378.57, "elapsed": 4006}
+{"event": "row", "pid": "281", "method": "st", "correct": 1, "k": 1, "think": 75, "stop": "st", "wall": 232.06, "elapsed": 4006}
+{"event": "round", "elapsed": 4145, "active": 13, "groups": [[10, 7008, 1261, 71.0], [3, 12060, 2051, 67.1]], "tokens": 3312, "queue": 383, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "row", "pid": "206", "method": "tsr", "correct": 1, "k": 2, "think": 2048, "stop": "entropy", "wall": 809.46, "elapsed": 4146}
+{"event": "row", "pid": "281", "method": "tsr", "correct": 1, "k": 1, "think": 75, "stop": "entropy", "wall": 371.39, "elapsed": 4146}
+{"event": "row", "pid": "281", "method": "visref_raw_rank", "correct": 1, "k": 1, "think": 75, "stop": "entropy", "wall": 371.39, "elapsed": 4146}
+{"event": "row", "pid": "883", "method": "st", "correct": 0, "k": 1, "think": 1024, "stop": "st", "wall": 276.59, "elapsed": 4146}
+{"event": "round", "elapsed": 4281, "active": 12, "groups": [[8, 3800, 4719, 63.0], [4, 12280, 2060, 71.8]], "tokens": 6779, "queue": 382, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "row", "pid": "27", "method": "st", "correct": 0, "k": 1, "think": 1024, "stop": "st", "wall": 274.4, "elapsed": 4281}
+{"event": "round", "elapsed": 4418, "active": 14, "groups": [[10, 4905, 1262, 64.1], [4, 13241, 2054, 72.1]], "tokens": 3316, "queue": 381, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "row", "pid": "27", "method": "tsr", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 411.65, "elapsed": 4419}
+{"event": "row", "pid": "27", "method": "visref_raw_rank", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 411.65, "elapsed": 4419}
+{"event": "row", "pid": "332", "method": "st", "correct": 1, "k": 1, "think": 526, "stop": "st", "wall": 272.49, "elapsed": 4419}
+{"event": "round", "elapsed": 4561, "active": 14, "groups": [[10, 4905, 6327, 67.9], [4, 13445, 2058, 74.2]], "tokens": 8385, "queue": 380, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "row", "pid": "332", "method": "tsr", "correct": 1, "k": 1, "think": 526, "stop": "entropy", "wall": 414.75, "elapsed": 4561}
+{"event": "row", "pid": "332", "method": "visref_raw_rank", "correct": 1, "k": 1, "think": 526, "stop": "entropy", "wall": 414.75, "elapsed": 4561}
+{"event": "round", "elapsed": 4707, "active": 14, "groups": [[10, 6010, 2363, 68.0], [4, 14412, 2054, 78.1]], "tokens": 4417, "queue": 380, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "row", "pid": "386", "method": "st", "correct": 1, "k": 1, "think": 1024, "stop": "st", "wall": 424.99, "elapsed": 4707}
+{"event": "row", "pid": "386", "method": "visref_raw_rank", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 425.0, "elapsed": 4707}
+{"event": "round", "elapsed": 4859, "active": 13, "groups": [[9, 6011, 6366, 73.2], [4, 14663, 2059, 77.5]], "tokens": 8425, "queue": 379, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "row", "pid": "747", "method": "visref_raw_rank", "correct": 0, "k": 5, "think": 5120, "stop": "entropy", "wall": 1524.46, "elapsed": 4860}
+{"event": "row", "pid": "386", "method": "tsr", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 577.47, "elapsed": 4860}
+{"event": "row", "pid": "599", "method": "st", "correct": 0, "k": 1, "think": 1024, "stop": "st", "wall": 440.73, "elapsed": 4860}
+{"event": "round", "elapsed": 4957, "active": 12, "groups": [[8, 6659, 863, 55.8], [4, 15584, 448, 42.1]], "tokens": 1311, "queue": 379, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "row", "pid": "733", "method": "tsr", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 3007.87, "elapsed": 4957}
+{"event": "row", "pid": "733", "method": "visref_raw_rank", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 3007.87, "elapsed": 4957}
+{"event": "row", "pid": "956", "method": "st", "correct": 0, "k": 1, "think": 1024, "stop": "st", "wall": 249.23, "elapsed": 4957}
+{"event": "round", "elapsed": 5106, "active": 9, "groups": [[7, 6659, 7168, 81.8], [2, 15585, 1570, 67.1]], "tokens": 8738, "queue": 379, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "row", "pid": "645", "method": "visref_raw_rank", "correct": 0, "k": 10, "think": 10240, "stop": "entropy", "wall": 3007.25, "elapsed": 5106}
+{"event": "round", "elapsed": 5121, "active": 8, "groups": [[7, 7688, 22, 11.5], [1, 11425, 4, 3.4]], "tokens": 26, "queue": 379, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "row", "pid": "206", "method": "visref_raw_rank", "correct": 0, "k": 6, "think": 6144, "stop": "entropy", "wall": 1785.02, "elapsed": 5121}
+{"event": "round", "elapsed": 5198, "active": 7, "groups": [[7, 7688, 5230, 77.2]], "tokens": 5230, "queue": 379, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "row", "pid": "883", "method": "visref_raw_rank", "correct": 0, "k": 5, "think": 5120, "stop": "entropy", "wall": 1329.36, "elapsed": 5198}
+{"event": "row", "pid": "956", "method": "tsr", "correct": 0, "k": 2, "think": 2048, "stop": "entropy", "wall": 490.26, "elapsed": 5198}
+{"event": "row", "pid": "956", "method": "visref_raw_rank", "correct": 0, "k": 2, "think": 2048, "stop": "entropy", "wall": 490.26, "elapsed": 5198}
+{"event": "round", "elapsed": 5206, "active": 4, "groups": [[4, 8717, 12, 7.9]], "tokens": 12, "queue": 379, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "round", "elapsed": 5275, "active": 4, "groups": [[4, 8717, 4096, 68.6]], "tokens": 4096, "queue": 379, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "round", "elapsed": 5285, "active": 4, "groups": [[4, 9746, 12, 9.9]], "tokens": 12, "queue": 379, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "round", "elapsed": 5352, "active": 4, "groups": [[4, 9747, 3219, 67.6]], "tokens": 3219, "queue": 379, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "row", "pid": "747", "method": "tsr", "correct": 1, "k": 9, "think": 9216, "stop": "entropy", "wall": 2017.38, "elapsed": 5352}
+{"event": "round", "elapsed": 5359, "active": 3, "groups": [[3, 9682, 9, 7.0]], "tokens": 9, "queue": 379, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "round", "elapsed": 5423, "active": 3, "groups": [[3, 9682, 2064, 63.4]], "tokens": 2064, "queue": 379, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "row", "pid": "599", "method": "visref_raw_rank", "correct": 0, "k": 6, "think": 6144, "stop": "entropy", "wall": 1004.04, "elapsed": 5423}
+{"event": "round", "elapsed": 5428, "active": 2, "groups": [[2, 10711, 6, 5.3]], "tokens": 6, "queue": 379, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "round", "elapsed": 5489, "active": 2, "groups": [[2, 10712, 1156, 61.1]], "tokens": 1156, "queue": 379, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "row", "pid": "883", "method": "tsr", "correct": 0, "k": 9, "think": 9216, "stop": "entropy", "wall": 1620.21, "elapsed": 5489}
+{"event": "round", "elapsed": 5492, "active": 1, "groups": [[1, 8722, 3, 2.6]], "tokens": 3, "queue": 379, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "round", "elapsed": 5542, "active": 1, "groups": [[1, 8722, 1024, 50.5]], "tokens": 1024, "queue": 379, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "round", "elapsed": 5545, "active": 1, "groups": [[1, 9751, 3, 2.7]], "tokens": 3, "queue": 379, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "round", "elapsed": 5597, "active": 1, "groups": [[1, 9751, 1024, 51.5]], "tokens": 1024, "queue": 379, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "round", "elapsed": 5600, "active": 1, "groups": [[1, 10780, 3, 3.1]], "tokens": 3, "queue": 379, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "round", "elapsed": 5635, "active": 1, "groups": [[1, 10781, 689, 35.6]], "tokens": 689, "queue": 379, "peak_alloc_gb": 11.94, "peak_reserved_gb": 12.38}
+{"event": "row", "pid": "599", "method": "tsr", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 1216.51, "elapsed": 5635}
+{"event": "end", "elapsed": 5635, "left_in_queue": 379}

@@ -1,0 +1,205 @@
+{
+ "n": 1000,
+ "scorer_version_rescored_views": "v4_mc_empty_wrong",
+ "v4_changes_in_a": 0,
+ "acc": {
+  "st": 57.8,
+  "tsr": 60.1,
+  "visref_raw_rank": 60.0
+ },
+ "pairs": {
+  "visref_raw_rank-st": {
+   "kind": "main",
+   "diff_pp": 2.2,
+   "ci95_pp": [
+    0.3,
+    4.1
+   ],
+   "a_only": 60,
+   "b_only": 38,
+   "p_mcnemar": 0.0334,
+   "paper_pp": 5.9,
+   "judgment": "효과 크기 재현 안 됨 (방향은 같으나 크기 다름)",
+   "p_holm": 0.0667
+  },
+  "visref_raw_rank-tsr": {
+   "kind": "main",
+   "diff_pp": -0.1,
+   "ci95_pp": [
+    -2.0,
+    1.7
+   ],
+   "a_only": 44,
+   "b_only": 45,
+   "p_mcnemar": 1.0,
+   "paper_pp": 3.5,
+   "judgment": "효과 크기 재현 안 됨",
+   "p_holm": 1.0
+  },
+  "tsr-st": {
+   "kind": "supplementary",
+   "diff_pp": 2.3,
+   "ci95_pp": [
+    0.6,
+    4.0
+   ],
+   "a_only": 51,
+   "b_only": 28,
+   "p_mcnemar": 0.0128,
+   "paper_pp": 2.4,
+   "judgment": "재현됨"
+  }
+ },
+ "sensitivity": {
+  "a_v3_llm": {
+   "acc": {
+    "st": 57.8,
+    "tsr": 60.1,
+    "visref_raw_rank": 60.0
+   },
+   "pairs": {
+    "visref_raw_rank-st": [
+     2.2,
+     [
+      0.3,
+      4.1
+     ]
+    ],
+    "visref_raw_rank-tsr": [
+     -0.1,
+     [
+      -2.0,
+      1.7
+     ]
+    ],
+    "tsr-st": [
+     2.3,
+     [
+      0.6,
+      4.0
+     ]
+    ]
+   }
+  },
+  "rule_only_v3": {
+   "acc": {
+    "st": 57.8,
+    "tsr": 60.0,
+    "visref_raw_rank": 60.0
+   },
+   "pairs": {
+    "visref_raw_rank-st": [
+     2.2,
+     [
+      0.3,
+      4.1
+     ]
+    ],
+    "visref_raw_rank-tsr": [
+     0.0,
+     [
+      -1.9,
+      1.8
+     ]
+    ],
+    "tsr-st": [
+     2.2,
+     [
+      0.4,
+      3.9
+     ]
+    ]
+   }
+  },
+  "b_af_stripped": {
+   "acc": {
+    "st": 55.9,
+    "tsr": 58.0,
+    "visref_raw_rank": 58.6
+   },
+   "pairs": {
+    "visref_raw_rank-st": [
+     2.7,
+     [
+      0.5,
+      5.0
+     ]
+    ],
+    "visref_raw_rank-tsr": [
+     0.6,
+     [
+      -1.7,
+      2.9
+     ]
+    ],
+    "tsr-st": [
+     2.1,
+     [
+      0.1,
+      4.1
+     ]
+    ]
+   }
+  },
+  "b_af_stripped_v3": {
+   "acc": {
+    "st": 56.0,
+    "tsr": 58.1,
+    "visref_raw_rank": 58.6
+   },
+   "pairs": {
+    "visref_raw_rank-st": [
+     2.6,
+     [
+      0.4,
+      4.9
+     ]
+    ],
+    "visref_raw_rank-tsr": [
+     0.5,
+     [
+      -1.8,
+      2.8
+     ]
+    ],
+    "tsr-st": [
+     2.1,
+     [
+      0.1,
+      4.1
+     ]
+    ]
+   }
+  },
+  "c_af_wrong": {
+   "acc": {
+    "st": 44.4,
+    "tsr": 48.3,
+    "visref_raw_rank": 47.4
+   },
+   "pairs": {
+    "visref_raw_rank-st": [
+     3.0,
+     [
+      0.5,
+      5.5
+     ]
+    ],
+    "visref_raw_rank-tsr": [
+     -0.9,
+     [
+      -3.3,
+      1.5
+     ]
+    ],
+    "tsr-st": [
+     3.9,
+     [
+      2.0,
+      5.7
+     ]
+    ]
+   }
+  }
+ }
+}
