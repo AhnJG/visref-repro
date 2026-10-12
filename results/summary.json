@@ -192,9 +192,92 @@
   },
   "verdict": "rule 4: immediate-answer gain from step-1 re-injection not reproduced"
  },
+ "visref_hs": {
+  "n": 839,
+  "acc_pct": {
+   "ST": 57.57,
+   "TSR": 59.71,
+   "VisRef": 59.36,
+   "VisRef-hs": 59.95
+  },
+  "primary": {
+   "VisRef-hs - TSR": {
+    "n": 839,
+    "diff_pp": 0.24,
+    "ci95_pp": [
+     -2.38,
+     3.1
+    ],
+    "ci95_sum": [
+     -20,
+     26
+    ],
+    "a_only": 68,
+    "b_only": 66,
+    "p_mcnemar": 0.9312
+   }
+  },
+  "secondary": {
+   "VisRef-hs - VisRef": {
+    "n": 839,
+    "diff_pp": 0.6,
+    "ci95_pp": [
+     -1.67,
+     2.98
+    ],
+    "ci95_sum": [
+     -14,
+     25
+    ],
+    "a_only": 58,
+    "b_only": 53,
+    "p_mcnemar": 0.7044
+   },
+   "VisRef-hs - ST": {
+    "n": 839,
+    "diff_pp": 2.38,
+    "ci95_pp": [
+     -0.24,
+     5.01
+    ],
+    "ci95_sum": [
+     -2,
+     42
+    ],
+    "a_only": 73,
+    "b_only": 53,
+    "p_mcnemar": 0.0901
+   }
+  },
+  "verdict": "rule 3: no paper-size (+3.5 pp) extra gain over TSR with last-layer Z",
+  "rules_only": {
+   "acc_pct": {
+    "ST": 57.57,
+    "TSR": 59.71,
+    "VisRef": 59.36,
+    "VisRef-hs": 60.07
+   },
+   "primary": {
+    "n": 839,
+    "diff_pp": 0.36,
+    "ci95_pp": [
+     -2.26,
+     3.22
+    ],
+    "ci95_sum": [
+     -19,
+     27
+    ],
+    "a_only": 69,
+    "b_only": 66,
+    "p_mcnemar": 0.8634
+   }
+  }
+ },
  "sources": [
   "repro/diag/final_judgment.json",
   "repro/diag/analyze_fill.json",
-  "repro/diag/step1_branch_analysis.json"
+  "repro/diag/step1_branch_analysis.json",
+  "repro/diag/analyze_hs.json"
  ]
 }

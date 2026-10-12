@@ -25,7 +25,7 @@
 | J-5 | 단계 경계와 이어가기 문구 | 모델이 낸 `</think>`에서 끊고 "Wait, think more" | B + C | Fig 2; Ghosal L159-161; s1 | 10, 16, C-1 |
 | J-6 | V_k 주입 위치·시점 | z_k 뒤, 정지 검사 전. 마지막 단계 선택도 최종 답 직전에 들어감 | A | Alg. 1 L323-325 | 17, 26, 41; EF 2026-10-08 정정 |
 | J-7 | DPP 선택 수 | Chen greedy, rank(L) < m이면 채우지 않음 | C (논문 문구 "\|Ṽk\| = m"(A)과 충돌) | Chen 코드 `dpp.py` L29-30; LAY L341, L360-362 | 36, 37, C-2, B-1; EF 2026-10-07 |
-| J-8 | Z(생각 토큰) 표현 | 입력 임베딩 | F | 논문은 층 미지정 | 30, B-5; EF 2026-10-08 hidden_rank_check |
+| J-8 | Z(생각 토큰) 표현 | 입력 임베딩 | F | 논문은 층 미지정 | 30, B-5; EF 2026-10-08 hidden_rank_check; 마지막 층 변형 `visref_hs`(EF 2026-10-13) |
 | J-9 | 정지 통계 H_k 추정 | `</think>`+`\n\n\boxed` 뒤 답 1개(T=1) 토큰 엔트로피 합 | F (정의 자체는 A: Alg. 1 L325, C: Ghosal) | Fig 2 "Answer:" 라벨뿐 | 21-24, B-2 |
 | J-10 | 토큰 상한 | 단계 1024 / 합계 10,240 / 답 1024 | F (1024는 모델 카드 예제 값, D) | 모델 카드 L527 | 11, 12, 14, B-6 |
 | J-11 | 생각이 상한에서 잘렸을 때 답 | `</think>` + `\nFinal Answer:` | C (s1 [34] 공식 코드. VisRef 파이프라인에 적용한 것은 우리 해석) | `s1/vllm_causallms.py` L254, L401-411 | 44, C-11; EF 2026-10-07 |
@@ -58,13 +58,13 @@
 | J-5 | 기록된 사용자 결정 없음 (논문·인용 근거) | `visref/methods.py` L187, L299-306 | `test_cut_step_gets_separator_before_wait_then_natural_answer_at_kmax`, `test_closed_step_continues_without_separator`, `test_decisions`(문구) | 일치 |
 | J-6 | 위치는 논문. 태그 없이 주입은 사용자(L775) | `visref/methods.py` L204 | `test_kmax_and_visref_injection_of_greedy_picks`, `test_visref_cut_step_separator_comes_before_injected_tokens` | 일치 |
 | J-7 | 사용자: rank만큼만(L899), 주 VisRef = `visref_raw_rank`(L976) | `visref/dpp.py` L26-34, `visref/methods.py` L203, `diag/final_judgment.py` L17 | `test_dpp_matches_naive_greedy`, `test_dpp_rank_deficient_returns_only_greedy_picks`, `test_raw_rank_with_the_same_step_is_rank_limited` | 일치 |
-| J-8 | 10-07 코드 재작성 때 입력 임베딩으로 구현. 그 전 사용자 결정 "Z에 입력 임베딩이 아닌 last hidden state가 타당"(L497-499)과 다르고, 바꾼 경위 기록을 찾지 못함. 10-12 사용자 지시로 마지막 층 Z 변형 실행 중(L1659) | `visref/methods.py` L203(주 VisRef), L197-200(`visref_hs`), `visref/engine.py` `last_hidden` | `tests/test_hs.py` 6개 | **불일치**: 이번 점검에서 찾은 빠진 사용자 결정은 이 하나. 영향은 `visref_hs` 결과로 확인 |
+| J-8 | 10-07 코드 재작성 때 입력 임베딩으로 구현. 그 전 사용자 결정 "Z에 입력 임베딩이 아닌 last hidden state가 타당"(L497-499)과 다르고, 바꾼 경위 기록을 찾지 못함. 10-12 사용자 지시로 마지막 층 Z 변형 `visref_hs` 사전등록(L1659) | `visref/methods.py` L203(주 VisRef), L197-200(`visref_hs`), `visref/engine.py` `last_hidden` | `tests/test_hs.py` 6개 | **불일치**: 이번 점검에서 찾은 빠진 사용자 결정은 이 하나. `visref_hs` 결과(EF 2026-10-13): 주입 수 m 도달, hs − TSR +0.24 pp (−2.38, +3.10), 사전등록 판정 ③(논문 크기 추가 이득 재현 안 됨) |
 | J-9 | 사용자: 답 하나로 측정(L750), 엔트로피 합·T 1(L820), `\boxed` probe(L827), 현행 유지(L955) | `visref/methods.py` L47, L104, L277-280, `run.py` L21 | `test_tsr_probe_sums_entropy_and_continues_until_confident`, `test_brace_probe_*` 6개, `test_engine_lumped_entropy_and_stop_check`, `test_decisions` | 일치 |
 | J-10 | 사용자: 단계 1,024 / 합계 10,240(L952-956) | 실행마다 run_args로 전달(`kaggle/runs/*/run_config.json`). `run.py` L20 기본값은 옛 결정(L804)의 4,096 / 8,192 | `test_decisions`(b_main 실행 11개(s1–s9, fill, hs)의 run_config가 1,024 / 10,240) | 실행 기록은 일치. **코드 기본값은 불일치**: 인자 없이 `run.py`를 직접 돌리면 옛 값으로 동작 |
 | J-11 | 사용자: s1 방식(L888-891). 줄바꿈 수는 감사 반영(L912)을 사용자가 수용(L922) | `visref/methods.py` L105-106, L240, `run.py` L22 | `test_st_cut_step_gets_s1_forced_answer`, `test_s1_*` 4개, `test_decisions` | 일치 |
 | J-12 | 사용자(L952-954) | `visref/methods.py` L243-247, `run.py` L22 | `test_s1_answer_hitting_cap_gets_deer_answer_forcing`, `test_natural_answer_hitting_cap_also_gets_answer_forcing_and_eos_answer_does_not`, `test_answer_forcing_after_later_think_end_keeps_scored_tail`, `test_decisions` | 일치 |
 | J-13 | 사용자: 10-06 지시(L646), 유지 결정(L1127) | `visref/methods.py` L234-236 | `test_final_text_after_last_generated_think_end`, `test_s1_later_think_end_is_respected` | 일치 |
-| J-14 | 사용자: 규칙 먼저 + LLM(L928), b_main은 gemini-3.5-flash-lite(L1250), fill은 Claude Haiku(L1449), 채점 v4(L1466) | `visref/scoring.py` L18-19, L130, L156, `llm_extract.py` L35, L93-94 | `test_score` 등 채점 테스트, `test_v4_*`, `test_decisions` | 일치 |
+| J-14 | 사용자: 규칙 먼저 + LLM(L928), b_main은 gemini-3.5-flash-lite(L1250), fill과 `visref_hs`는 Claude Haiku(L1449, EF 2026-10-13), 채점 v4(L1466) | `visref/scoring.py` L18-19, L130, L156, `llm_extract.py` L35, L93-94 | `test_score` 등 채점 테스트, `test_v4_*`, `test_decisions` | 일치 |
 | J-15 | 운영 조건, "문서화만"(L925) | `visref/model.py` L82 | 없음 | 논문과 다름 (기록됨) |
 | J-16 | 기록된 사용자 결정 없음 | `run.py`(문항별 시드), `visref/methods.py` | `test_crn_tsr_stopping_at_k1_reproduces_st_final_answer`, `test_fork_from_step1_matches_running_step1`, `test_probe_uses_its_own_generator` | 일치 |
 | J-17 | 사용자: 주 비교·Holm(L1081-1083), 판정 규칙(L1296) | `diag/final_judgment.py` L17, L24, L71, `summarize.py` L39 | `make check`(저장된 판정 결과를 다시 계산해 비교) | 일치 |

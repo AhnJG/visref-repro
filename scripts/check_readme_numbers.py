@@ -38,6 +38,8 @@ def expected():
     for r in rows('followups.csv'):
         if r['experiment'].startswith('visref_fill') and r['comparison'] in ('VisRef-fill - TSR', 'VisRef-fill - VisRef'):
             want |= {signed(r['ci95_lo'], 2), signed(r['ci95_hi'], 2)}
+        if r['experiment'].startswith('visref_hs primary'):
+            want |= {signed(r['diff_pp'], 2), signed(r['ci95_lo'], 2), signed(r['ci95_hi'], 2)}
         if 'co-primary' in r['experiment']:
             want |= {signed(r['diff_pp'], 2), signed(r['ci95_lo'], 2), signed(r['ci95_hi'], 2), plain(r['p_holm'], 3)}
     return sorted(want)

@@ -1,0 +1,326 @@
+{
+ "method": "visref_hs",
+ "n_prefix": 839,
+ "n_hs_rows": 839,
+ "n_hs_error": 0,
+ "hs_code_version": [
+  "f1376774850d"
+ ],
+ "order_same_as_fill": true,
+ "power_flag": null,
+ "scorer": "v4_mc_empty_wrong",
+ "bmain_rows_changed_by_current_scorer": 0,
+ "hs_llm_rows_scorer": [
+  "v4_mc_empty_wrong"
+ ],
+ "hs_llm_used": 21,
+ "main_reading": "main",
+ "main": {
+  "acc": {
+   "st": 57.57,
+   "tsr": 59.71,
+   "visref_raw_rank": 59.36,
+   "visref_hs": 59.95
+  },
+  "primary": {
+   "n": 839,
+   "diff_pp": 0.24,
+   "ci95_pp": [
+    -2.38,
+    3.1
+   ],
+   "ci95_sum": [
+    -20,
+    26
+   ],
+   "a_only": 68,
+   "b_only": 66,
+   "p_mcnemar": 0.9312
+  },
+  "secondary": {
+   "visref_hs-visref_raw_rank": {
+    "n": 839,
+    "diff_pp": 0.6,
+    "ci95_pp": [
+     -1.67,
+     2.98
+    ],
+    "ci95_sum": [
+     -14,
+     25
+    ],
+    "a_only": 58,
+    "b_only": 53,
+    "p_mcnemar": 0.7044
+   },
+   "visref_hs-st": {
+    "n": 839,
+    "diff_pp": 2.38,
+    "ci95_pp": [
+     -0.24,
+     5.01
+    ],
+    "ci95_sum": [
+     -2,
+     42
+    ],
+    "a_only": 73,
+    "b_only": 53,
+    "p_mcnemar": 0.0901
+   }
+  },
+  "verdict": {
+   "code": 3,
+   "text": "마지막 층 Z로도 논문 크기(+3.5 pp)의 추가 이득은 재현 안 됨"
+  }
+ },
+ "rules_only": {
+  "acc": {
+   "st": 57.57,
+   "tsr": 59.71,
+   "visref_raw_rank": 59.36,
+   "visref_hs": 60.07
+  },
+  "primary": {
+   "n": 839,
+   "diff_pp": 0.36,
+   "ci95_pp": [
+    -2.26,
+    3.22
+   ],
+   "ci95_sum": [
+    -19,
+    27
+   ],
+   "a_only": 69,
+   "b_only": 66,
+   "p_mcnemar": 0.8634
+  },
+  "secondary": {
+   "visref_hs-visref_raw_rank": {
+    "n": 839,
+    "diff_pp": 0.72,
+    "ci95_pp": [
+     -1.67,
+     3.1
+    ],
+    "ci95_sum": [
+     -14,
+     26
+    ],
+    "a_only": 59,
+    "b_only": 53,
+    "p_mcnemar": 0.6368
+   },
+   "visref_hs-st": {
+    "n": 839,
+    "diff_pp": 2.5,
+    "ci95_pp": [
+     -0.12,
+     5.13
+    ],
+    "ci95_sum": [
+     -1,
+     43
+    ],
+    "a_only": 74,
+    "b_only": 53,
+    "p_mcnemar": 0.0755
+   }
+  },
+  "verdict": {
+   "code": 3,
+   "text": "마지막 층 Z로도 논문 크기(+3.5 pp)의 추가 이득은 재현 안 됨"
+  }
+ },
+ "verdict": {
+  "code": 3,
+  "text": "마지막 층 Z로도 논문 크기(+3.5 pp)의 추가 이득은 재현 안 됨"
+ },
+ "mechanism": {
+  "n_steps_with_injection": 1966,
+  "inject_over_m_q25_50_75": [
+   0.977,
+   1.0,
+   1.0
+  ],
+  "steps_len_ge_m": 1678,
+  "steps_len_ge_m_inject_eq_m": 1130,
+  "visref_inject_over_m_q25_50_75": [
+   0.142,
+   0.205,
+   0.613
+  ],
+  "n_meaningful_q25_50_75": [
+   54.0,
+   70.0,
+   89.0
+  ],
+  "n_meaningful_over_m_q25_50_75": [
+   0.078,
+   0.136,
+   0.304
+  ],
+  "tail_rel_spearman_q25_50_75": [
+   -0.224,
+   -0.171,
+   -0.105
+  ],
+  "n_unique_z_q25_50_75": [
+   100.0,
+   140.5,
+   165.0
+  ],
+  "second_think_end_in_final_answer": {
+   "visref_hs": {
+    "all": {
+     "inner": 395,
+     "n": 839,
+     "rate": 0.47079856972586415
+    },
+    "k1_close": {
+     "inner": 144,
+     "n": 277,
+     "rate": 0.51985559566787
+    },
+    "k1_cap": {
+     "inner": 166,
+     "n": 288,
+     "rate": 0.5763888888888888
+    }
+   },
+   "st": {
+    "all": {
+     "inner": 109,
+     "n": 839,
+     "rate": 0.1299165673420739
+    },
+    "k1_close": {
+     "inner": 18,
+     "n": 273,
+     "rate": 0.06593406593406594
+    },
+    "k1_cap": {
+     "inner": 91,
+     "n": 543,
+     "rate": 0.16758747697974216
+    }
+   },
+   "tsr": {
+    "all": {
+     "inner": 99,
+     "n": 839,
+     "rate": 0.11799761620977355
+    },
+    "k1_close": {
+     "inner": 21,
+     "n": 270,
+     "rate": 0.07777777777777778
+    },
+    "k1_cap": {
+     "inner": 51,
+     "n": 329,
+     "rate": 0.15501519756838905
+    }
+   },
+   "visref_raw_rank": {
+    "all": {
+     "inner": 392,
+     "n": 839,
+     "rate": 0.46722288438617404
+    },
+    "k1_close": {
+     "inner": 133,
+     "n": 269,
+     "rate": 0.4944237918215613
+    },
+    "k1_cap": {
+     "inner": 169,
+     "n": 315,
+     "rate": 0.5365079365079365
+    }
+   }
+  },
+  "k_counts": {
+   "visref_hs": {
+    "1": 580,
+    "2": 80,
+    "3": 40,
+    "4": 19,
+    "5": 15,
+    "6": 13,
+    "7": 7,
+    "8": 8,
+    "9": 6,
+    "10": 71
+   },
+   "st": {
+    "1": 839
+   },
+   "tsr": {
+    "1": 617,
+    "2": 71,
+    "3": 38,
+    "4": 20,
+    "5": 12,
+    "6": 7,
+    "7": 6,
+    "8": 3,
+    "9": 6,
+    "10": 59
+   },
+   "visref_raw_rank": {
+    "1": 600,
+    "2": 76,
+    "3": 30,
+    "4": 19,
+    "5": 15,
+    "6": 10,
+    "7": 10,
+    "8": 3,
+    "9": 4,
+    "10": 72
+   }
+  },
+  "mean_k": {
+   "visref_hs": 2.34,
+   "st": 1,
+   "tsr": 2.1,
+   "visref_raw_rank": 2.27
+  },
+  "stop_reason": {
+   "visref_hs": {
+    "entropy": 775,
+    "kmax": 64
+   },
+   "st": {
+    "st": 839
+   },
+   "tsr": {
+    "entropy": 783,
+    "kmax": 56
+   },
+   "visref_raw_rank": {
+    "entropy": 769,
+    "kmax": 70
+   }
+  },
+  "step1_end_agree": {
+   "visref_hs-st": 763,
+   "visref_hs-tsr": 763,
+   "visref_hs-visref_raw_rank": 763
+  },
+  "answer_forced": {
+   "visref_hs": 169,
+   "st": 195,
+   "tsr": 158,
+   "visref_raw_rank": 188
+  },
+  "mean_think_tokens": {
+   "visref_hs": 2054,
+   "st": 763,
+   "tsr": 1878,
+   "visref_raw_rank": 2018
+  }
+ }
+}
