@@ -16,7 +16,7 @@
 <rect class="surface" x="0" y="0" width="840" height="386" rx="10"/>
 <rect class="frame" x="0.5" y="0.5" width="839" height="385" rx="10"/>
 <text x="24" y="34" class="ink" font-size="16" text-anchor="start" font-weight="600">Paired accuracy differences: our reproduction vs. the paper</text>
-<text x="24" y="56" class="ink2" font-size="12" text-anchor="start">InternVL3.5-1B on MathVista testmini, n = 1,000 questions, pre-specified reading (a)</text>
+<text x="24" y="56" class="ink2" font-size="12" text-anchor="start">InternVL3.5-1B on MathVista testmini, n = 1,000 questions, main scoring</text>
 <line class="ours-l" x1="24" y1="84" x2="48" y2="84" stroke-width="2" stroke-linecap="round"/>
 <circle class="ours ring" cx="36" cy="84" r="5" stroke-width="2"/>
 <text x="56" y="88" class="ink2" font-size="12" text-anchor="start">Ours: paired difference with 95% bootstrap CI</text>

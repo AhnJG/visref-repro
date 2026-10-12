@@ -3,7 +3,7 @@
   python3 scripts/make_results.py        # run from the repository root
 
 Inputs (committed; regenerate them with `make analysis`):
-  repro/diag/final_judgment.json        main verdict, reading (a) = rules + LLM fallback, and the sensitivity readings
+  repro/diag/final_judgment.json        main verdict (main scoring = rules + LLM fallback) and the other scoring variants
   repro/diag/analyze_fill.json          follow-up visref_fill (pre-registered)
   repro/diag/step1_branch_analysis.json follow-up step1_branch (pre-registered)
 Outputs: results/accuracy.csv, results/paired_differences.csv, results/sensitivity.csv, results/followups.csv,
@@ -21,9 +21,10 @@ NAME = {'st': 'ST', 'tsr': 'TSR', 'visref_raw_rank': 'VisRef', 'visref_fill': 'V
 LABEL = {'재현됨': 'consistent with the paper value',
          '효과 크기 재현 안 됨': 'effect size not reproduced',
          '효과 크기 재현 안 됨 (방향은 같으나 크기 다름)': 'effect size not reproduced (same direction, different size)'}
-READING = {'a_v3_llm': '(a) rules + LLM fallback (pre-specified)', 'rule_only_v3': 'rules only, scorer v3',
-           'b_af_stripped': '(b) af rows re-scored before af, scorer v4',
-           'b_af_stripped_v3': '(b) af rows re-scored before af, scorer v3', 'c_af_wrong': '(c) af rows counted wrong'}
+READING = {'a_v3_llm': 'main scoring: rules + LLM fallback (fixed in advance)', 'rule_only_v3': 'rules only, scorer v3',
+           'b_af_stripped': 'scored before answer forcing, scorer v4',
+           'b_af_stripped_v3': 'scored before answer forcing, scorer v3',
+           'c_af_wrong': 'unfinished answers counted wrong'}
 
 
 def pair_name(k):

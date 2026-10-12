@@ -6,7 +6,7 @@
   "VisRef": 52.0
  },
  "main": {
-  "reading": "(a) rules + LLM fallback (pre-specified)",
+  "reading": "main scoring: rules + LLM fallback (fixed in advance)",
   "n": 1000,
   "acc_pct": {
    "ST": 57.8,

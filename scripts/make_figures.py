@@ -75,7 +75,7 @@ def main():
          f'<rect class="surface" x="0" y="0" width="{W}" height="{H}" rx="10"/>',
          f'<rect class="frame" x="0.5" y="0.5" width="{W - 1}" height="{H - 1}" rx="10"/>',
          text(24, 34, 'Paired accuracy differences: our reproduction vs. the paper', 'ink', 16, weight='600'),
-         text(24, 56, 'InternVL3.5-1B on MathVista testmini, n = 1,000 questions, pre-specified reading (a)', 'ink2', 12)]
+         text(24, 56, 'InternVL3.5-1B on MathVista testmini, n = 1,000 questions, main scoring', 'ink2', 12)]
     ly = 84                                                     # legend
     o += [line(24, ly, 48, ly), f'<circle class="ours ring" cx="36" cy="{ly}" r="5" stroke-width="2"/>',
           text(56, ly + 4, 'Ours: paired difference with 95% bootstrap CI', 'ink2', 12),

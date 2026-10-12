@@ -46,7 +46,7 @@ Source codes: **P** paper; **C** work or code cited by the paper; **O** official
 
 ### 2.2 Scoring
 
-The text after the last `</think>` is scored (the same split rule as VLMEvalKit `SPLIT_THINK`; whether the InternVL3.5 evaluation enabled it is unconfirmed). Answers are extracted by rules (boxed, then "answer is", then last line) and compared with the MathVista normalisation. Rows on which the rules fail (36 of 3,000) go to an LLM fallback (official MathVista extraction prompt, gemini-3.5-flash-lite, fixed before the final extraction). An LLM answer is accepted only if it is grounded in the response text. Empty responses (13) are never sent and count as wrong. Scorer v4 (2026-10-11, after the results) counts an empty multiple-choice extraction as wrong, like the official `--ignore_empty_extractions`; it changes 0 rows of reading (a). Reading (a), rules plus LLM fallback, is the pre-specified reading.
+The text after the last `</think>` is scored (the same split rule as VLMEvalKit `SPLIT_THINK`; whether the InternVL3.5 evaluation enabled it is unconfirmed). Answers are extracted by rules (boxed, then "answer is", then last line) and compared with the MathVista normalisation. Rows on which the rules fail (36 of 3,000) go to an LLM fallback (official MathVista extraction prompt, gemini-3.5-flash-lite, fixed before the final extraction). An LLM answer is accepted only if it is grounded in the response text. Empty responses (13) are never sent and count as wrong. Scorer v4 (2026-10-11, after the results) counts an empty multiple-choice extraction as wrong, like the official `--ignore_empty_extractions`; it changes 0 rows of the main scoring. This main scoring (rules plus LLM fallback) was fixed in advance; the other scoring variants in Section 3.2 are sensitivity checks.
 
 ### 2.3 Statistics
 
@@ -54,7 +54,7 @@ The unit is the question, compared pairwise. We report paired bootstrap 95% CIs 
 
 ### 2.4 Timing of pre-registration
 
-The main comparisons, the tests (McNemar + Holm) and the sensitivity readings (a), (b), (c) were fixed on 2026-10-10 before the final 1,000-question analysis. The choice of main comparisons and tests followed the paper's claim but was made after an interim look at the first 392 questions (sessions 1–4; VisRef−TSR was about +1.0 pp then), so the main run is not a pre-registration in the strict sense. The **CI classification rule was fixed after we had seen the interim result on 759 questions** (sessions 1–7), and the final 1,000 include those 759, so the classification is not confirmatory in the strict sense. The two follow-ups (Sections 4.2 and 4.3) were registered with their decision rules before their results. Scorer v4 was a change after results. Every other analysis is labelled post-hoc and has no multiplicity correction.
+The main comparisons, the tests (McNemar + Holm) and the scoring variants of Section 3.2 were fixed on 2026-10-10 before the final 1,000-question analysis. The choice of main comparisons and tests followed the paper's claim but was made after an interim look at the first 392 questions (sessions 1–4; VisRef−TSR was about +1.0 pp then), so the main run is not a pre-registration in the strict sense. The **CI classification rule was fixed after we had seen the interim result on 759 questions** (sessions 1–7), and the final 1,000 include those 759, so the classification is not confirmatory in the strict sense. The two follow-ups (Sections 4.2 and 4.3) were registered with their decision rules before their results. Scorer v4 was a change after results. Every other analysis is labelled post-hoc and has no multiplicity correction.
 
 ### 2.5 Code versions and compute
 
@@ -62,7 +62,7 @@ Three code versions produced the 1,000 questions: `79eef648ebd1` (session 1, 74 
 
 ## 3. Results
 
-### 3.1 Main result (reading (a), n = 1,000)
+### 3.1 Main result (main scoring, n = 1,000)
 
 ![Paired accuracy differences with 95% CIs next to the paper's differences](figures/paired_differences.svg)
 
@@ -87,17 +87,17 @@ Three code versions produced the 1,000 questions: `79eef648ebd1` (session 1, 74 
 
 ### 3.2 Sensitivity to answer handling
 
-Readings: (a) as scored; rule-only: no LLM fallback; (b) answers rescued by answer forcing (af) re-scored on the text before af, with scorer v4 and v3; (c) rows that needed af counted wrong (a lower bound). Cells give difference in pp with CI.
+Scoring variants: *main scoring* as described in Section 2.2; *rules only*: no LLM fallback; *scored before answer forcing*: answers that did not finish and were rescued by answer forcing (af) are re-scored on the text before the forcing, with scorer v4 and v3; *unfinished answers counted wrong*: every row that needed af counts as wrong (a lower bound). Cells give difference in pp with CI.
 
-| Reading | ST % | TSR % | VisRef % | VisRef − ST | VisRef − TSR | TSR − ST |
+| Scoring | ST % | TSR % | VisRef % | VisRef − ST | VisRef − TSR | TSR − ST |
 |---|---|---|---|---|---|---|
-| (a) rules + LLM (pre-specified) | 57.8 | 60.1 | 60.0 | +2.2 (+0.3, +4.1) | −0.1 (−2.0, +1.7) | +2.3 (+0.6, +4.0) |
-| rule-only, v3 | 57.8 | 60.0 | 60.0 | +2.2 (+0.3, +4.1) | 0.0 (−1.9, +1.8) | +2.2 (+0.4, +3.9) |
-| (b) af stripped, v4 | 55.9 | 58.0 | 58.6 | +2.7 (+0.5, +5.0) | +0.6 (−1.7, +2.9) | +2.1 (+0.1, +4.1) |
-| (b) af stripped, v3 | 56.0 | 58.1 | 58.6 | +2.6 (+0.4, +4.9) | +0.5 (−1.8, +2.8) | +2.1 (+0.1, +4.1) |
-| (c) af rows wrong | 44.4 | 48.3 | 47.4 | +3.0 (+0.5, +5.5) | −0.9 (−3.3, +1.5) | +3.9 (+2.0, +5.7) |
+| main scoring: rules + LLM (fixed in advance) | 57.8 | 60.1 | 60.0 | +2.2 (+0.3, +4.1) | −0.1 (−2.0, +1.7) | +2.3 (+0.6, +4.0) |
+| rules only, v3 | 57.8 | 60.0 | 60.0 | +2.2 (+0.3, +4.1) | 0.0 (−1.9, +1.8) | +2.2 (+0.4, +3.9) |
+| scored before answer forcing, v4 | 55.9 | 58.0 | 58.6 | +2.7 (+0.5, +5.0) | +0.6 (−1.7, +2.9) | +2.1 (+0.1, +4.1) |
+| scored before answer forcing, v3 | 56.0 | 58.1 | 58.6 | +2.6 (+0.4, +4.9) | +0.5 (−1.8, +2.8) | +2.1 (+0.1, +4.1) |
+| unfinished answers counted wrong | 44.4 | 48.3 | 47.4 | +3.0 (+0.5, +5.5) | −0.9 (−3.3, +1.5) | +3.9 (+2.0, +5.7) |
 
-The CI-based classification is the same under every reading. Significance is not: under (c), VisRef−ST has McNemar 94 : 64 and Holm p = 0.042 (we recomputed this from the merged rows), versus 0.067 under (a). LLM fallback: of 36 rule-failed rows, 30 grounded extractions were used and 6 rejected; 1 label changed from wrong to right (question 341, TSR) and none from right to wrong; 20 control rows on which the rules had succeeded agreed with the LLM extraction.
+The CI-based classification is the same under every scoring variant. Significance is not: with unfinished answers counted wrong, VisRef−ST has McNemar 94 : 64 and Holm p = 0.042 (we recomputed this from the merged rows), versus 0.067 under the main scoring. LLM fallback: of 36 rule-failed rows, 30 grounded extractions were used and 6 rejected; 1 label changed from wrong to right (question 341, TSR) and none from right to wrong; 20 control rows on which the rules had succeeded agreed with the LLM extraction.
 
 ### 3.3 Run record
 
@@ -114,7 +114,7 @@ The CI-based classification is the same under every reading. Significance is not
 
 ## 4. Beyond the paper
 
-Everything in this section is **post-hoc unless marked pre-registered**, uses reading (a), and played no role in the verdicts of Section 3.
+Everything in this section is **post-hoc unless marked pre-registered**, uses the main scoring, and played no role in the verdicts of Section 3.
 
 ### 4.1 Cause analysis (post-hoc)
 
@@ -125,7 +125,7 @@ We could not pin down a single cause. The items below are observations and candi
 3. **Side effect of the injection.** In the same k = 1 group the final answer contains another `</think>` in 352 of 713 VisRef answers versus 67 of 713 for ST.
 4. **Injection amount: confirmed procedural difference.** The median injected/m ratio is 0.199, and 1,895 of 2,261 steps inject fewer than m tokens (median m 537, median injected 129). The cause is the early stop at the kernel rank, which is bounded by the number of distinct reasoning-token embeddings. Section 4.2 tests topping up to m (the top-up turned out to ignore relevance).
 5. **The stopping statistic H is our estimator.** The paper defines H as the entropy of the answer distribution; the cited Ghosal et al. sample several answers. We use one answer sample, whose summed token entropy equals the answer-distribution entropy on average (chain rule) but is noisy. We started with one sample, tried 10 complete answers per step after reading Ghosal et al. (with the 8B model, a TSR run on 3 development questions took 4,703.9 GPU-seconds), and went back to one sample because, judging from the paper's latency table (Table 5: ST 7.1 s, TSR 7.7 s, VisRef 8.2 s per question, 8B model on one H100), the authors cannot have generated several answers per step (`docs/EXPERIMENT_FLOW.md`, 2026-10-05 to 2026-10-07); multi-sample estimation was not used in the final runs.
-6. **Other checks.** Dropping the `Final Answer:` nudge after truncated thinking (150 questions, pre-registered diagnostic) changed accuracy by −2.0 pp (15 vs 18 discordant, McNemar p = 0.73), so the pre-registered criterion (a drop of 10 pp or more) was not met. An independent review of the injection path by a separate AI-model session found no implementation error in the paths and samples it examined.
+6. **Other checks.** Dropping the `Final Answer:` nudge after truncated thinking (150 questions, pre-registered diagnostic) changed accuracy by −2.0 pp (15 vs 18 discordant, McNemar p = 0.73; 95% range about −9.5 to +5.5 pp, normal approximation), so the pre-registered criterion (a drop of 10 pp or more) was not met; 150 questions cannot detect a change of a few pp. An independent review of the injection path by a separate AI-model session found no implementation error in the paths and samples it examined.
 
 ### 4.2 visref_fill: topping up the injection to m tokens (pre-registered)
 
@@ -171,7 +171,7 @@ We could not pin down a single cause. The items below are observations and candi
 ### 4.4 Paper fingerprints (post-hoc)
 
 - **Visual tokens.** The paper reports ∼1,772 visual tokens per image (InternVL-3.5-8B, MathVista; the 1B and 8B models use the same InternViT-300M). Recomputing InternVL's dynamic tiling from the image sizes reproduces our recorded counts on 1,000/1,000 questions. Mean |V|: max_num 12 with thumbnail 1,961.5 (+10.7% vs 1,772); max_num 12 without thumbnail 1,755.6 (−0.9%); max_num 6, 8 or 10 give −24% to −41%. This is compatible with, but does not show, that the authors dropped the thumbnail tile.
-- **Answer handling.** Accuracy under four readings against Table 6 (ST / TSR / VisRef, gap = ours − paper): (a) 57.8 / 60.1 / 60.0 (+11.7 / +11.6 / +8.0); (c) af rows wrong 44.4 / 48.3 / 47.4 (−1.7 / −0.2 / −4.6); (e) forced-answer rows wrong 25.2 / 26.4 / 26.9 (−20.9 / −22.1 / −25.1); (f) forced or af rows wrong 24.4 / 25.3 / 26.3 (−21.7 / −23.2 / −25.7). Only (c) lands near the paper's ST and TSR. That is a hypothesis formed after the results and selected among four readings; under (c) TSR−ST is +3.9, farther from +2.4 than (a)'s +2.3. VisRef−TSR lies between −0.9 and +1.0 under all four readings, so answer handling alone does not explain a missing +3.5.
+- **Answer handling.** Accuracy under four scoring variants against Table 6 (ST / TSR / VisRef, gap = ours − paper): main scoring 57.8 / 60.1 / 60.0 (+11.7 / +11.6 / +8.0); unfinished answers (rows that needed af) counted wrong 44.4 / 48.3 / 47.4 (−1.7 / −0.2 / −4.6); answers forced after cut thinking counted wrong 25.2 / 26.4 / 26.9 (−20.9 / −22.1 / −25.1); both counted wrong 24.4 / 25.3 / 26.3 (−21.7 / −23.2 / −25.7). Only counting unfinished answers wrong lands near the paper's ST and TSR. That is a hypothesis formed after the results and selected among four variants; under it TSR−ST is +3.9, farther from +2.4 than the main scoring's +2.3. VisRef−TSR lies between −0.9 and +1.0 under all four variants, so answer handling alone does not explain a missing +3.5.
 - **Thinking volume.** Generated tokens relative to ST: TSR 1.98×, VisRef 2.14×. The paper's latency ratios (Table 5, 8B on H100) are 1.08× and 1.15×. The models differ, so this is only indicative that continuation was rarer in the authors' setup. In ours, 64.1% of ST first steps hit the cap, and 73.0% (TSR) and 71.3% (VisRef) of questions stopped at step 1.
 
 ## 5. Discussion
@@ -216,7 +216,7 @@ None as of 2026-10-12. Questions we would send:
 - One model size (1B), one benchmark (MathVista testmini), one seed and one sample per question; the paper's 2B and 8B rows and other benchmarks were not tested.
 - T4 fp16 results depend on batch composition: the same seed can give different outputs (16 of 730 predictions differ between TSR at k = 1 and ST; 874 of 976 first-step end types agree between the fill run and the main run).
 - The paper provides no per-question outputs, so the difference between our result and the paper's cannot be tested formally; the CI classification is a coarse check.
-- Absolute accuracies are 8–12 pp above the paper's. Candidates (treatment of unfinished answers, thinking budget, extraction, prompt, hardware) were not isolated; the closeness of reading (c) to the paper's ST and TSR is a post-hoc hypothesis.
+- Absolute accuracies are 8–12 pp above the paper's. Candidates (treatment of unfinished answers, thinking budget, extraction, prompt) were not isolated; the closeness of the variant that counts unfinished answers wrong to the paper's ST and TSR is a post-hoc hypothesis.
 - Choices of ours (Z layer, H estimator, injection format, token limits) and the confirmed shortfall in injected tokens limit what the null result on VisRef−TSR means; it concerns this implementation only.
 - The LLM fallback differs from the official GPT-based extractor; the fill run used another extractor.
 - The main comparisons and tests were fixed after an interim look at 392 questions and the CI classification rule after one at 759 (Section 2.4); the post-hoc analyses are exploratory.
