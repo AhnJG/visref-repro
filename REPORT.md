@@ -16,7 +16,7 @@ We reimplemented the three methods of Table 6 (standard thinking ST, textual sel
 | C2 | VisRef > ST | +5.9 pp | main comparison 1 |
 | C3 | VisRef > TSR | +3.5 pp | main comparison 2 |
 
-The paper's headline claim is that VisRef improves over both ST and TSR, so C2 and C3 are the main comparisons. We target the paired differences, not the absolute accuracies: the paper's ST (46.1) is far below the official InternVL3.5-1B MathVista (mini) score of 59.3 (InternVL3.5 report; the report does not say whether that number uses thinking mode), and the paper's 8B ST (68.1) is likewise more than 10 pp below the official 78.4. The label "InternVL-1B" does not name the generation. We assumed InternVL3.5-1B (the paper writes "InternVL-3.5" explicitly for 8B), although the paper's ST of 46.1 is numerically close to the official InternVL3-1B score of 45.8; InternVL3-1B was not tested.
+The paper's headline claim is that VisRef improves over both ST and TSR, so C2 and C3 are the main comparisons. We target the paired differences, not the absolute accuracies: the paper's ST (46.1) is far below the official InternVL3.5-1B MathVista (mini) score of 59.3 (InternVL3.5 report; the report does not say whether that number uses thinking mode), and the paper's 8B ST (68.1) is likewise more than 10 pp below the official 78.4. Table 6 labels the row "InternVL-1B". We use InternVL3.5-1B: the only InternVL generation the paper names is InternVL3.5, it runs its models in thinking mode, it compares the 1B, 2B and 8B models "under the same decoding setup and token budget", and its 8B row equals the InternVL3.5-8B row of Table 1.
 
 ## 2. Methodology
 
@@ -30,7 +30,7 @@ Source codes: **P** paper; **C** work or code cited by the paper; **O** official
 
 | Item | Value | Source |
 |---|---|---|
-| Model, data | `OpenGVLab/InternVL3_5-1B` @ `2f71cf52…`; `AI4Math/MathVista` testmini (1,000 q) @ `2b6ad694…` | P (generation assumed, see Section 1) |
+| Model, data | `OpenGVLab/InternVL3_5-1B` @ `2f71cf52…`; `AI4Math/MathVista` testmini (1,000 q) @ `2b6ad694…` | P (see Section 1) |
 | Question order, seeds | Order shuffled with seed 0; generation seed 42, derived per question and shared by the three methods; first thinking step shared (forked) | U |
 | Methods | ST; TSR (cue "Wait, think more"); VisRef (greedy MAP DPP over visual tokens) | P; DPP code of Chen et al. 2018 (C) |
 | VisRef values | δ = 0.25, m = ⌊0.3·\|V\|⌋, K_max = 10 | P |
@@ -196,7 +196,7 @@ We could not find the following in the paper; each was a choice of ours (Section
 - what to do when the DPP kernel rank is below m;
 - the stopping-entropy estimator (number of answer samples, temperature, probe prompt, log base);
 - the injection format: tags, separators, `</think>` handling, position ids, answer prompt after Ṽ_k;
-- the image tiling (thumbnail tile), and which InternVL generation "InternVL-1B" is.
+- the image tiling (thumbnail tile).
 
 We also recorded internal tensions in the paper (for example the latency table versus the token-usage figure; `docs/SPEC_LEDGER.md`, items A-4, A-8 to A-10, C-12) and did not use them as targets.
 
@@ -212,7 +212,7 @@ None as of 2026-10-12. Questions we would send:
 6. How |Ṽ_k| = m is enforced when the kernel rank is below m.
 7. Injection format, separators, `</think>` handling and position ids.
 8. Tiling settings (max_num, thumbnail) behind ∼1,772 visual tokens.
-9. For 1B: the distribution of the number of steps k, tokens per trace, and whether Table 6 uses InternVL3.5-1B or InternVL3-1B.
+9. For 1B: the distribution of the number of steps k and the tokens per trace.
 10. Sampling parameters, number of runs and hardware/precision for Table 6.
 
 ## 6. Limitations

@@ -1629,3 +1629,8 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - README(영·한): 절대 정확도 차이의 추정 원인에서 "다른 모델 세대(InternVL3-1B)" 항목과 설정 표 모델 행의 대안 칸을 삭제(사용자 지시 "이건 빼"). REPORT §6 후보 목록에 직전에 넣었던 "the model generation"도 되돌림. REPORT 1절 범위 설명(세대 가정)과 5.3절 저자 질문 9번, SPEC_LEDGER 행 1·C-8·X-26의 기록은 그대로 둠.
 - 검증: `make check` Python 3.11·3.13 통과. GitHub 렌더링(저장소 API)에서 두 README의 REPORT 링크 9개씩 모두 REPORT 제목 id와 일치, README 내부 링크 일치, 표 6개, § 0개.
 - push: `main` = 7fc9d64. 공개 폴더 README.md·README.ko.md·REPORT.md 같은 내용으로 맞춤.
+
+## 2026-10-12 REPORT에서 InternVL3-1B 후보 삭제 (사용자 판단) — 결과·판정 불변
+- 사용자 지적: 논문은 InternVL3.5-8B 위주이고 1B 행만 3 세대로 보는 것은 논리적으로 맞지 않는다. 원문 대조: 논문이 이름을 밝힌 InternVL 세대는 3.5뿐(LAY에 "InternVL3-" 0회, "InternVL-3.5"/"InternVL3.5" 다수), 모델을 "reasoning (thinking) mode"로 실행(LAY L428-429), 1B·2B·8B를 "under the same decoding setup and token budget"으로 비교(L924-925), 8B 행 68.1/73.9/79.3 = Table 1 InternVL3.5-8B(L396-398). InternVL3 후보의 근거는 1B 수치 근접(45.8 vs 46.1) 하나뿐이었다 → 지적이 맞다고 판단.
+- REPORT: 1절 범위 설명을 위 근거로 InternVL3.5-1B를 쓴다는 문장으로 교체, 2.1절 표 "generation assumed" 삭제, 5.2절 "어느 InternVL 세대인지" 항목 삭제, 5.3절 저자 질문 9번에서 InternVL3 부분 삭제. README는 직전 커밋에서 이미 삭제.
+- SPEC_LEDGER X-26에 삭제 사유 메모 추가(행 1·C-8의 기록은 그대로).
