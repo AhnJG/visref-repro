@@ -15,7 +15,7 @@ InternVL3.5-1B on MathVista *testmini* (1,000 questions), comparing
 ![ST, TSR and VisRef as run in this reproduction; orange notes mark settings we could not find in the paper](figures/method_overview.svg)
 
 > **Status (2026-10-13): complete.** The main run and three follow-up experiments are finished and analysed; the
-> decision rules of the follow-ups were fixed before their results.
+> decision rules of the follow-ups were fixed before their results. Three more experiments are planned (below).
 > Full write-up: **[REPORT.md](REPORT.md)**.
 
 ## Results
@@ -91,6 +91,24 @@ from our implementation. Details: [REPORT, Section 4](REPORT.md#4-beyond-the-pap
 
 All final tables are in [`results/`](results) (built from `repro/diag/*.json`). Post-hoc analyses (cause analysis,
 scoring variants, visual-token counts) are in [REPORT, Section 4](REPORT.md#4-beyond-the-paper) and are not part of the verdicts.
+
+### Planned next experiments (not yet run)
+The designs below are proposals. As for the follow-ups above, each decision rule will be fixed and published before
+its run.
+
+| experiment | question | proposed design |
+|---|---|---|
+| `visref_hs`, the remaining 161 questions | Does the last-layer-Z result hold on all 1,000 questions? | Run the 161 questions the session did not reach, with the same design as the first 839, and report the 1,000-question result next to the recorded 839-question verdict, which stays. |
+| thinking after the image (`visref_think`) | VisRef stopped at step 1 in 71.3% of questions, so the re-injected image comes right before the answer with no thinking step after it (the model sometimes writes more reasoning inside its answer: a second `</think>` in 352 of 713 such answers). Does VisRef gain if the model keeps thinking after the injection? | When the stopping rule fires, the model thinks up to 512 more tokens after Ṽ_k, then answers. Control: TSR with the same extra thinking but no image (`tsr_think`), so that extra thinking alone cannot explain a gain; main comparison `visref_think` − `tsr_think`. A step-1-only version of this (`step1_branch`, D − C, on the 309 questions where the methods continued) gave +0.97 pp (−2.27, +4.21). |
+| both together (`visref_hs_think`) | Does thinking after the image help when the injection reaches m tokens (last-layer Z)? | Last-layer Z plus thinking after the image, compared with `tsr_think`. With the runs above this completes a 2 × 2 design: Z from input embeddings or the last layer, with or without thinking after the image. |
+
+The independent review of 2026-10-13 ([review](repro/audit/independent_review_20261013/review.md), Korean) found that the follow-up runs so far regenerated the
+first thinking step: only 193 of 839 `visref_hs` first steps match the main run, which roughly doubled the paired
+noise. The two new experiments should therefore start from the main run's stored first step (as `step1_branch` did)
+and run their control in the same session, and their power calculation should use the measured disagreement rate
+(16% for `visref_hs` − TSR) rather than the main run's 9%. Rough cost from the measured `visref_hs` speed (839
+questions in about 7.7 h on 2×T4): about 2 h for the remaining 161 questions and 9 h or more per method for 1,000
+questions (an estimate, not measured).
 
 ## What is in this repository
 
@@ -219,9 +237,10 @@ the next token; we take the entropy of each distribution (natural logarithm) and
 equals the entropy of the answer distribution (chain rule), so it measures the same quantity as the paper, but with one
 sample it is noisy, and the noise affects when a method stops. History: we started with one sampled answer and the
 average of its token entropies. After reading Ghosal et al. we also tried 10 complete answers per step; with the 8B
-model, a TSR run on 3 development questions took 4,703.9 GPU-seconds. We went back to one sample because, judging from
-the paper's latency table (Table 5: ST 7.1 s, TSR 7.7 s, VisRef 8.2 s per question, 8B model on one H100), the
-authors cannot have generated several answers per step. Finally we replaced the average by the sum, because the
+model, a TSR run on 3 development questions took 4,703.9 GPU-seconds. We went back to one sample because we judged from
+the paper's latency table (Table 5: ST 7.1 s, TSR 7.7 s, VisRef 8.2 s per question, 8B model on one H100) that the
+authors did not generate several long, complete answers per step (our judgment: the paper does not say, and sampling
+several short answers in one batch would still fit the small latency gap). Finally we replaced the average by the sum, because the
 average is not the entropy of the answer (decision log: `docs/EXPERIMENT_FLOW.md`, 2026-10-05 to 2026-10-07). An
 `Answer:` probe was also replaced, because its formatting tokens dominated H and TSR stopped by entropy in 0 of 18
 smoke-test questions.
