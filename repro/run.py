@@ -17,7 +17,7 @@ from visref.methods import METHODS, Job
 from visref.model import encode_sample, load_mathvista, load_model, special_ids
 from visref.scoring import score
 
-DEFAULTS = dict(delta=0.25, kmax=10, vis_frac=0.3, think_cap=4096, total_think_cap=8192, answer_cap=1024,
+DEFAULTS = dict(delta=0.25, kmax=10, vis_frac=0.3, think_cap=1024, total_think_cap=10240, answer_cap=1024,
                 max_context=40960, min_step_tokens=256, probe_cap=16, probe_prompt='\n\n\\boxed', wait_text='Wait, think more',
                 forced_prompt='\nFinal Answer:', af_prompt='\n**Final Answer**\n\\boxed', af_cap=100, cut_sep='\n', temperature=0.6, top_k=50,
                 top_p=0.95, seed=42, batch=16, chunk=1024, batch_tokens=72000, max_num=12, fast_kv=1, dual_probe=0)

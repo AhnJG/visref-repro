@@ -60,7 +60,7 @@
 | J-7 | 사용자: rank만큼만(L899), 주 VisRef = `visref_raw_rank`(L976) | `visref/dpp.py` L26-34, `visref/methods.py` L203, `diag/final_judgment.py` L17 | `test_dpp_matches_naive_greedy`, `test_dpp_rank_deficient_returns_only_greedy_picks`, `test_raw_rank_with_the_same_step_is_rank_limited` | 일치 |
 | J-8 | 10-07 코드 재작성 때 입력 임베딩으로 구현. 그 전 사용자 결정 "Z에 입력 임베딩이 아닌 last hidden state가 타당"(L497-499)과 다르고, 바꾼 경위 기록을 찾지 못함. 10-12 사용자 지시로 마지막 층 Z 변형 `visref_hs` 사전등록(L1659) | `visref/methods.py` L203(주 VisRef), L197-200(`visref_hs`), `visref/engine.py` `last_hidden` | `tests/test_hs.py` 6개 | **불일치**: 이번 점검에서 찾은 빠진 사용자 결정은 이 하나. `visref_hs` 결과(EF 2026-10-13): 주입 수 m 도달, hs − TSR +0.24 pp (−2.38, +3.10), 사전등록 판정 ③(논문 크기 추가 이득 재현 안 됨) |
 | J-9 | 사용자: 답 하나로 측정(L750), 엔트로피 합·T 1(L820), `\boxed` probe(L827), 현행 유지(L955) | `visref/methods.py` L47, L104, L277-280, `run.py` L21 | `test_tsr_probe_sums_entropy_and_continues_until_confident`, `test_brace_probe_*` 6개, `test_engine_lumped_entropy_and_stop_check`, `test_decisions` | 일치 |
-| J-10 | 사용자: 단계 1,024 / 합계 10,240(L952-956) | 실행마다 run_args로 전달(`kaggle/runs/*/run_config.json`). `run.py` L20 기본값은 옛 결정(L804)의 4,096 / 8,192 | `test_decisions`(b_main 실행 11개(s1–s9, fill, hs)의 run_config가 1,024 / 10,240) | 실행 기록은 일치. **코드 기본값은 불일치**: 인자 없이 `run.py`를 직접 돌리면 옛 값으로 동작 |
+| J-10 | 사용자: 단계 1,024 / 합계 10,240(L952-956) | `run.py` L20 기본값(2026-10-13 정정 전에는 옛 결정 L804의 4,096 / 8,192), 실행마다 run_args로도 전달(`kaggle/runs/*/run_config.json`) | `test_decisions`(기본값, b_main 실행 11개(s1–s9, fill, hs)의 run_config가 1,024 / 10,240) | 실행 기록은 일치. 코드 기본값은 10-12 점검에서 불일치를 찾아 10-13 정정(사용자 지시) |
 | J-11 | 사용자: s1 방식(L888-891). 줄바꿈 수는 감사 반영(L912)을 사용자가 수용(L922) | `visref/methods.py` L105-106, L240, `run.py` L22 | `test_st_cut_step_gets_s1_forced_answer`, `test_s1_*` 4개, `test_decisions` | 일치 |
 | J-12 | 사용자(L952-954) | `visref/methods.py` L243-247, `run.py` L22 | `test_s1_answer_hitting_cap_gets_deer_answer_forcing`, `test_natural_answer_hitting_cap_also_gets_answer_forcing_and_eos_answer_does_not`, `test_answer_forcing_after_later_think_end_keeps_scored_tail`, `test_decisions` | 일치 |
 | J-13 | 사용자: 10-06 지시(L646), 유지 결정(L1127) | `visref/methods.py` L234-236 | `test_final_text_after_last_generated_think_end`, `test_s1_later_think_end_is_respected` | 일치 |
@@ -74,7 +74,7 @@
 | J-21 | 사용자 승인(L1237) | `llm_extract.py` L104, L131, L163 | `test_decisions`(가드 2, LLM에 보낼 행 고르기) | 일치 |
 | J-22 | 사용자: 본 실험(L1296), fill(L1277), step1_branch(L1534, L1543), `visref_hs`(L1666-1669) | `diag/final_judgment.py` L24, `diag/analyze_step1_branch.py`, `diag/analyze_hs.py` L59. fill 규칙만 코드 없이 사람이 적용(결과 L1452) | `make check`, `test_analyze_step1_branch.py`, `test_analyze_hs.py` | 일치 (fill만 수동 적용) |
 
-이번 점검에서 고치지 않은 것: `run.py` 기본값(J-10)을 1,024 / 10,240으로 바꾸면 code_version이 바뀌므로 사용자 결정 뒤로 미룸(EF 2026-10-12 "결정 점검"). 표에 없는 사용자 결정(대체된 9건 포함)은 하위 에이전트 원본 표에 있다.
+`run.py` 기본값(J-10)은 code_version이 바뀌므로 점검 때는 미뤘다가, `visref_hs` 실행이 끝난 뒤 2026-10-13 사용자 지시로 1,024 / 10,240으로 고쳤다(code_version f1376774850d → cf46b2e6222e, EF 2026-10-13). 표에 없는 사용자 결정(대체된 9건 포함)은 하위 에이전트 원본 표에 있다.
 
 ### D 자료 대조: InternVL3.5 공식 평가(VLMEvalKit, 커밋 54a063c5)의 InternVL3.5-1B 설정 vs 우리 b_main (2026-10-10)
 

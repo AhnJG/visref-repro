@@ -21,6 +21,7 @@ DECIDED = {
     'delta': 0.25, 'kmax': 10, 'vis_frac': 0.3,              # J-4, paper (A)
     'temperature': 0.6, 'top_k': 50, 'top_p': 0.95,          # J-3, official model page (D); EF L925
     'wait_text': 'Wait, think more',                         # J-5
+    'think_cap': 1024, 'total_think_cap': 10240,             # J-10, EF L952-956 (default fixed 2026-10-13)
     'answer_cap': 1024,                                      # J-10
     'probe_prompt': '\n\n\\boxed', 'probe_cap': 16,          # J-9, EF L827 (user agreed)
     'forced_prompt': '\nFinal Answer:',                      # J-11, EF L891 -> L912/L922 (s1 string)
@@ -54,8 +55,8 @@ def generation_runs():
 
 
 def test_generation_runs_were_built_with_the_decided_caps_and_order():
-    """run.py's own defaults are think_cap 4096 / total 8192 (EF L804, replaced by L956), so every run must pass the
-    decided caps 1,024 / 10,240 explicitly (J-10) and use the seed-0 question order (J-19)."""
+    """Every generation run passed the decided caps 1,024 / 10,240 explicitly (J-10): until 2026-10-13 run.py's own
+    defaults were the older 4,096 / 8,192 (EF L804, replaced by L956). Runs also use the seed-0 question order (J-19)."""
     runs = generation_runs()
     assert len(runs) >= 11  # b_main_s1..s9, b_main_fill, b_main_hs
     for name, c in runs:
