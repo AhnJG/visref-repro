@@ -21,7 +21,7 @@ InternVL3.5-1B on MathVista *testmini* (1,000 questions), comparing
 
 Scoring (reading (a), fixed in advance): answers are extracted by rules; for the rows the rules cannot parse (36 of
 3,000), an LLM extracts the answer with the official MathVista extraction prompt, and its answer counts only if it
-appears in the response ([Reproduce §3](#3-llm-fallback-extraction-rows-the-rule-scorer-cannot-parse-about-1)).
+appears in the response (see [LLM fallback extraction](#3-llm-fallback-extraction-rows-the-rule-scorer-cannot-parse-about-1)).
 n = 1,000; each method once per question, with shared seeds and a shared first thinking step.
 
 ![Paired accuracy differences with 95% CIs next to the paper's differences](figures/paired_differences.svg)
@@ -46,8 +46,8 @@ n = 1,000; each method once per question, with shared seeds and a shared first t
   The CIs are paired bootstrap intervals (2,000 resamples, seed 0).
 - **When the rules were fixed:** the main comparisons and tests after an interim look at the first 392 questions, and
   the classification rule after an interim look at 759 questions, both before the final analysis. The main run is
-  therefore not a pre-registration in the strict sense and its classification is not confirmatory (REPORT §2.4). The
-  classification is the same under every answer-handling reading we tried (REPORT §3.2). The decision rules of the two
+  therefore not a pre-registration in the strict sense and its classification is not confirmatory ([REPORT, Section 2.4](REPORT.md#24-timing-of-pre-registration)). The
+  classification is the same under every answer-handling reading we tried ([REPORT, Section 3.2](REPORT.md#32-sensitivity-to-answer-handling)). The decision rules of the two
   follow-up experiments below were fixed before their results.
 
 ### Why our accuracies are 8–12 pp above the paper's (not resolved)
@@ -59,11 +59,8 @@ not find that setting in the paper. Our estimates of the cause, none of them tes
 1. **Unfinished answers counted as wrong.** If every answer that reached the answer cap and needed answer forcing is
    counted wrong (reading (c)), our accuracies become ST 44.4 / TSR 48.3 / VisRef 47.4, close to the paper's ST and TSR
    (46.1 / 48.5). We formed this hypothesis after seeing the results and picked it among four readings, so it is weak
-   evidence (REPORT §4.4).
-2. **A different model generation.** "InternVL-1B" in Table 6 does not name the generation, and the official
-   InternVL3-1B score (45.8) is close to the paper's ST of 46.1. We assumed InternVL3.5-1B because the paper writes
-   "InternVL-3.5" for its 8B model; InternVL3-1B was not run.
-3. **Token limits, answer extraction, prompt, hardware.** We could not find the first three in the paper, and its GPUs
+   evidence ([REPORT, Section 4.4](REPORT.md#44-paper-fingerprints-post-hoc)).
+2. **Token limits, answer extraction, prompt, hardware.** We could not find the first three in the paper, and its GPUs
    (A10G) differ from ours (T4, fp16). A tighter thinking limit, for example, would cut more answers short.
 
 The official scores are from the InternVL3.5 report (Table 3); where each paper number comes from: `docs/SOURCES.md`.
@@ -80,7 +77,7 @@ We look for the cause in our implementation first. The differences that could ex
 | Stopping entropy H from one sampled answer | noisy stop decisions | Several samples per step not run |
 
 None of these is ruled out completely, and we could not find CIs or the number of runs behind the paper's numbers, so
-we cannot say how much of the gap comes from our implementation. Details: REPORT §4.
+we cannot say how much of the gap comes from our implementation. Details: [REPORT, Section 4](REPORT.md#4-beyond-the-paper).
 
 ### Follow-up experiments (decision rules fixed before the results)
 
@@ -90,7 +87,7 @@ we cannot say how much of the gap comes from our implementation. Details: REPORT
 | `step1_branch` (309 q) | On the questions where TSR or VisRef continued after step 1: does re-injecting Ṽ₁ help an immediate answer (B − A), or an answer after ≤ 512 more thinking tokens (D − C)? | B − A +1.40 pp (−1.19, +3.99); D − C +0.97 pp (−2.27, +4.21); Holm p 0.658 for both: the immediate-answer gain seen post hoc in the main run was not reproduced. |
 
 All final tables are in [`results/`](results) (built from `repro/diag/*.json`). Post-hoc analyses (cause analysis,
-answer-handling readings, visual-token counts) are in REPORT §4 and are not part of the verdicts.
+answer-handling readings, visual-token counts) are in [REPORT, Section 4](REPORT.md#4-beyond-the-paper) and are not part of the verdicts.
 
 ## What is in this repository
 
@@ -150,7 +147,7 @@ why its TSR accuracy (60.0) differs from reading (a) (60.1, one row recovered by
 Pinned: model `OpenGVLab/InternVL3_5-1B` @ `2f71cf52542334823e48a46ffba0e2bc9add3446`,
 data `AI4Math/MathVista` @ `2b6ad69445fbb5695c9b165475e8decdbeb97747`, `transformers==4.55.0`, fp16.
 Each session's exact settings are in `repro/kaggle/runs/<session>/run_config.json`. The main run took 9 Kaggle
-sessions on 2×T4, about 14.9 session-hours in total (REPORT §2.5).
+sessions on 2×T4, about 14.9 session-hours in total ([REPORT, Section 2.5](REPORT.md#25-code-versions-and-compute)).
 Use new run names: the folders under `repro/kaggle/runs/` are the records of the published sessions, and the
 builders refuse to overwrite an existing run folder (`--overwrite` exists only for rebuilding a session that has not
 been pushed yet).
@@ -169,7 +166,7 @@ python3 kaggle/build_step1_branch.py rerun_step1_branch_main --timeout 7200 \
 ```
 Questions are processed in a fixed seed-0 shuffled order, so any completed prefix is a random subset; every
 (question, method) uses a per-question seed (common random numbers across methods). Outputs depend slightly on batch
-composition under fp16 (REPORT §6).
+composition under fp16 ([REPORT, Section 6](REPORT.md#6-limitations)).
 
 ### 3. LLM fallback extraction (rows the rule scorer cannot parse, about 1%)
 ```bash
@@ -195,11 +192,11 @@ which the InternVL3.5 report used) → public code the paper does not cite → o
 
 | setting | our choice | basis | other possibilities (status) |
 |---|---|---|---|
-| Model ("InternVL-1B") | InternVL3.5-1B | the paper writes "InternVL-3.5" for 8B, and its 8B row matches the InternVL3.5-8B row of its Table 1 | InternVL3-1B (official 45.8, close to the paper's ST 46.1); not run |
+| Model ("InternVL-1B") | InternVL3.5-1B | the paper writes "InternVL-3.5" for 8B, and its 8B row matches the InternVL3.5-8B row of its Table 1 | – |
 | Thinking mode, sampling | R1 thinking system prompt; T 0.6, top-k 50, top-p 0.95 | InternVL3.5 model card | – |
 | Token limits | 1,024 per thinking step, 10,240 in total, 1,024 for the answer | 1,024 is the model card's example value; the rest is our choice | a larger step cap (e.g. 4,096) or the official evaluation's 65,536 new tokens; not run |
 | Truncated thinking | append `</think>\nFinal Answer:` (s1-style budget forcing) | s1, which the paper cites; applying it here is our interpretation | without the `Final Answer:` nudge: −2.0 pp on 150 questions, p = 0.73 (diagnostic run) |
-| Answer reaching the cap | DEER-style answer forcing (`\n**Final Answer**\n\boxed`, ≤ 100 tokens) | DEER code (not cited by the paper) | count it wrong: reading (c), REPORT §3.2 |
+| Answer reaching the cap | DEER-style answer forcing (`\n**Final Answer**\n\boxed`, ≤ 100 tokens) | DEER code (not cited by the paper) | count it wrong: reading (c), [REPORT, Section 3.2](REPORT.md#32-sensitivity-to-answer-handling) |
 | Answer extraction | rules, then the official MathVista extraction prompt for rows the rules cannot parse | MathVista extracts every answer with an LLM; rules first, LLM second is how VLMEvalKit works | an LLM for every row with the official GPT model; not run |
 | Text that is scored | the text after the last `</think>` | the same split rule as VLMEvalKit (whether the InternVL3.5 evaluation turned it on: not confirmed) | score the whole output; not tested |
 | DPP selection size | the greedy DPP stops at the kernel rank, about m/5 tokens | the cited DPP code (Chen et al. 2018); conflicts with the paper's \|V_k\| = m | fill up to m: tested (`visref_fill`), no extra gain |
@@ -221,7 +218,7 @@ smoke-test questions.
 
 Every decision with its evidence and alternatives is in `docs/SPEC_LEDGER.md` (start at "핵심 판단 요약"); where each
 paper claim comes from (arXiv version, page, table) is in `docs/SOURCES.md`. Questions for the authors are listed in
-REPORT §5.3.
+[REPORT, Section 5.3](REPORT.md#53-communication-with-original-authors).
 
 ## Contributions and AI use
 This reproduction was carried out by AhnJG with AI assistance (Claude models, Anthropic).
@@ -236,7 +233,7 @@ This reproduction was carried out by AhnJG with AI assistance (Claude models, An
   scripts, tests); drafted the pre-registrations, analyses, REPORT.md and the figures; separate model sessions carried
   out independent reviews (`repro/audit/`).
 - **An LLM as part of the method:** gemini-3.5-flash-lite extracts the answer for the rows the rules cannot parse
-  (Reproduce §3).
+  (see [LLM fallback extraction](#3-llm-fallback-extraction-rows-the-rule-scorer-cannot-parse-about-1)).
 
 ## Citation
 See `CITATION.cff`. Please also cite the original paper:
