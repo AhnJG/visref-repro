@@ -1,0 +1,4 @@
+method,ours_pct,paper_pct,ours_minus_paper_pp
+ST,57.8,46.1,11.7
+TSR,60.1,48.5,11.6
+VisRef,60.0,52.0,8.0

@@ -1,0 +1,200 @@
+{
+ "target": "VisRef (arXiv 2603.00207) Appendix Table 6, InternVL-1B, MathVista testmini (n = 1,000)",
+ "paper_pct": {
+  "ST": 46.1,
+  "TSR": 48.5,
+  "VisRef": 52.0
+ },
+ "main": {
+  "reading": "(a) rules + LLM fallback (pre-specified)",
+  "n": 1000,
+  "acc_pct": {
+   "ST": 57.8,
+   "TSR": 60.1,
+   "VisRef": 60.0
+  },
+  "pairs": {
+   "VisRef - ST": {
+    "kind": "main",
+    "diff_pp": 2.2,
+    "ci95_pp": [
+     0.3,
+     4.1
+    ],
+    "a_only": 60,
+    "b_only": 38,
+    "p_mcnemar": 0.0334,
+    "paper_pp": 5.9,
+    "p_holm": 0.0667,
+    "classification": "effect size not reproduced (same direction, different size)"
+   },
+   "VisRef - TSR": {
+    "kind": "main",
+    "diff_pp": -0.1,
+    "ci95_pp": [
+     -2.0,
+     1.7
+    ],
+    "a_only": 44,
+    "b_only": 45,
+    "p_mcnemar": 1.0,
+    "paper_pp": 3.5,
+    "p_holm": 1.0,
+    "classification": "effect size not reproduced"
+   },
+   "TSR - ST": {
+    "kind": "supplementary",
+    "diff_pp": 2.3,
+    "ci95_pp": [
+     0.6,
+     4.0
+    ],
+    "a_only": 51,
+    "b_only": 28,
+    "p_mcnemar": 0.0128,
+    "paper_pp": 2.4,
+    "p_holm": null,
+    "classification": "consistent with the paper value"
+   }
+  }
+ },
+ "visref_fill": {
+  "n": 976,
+  "acc_pct": {
+   "ST": 57.79,
+   "TSR": 60.04,
+   "VisRef": 59.94,
+   "VisRef-fill": 60.04
+  },
+  "pairs": {
+   "VisRef-fill - TSR": {
+    "diff_pp": 0.0,
+    "ci95_pp": [
+     -2.15,
+     2.36
+    ],
+    "a_only": 70,
+    "b_only": 70,
+    "p_mcnemar": 1.0
+   },
+   "VisRef-fill - VisRef": {
+    "diff_pp": 0.1,
+    "ci95_pp": [
+     -2.15,
+     2.36
+    ],
+    "a_only": 65,
+    "b_only": 64,
+    "p_mcnemar": 1.0
+   },
+   "VisRef-fill - ST": {
+    "diff_pp": 2.25,
+    "ci95_pp": [
+     -0.31,
+     4.71
+    ],
+    "a_only": 87,
+    "b_only": 65,
+    "p_mcnemar": 0.0882
+   },
+   "VisRef - TSR": {
+    "diff_pp": -0.1,
+    "ci95_pp": [
+     -2.05,
+     1.95
+    ],
+    "a_only": 43,
+    "b_only": 44,
+    "p_mcnemar": 1.0
+   }
+  }
+ },
+ "step1_branch": {
+  "n": 309,
+  "acc_t1_pct": {
+   "A": 33.98,
+   "B": 35.38,
+   "C": 35.28,
+   "D": 36.25
+  },
+  "acc_greedy_pct": {
+   "A": 35.28,
+   "B": 36.57,
+   "C": 39.81,
+   "D": 37.86
+  },
+  "primary": {
+   "B-A": {
+    "n": 309,
+    "diff_pp": 1.4,
+    "ci95_pp": [
+     -1.19,
+     3.99
+    ],
+    "greedy_only": [
+     18,
+     14
+    ],
+    "p_mcnemar_greedy": 0.5966,
+    "p_boot": 0.289,
+    "p_holm": 0.578
+   },
+   "D-C": {
+    "n": 309,
+    "diff_pp": 0.97,
+    "ci95_pp": [
+     -2.27,
+     4.21
+    ],
+    "greedy_only": [
+     14,
+     20
+    ],
+    "p_mcnemar_greedy": 0.3915,
+    "p_boot": 0.575,
+    "p_holm": 0.578
+   }
+  },
+  "secondary": {
+   "D-B": {
+    "n": 309,
+    "diff_pp": 0.86,
+    "ci95_pp": [
+     -2.16,
+     3.88
+    ],
+    "greedy_only": [
+     20,
+     16
+    ],
+    "p_mcnemar_greedy": 0.6177
+   },
+   "C-A": {
+    "n": 309,
+    "diff_pp": 1.29,
+    "ci95_pp": [
+     -1.83,
+     4.42
+    ],
+    "greedy_only": [
+     25,
+     11
+    ],
+    "p_mcnemar_greedy": 0.0288
+   },
+   "DiD_(D-C)-(B-A)": {
+    "diff_pp": -0.43,
+    "ci95_pp": [
+     -4.21,
+     3.24
+    ]
+   }
+  },
+  "verdict": "rule 4: immediate-answer gain from step-1 re-injection not reproduced"
+ },
+ "sources": [
+  "repro/diag/final_judgment.json",
+  "repro/diag/analyze_fill.json",
+  "repro/diag/step1_branch_analysis.json"
+ ]
+}

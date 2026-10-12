@@ -1,0 +1,22 @@
+{"event": "start", "code_version": "a9e2cafef0a8", "todo": 144, "done": 20, "cfg": {"vis_frac": 0.3, "think_extra": 512, "probe_prompt": "\n\n\\boxed", "probe_cap": 16, "n_t1": 3, "temperature": 0.6, "top_k": 50, "top_p": 0.95, "seed": 42, "cut_sep": "\n", "chunk": 1024, "batch_tokens": 72000, "group": 8, "max_num": 12}}
+FlashAttention2 is not installed.
+{"event": "fast_kv_check", "ok": true, "match_rows": [true, true]}
+{"event": "group", "n": 8, "group_s": 148.4, "elapsed": 194, "left": 136, "peak_alloc_gb": 10.78}
+{"event": "group", "n": 8, "group_s": 148.4, "elapsed": 342, "left": 128, "peak_alloc_gb": 10.92}
+{"event": "group", "n": 8, "group_s": 159.0, "elapsed": 501, "left": 120, "peak_alloc_gb": 11.04}
+{"event": "group", "n": 8, "group_s": 158.9, "elapsed": 660, "left": 112, "peak_alloc_gb": 11.04}
+{"event": "group", "n": 8, "group_s": 129.3, "elapsed": 789, "left": 104, "peak_alloc_gb": 11.04}
+{"event": "group", "n": 8, "group_s": 165.5, "elapsed": 955, "left": 96, "peak_alloc_gb": 11.04}
+{"event": "group", "n": 8, "group_s": 157.3, "elapsed": 1112, "left": 88, "peak_alloc_gb": 11.04}
+{"event": "group", "n": 8, "group_s": 158.9, "elapsed": 1271, "left": 80, "peak_alloc_gb": 11.04}
+{"event": "group", "n": 8, "group_s": 133.7, "elapsed": 1405, "left": 72, "peak_alloc_gb": 11.04}
+{"event": "group", "n": 8, "group_s": 121.0, "elapsed": 1526, "left": 64, "peak_alloc_gb": 11.04}
+{"event": "group", "n": 8, "group_s": 152.2, "elapsed": 1678, "left": 56, "peak_alloc_gb": 11.04}
+{"event": "group", "n": 8, "group_s": 133.6, "elapsed": 1811, "left": 48, "peak_alloc_gb": 11.04}
+{"event": "group", "n": 8, "group_s": 184.6, "elapsed": 1996, "left": 40, "peak_alloc_gb": 11.05}
+{"event": "group", "n": 8, "group_s": 146.5, "elapsed": 2143, "left": 32, "peak_alloc_gb": 11.09}
+{"event": "group", "n": 8, "group_s": 165.9, "elapsed": 2308, "left": 24, "peak_alloc_gb": 11.09}
+{"event": "group", "n": 8, "group_s": 170.0, "elapsed": 2478, "left": 16, "peak_alloc_gb": 11.09}
+{"event": "group", "n": 8, "group_s": 152.3, "elapsed": 2631, "left": 8, "peak_alloc_gb": 11.09}
+{"event": "group", "n": 8, "group_s": 165.8, "elapsed": 2797, "left": 0, "peak_alloc_gb": 11.09}
+{"event": "end", "elapsed": 2797}

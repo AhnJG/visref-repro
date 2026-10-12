@@ -1,0 +1,4 @@
+comparison,kind,diff_pp,ci95_lo,ci95_hi,only_first_correct,only_second_correct,p_mcnemar,p_holm,paper_pp,classification
+VisRef - ST,main,2.2,0.3,4.1,60,38,0.0334,0.0667,5.9,"effect size not reproduced (same direction, different size)"
+VisRef - TSR,main,-0.1,-2.0,1.7,44,45,1.0,1.0,3.5,effect size not reproduced
+TSR - ST,supplementary,2.3,0.6,4.0,51,28,0.0128,,2.4,consistent with the paper value

@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+message: "If you use this reproduction, please cite it and the original VisRef paper (see references)."
+title: "visref-repro: an unofficial reproduction of VisRef (InternVL3.5-1B, MathVista testmini)"
+type: software
+authors:
+  - alias: AhnJG
+repository-code: "https://github.com/AhnJG/visref-repro"
+license: MIT
+keywords:
+  - reproducibility
+  - multimodal reasoning
+  - test-time scaling
+  - VisRef
+  - MathVista
+references:
+  - type: article
+    title: "VisRef: Visual Refocusing while Thinking Improves Test-Time Scaling in Multi-Modal Large Reasoning Models"
+    authors:
+      - family-names: Ghosal
+        given-names: Soumya Suvra
+      - family-names: Kim
+        given-names: Youngeun
+      - family-names: Li
+        given-names: Zhuowei
+      - family-names: Chaudhry
+        given-names: Ritwick
+      - family-names: Xu
+        given-names: Linghan
+      - family-names: Zhang
+        given-names: Hongjing
+      - family-names: Zablocki
+        given-names: Jakub
+      - family-names: Xing
+        given-names: Yifan
+      - family-names: Zhang
+        given-names: Qin
+    year: 2026
+    identifiers:
+      - type: other
+        value: "arXiv:2603.00207"
+    url: "https://arxiv.org/abs/2603.00207"

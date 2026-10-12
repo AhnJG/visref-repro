@@ -1550,3 +1550,37 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - export README: 상태 문구(b_main 완료, 판정 파일 `repro/diag/final_judgment.json`), 구조 목록, 테스트 요구사항(torch + transformers) 갱신. 결과표는 공개 시 채움.
 - 검증: git 추적 대상 200개 파일, 72.8MB, 최대 22.9MB(`repro/llm/final/merged.jsonl`). 비밀 키 패턴·이메일·개인 경로 0건, PDF·.pt·노트북 0건. CPU `pytest` 89 passed(torch 2.11.0 + transformers 4.55.0, Python 3.13). 새 복사본에서 `scripts/fetch_sources.py` 17/17 sha256 일치, `diag/final_judgment.py` 재실행 결과가 커밋본과 바이트 단위로 동일.
 - 미해결(사용자 결정 필요): README 1단계 `report.py ... --rescore-data` 명령으로 재생성한 결과(scorer v4, TSR 600/1000)가 커밋된 `repro/reports/b_main_report.json`(scorer "recorded (per-row, may mix versions)", TSR 601/1000)과 다르다. 재생성값은 위 L1379의 v3 규칙 채점 참고값(TSR 60.0)과 같다. 보고서를 재생성할지, README 명령을 고칠지는 아직 정하지 않았다.
+
+## 2026-10-11 step1_branch 파일럿 결과(시간·복원만) → 본 실행 빌드
+- 파일럿(20문항, T4×2, code a9e2cafef0a8, torch 2.11.0+cu128, transformers 4.55.0): 8문항 묶음 139–162초(문항당 약 18–20초/GPU), 두 GPU 병렬 기준 문항당 약 10초, 세션 약 6분. 복원: 재토큰 수 = b_main think_tokens 20/20, 선택 수 = b_main n_dpp 20/20(차이 0), 오류 0, 답 형식 유효 320/320(조건 합산; 조건별 정확도는 보지 않음).
+- 결과 파일은 사용자가 `github_export/visref-repro/...`에서 pull해 그 아래에 저장됨 → `repro/kaggle/runs/step1_branch_pilot/output/`로 복사(원본은 그대로).
+- 비용 규칙 판단: 본 실행 289문항 예상 약 50분(< 3시간) → 자유 생성 상한 512 유지. 본 실행 `repro/kaggle/runs/step1_branch_main`(파일럿 20 pid 건너뜀, timeout 7,200s, 코드 묶음 sha 파일럿과 동일).
+
+- push 완료(사용자 요청으로 Claude가 수행): `github.com/AhnJG/visref-repro`(private) `main` = `7ec0965`(사용자가 로컬에서 만든 커밋 그대로, 파일 200개). 원격 트리의 파일 수 200을 확인했다. 작성자 이메일은 사용자 결정에 따라 그대로 두었다.
+
+## 2026-10-11 step1_branch 본 실행 결과 (309문항 = 파일럿 20 + 본 289) — 사전등록 규칙 그대로 판정
+- 데이터: 본 실행 출력은 사용자 자동 pull로 `repro/runs/kaggle/visref-step1-branch-main/20261011T160142Z/`에 저장(사전 안내한 `repro/kaggle/runs/step1_branch_main/output/`가 아님). JSONL 145+144줄, 고유 pid 289, 파일럿 skip 20과 합쳐 309/309. 같은 폴더 아래 반복 다운로드 166벌은 JSONL sha256 전부 동일(6df86ae1d93e…, 0fbb8ba07645…) → 데이터 영향 없음. 번들 src 10개 파일 sha = 로컬 repro와 동일, code_version a9e2cafef0a8(파일럿과 같음), Kaggle torch 2.11.0+cu128 / transformers 4.55.0, T4×2, GPU별 약 2,918초, 오류·OOM 0.
+- 분석: `python3 diag/analyze_step1_branch.py <파일럿 2개> <본 2개> --ids diag/step1_branch_ids.json --out diag/step1_branch_analysis.json`(결과 전 고정 코드, 수정 없음).
+- T=1 3개 평균 정답률(%): A 33.98 / B 35.38 / C 35.28 / D 36.25. greedy: A 35.28 / B 36.57 / C 39.81 / D 37.86. 답 형식 유효 99.1–99.6%.
+- 공동 1차: B−A +1.40%p, 95% CI −1.19~+3.99, Holm p 0.578 (greedy 18:14). D−C +0.97%p, CI −2.27~+4.21, Holm p 0.578 (greedy 14:20). → ①·② 모두 불성립.
+- 판정(사전 규칙 ④): 즉답 재주입 이득 재현 안 됨. b_main 1단계 즉답에서 본 +5.5%p(309문항, 표본 1개)는 잡음이었을 가능성이 있다. 무효 결과는 사전 문구대로 "5–6%p 이상의 효과는 검출되지 않음"으로만 표현한다(CI 상한은 약 +4%p).
+- 보조(판정에 쓰지 않음): D−B +0.86 (CI −2.16~+3.88), C−A +1.29 (CI −1.83~+4.42; greedy만 25:11, McNemar p 0.029 — 보정 없는 보조 지표 하나), (D−C)−(B−A) −0.43 (CI −4.21~+3.24). 1단계 종료별 T=1: cap 297문항 A 33.2 / B 34.7 / C 34.6 / D 35.6, eos 7, close 5(작아서 기술만).
+- 메커니즘(C vs D): 모델이 스스로 `</think>`로 닫음 99 vs 82, 512 도달 203 vs 220, 이미지 관련 단어 언급률 22.7% vs 31.4%. 이미지를 넣으면 생각 글에 이미지 언급은 늘지만 정답률로 이어지지 않았다.
+- 복원: 재토큰 수 일치 301/309, 선택 수 일치 296/309(차이 ±1–3개), 둘 다 일치 293. 사후 민감도(판정 아님): 일치 293문항만 보면 B−A +1.59 (CI −1.14~+4.44), D−C +0.57 (CI −2.73~+3.75)로 결론 같음. 조건 A–D는 같은 z·같은 선택을 공유하므로 조건 간 비교는 이 불일치와 무관하다.
+- 해석(추론, 사실 아님): 우리 구현에서 TSR과 VisRef가 갈리는 곳은 이 309문항뿐이다. 논문 1B의 VisRef−TSR +3.5%p(`references/papers/VisRef_fulltext/VisRef_layout.txt` L900: 48.5 → 52.0)를 이 309문항 안의 1단계 재주입만으로 내려면 309문항 안에서 약 +11%p가 필요하지만, 이번 CI 상한은 약 +4%p(1,000문항 환산 약 +1.3%p). 따라서 우리 1단계 지점의 재주입은 논문 크기의 차이를 설명하지 못한다. 논문의 이득이 다른 곳(정지 규칙·단계 길이·주입 방식·2단계 이후)에서 나왔을 가능성은 이 실험으로 판단할 수 없다.
+- 다음: 사전 규칙 ④에는 후속 실험이 정해져 있지 않다. 남은 의문(주입 형식·위치, 단계 경계, 썸네일, 상한 도달 답 처리)은 저자 문의로 넘기는 것을 제안.
+- (10-12 사후 계산, 사전등록 아님) 사용자 질문 "이미지 넣고 더 생각하는 게 더 좋은가"에 답하려고 같은 분석 함수(`pair`, 부트스트랩 seed 0)로 D−A를 계산: +2.27%p (95% CI −0.97~+5.72, greedy 23:15, McNemar p 0.256). greedy 정답률 순서는 C 39.81 > D 37.86 > B 36.57 > A 35.28로 T=1 평균 순서(D 최고)와 다르다 → "D가 가장 좋다"는 309문항에서 확인되지 않음.
+
+## 2026-10-12 실험 종료 + 공개 폴더 완성 (사용자 지시 "여기서 끝내고 깃헙 정리를 완성해")
+- 실험 종료: 새 GPU 실험 없음. st_official은 미완료로 남기고 분석하지 않는다. 저자 문의는 아직 안 함(질문 목록은 REPORT §5.3).
+- step1_branch 본 실행 출력을 `repro/kaggle/runs/step1_branch_main/output/results/`로 복사(원본 `repro/runs/kaggle/visref-step1-branch-main/20261011T160142Z/`는 그대로, JSONL sha256 동일). `scripts/make_github_export.py` RUNS에 `step1_branch_main` 추가(이전 판 `scripts/.make_github_export.bak_20261012`).
+- `repro/reports/b_main_report.*` 재생성: README 명령(`--rescore-data`, 규칙 채점 v4만)으로 다시 만든 결과와 커밋 파일이 달랐던 미해결 건(10-11 기록) 해소. 새 값 ST 57.8 / TSR 60.0 / VisRef 60.0(규칙만; 판정 읽기 (a)의 TSR 60.1과의 차이 1행은 LLM 추출로 바뀐 341 TSR). 이전 판(기록값, 판 혼합) 백업 `repro/.backup_report_20261012/`. 판정 수치 변경 없음.
+- 공개 폴더에서 직접 관리하는 새 파일: `REPORT.md`(영문 MLRC 형식; Sonnet 서브에이전트 초안 → 주 세션이 수치를 JSON·merged.jsonl·EF와 대조, 근거를 찾지 못한 문장 2개 삭제), README 결과표·후속 실험·재현 명령 갱신(이전 판 `github_export/.README_export.bak_20261012`), `results/`(`scripts/make_results.py`가 diag JSON에서 생성), `CITATION.cff`(cffconvert로 스키마 1.2.0 검증, 저자 표기 alias AhnJG), `Makefile`(fetch / analysis / results / check / report / test), `.gitignore`에 `build/`.
+- 검증: 새 복사본에서 `make analysis results report` → final_judgment.json, analyze_fill.json, step1_branch_analysis.json, results/, b_main_report.json 모두 바이트 동일(HTML은 생성 시각만 다름). CPU pytest 89 passed(torch 2.7.0, transformers 4.55.0). 새·변경 파일에서 키 패턴·개인 경로·이메일 0건.
+- git: 장치에서 실행한 `git add -A --dry-run`이 `.git/index.lock`을 남겼고 삭제 권한이 없어 `.git/stale-index-lock-20261012`로 옮겼다(git 동작에는 영향 없음, 사용자가 지워도 됨). 커밋·push는 하지 않았다.
+
+## 2026-10-12 공개 폴더에 그림 2개 추가 (사용자 결정: GitHub 저장소, 결과 요약 + 방법 흐름도, 영어)
+- `figures/paired_differences.svg`: 세 비교(VisRef−ST, VisRef−TSR, TSR−ST)의 짝 차이와 95% 부트스트랩 CI(점·막대) 옆에 논문 Table 6 차이(마름모). `scripts/make_figures.py`(표준 라이브러리)가 `results/paired_differences.csv`에서 그림. 색은 dataviz 기본 팔레트 1·2번(파랑·주황), 검증 스크립트로 라이트·다크 모두 통과, 모양(점 vs 마름모)으로도 구분. SVG 안에 라이트/다크 색을 함께 넣음.
+- `figures/method_overview.svg`(손으로 배치): 이미지+질문 → 생각 단계 → (VisRef만) Ṽ_k 재주입 → 정지 확인 → 답, "Wait, think more" 반복, ST·TSR 경로. 논문 명시 값(δ 0.25, K_max 10, m = ⌊0.3|V|⌋)은 상자 안, 우리가 정한 것(타일링·썸네일, 토큰 상한, Z = 입력 임베딩, DPP 계수 조기 종료 ≈ m/5 = 확인된 절차 차이, 주입 형식, H 추정, 답 처리)은 주황 메모.
+- README(방법 표 아래 흐름도, 결과 절 첫머리 결과 그림), REPORT(Figure 1 = §2.1, Figure 2 = §3.1), 파일 위치 표, Makefile(`figures` 목표, `check`에 figures 포함) 갱신.
+- 검증: 브라우저(Chromium)로 라이트·다크 렌더링을 눈으로 확인(겹침·잘림 수정 후 최종본). 장치(Python 3.10)와 컨테이너에서 결과 그림 생성물이 같음, 새 복사본에서 `make analysis figures` → results/·결과 그림 바이트 동일. 방법 흐름도 SVG에는 전달 과정에서 붙은 C2PA 출처 메타데이터가 들어 있음(렌더링 영향 없음, 그대로 둠).

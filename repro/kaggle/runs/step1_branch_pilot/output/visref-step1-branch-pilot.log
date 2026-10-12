@@ -1,0 +1,59 @@
+[{"stream_name":"stderr","time":7.32034729,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":7.320390539,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":7.320396386,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":7.320402128,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stderr","time":7.920831376,"data":"0.00s - Debugger warning: It seems that frozen modules are being used, which may\n"}
+,{"stream_name":"stderr","time":7.920870266,"data":"0.00s - make the debugger miss breakpoints. Please pass -Xfrozen_modules=off\n"}
+,{"stream_name":"stderr","time":7.920876062,"data":"0.00s - to python to disable frozen modules.\n"}
+,{"stream_name":"stderr","time":7.920880762,"data":"0.00s - Note: Debugging will proceed. Set PYDEVD_DISABLE_FILE_VALIDATION=1 to disable this validation.\n"}
+,{"stream_name":"stdout","time":12.725895506,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 11.3/11.3 MB 96.1 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":12.76442184,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 566.4/566.4 kB 25.5 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":12.820615197,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.1/3.1 MB 86.4 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":12.928207797,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 11.3/11.3 MB 96.1 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":12.928232053,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 566.4/566.4 kB 25.5 MB/s eta 0:00:00\n"}
+,{"stream_name":"stdout","time":12.928237329,"data":"   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.1/3.1 MB 86.4 MB/s eta 0:00:00\n"}
+,{"stream_name":"stderr","time":27.681054273,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":27.681079103,"data":"gradio 6.26.0 requires huggingface-hub\u003c2.0,\u003e=1.16.0, but you have huggingface-hub 0.36.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":27.681083598,"data":"diffusers 0.40.0 requires huggingface-hub\u003c2.0,\u003e=1.23.0, but you have huggingface-hub 0.36.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":27.883785801,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":27.883808862,"data":"gradio 6.26.0 requires huggingface-hub\u003c2.0,\u003e=1.16.0, but you have huggingface-hub 0.36.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":27.883814631,"data":"diffusers 0.40.0 requires huggingface-hub\u003c2.0,\u003e=1.23.0, but you have huggingface-hub 0.36.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":27.883818944,"data":"\n"}
+,{"stream_name":"stderr","time":27.88382242,"data":"ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.\n"}
+,{"stream_name":"stderr","time":27.883840714,"data":"gradio 6.26.0 requires huggingface-hub\u003c2.0,\u003e=1.16.0, but you have huggingface-hub 0.36.2 which is incompatible.\n"}
+,{"stream_name":"stderr","time":27.883844047,"data":"diffusers 0.40.0 requires huggingface-hub\u003c2.0,\u003e=1.23.0, but you have huggingface-hub 0.36.2 which is incompatible.\n"}
+,{"stream_name":"stdout","time":65.708705528,"data":"{\"torch\": \"2.11.0+cu128\", \"transformers\": \"4.55.0\", \"python\": \"3.13.15 (main, Aug  6 2026, 11:06:22) [GCC 13.3.0]\", \"gpus\": [\"Tesla T4\", \"Tesla T4\"], \"cfg\": {\"model\": \"OpenGVLab/InternVL3_5-1B\", \"model_rev\": \"2f71cf52542334823e48a46ffba0e2bc9add3446\", \"data_rev\": \"2b6ad69445fbb5695c9b165475e8decdbeb97747\", \"parquet\": \"data/testmini-00000-of-00001-725687bf7a18d64b.parquet\", \"run_args\": [\"--think-extra\", \"512\", \"--limit\", \"20\"], \"skip\": [], \"time_limit\": 2700}, \"setup_s\": 56.51007795333862}\n"}
+,{"stream_name":"stdout","time":125.728895033,"data":"[gpu0 117s] {\"event\": \"fast_kv_check\", \"ok\": true, \"match_rows\": [true, true]}\n"}
+,{"stream_name":"stdout","time":125.729420385,"data":"[gpu1 117s] {\"event\": \"fast_kv_check\", \"ok\": true, \"match_rows\": [true, true]}\n"}
+,{"stream_name":"stdout","time":185.729900226,"data":"[gpu0 177s] {\"event\": \"fast_kv_check\", \"ok\": true, \"match_rows\": [true, true]}\n"}
+,{"stream_name":"stdout","time":185.730840672,"data":"[gpu1 177s] {\"event\": \"fast_kv_check\", \"ok\": true, \"match_rows\": [true, true]}\n"}
+,{"stream_name":"stdout","time":245.733627781,"data":"[gpu0 237s] {\"event\": \"fast_kv_check\", \"ok\": true, \"match_rows\": [true, true]}\n"}
+,{"stream_name":"stdout","time":245.735057275,"data":"[gpu1 237s] {\"event\": \"fast_kv_check\", \"ok\": true, \"match_rows\": [true, true]}\n"}
+,{"stream_name":"stdout","time":305.730417422,"data":"[gpu0 297s] {\"event\": \"group\", \"n\": 8, \"group_s\": 161.7, \"elapsed\": 206, \"left\": 2, \"peak_alloc_gb\": 10.97}\n"}
+,{"stream_name":"stdout","time":305.73126281,"data":"[gpu1 297s] {\"event\": \"end\", \"elapsed\": 223}\n"}
+,{"stream_name":"stdout","time":365.733482384,"data":"[gpu0 357s] {\"event\": \"end\", \"elapsed\": 257}\n"}
+,{"stream_name":"stdout","time":365.734568625,"data":"[gpu1 357s] {\"event\": \"end\", \"elapsed\": 223}\n"}
+,{"stream_name":"stdout","time":365.735776563,"data":"gpu 0 exit 0 \n"}
+,{"stream_name":"stdout","time":365.735789442,"data":" {\"event\": \"start\", \"code_version\": \"a9e2cafef0a8\", \"todo\": 10, \"done\": 0, \"cfg\": {\"vis_frac\": 0.3, \"think_extra\": 512, \"probe_prompt\": \"\\n\\n\\\\boxed\", \"probe_cap\": 16, \"n_t1\": 3, \"temperature\": 0.6, \"top_k\": 50, \"top_p\": 0.95, \"seed\": 42, \"cut_sep\": \"\\n\", \"chunk\": 1024, \"batch_tokens\": 72000, \"group\": 8, \"max_num\": 12}}\n"}
+,{"stream_name":"stdout","time":365.735814457,"data":"FlashAttention2 is not installed.\n"}
+,{"stream_name":"stdout","time":365.735820242,"data":"{\"event\": \"fast_kv_check\", \"ok\": true, \"match_rows\": [true, true]}\n"}
+,{"stream_name":"stdout","time":365.735825843,"data":"{\"event\": \"group\", \"n\": 8, \"group_s\": 161.7, \"elapsed\": 206, \"left\": 2, \"peak_alloc_gb\": 10.97}\n"}
+,{"stream_name":"stdout","time":365.735831194,"data":"{\"event\": \"group\", \"n\": 2, \"group_s\": 51.0, \"elapsed\": 257, \"left\": 0, \"peak_alloc_gb\": 10.97}\n"}
+,{"stream_name":"stdout","time":365.735836578,"data":"{\"event\": \"end\", \"elapsed\": 257}\n"}
+,{"stream_name":"stdout","time":365.735841073,"data":"gpu 1 exit 0 \n"}
+,{"stream_name":"stdout","time":365.735845303,"data":" {\"event\": \"start\", \"code_version\": \"a9e2cafef0a8\", \"todo\": 10, \"done\": 0, \"cfg\": {\"vis_frac\": 0.3, \"think_extra\": 512, \"probe_prompt\": \"\\n\\n\\\\boxed\", \"probe_cap\": 16, \"n_t1\": 3, \"temperature\": 0.6, \"top_k\": 50, \"top_p\": 0.95, \"seed\": 42, \"cut_sep\": \"\\n\", \"chunk\": 1024, \"batch_tokens\": 72000, \"group\": 8, \"max_num\": 12}}\n"}
+,{"stream_name":"stdout","time":365.73587409,"data":"FlashAttention2 is not installed.\n"}
+,{"stream_name":"stdout","time":365.735879377,"data":"{\"event\": \"fast_kv_check\", \"ok\": true, \"match_rows\": [true, true]}\n"}
+,{"stream_name":"stdout","time":365.735886033,"data":"{\"event\": \"group\", \"n\": 8, \"group_s\": 139.4, \"elapsed\": 184, \"left\": 2, \"peak_alloc_gb\": 10.92}\n"}
+,{"stream_name":"stdout","time":365.735888557,"data":"{\"event\": \"group\", \"n\": 2, \"group_s\": 39.1, \"elapsed\": 223, \"left\": 0, \"peak_alloc_gb\": 10.92}\n"}
+,{"stream_name":"stdout","time":365.735891054,"data":"{\"event\": \"end\", \"elapsed\": 223}\n"}
+,{"stream_name":"stdout","time":365.735893328,"data":"total_s 357\n"}
+,{"stream_name":"stderr","time":368.844481749,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":368.844505572,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":368.998198812,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":368.998230471,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":369.727437986,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":369.834065427,"data":"[NbConvertApp] Writing 649073 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":372.324519399,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":372.853190065,"data":"[NbConvertApp] Writing 882670 bytes to __results__.html\n"}
+]

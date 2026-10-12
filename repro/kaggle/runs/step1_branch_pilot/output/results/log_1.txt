@@ -1,0 +1,6 @@
+{"event": "start", "code_version": "a9e2cafef0a8", "todo": 10, "done": 0, "cfg": {"vis_frac": 0.3, "think_extra": 512, "probe_prompt": "\n\n\\boxed", "probe_cap": 16, "n_t1": 3, "temperature": 0.6, "top_k": 50, "top_p": 0.95, "seed": 42, "cut_sep": "\n", "chunk": 1024, "batch_tokens": 72000, "group": 8, "max_num": 12}}
+FlashAttention2 is not installed.
+{"event": "fast_kv_check", "ok": true, "match_rows": [true, true]}
+{"event": "group", "n": 8, "group_s": 139.4, "elapsed": 184, "left": 2, "peak_alloc_gb": 10.92}
+{"event": "group", "n": 2, "group_s": 39.1, "elapsed": 223, "left": 0, "peak_alloc_gb": 10.92}
+{"event": "end", "elapsed": 223}
