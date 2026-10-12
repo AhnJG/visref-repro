@@ -19,7 +19,7 @@ InternVL3.5-1B on MathVista *testmini* (1,000 questions), comparing
 
 ## Results
 
-Scoring (reading (a), fixed in advance): answers are extracted by rules; for the rows the rules cannot parse (36 of
+Scoring (fixed in advance): answers are extracted by rules; for the rows the rules cannot parse (36 of
 3,000), an LLM extracts the answer with the official MathVista extraction prompt, and its answer counts only if it
 appears in the response (see [LLM fallback extraction](#3-llm-fallback-extraction-rows-the-rule-scorer-cannot-parse-about-1)).
 n = 1,000; each method once per question, with shared seeds and a shared first thinking step.
@@ -47,7 +47,7 @@ n = 1,000; each method once per question, with shared seeds and a shared first t
 - **When the rules were fixed:** the main comparisons and tests after an interim look at the first 392 questions, and
   the classification rule after an interim look at 759 questions, both before the final analysis. The main run is
   therefore not a pre-registration in the strict sense and its classification is not confirmatory ([REPORT, Section 2.4](REPORT.md#24-timing-of-pre-registration)). The
-  classification is the same under every answer-handling reading we tried ([REPORT, Section 3.2](REPORT.md#32-sensitivity-to-answer-handling)). The decision rules of the two
+  classification is the same under every scoring variant we tried ([REPORT, Section 3.2](REPORT.md#32-sensitivity-to-answer-handling)). The decision rules of the two
   follow-up experiments below were fixed before their results.
 
 ### Why our accuracies are 8–12 pp above the paper's (not resolved)
@@ -56,12 +56,12 @@ The paper's 8B ST (68.1) is also more than 10 pp below the official InternVL3.5-
 paper evaluated its baselines in a setting where the model scores lower than in the official evaluation, but we could
 not find that setting in the paper. Our estimates of the cause, none of them tested directly:
 
-1. **Unfinished answers counted as wrong.** If every answer that reached the answer cap and needed answer forcing is
-   counted wrong (reading (c)), our accuracies become ST 44.4 / TSR 48.3 / VisRef 47.4, close to the paper's ST and TSR
-   (46.1 / 48.5). We formed this hypothesis after seeing the results and picked it among four readings, so it is weak
-   evidence ([REPORT, Section 4.4](REPORT.md#44-paper-fingerprints-post-hoc)).
-2. **Token limits, answer extraction, prompt, hardware.** We could not find the first three in the paper, and its GPUs
-   (A10G) differ from ours (T4, fp16). A tighter thinking limit, for example, would cut more answers short.
+1. **Unfinished answers counted as wrong.** If every answer that did not finish within the answer limit, and so needed
+   answer forcing, is counted wrong, our accuracies become ST 44.4 / TSR 48.3 / VisRef 47.4, close to the paper's ST
+   and TSR (46.1 / 48.5). (We picked this comparison among several scoring variants after seeing the results;
+   [REPORT, Section 4.4](REPORT.md#44-paper-fingerprints-post-hoc).)
+2. **Token limits, answer extraction, prompt.** We could not find these in the paper. A lower thinking limit, for
+   example, would cut more answers short.
 
 The official scores are from the InternVL3.5 report (Table 3); where each paper number comes from: `docs/SOURCES.md`.
 
@@ -70,24 +70,24 @@ We look for the cause in our implementation first. The differences that could ex
 
 | candidate on our side | why it could matter | checked? |
 |---|---|---|
-| We inject about one fifth of the paper's m tokens: the greedy DPP stops at the kernel rank (confirmed procedural difference) | less visual evidence per step | Filling up to m (`visref_fill`, below) gave no extra gain, but filling also changes which tokens are added, so "too few tokens" is not ruled out |
-| Injection format: visual embeddings appended without image tags right before `</think>` (format not found in the paper) | the model may not treat them as an image | Not tested. A side effect is visible: of the 713 questions where VisRef stopped at step 1, 352 VisRef final answers contain another `</think>`, versus 67 ST answers |
+| We inject about one fifth of the paper's m tokens: the greedy DPP stops at the kernel rank (confirmed procedural difference) | less visual evidence per step | Not settled. A variant that topped the selection up to m (`visref_fill`, below) gave no extra gain, but the top-up chose tokens without regard to relevance (rank correlation with relevance −0.10), and in the paper random selection is also close to ST (Table 7). Injecting m relevant tokens was not tested |
+| Injection format: InternVL wraps an image in `<img>` … `</img>` tags; we re-inject the selected visual embeddings without these tags, right before `</think>` (we could not find the paper's format) | the model may not treat them as part of an image | Not tested. A side effect is visible: of the 713 questions where VisRef stopped at step 1, 352 VisRef final answers contain another `</think>`, versus 67 ST answers |
 | Where the injection lands: TSR and VisRef continued almost only after a step hit the 1,024-token cap, so the injection usually comes mid-sentence | the paper may have continued mostly after completed steps | A larger step cap (e.g. 4,096) was not run |
-| Reasoning-token representation Z: input embeddings (no layer found in the paper) | the DPP kernel, and so the selection, depends on it | Offline check on 12 questions: with hidden-state Z, too, only about 50–110 selected tokens add clear diversity, fewer than m; not run as a variant |
-| Stopping entropy H from one sampled answer | noisy stop decisions | Several samples per step not run |
+| What the image pieces are matched against: the DPP picks image pieces that fit the thinking text, which it reads as vectors. We use the vectors right after the words are turned into numbers (input embeddings), not those of a deeper layer of the model; we could not find which layer the paper uses | a different layer would pick different image pieces | Offline check on 12 questions: with deeper-layer vectors, too, only about 50–110 selected tokens add clear diversity, fewer than m; not run as a variant |
+| Stopping entropy H from one sampled answer (see below) | noisy stop decisions | Several samples per step were not used in the final runs |
 
-None of these is ruled out completely, and we could not find CIs or the number of runs behind the paper's numbers, so
-we cannot say how much of the gap comes from our implementation. Details: [REPORT, Section 4](REPORT.md#4-beyond-the-paper).
+None of these is ruled out, and we could not find CIs or the number of runs behind the paper's numbers, so we cannot
+say how much of the gap comes from our implementation. Details: [REPORT, Section 4](REPORT.md#4-beyond-the-paper).
 
 ### Follow-up experiments (decision rules fixed before the results)
 
 | experiment | question | result |
 |---|---|---|
-| `visref_fill` (976 q) | Does injecting exactly m tokens (DPP filled up to m with a ridge term) change VisRef? | fill − TSR 0.0 pp (−2.15, +2.36); fill − VisRef +0.1 pp (−2.15, +2.36): this filled variant showed no extra gain. Filling changes both the amount and, through the ridge term, which tokens are added (the filled tail was not ordered by relevance), so it does not isolate the effect of the amount; whether too few tokens limit VisRef stays open. |
+| `visref_fill` (976 q) | Does VisRef change if the DPP selection is topped up to exactly m tokens? (The top-up turned out to choose tokens without regard to relevance.) | fill − TSR 0.0 pp (−2.15, +2.36); fill − VisRef +0.1 pp (−2.15, +2.36): adding tokens chosen without regard to relevance gave no extra gain. Whether m relevant tokens help was not tested. |
 | `step1_branch` (309 q) | On the questions where TSR or VisRef continued after step 1: does re-injecting Ṽ₁ help an immediate answer (B − A), or an answer after ≤ 512 more thinking tokens (D − C)? | B − A +1.40 pp (−1.19, +3.99); D − C +0.97 pp (−2.27, +4.21); Holm p 0.658 for both: the immediate-answer gain seen post hoc in the main run was not reproduced. |
 
 All final tables are in [`results/`](results) (built from `repro/diag/*.json`). Post-hoc analyses (cause analysis,
-answer-handling readings, visual-token counts) are in [REPORT, Section 4](REPORT.md#4-beyond-the-paper) and are not part of the verdicts.
+scoring variants, visual-token counts) are in [REPORT, Section 4](REPORT.md#4-beyond-the-paper) and are not part of the verdicts.
 
 ## What is in this repository
 
@@ -141,7 +141,7 @@ pip install -r requirements.txt pytest
 make test
 ```
 The individual commands are listed in the `Makefile`. `repro/reports/b_main_report.json` is rule-based only, which is
-why its TSR accuracy (60.0) differs from reading (a) (60.1, one row recovered by the LLM fallback).
+why its TSR accuracy (60.0) differs from the main scoring (60.1, one row recovered by the LLM fallback).
 
 ### 2. Regenerate the model outputs (GPU)
 Pinned: model `OpenGVLab/InternVL3_5-1B` @ `2f71cf52542334823e48a46ffba0e2bc9add3446`,
@@ -175,45 +175,50 @@ python3 llm_extract.py prepare <results...> --out requests.jsonl --control 20
 GEMINI_API_KEY=... python3 gemini_extract.py requests.jsonl --out responses.jsonl --model gemini-3.5-flash-lite --sleep 6
 python3 llm_extract.py merge <results...> --responses responses.jsonl --out rescored.jsonl
 ```
-The official MathVista evaluation uses an LLM (GPT-4 in the MathVista paper) to pull the short final answer out of a
-long response. Its prompt shows five worked examples (question, model response, extracted answer) and then the new
+Unless a response is already a bare answer, the official MathVista evaluation uses an LLM (GPT-4 in the MathVista
+paper) to pull the short final answer out of it. Its prompt shows five worked examples (question, model response, extracted answer) and then the new
 response (`evaluation/prompts/ext_ans.py` in the MathVista repository, pinned in `references/SOURCES.json`). We send
 the same prompt to gemini-3.5-flash-lite, only for the rows the rules cannot parse. The LLM's answer counts only if it
 appears in the response text, so the LLM cannot solve the question itself, and empty responses are never sent (see
 `docs/EXPERIMENT_FLOW.md`).
 
 ## Settings we could not find in the paper
-We could not find these in the paper: token limits, what to do with truncated thinking or capped answers, the
-answer-extraction method, the layer of the reasoning-token representation, what to do when the DPP kernel rank is below
-the token budget m, the estimator of the stopping entropy, the injection format (tags, separators, `</think>` handling,
-position ids) and the image tiling. We filled each gap from the strongest source available, in this order: the
-paper's figures and tables → works and code the paper cites → official InternVL3.5 material (model card; VLMEvalKit,
-which the InternVL3.5 report used) → public code the paper does not cite → our own choice.
+We could not find these in the paper: how thinking mode is turned on and the sampling values, token limits, what to do
+with truncated thinking or unfinished answers, the answer-extraction method, the layer of the vectors used for the
+thinking text, what to do when the DPP kernel rank is below the token budget m, how the stopping entropy is estimated,
+the injection format (tags, separators, `</think>` handling, position ids) and the image tiling. We filled each gap
+from the strongest source available, in this order: the paper's figures and tables → works and code the paper cites →
+official InternVL3.5 material (the [model card](https://huggingface.co/OpenGVLab/InternVL3_5-1B), the usage page the
+authors publish with the model on Hugging Face, and VLMEvalKit, which the InternVL3.5 report used) → public code the
+paper does not cite → our own choice.
 
 | setting | our choice | basis | other possibilities (status) |
 |---|---|---|---|
-| Model ("InternVL-1B") | InternVL3.5-1B | the paper writes "InternVL-3.5" for 8B, and its 8B row matches the InternVL3.5-8B row of its Table 1 | – |
-| Thinking mode, sampling | R1 thinking system prompt; T 0.6, top-k 50, top-p 0.95 | InternVL3.5 model card | – |
+| Thinking mode, sampling | the model card's thinking system prompt; T 0.6, top-k 50, top-p 0.95 | the paper says the models run in thinking mode, but we could not find how it is turned on or the sampling values; both from the model card | – |
 | Token limits | 1,024 per thinking step, 10,240 in total, 1,024 for the answer | 1,024 is the model card's example value; the rest is our choice | a larger step cap (e.g. 4,096) or the official evaluation's 65,536 new tokens; not run |
-| Truncated thinking | append `</think>\nFinal Answer:` (s1-style budget forcing) | s1, which the paper cites; applying it here is our interpretation | without the `Final Answer:` nudge: −2.0 pp on 150 questions, p = 0.73 (diagnostic run) |
-| Answer reaching the cap | DEER-style answer forcing (`\n**Final Answer**\n\boxed`, ≤ 100 tokens) | DEER code (not cited by the paper) | count it wrong: reading (c), [REPORT, Section 3.2](REPORT.md#32-sensitivity-to-answer-handling) |
-| Answer extraction | rules, then the official MathVista extraction prompt for rows the rules cannot parse | MathVista extracts every answer with an LLM; rules first, LLM second is how VLMEvalKit works | an LLM for every row with the official GPT model; not run |
+| Thinking cut at the limit | close the thinking and append `Final Answer:` (`</think>\nFinal Answer:`), so the model answers at once | the method of s1 (Muennighoff et al. 2025, "budget forcing"), which the paper cites; using it here is our interpretation | a diagnostic run without `Final Answer:` (ST, 150 questions) changed accuracy by −2.0 pp, not distinguishable from chance (p = 0.73), so this wording does not explain the gap to the paper |
+| Answer that does not finish | force a final answer: append `\n**Final Answer**\n\boxed` and allow up to 100 more tokens | answers often restarted thinking ("Wait, wait …") and ran to the 1,024-token limit; we found no rule for this in the paper or its cited works, and the public code of DEER (Yang et al. 2025, an early-exit method for reasoning models; not cited by the paper) has a rule for exactly this case | count such answers wrong ([REPORT, Section 3.2](REPORT.md#32-sensitivity-to-answer-handling)) |
+| Answer extraction | rules first (boxed answer, "answer is", last line); the official MathVista extraction prompt with an LLM only for rows the rules cannot parse | the official MathVista code handles only bare answers by rule (a choice or a number as the whole response) and sends every other response to an LLM (GPT); VLMEvalKit also tries a rule first, then GPT | the LLM for every response that is not a bare answer, with the official GPT model; not run |
 | Text that is scored | the text after the last `</think>` | the same split rule as VLMEvalKit (whether the InternVL3.5 evaluation turned it on: not confirmed) | score the whole output; not tested |
-| DPP selection size | the greedy DPP stops at the kernel rank, about m/5 tokens | the cited DPP code (Chen et al. 2018); conflicts with the paper's \|V_k\| = m | fill up to m: tested (`visref_fill`), no extra gain |
-| Reasoning-token representation Z | input embeddings | our choice | hidden states: offline check only (see above) |
-| Stopping entropy H | one sampled answer (see below) | definition from the paper; estimator ours | several sampled answers, entropy over distinct answer values, log base 2 (δ = 0.25 bits ≈ 0.17 nats); not run |
-| Injection format | selected visual embeddings appended without image tags right before `</think>`; order z_k → Ṽ_k → H_k → "Wait, think more" | order from the paper (Algorithm 1); format our choice | with image tags, after `</think>`, other position ids; not tested |
-| Image tiling | dynamic tiling, max_num 12 plus a thumbnail tile (mean 1,961.5 visual tokens) | model card | without the thumbnail the mean is 1,755.6, closer to the paper's ∼1,772 (8B); not run |
-| Hardware | Kaggle T4, fp16 | free GPUs | paper: four A10G GPUs, PyTorch 2.7.0, Transformers 4.55.0; not tested |
+| DPP selection size | the greedy DPP stops at the kernel rank, about m/5 tokens | the cited DPP code (Chen et al. 2018); conflicts with the paper's \|V_k\| = m | top up to m with tokens chosen without regard to relevance: no extra gain (`visref_fill`); m relevant tokens: not tested |
+| Vectors for the thinking text (Z) | input embeddings: the vectors right after the words are turned into numbers | our choice (no layer found in the paper) | a deeper layer of the model: offline check only (see above) |
+| Stopping entropy H | one sampled answer (see below) | definition from the paper; the way to estimate it is ours | several sampled answers, entropy over distinct answer values, base-2 logarithm (the same δ = 0.25 would then be stricter); not used in the final runs |
+| Injection format | selected visual embeddings appended right before `</think>`, without the `<img>` … `</img>` tags InternVL uses around an image; order z_k → Ṽ_k → H_k → "Wait, think more" | order from the paper (Algorithm 1); format our choice | with the tags, after `</think>`, other position ids; not tested |
+| Image tiling | InternVL's standard input: the image is cut into up to 12 tiles of 448×448 to fit its shape, plus one shrunken copy of the whole image; each tile becomes 256 visual tokens (mean 1,961.5 per image) | the model card's example code (`load_image(max_num=12)`, shrunken copy on) and the model's configuration file (`max_dynamic_patch` 12, `use_thumbnail` true) | without the shrunken copy the mean is 1,755.6, closer to the paper's ∼1,772 (8B); not run |
+| Hardware | Kaggle T4, fp16 | free GPUs | paper: four A10G GPUs, PyTorch 2.7.0, Transformers 4.55.0; not tested (on the same GPU, fp16 noise changed 2.2% of answers) |
 
 **The stopping entropy H.** The paper defines H as the entropy of the model's answer distribution (Algorithm 1,
-line 12), and the study it cites for this criterion (Ghosal et al.) samples several answers to measure it. We sample
-one short answer after `</think>` + `\n\n\boxed` (T = 1, at most 16 tokens) and add up the entropy of each of its
-tokens, in nats. On average this equals the entropy of the answer distribution (chain rule), so it measures the same
-quantity, but with one sample it is noisy, and the noise affects when a method stops. We started with one sampled answer. After reading the study the paper cites for this criterion
-(Ghosal et al.), we also tried sampling 10 complete answers per step; with the 8B model, a TSR run on 3 development
-questions took 4,703.9 GPU-seconds. We then went back to one sample, in the form described above (decision log:
-`docs/EXPERIMENT_FLOW.md`, 2026-10-05 to 2026-10-07). An
+line 12), and the study it cites for this criterion (Ghosal et al.) samples several answers to measure it. We let the
+model write one short answer after `</think>` + `\n\n\boxed` (sampled at T = 1, at most 16 tokens). This is the
+model's own answer, not the correct one. At each token of that answer the model has a probability distribution over
+the next token; we take the entropy of each distribution (natural logarithm) and add them up. On average this sum
+equals the entropy of the answer distribution (chain rule), so it measures the same quantity as the paper, but with one
+sample it is noisy, and the noise affects when a method stops. History: we started with one sampled answer and the
+average of its token entropies. After reading Ghosal et al. we also tried 10 complete answers per step; with the 8B
+model, a TSR run on 3 development questions took 4,703.9 GPU-seconds. We went back to one sample because, judging from
+the paper's latency table (Table 5: ST 7.1 s, TSR 7.7 s, VisRef 8.2 s per question, 8B model on one H100), the
+authors cannot have generated several answers per step. Finally we replaced the average by the sum, because the
+average is not the entropy of the answer (decision log: `docs/EXPERIMENT_FLOW.md`, 2026-10-05 to 2026-10-07). An
 `Answer:` probe was also replaced, because its formatting tokens dominated H and TSR stopped by entropy in 0 of 18
 smoke-test questions.
 
