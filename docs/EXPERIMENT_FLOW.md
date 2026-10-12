@@ -1639,3 +1639,11 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - 사용자 지적: "처음에 하나만 뽑아서 하다가 참고 문헌을 보고 혹시나 해서 다중 표본을 시도했다." 기록 대조: 10-05 v3 명세는 "1회 추정"(이 파일 2026-10-05 independent_dpp30_entropy_v3 항목), r3은 답 1개의 답 토큰 평균 엔트로피 → 10-05 사용자가 준 [19] Ghosal 근거 검토(`docs/paper_baseline_alignment/ENTROPY_REFERENCE_CLAIM_REVIEW_KO.md`: 여러 완결 응답의 sequence NLL 평균 = Monte-Carlo estimator) → 10-06 S10(단계마다 완결 응답 10개) 구현·8B 실행(R25 GPU 4,703.9초) → 10-06 사용자 지시로 자연 응답 엔트로피(1개)로 전환 → 10-07 짧은 답 1개 토큰 엔트로피 합. 지적이 맞다. README·README.ko의 H 문단과 REPORT 4.1절 5번을 이 순서로 고침(이전 문장 "earlier version sampled 10 … replaced by the one-sample estimator"는 커밋 eae46a1). 바꾼 이유는 여전히 기록에 없어 쓰지 않음.
 - 기여 절: "모든 GPU 세션과 Gemini 추출을 실행" 문구 삭제(사용자 판단: 중요하지 않음), "Codex(OpenAI): 프로젝트 전 과정에서 내용 검토에 사용" 추가(사용자 진술).
 - push: `main` = 8b27721. 공개 폴더 README.md·README.ko.md·REPORT.md 같은 내용으로 맞춤.
+
+## 2026-10-12 README·REPORT 설명 보강, st_official 삭제 (사용자 지시·결정) — 결과·판정 불변
+- H를 답 1개로 되돌린 이유(사용자 진술): 논문 Table 5에서 문항당 시간이 ST 7.1초, TSR 7.7초, VisRef 8.2초(8B, H100 1장)라 단계마다 답을 여러 개 생성했다면 나올 수 없는 수치(SPEC_LEDGER X-32). README·REPORT 4.1절 5번에 반영. README H 문단은 "모델이 그 자리에서 쓴 답(정답 아님), 토큰별 엔트로피를 자연로그로 계산해 합" + 경위(평균 → S10 시도 → 답 1개 → 합)로 풀어 씀.
+- visref_fill 서술 정정(사용자 지적): 채운 부분은 관련성과 무관하게 골라졌다(꼬리 순서와 관련성 순위 상관 −0.10, 2026-10-11 fill 결과 항목). 논문 Table 7에서도 무작위 선택은 ST 수준(X-36). README·REPORT에서 "m개를 넣어도 이득 없음"이 아니라 "관련성과 무관한 토큰으로 m개까지 채운 변형은 이득 없음, 관련 토큰 m개는 시험하지 않음"으로 고침. REPORT 4.2절 제목도 "topping up … to m tokens".
+- README 설정 표: 모델 행 삭제(사용자), 사고 모드·샘플링(논문은 사고 모드 실행만 명시, 켜는 법·샘플링 값 없음 X-37), 모델 카드 설명·링크, s1 풀어 쓰기, `Final Answer:` 진단 뜻 풀기, DEER를 쓴 이유(답이 "Wait, wait …"로 끝나지 않아 상한까지 감 — 10-07 결정 항목), 답 추출 문구 정정(MathVista도 아주 단순한 경우만 규칙, 나머지 LLM; VLMEvalKit 규칙 → GPT, X-33·X-34), Z 쉬운 설명, 주입 형식에 InternVL 원래 `<img>` … `</img>` 태그(X-35), 타일링 설명·근거(X-35), nat → "자연로그".
+- 절대 정확도 차이 원인에서 하드웨어 삭제(같은 GPU fp16 잡음으로 바뀐 답 2.2%, REPORT 4.1절), 사후 가설 문장은 한 구절로 줄임(사용자 결정). README에서 "읽기 (a)/(c)"를 설명형 이름으로(REPORT는 표로 정의된 (a)~(f) 유지).
+- st_official(사용자 결정: 글 + 전용 파일 삭제): REPORT 4.5절과 위치 표 언급 삭제, 공개 저장소에서 `repro/diag/analyze_st_official.py`, `repro/colab/runs/st_official_c1/run_config.json` 삭제(Mac 공개 폴더도 삭제 권한 받아 같은 두 파일 삭제). export 스크립트가 다시 복사하지 않도록 수정(이전 판 `scripts/.make_github_export.bak_20261012c`). 이 실험 기록·`repro/audit/`의 검토 기록 안 언급은 이력이라 유지. Colab 빌더 `repro/colab/build_colab.py`는 일반 도구라 유지.
+- push: `main` = 0b508f3.
