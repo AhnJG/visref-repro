@@ -57,7 +57,7 @@ def test_generation_runs_were_built_with_the_decided_caps_and_order():
     """run.py's own defaults are think_cap 4096 / total 8192 (EF L804, replaced by L956), so every run must pass the
     decided caps 1,024 / 10,240 explicitly (J-10) and use the seed-0 question order (J-19)."""
     runs = generation_runs()
-    assert len(runs) >= 10  # b_main_s1..s9 and b_main_fill
+    assert len(runs) >= 11  # b_main_s1..s9, b_main_fill, b_main_hs
     for name, c in runs:
         a = c['run_args']
         assert a[a.index('--think-cap') + 1] == '1024', name
