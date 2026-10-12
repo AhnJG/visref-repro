@@ -1675,3 +1675,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - 사용자 지시: AI 활용 오류로 방향을 잘못 잡거나 실험을 실수한 기록을 모아 반성 사항으로 정리. Sonnet 하위 에이전트가 EF·SPEC_LEDGER·AUDIT·`repro/audit/`·REPORT를 훑어 후보 74건을 찾고, 주 세션이 문서에 쓴 사례의 근거 줄 57곳을 원문과 대조(모두 일치). 결과는 claude.ai 프로젝트 문서 `claude/VisRef_AI활용_반성.md`(9개 주제, 남은 불일치, 앞으로의 규칙 9개).
 - 대조 중 확인한 남은 불일치: SPEC_LEDGER 37·44행 상태 열과 요약 집계(L148, L160, L183)가 감사 후 메모(L271, L274)와 달리 여전히 "인용 구현에서 확인". 아직 고치지 않음.
 - 사용자 지적("모델 카드가 뭔데 계속 쓰나")에 따라 README·README.ko·REPORT·docs/SOURCES.md의 "model card / 모델 카드"를 "official model page / 공식 모델 페이지"로 바꿈(`main` = 9f920d1). 이 기록과 SPEC_LEDGER의 옛 표현은 당시 기록이라 그대로 둠.
+
+## 2026-10-12 `visref_hs` 실행 시작, AI 활용 반성 기록 공개 (사용자)
+- `b_main_hs`: 사용자가 Kaggle push. 시작 20–30분 뒤 로그에 error 없음(사용자 확인). 결과·판정은 세션 종료 후 사전등록 규칙대로.
+- 반성 기록에 "재발을 막는 방법"(결정 대장과 결정별 테스트, 가정 대장, 문장 출처 규칙과 다른 모델 검토, 해석 문구 사전 지정, 자율 실행 계약, 실행 위생, 하위 에이전트 결과 재계산, 실측 기반 시간 추정, 쉬운 말, 사용자 질문 5개, 적용함/아직 안 함)을 추가하고, 사용자 요청으로 공개 저장소 `docs/AI_USE_REFLECTION.md`에 넣음(claude.ai 프로젝트 문서 `claude/VisRef_AI활용_반성.md`와 같은 내용, 공개용 머리말 추가). README 두 개의 파일 목록, REPORT 7절 표와 Process note(Codex 내용 검토 사용 포함)에 링크.

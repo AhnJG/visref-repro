@@ -115,6 +115,7 @@ docs/
                            공식 모델 문서 / 우리의 선택) — "핵심 판단 요약"부터 읽을 것
   EXPERIMENT_FLOW.md       시간순 기록: 사전 등록, 결정, 결과
   SOURCES.md               (영문) 기록의 인용이 공개 출처(arXiv 버전, 페이지, 표)에 어떻게 대응하는지
+  AI_USE_REFLECTION.md     이 프로젝트에서 AI 활용이 잘못된 사례와 재발 방지 방법
 references/SOURCES.json    제3자 파일(MathVista 데이터와 평가 프롬프트, 인용한 코드, VLMEvalKit)과 URL + sha256
 scripts/                   fetch_sources.py(내려받고 검증), make_results.py, make_figures.py,
                            check_readme_numbers.py

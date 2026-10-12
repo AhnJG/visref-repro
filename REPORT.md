@@ -238,6 +238,7 @@ None as of 2026-10-12. Questions we would send:
 | Code | `repro/run.py`, `repro/visref/` (engine, methods, DPP, scoring), `repro/diag/step1_branch.py` |
 | Reviews and audits | `repro/audit/`, `docs/AUDIT_REPORT_20261007.md`, `docs/REVIEW_20261007.md` |
 | Public sources behind the logs' citations (arXiv versions, pages, tables) | `docs/SOURCES.md` |
+| Where using AI went wrong in this project and how to prevent it (Korean) | `docs/AI_USE_REFLECTION.md` |
 | Reproduction commands | `README.md` |
 
-*Process note.* Implementation, analysis scripts, review passes and the drafting of this report were carried out with AI assistants (Claude models) under the author's direction; decisions marked "사용자 결정" in `docs/EXPERIMENT_FLOW.md` are the author's.
+*Process note.* Implementation, analysis scripts, review passes and the drafting of this report were carried out with AI assistants (Claude models; Codex for content reviews) under the author's direction; what went wrong in that use is summarized in `docs/AI_USE_REFLECTION.md`; decisions marked "사용자 결정" in `docs/EXPERIMENT_FLOW.md` are the author's.

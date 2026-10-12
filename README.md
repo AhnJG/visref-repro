@@ -117,6 +117,7 @@ docs/
                            model docs / our choice) — start at "핵심 판단 요약"
   EXPERIMENT_FLOW.md       chronological log: pre-registrations, decisions, results
   SOURCES.md               (English) how the logs' citations map to public sources: arXiv versions, pages, tables
+  AI_USE_REFLECTION.md     (Korean) where using AI went wrong in this project, and how to prevent it
 references/SOURCES.json    third-party files (MathVista data & eval prompt, cited code, VLMEvalKit) with URL + sha256
 scripts/                   fetch_sources.py (downloads and verifies them), make_results.py, make_figures.py,
                            check_readme_numbers.py
