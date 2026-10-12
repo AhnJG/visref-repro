@@ -1623,3 +1623,9 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - 새로 확인한 외부 수치·근거: SPEC_LEDGER X-26~X-31.
 - 검증: `make check` Python 3.11·3.12·3.13 통과(README 숫자 검사 포함), GitHub 렌더링(저장소 API)에서 두 README 모두 표 6개·행 34개, 내부 링크 앵커 일치.
 - push: `main` = 0a8241d. 공개 폴더의 README.md·README.ko.md·REPORT.md·method_overview.svg·docs/SPEC_LEDGER.md를 같은 내용으로 맞춤.
+
+## 2026-10-12 § 표기 변경, InternVL3-1B 후보 삭제 (사용자 지시) — 결과·판정 불변
+- README(영·한): "REPORT §4.4" → "[REPORT, Section 4.4]" / "[REPORT 4.4절]"로 바꾸고 REPORT 해당 제목으로 가는 링크를 걸었다(각 9개). README 안의 "재현 방법 §3"은 LLM 보조 추출 단계 링크로. REPORT의 § 10개 → "Section".
+- README(영·한): 절대 정확도 차이의 추정 원인에서 "다른 모델 세대(InternVL3-1B)" 항목과 설정 표 모델 행의 대안 칸을 삭제(사용자 지시 "이건 빼"). REPORT §6 후보 목록에 직전에 넣었던 "the model generation"도 되돌림. REPORT 1절 범위 설명(세대 가정)과 5.3절 저자 질문 9번, SPEC_LEDGER 행 1·C-8·X-26의 기록은 그대로 둠.
+- 검증: `make check` Python 3.11·3.13 통과. GitHub 렌더링(저장소 API)에서 두 README의 REPORT 링크 9개씩 모두 REPORT 제목 id와 일치, README 내부 링크 일치, 표 6개, § 0개.
+- push: `main` = 7fc9d64. 공개 폴더 README.md·README.ko.md·REPORT.md 같은 내용으로 맞춤.
