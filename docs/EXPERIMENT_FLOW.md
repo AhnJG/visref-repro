@@ -1603,3 +1603,10 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - 3) 외부 근거 경로: 공개 저장소에 `docs/SOURCES.md` 추가(arXiv 버전·PDF sha256, `pdftotext -layout`/`pdftotext`(poppler 22.02.0) 재생성 방법, 핵심 수치의 페이지·절·표: Table 6 p.14, δ·m·K_max §5 p.6, |V_k|=m §4 p.5, ∼1,772 §4 p.4, 환경 p.12, Table 5 p.14, InternVL3.5 Table 3 p.11). 확인: `LAY`·`VisRef_plain.txt`·`REF/InternVL3.5.txt`는 로컬 PDF에 같은 명령을 돌린 결과와 바이트 단위로 같다. arXiv는 이 환경(클라우드·장치)에서 접속 불가라 공개 PDF와의 바이트 일치는 미확인. SOURCES.json의 main/master URL 5개를 커밋 고정(파일 sha256 일치 확인; MathVista c5acd37d, fast-map-dpp 6ab745ca, DEER c9dd19fb), export 스크립트도 같은 값으로 수정. SPEC_LEDGER "논문 PDF는 로컬에 없다"에 2026-10-07 작성 당시 상태 표시.
 - 4) 문구: README·README.ko·REPORT에 "주 비교·검정은 첫 392문항, CI 분류 기준은 759문항 중간 결과를 본 뒤 최종 분석 전에 고정 → 엄격한 의미의 사전등록 아님, 후속 실험 규칙은 각 결과 전", TSR−ST는 "논문 수치와 양립(효과·메커니즘 동일성 증명 아님)", fill은 "이 채움 변형에서 추가 이득 없음, 양만의 효과는 분리하지 못함"(사전등록 판정은 기록으로 유지). README 테스트 설치에 pytest·가상환경 추가.
 - 검증: 클라우드 사본에서 `make check`가 Python 3.11·3.12·3.13 모두 통과, CPU pytest 98 passed(torch 2.7.0, transformers 4.55.0; 고정 버전 torch 2.11.0 환경은 미검증).
+
+## 2026-10-12 README.ko.md 전체 번역 + README 숫자 자동 대조 (사용자 결정: 영문 README를 메인으로 유지, 한국어 페이지는 요약이 아닌 전체 번역)
+- `README.ko.md`: 요약판을 README.md 전체 번역으로 교체(Sonnet 서브에이전트 번역 → 주 세션이 숫자·명령·링크·코드 블록·BibTeX를 원문과 대조). 첫머리에 "두 문서가 다르면 영문이 기준" 문구. 용어는 EF·REPORT와 맞춰 "읽기 (a)".
+- `scripts/check_readme_numbers.py`(표준 라이브러리): `results/`의 accuracy·paired_differences·followups 값(정확도, 짝 차이, CI, McNemar p, Holm p, 논문 값)이 README.md와 README.ko.md 모두에 들어 있는지 확인하고 하나라도 없으면 실패. `make check` 마지막 단계로 추가, README 두 곳의 `make check` 설명과 파일 목록 갱신. 한계: 값이 들어 있는지만 보므로 옛 값이 새 값과 함께 남아 있으면 잡지 못한다.
+- 음성 대조: 복사본의 README.ko.md에서 0.658을 0.578로 바꾸면 실패(exit 1).
+- 검증: 클라우드 사본 `make check`가 Python 3.11·3.12·3.13에서 통과, 장치 Python 3.10에서 검사 스크립트 통과, 두 README의 상대 링크·앵커 확인.
+- push: `main` = 8c9be58. 공개 폴더의 README.md·README.ko.md·Makefile·scripts/check_readme_numbers.py를 같은 내용으로 맞춤(sha256 4/4 일치). Makefile은 원격 파일 전송이 막혀(보호 파일) 장치에서 같은 텍스트 치환으로 수정.
