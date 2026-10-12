@@ -29,10 +29,12 @@ results:
 figures: results
 	$(PY) scripts/make_figures.py
 
-# Everything regenerated must equal the committed files (needs a git checkout).
+# Everything regenerated must equal the committed files (needs a git checkout),
+# and both READMEs must quote the numbers in results/.
 check: analysis results figures
 	git diff --exit-code -- repro/diag results figures
-	@echo "OK: the analyses, results/ and figures/ reproduce the committed files"
+	$(PY) scripts/check_readme_numbers.py
+	@echo "OK: the analyses, results/ and figures/ reproduce the committed files; the READMEs quote results/"
 
 # Descriptive per-method report (rule-based scorer v4 only, no LLM fallback) -> build/b_main_report.{html,json}.
 # Equals repro/reports/b_main_report.json; the HTML differs only in its generation timestamp.

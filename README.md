@@ -30,7 +30,8 @@ This reproduction was carried out by AhnJG with AI assistance (Claude models, An
 - **Claude (AI assistant):** wrote most of the code (generation engine, methods, DPP selection, scoring, analysis
   scripts, tests); drafted the pre-registrations, analyses, REPORT.md and the figures; separate model sessions carried
   out independent reviews (`repro/audit/`).
-- The result tables and the results figure are regenerated from the saved outputs by `make check`.
+- `make check` regenerates results/ and the results figure from the saved outputs and checks that both READMEs quote
+  the numbers in results/.
 
 ## Results
 
@@ -105,7 +106,8 @@ docs/
   EXPERIMENT_FLOW.md       chronological log: pre-registrations, decisions, results
   SOURCES.md               (English) how the logs' citations map to public sources: arXiv versions, pages, tables
 references/SOURCES.json    third-party files (MathVista data & eval prompt, cited code, VLMEvalKit) with URL + sha256
-scripts/                   fetch_sources.py (downloads and verifies them), make_results.py, make_figures.py
+scripts/                   fetch_sources.py (downloads and verifies them), make_results.py, make_figures.py,
+                           check_readme_numbers.py
 ```
 The documents in `docs/` are written in Korean; `REPORT.md` points to the relevant entries.
 
@@ -116,7 +118,8 @@ Needs Python 3.10 or newer (standard library only; `make check` passes on 3.10, 
 git checkout. No GPU and no PyTorch.
 ```bash
 make fetch     # MathVista testmini.json, official extraction prompt and cited code, sha256-checked
-make check     # re-runs the pre-registered analyses, results/ and the results figure; fails on any difference
+make check     # re-runs the pre-registered analyses, results/ and the results figure, checks the README numbers;
+               # fails on any difference
 make report    # optional: descriptive per-method report (rule-based scorer v4, no LLM fallback) in build/
 ```
 The unit tests need PyTorch, transformers and pytest (a CPU build is enough):

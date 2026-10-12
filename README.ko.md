@@ -1,74 +1,201 @@
-# visref-repro (한국어 요약)
+# visref-repro (한국어)
 
-> 영문 README: [README.md](README.md) · 재현 보고서(영문): [REPORT.md](REPORT.md) ·
-> 실험 기록(한국어): [docs/EXPERIMENT_FLOW.md](docs/EXPERIMENT_FLOW.md) · 구현 근거(한국어): [docs/SPEC_LEDGER.md](docs/SPEC_LEDGER.md)
+> 이 문서는 영문 [README.md](README.md)를 옮긴 것입니다(2026-10-12 기준). 두 문서의 내용이 다르면 영문이 기준입니다.
 
-VisRef 논문(Ghosal 외, arXiv:2603.00207, CVPR 2026) 부록 Table 6의 *InternVL-1B* 행을 InternVL3.5-1B와
-MathVista testmini 1,000문항으로 다시 실행해 본 **비공식 재현**입니다.
+**VisRef**(Ghosal 외, *VisRef: Visual Refocusing while Thinking Improves Test-Time
+Scaling in Multi-Modal Large Reasoning Models*, arXiv:2603.00207, CVPR 2026)의 비공식 재현입니다. 대상은 부록 Table 6의
+*InternVL-1B* 행으로, MathVista *testmini*(1,000문항)에서 InternVL3.5-1B를 사용해 다음을 비교합니다.
 
-## 무엇을 비교했나
-
-| 방법 | 내용 | 논문 정확도(%) |
+| 방법 | 하는 일 | 논문 (Table 6) |
 |---|---|---|
-| **ST** | 한 번 생각하고 답한다 | 46.1 |
-| **TSR** | 답의 불확실성(엔트로피)이 기준보다 높으면 "Wait, think more"로 다시 생각한다 | 48.5 |
-| **VisRef** | TSR과 같되, 생각할 때마다 이미지 토큰 일부(DPP로 선택)를 다시 넣는다 | 52.0 |
+| **ST** – 표준 사고(standard thinking) | 추론을 한 번 하고 답을 낸다 | 46.1 |
+| **TSR** – 텍스트 자기 성찰(textual self-reflection) | 답 엔트로피가 δ보다 낮아질 때까지 "Wait, think more" 단계를 반복한다 | 48.5 |
+| **VisRef** | TSR에 더해, 매 단계 뒤에 DPP로 고른 이미지 시각 토큰의 부분집합을 다시 주입한다 | 52.0 |
 
-![ST, TSR, VisRef의 실행 흐름. 주황 메모는 논문이 정하지 않아 우리가 정한 설정](figures/method_overview.svg)
+![이 재현에서 실행한 ST, TSR, VisRef. 주황색 메모는 논문이 정하지 않은 설정을 표시한 것](figures/method_overview.svg)
 
-## 결과 (1,000문항, 미리 정한 채점 방식)
+> **상태(2026-10-12): 완료.** 본 실험과 사전 등록된 후속 실험 두 개를 마쳤고 분석도 끝났으며, 실험은 종료되었습니다.
+> 보조 실행 하나(`st_official`)는 무료 Colab에서 일찍 중단되어 분석하지 않았습니다. 원 저자에게는 아직 연락하지
+> 않았습니다. 전체 정리: **[REPORT.md](REPORT.md)**.
+
+## 누가 무엇을 했나
+이 재현은 AhnJG가 AI(Anthropic의 Claude 모델)의 도움을 받아 수행했습니다.
+
+- **AhnJG:** 재현 대상과 근거 규칙(외부 수치는 모두 file:line으로 출처를 밝히거나 미확인으로 표시)을 정했습니다.
+  `docs/EXPERIMENT_FLOW.md`에 "사용자 결정"으로 기록된 설계 결정을 내렸습니다. 여기에는 DPP의 rank만큼만 주입하는 것
+  (`visref_raw_rank`), 답 처리 방식(s1 프롬프트 + DEER answer forcing), 규칙 기반 채점과 grounded LLM fallback,
+  최종 분석 전에 주 비교와 검정을 고정한 것, 후속 실험과 그 범위, 종료 시점이 포함됩니다. 모든 GPU 세션(Kaggle 2×T4,
+  Colab)과 본 실험의 Gemini 추출을 실행했습니다. 기록된 여러 정정의 계기가 된 질문을 제기했습니다.
+- **Claude(AI 어시스턴트):** 코드 대부분(생성 엔진, 방법, DPP 선택, 채점, 분석 스크립트, 테스트)을 작성했습니다.
+  사전 등록 문서, 분석, REPORT.md, 그림의 초안을 작성했습니다. 독립 검토는 별도의 모델 세션들이 수행했습니다
+  (`repro/audit/`).
+- `make check`는 저장된 출력으로부터 results/와 결과 그림을 다시 생성하고, 두 README가 results/의 숫자를 그대로
+  인용하는지 확인합니다.
+
+## 결과
+
+사전에 지정한 읽기 (a)입니다. 규칙 기반 답 추출을 쓰고, 규칙이 파싱하지 못하는 행에는 grounded LLM fallback을 씁니다.
+n = 1,000이며, 각 방법을 문항마다 한 번씩 실행하고 시드와 첫 사고 단계는 공유합니다.
+
+![짝 비교 정확도 차이와 95% CI를 논문의 차이와 나란히 표시](figures/paired_differences.svg)
 
 | 정확도(%) | ST | TSR | VisRef |
 |---|---|---|---|
-| 논문 | 46.1 | 48.5 | 52.0 |
+| 논문 (Table 6) | 46.1 | 48.5 | 52.0 |
 | **이 재현** | **57.8** | **60.1** | **60.0** |
 
-| 비교 | 이 재현, %p (95% 신뢰구간) | 논문, %p | 판정 |
-|---|---|---|---|
-| VisRef − ST (주 비교) | +2.2 (+0.3 ~ +4.1), Holm 보정 p = 0.067 | +5.9 | 효과 크기 재현 안 됨(방향은 같음) |
-| VisRef − TSR (주 비교) | −0.1 (−2.0 ~ +1.7) | +3.5 | 효과 크기 재현 안 됨 |
-| TSR − ST (보조 비교) | +2.3 (+0.6 ~ +4.0) | +2.4 | 논문 값과 양립 |
+| 비교 | 이 재현, pp (95% CI) | 첫 번째만 / 두 번째만 정답 | McNemar p | Holm p | 논문, pp | 분류 |
+|---|---|---|---|---|---|---|
+| VisRef − ST (주 비교) | +2.2 (+0.3, +4.1) | 60 / 38 | 0.033 | 0.067 | +5.9 | 효과 크기 재현 안 됨 (방향은 같음) |
+| VisRef − TSR (주 비교) | −0.1 (−2.0, +1.7) | 44 / 45 | 1.000 | 1.000 | +3.5 | 효과 크기 재현 안 됨 |
+| TSR − ST (보조) | +2.3 (+0.6, +4.0) | 51 / 28 | 0.013 | – | +2.4 | 논문 값과 양립 |
 
-![짝 비교 차이와 95% 신뢰구간, 논문 값 비교](figures/paired_differences.svg)
+- **요약:** TSR이 ST보다 높은 정도는 논문 값과 양립합니다. 이것이 효과나 그 작동 방식이 같다는 것을 보여 주지는
+  않습니다. 우리의 InternVL3.5-1B 구현에서는 VisRef가 TSR보다 추가로 더 낫다는 것을 확인하지 못했습니다. VisRef − ST는
+  사전에 지정한 Holm 보정 후에는 유의하지 않습니다(보정 없이는 p = 0.033).
+- *양립* = 짝 bootstrap 95% CI(2,000회 재표집, seed 0)가 0을 포함하지 않으면서 논문의 delta를 포함함(동등성의 증명은
+  아님). *재현 안 됨* = CI가 논문의 delta를 포함하지 않음. 시도한 모든 답 처리 해석에서도 마찬가지입니다(REPORT §3.2).
+- **시점:** 주 비교와 검정은 처음 392문항을 중간에 본 뒤에, CI 분류 규칙은 759문항을 중간에 본 뒤에 정했으며, 둘 다 최종
+  분석 전입니다. 따라서 본 실험은 엄밀한 의미의 사전 등록이 아닙니다(REPORT §2.4). 아래 두 후속 실험의 규칙은 결과가
+  나오기 전에 정했습니다.
+- 우리의 절대 정확도는 논문보다 8–12%p 높습니다. 우리의 ST는 공식 InternVL3.5-1B MathVista 점수(59.3)에 가깝습니다.
+  차이의 원인은 분리하지 못했습니다.
+- VisRef에 효과가 없다고 결론짓지 **않습니다**. 우리 구현은 논문의 토큰 예산 m의 약 5분의 1만 주입하며(확인된
+  절차상의 차이), 논문에 명시되지 않은 설정이 여럿 있습니다([논문과 다른 점](#논문과-다른-점) 참조).
 
-- **요약:** TSR이 ST보다 나은 정도는 논문 수치와 양립합니다. 다만 효과나 작동 방식이 같다는 증명은 아닙니다. VisRef가
-  TSR보다 더 나은 효과는 이 구현(InternVL3.5-1B)에서 확인하지 못했습니다. VisRef − ST는 비교를 두 개 한 것을 감안하는
-  Holm 보정 뒤 유의하지 않습니다(보정 전 p = 0.033).
-- **"VisRef는 효과가 없다"고 결론 내리지 않습니다.** 이 구현은 논문이 정한 양(m)의 약 1/5만 이미지 토큰을 다시 넣는
-  확인된 차이가 있고, 논문에 적혀 있지 않은 설정(토큰 상한, 정지 엔트로피 계산 방식, 다시 넣는 형식 등)은 우리가 정했습니다.
-- **판정 기준을 정한 시점:** 주 비교와 검정은 첫 392문항, 판정 분류 기준은 759문항의 중간 결과를 본 뒤 최종 분석 전에
-  정했습니다. 그래서 본 실험은 엄격한 의미의 사전등록이 아닙니다(REPORT §2.4). 아래 후속 실험 두 개의 규칙은 각 결과를
-  보기 전에 정했습니다.
-- 절대 정확도는 논문보다 8–12%p 높습니다. 우리 ST는 InternVL3.5-1B 공식 MathVista 점수(59.3)에 가깝습니다.
+### 사전 등록 후속 실험
 
-## 후속 실험 (결과를 보기 전에 판정 규칙을 정함)
+| 실험 | 질문 | 결과 |
+|---|---|---|
+| `visref_fill` (976문항) | 정확히 m개의 토큰을 주입하면(DPP를 ridge 항으로 m개까지 채움) VisRef가 달라지는가? | fill − TSR 0.0 pp (−2.15, +2.36); fill − VisRef +0.1 pp (−2.15, +2.36): 이 채움 변형에서는 추가 이득이 나타나지 않았다. 채움은 주입량뿐 아니라 ridge 항을 통해 어떤 토큰이 추가되는지도 바꾸므로(채워진 뒷부분은 관련성 순으로 정렬되어 있지 않았다) 주입량의 효과만 분리하지는 못한다. 토큰이 너무 적어서 VisRef가 제한되는지는 열려 있다. |
+| `step1_branch` (309문항) | TSR 또는 VisRef가 1단계 뒤에도 계속된 문항에서, Ṽ₁을 다시 주입하면 바로 답하는 경우(B − A)나 ≤ 512개의 사고 토큰을 더 쓴 뒤 답하는 경우(D − C)에 도움이 되는가? | B − A +1.40 pp (−1.19, +3.99); D − C +0.97 pp (−2.27, +4.21); 둘 다 Holm p 0.658: 본 실험에서 사후에 관찰된 바로 답하는 경우의 이득은 재현되지 않았다. |
 
-- **visref_fill (976문항):** 이미지 토큰을 m개까지 채운 이 방식에서는 추가 이득이 없었습니다(TSR과의 차이
-  0.0%p, −2.15 ~ +2.36). 채우는 과정에서 넣는 양과 고르는 방식이 함께 바뀌었고 채운 토큰은 관련성 순서도 아니었으므로,
-  "넣는 양이 적어서인가"는 이 실험만으로 판단할 수 없습니다.
-- **step1_branch (309문항):** 첫 단계에서 이미지를 다시 넣고 바로 답하게 하면 +1.40%p(−1.19 ~ +3.99), 넣은 뒤 최대
-  512토큰 더 생각하고 답하게 하면 +0.97%p(−2.27 ~ +4.21)였습니다. 즉답 이득은 재현되지 않았습니다.
+모든 최종 표는 [`results/`](results)에 있습니다(`repro/diag/*.json`으로부터 생성). 사후(post hoc) 분석(원인 분석, 답
+처리 해석, 시각 토큰 수)은 REPORT §4에 있으며 판정에는 포함되지 않습니다.
 
-## 누가 무엇을 했나
+## 저장소 구성
 
-- **AhnJG:** 재현 대상과 근거 규칙(외부 수치는 출처 파일:줄로 밝히거나 "미확인"으로 표시)을 정했습니다. 실험 기록에
-  "사용자 결정"으로 남은 설계 결정을 내렸습니다(DPP 계수만큼만 주입, 답 처리 방식, 규칙+LLM 채점, 최종 분석 전 주 비교와
-  검정 고정, 후속 실험과 범위, 종료 시점). 모든 GPU 실행(Kaggle T4×2, Colab)과 본 실험의 Gemini 추출을 직접 수행했습니다.
-- **Claude(AI 어시스턴트):** 코드 대부분(생성 엔진, 방법, DPP 선택, 채점, 분석 스크립트, 테스트)과 사전등록, 분석,
-  REPORT.md, 그림의 초안을 작성했습니다. 독립 검토는 별도 모델 세션이 했습니다(`repro/audit/`).
+```
+REPORT.md                  재현성 보고서(MLRC 형식): 범위, 방법, 결과, 논문을 넘어서는 부분, 논의
+results/                   최종 표(CSV + summary.json), scripts/make_results.py가 생성
+figures/                   paired_differences.svg(scripts/make_figures.py가 results/로부터 그림), method_overview.svg
+Makefile                   make fetch / check / report / test (CPU만 사용)
+CITATION.cff               이 저장소와 원 논문을 인용하는 방법
+repro/                     구현(간결하게 유지)과 분석
+  run.py, visref/          생성 엔진, ST/TSR/VisRef, DPP 선택, 채점(scorer v4)
+  kaggle/build.py          세션 하나(2×T4)를 위한 자체 완결형 Kaggle 노트북을 만든다; kaggle_ctl.py push/status/pull
+  kaggle/build_step1_branch.py   step1_branch 후속 실험에 대해 같은 일을 한다
+  colab/build_colab.py     Colab GPU 하나에 대해 같은 일을 하며, Google Drive로 이어서 실행할 수 있다
+  report.py, rescore.py    오프라인 집계 / 재채점(GPU 불필요)
+  llm_extract.py, gemini_extract.py   규칙이 실패한 행에 대한 LLM fallback 답 추출
+  diag/                    사전 등록된 분석(final_judgment.py, analyze_fill.py, step1_branch.py,
+                           analyze_step1_branch.py)과 사후 진단, 그리고 그 JSON 출력
+  audit/                   독립 검토와 감사
+  kaggle/runs/<session>/   모든 세션: run_config.json(소스 sha256, id, 인자), env.json, 로그, 원본 출력
+                           (b_main_s1–s9, b_main_fill, b_main_rescore_v2/v3, diag_st_plain, hidden_rank_check,
+                            step1_branch_pilot, step1_branch_main)
+  llm/final, llm/fill      LLM fallback 추출: 요청, 응답, 병합된 행(diag/*.py가 읽음)
+  reports/                 방법별 서술 보고서(규칙 기반 scorer v4만 사용)
+docs/
+  SPEC_LEDGER.md           모든 구현 결정과 그 근거 등급(논문 / 인용한 코드 /
+                           공식 모델 문서 / 우리의 선택) — "핵심 판단 요약"부터 읽을 것
+  EXPERIMENT_FLOW.md       시간순 기록: 사전 등록, 결정, 결과
+  SOURCES.md               (영문) 기록의 인용이 공개 출처(arXiv 버전, 페이지, 표)에 어떻게 대응하는지
+references/SOURCES.json    제3자 파일(MathVista 데이터와 평가 프롬프트, 인용한 코드, VLMEvalKit)과 URL + sha256
+scripts/                   fetch_sources.py(내려받고 검증), make_results.py, make_figures.py,
+                           check_readme_numbers.py
+```
+`docs/`의 문서는 한국어로 작성되어 있으며, `REPORT.md`가 관련 항목을 가리킵니다.
 
-## 다시 확인하는 방법 (GPU 없이)
+## 재현 방법
 
-Python 3.10 이상(표준 라이브러리만), `make`, git 저장소 사본이 있으면 됩니다.
-
+### 1. 저장된 출력으로부터 모든 표와 결과 그림 다시 만들기 (CPU만 사용)
+Python 3.10 이상(표준 라이브러리만 사용, `make check`는 3.10, 3.11, 3.12, 3.13에서 통과), `make`, git checkout이
+필요합니다. GPU와 PyTorch는 필요하지 않습니다.
 ```bash
-make fetch   # MathVista 데이터, 공식 추출 프롬프트, 인용 코드를 내려받고 sha256 확인
-make check   # 사전등록 분석, 결과표, 결과 그림을 다시 만들고 저장소 파일과 하나라도 다르면 실패
+make fetch     # MathVista testmini.json, 공식 추출 프롬프트, 인용한 코드를 내려받고 sha256 확인
+make check     # 사전 등록 분석, results/, 결과 그림을 다시 실행하고 README 숫자를 확인합니다.
+               # 하나라도 다르면 실패
+make report    # 선택 사항: build/에 방법별 서술 보고서 생성(규칙 기반 scorer v4, LLM fallback 없음)
+```
+단위 테스트에는 PyTorch, transformers, pytest가 필요합니다(CPU 빌드면 충분합니다).
+```bash
+python3 -m venv .venv && . .venv/bin/activate
+pip install -r requirements.txt pytest
+make test
+```
+개별 명령은 `Makefile`에 나와 있습니다. `repro/reports/b_main_report.json`은 규칙 기반만 사용하므로, 이 파일의 TSR
+정확도(60.0)가 읽기 (a)의 값(60.1, LLM fallback으로 한 행을 복구)과 다릅니다.
+
+### 2. 모델 출력 다시 생성하기 (GPU)
+고정한 버전: 모델 `OpenGVLab/InternVL3_5-1B` @ `2f71cf52542334823e48a46ffba0e2bc9add3446`,
+데이터 `AI4Math/MathVista` @ `2b6ad69445fbb5695c9b165475e8decdbeb97747`, `transformers==4.55.0`, fp16.
+각 세션의 정확한 설정은 `repro/kaggle/runs/<session>/run_config.json`에 있습니다. 본 실험은 2×T4의 Kaggle 세션
+9개로, 총 약 14.9 세션 시간이 걸렸습니다(REPORT §2.5).
+새 실행 이름을 사용하세요. `repro/kaggle/runs/` 아래 폴더는 공개된 세션의 기록이며, 빌드 스크립트는 기존 실행 폴더를
+덮어쓰기를 거부합니다(`--overwrite`는 아직 push하지 않은 세션을 다시 만들 때만 있습니다).
+```bash
+# Kaggle (2×T4): kaggle.json을 저장소 루트에 둡니다 (절대 커밋하지 마세요)
+python3 repro/kaggle/build.py rerun_b_main_s1 --timeout 7200 \
+  --run-args="--methods st,tsr,visref_raw_rank --think-cap 1024 --total-think-cap 10240"
+python3 repro/kaggle/kaggle_ctl.py push rerun_b_main_s1      # 이후: status / pull
+# 이후 세션은 본인의 세션이 이미 끝낸 문항을 건너뜁니다:
+#   --skip-from repro/kaggle/runs/rerun_b_main_s*/output/results/results_*.jsonl
+
+# step1_branch 후속 실험 (20문항 파일럿, 그다음 나머지)
+cd repro && python3 kaggle/build_step1_branch.py rerun_step1_branch_pilot --limit 20 --timeout 3600
+python3 kaggle/build_step1_branch.py rerun_step1_branch_main --timeout 7200 \
+  --skip-from kaggle/runs/rerun_step1_branch_pilot/output/results/step1_branch_*.jsonl
+```
+문항은 seed 0으로 고정된 셔플 순서대로 처리되므로, 완료된 앞부분은 어느 것이나 무작위 부분집합입니다. 모든 (문항, 방법)
+쌍은 문항별 seed를 사용합니다(방법 간 common random numbers). fp16에서는 출력이 배치 구성에 따라 약간 달라집니다
+(REPORT §6).
+
+### 3. LLM fallback 추출 (규칙 채점기가 파싱하지 못하는 행, 약 1%)
+```bash
+cd repro
+python3 llm_extract.py prepare <results...> --out requests.jsonl --control 20
+GEMINI_API_KEY=... python3 gemini_extract.py requests.jsonl --out responses.jsonl --model gemini-3.5-flash-lite --sleep 6
+python3 llm_extract.py merge <results...> --responses responses.jsonl --out rescored.jsonl
+```
+공식 MathVista 추출 프롬프트를 사용합니다. LLM 추출은 응답 텍스트에 근거(grounded)한 경우에만 받아들이고, 빈 응답은
+보내지 않습니다(`docs/EXPERIMENT_FLOW.md` 참조).
+
+## 논문과 다른 점
+논문은 다음을 명시하지 않습니다. 토큰 상한, 잘린 사고나 상한에 걸린 답의 처리, 답 추출 방법, 추론 토큰 표현의 레이어,
+DPP 커널 rank가 토큰 예산 m보다 작은 경우의 처리, 정지 엔트로피의 추정 방식, 주입 형식(태그, 구분자, `</think>` 처리,
+position id)입니다.
+우리의 선택과 그 근거는 `docs/SPEC_LEDGER.md`("핵심 판단 요약")에 있습니다. 가장 영향이 큰 것은 다음과 같습니다.
+- 사고는 단계당 1,024토큰(총 10,240토큰)으로, 답은 1,024토큰으로 제한했습니다. 잘린 사고는 `</think>\nFinal Answer:`
+  뒤에서 답합니다(s1 방식 budget forcing). 상한에 걸린 답에는 DEER 방식 answer forcing을 적용합니다.
+- VisRef는 greedy DPP가 선택한 토큰만 주입합니다(인용한 Chen 외 코드처럼 커널 rank에서 멈춤). 추론 토큰이 입력
+  임베딩일 때 이는 m = ⌊0.3·|V|⌋의 약 5분의 1입니다. 논문은 |V_k| = m이라고 명시합니다.
+- 선택된 시각 임베딩은 이미지 태그 없이 `</think>` 바로 앞에 덧붙입니다.
+- 정지 엔트로피 H는 샘플링한 답 하나의 토큰 엔트로피 합입니다(논문은 답 분포에 대해 정의합니다).
+- 이미지는 max_num 12의 InternVL dynamic tiling에 thumbnail 타일을 더해 사용합니다(평균 시각 토큰 1,961.5개. 논문은
+  8B 모델에 대해 ∼1,772를 보고하며, 이는 thumbnail을 뺀 우리 값 1,755.6에 가깝습니다).
+- fp16을 쓰는 Kaggle T4 GPU(논문: A10G GPU 4개, PyTorch 2.7.0, Transformers 4.55.0).
+
+저자에게 할 질문은 REPORT §5.3에 있습니다. 논문의 각 주장이 어디에서 왔는지(arXiv 버전, 페이지, 표)는
+`docs/SOURCES.md`에 있습니다.
+
+## 인용
+`CITATION.cff`를 참조하세요. 원 논문도 함께 인용해 주세요.
+```bibtex
+@article{ghosal2026visref,
+  title   = {VisRef: Visual Refocusing while Thinking Improves Test-Time Scaling in Multi-Modal Large Reasoning Models},
+  author  = {Ghosal, Soumya Suvra and Kim, Youngeun and Li, Zhuowei and Chaudhry, Ritwick and Xu, Linghan and
+             Zhang, Hongjing and Zablocki, Jakub and Xing, Yifan and Zhang, Qin},
+  journal = {arXiv preprint arXiv:2603.00207},
+  year    = {2026}
+}
 ```
 
-GPU로 모델 출력부터 다시 만드는 방법은 영문 README의 "Reproduce" 절에 있습니다(본 실험은 Kaggle 9세션, 약 14.9시간).
-
 ## 라이선스
-
-코드는 MIT입니다. MathVista에서 온 내용이 들어 있는 데이터 파일은 CC BY-SA 4.0을 따릅니다. 범위는 영문 README의
-License 절에 있습니다.
+- 코드: MIT(`LICENSE`).
+- 데이터 파일에는 CC BY-SA 4.0으로 배포되는 MathVista에서 파생된 내용이 들어 있습니다. 해당하는 파일은 실행 출력
+  (`repro/**/results_*.jsonl`, `repro/**/step1_branch_*.jsonl`), `repro/llm/`의 LLM 추출 요청과 응답(문항, 답, 공식
+  MathVista 추출 프롬프트), `repro/diag/`의 분석 JSON, `results/`, 보고서입니다. 따라서 이 데이터 파일은 CC BY-SA 4.0으로
+  공유됩니다. 모델 출력은 InternVL3.5-1B(Apache-2.0)로 생성했습니다.
+- 그 밖의 제3자 파일(MathVista 데이터, 인용한 코드)은 포함하지 않으며, `scripts/fetch_sources.py`가 원래 위치에서
+  내려받습니다.
