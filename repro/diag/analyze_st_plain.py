@@ -2,7 +2,7 @@
 
 diag = ST with --forced-prompt= (rule 1 off: a capped thinking step gets only '</think>'), rerun on 150 pids whose
 b_main ST first step hit the cap. Paired against the b_main ST row of the same pid. Three readings, both sides,
-scorer = current visref/scoring.py (v3):
+scorer = current visref/scoring.py (v3 when this was run, v4 since 2026-10-11):
   (a) as scored                      -> decision reading
   (b) af rows re-scored on the text before the af prompt (rule 2 removed too, approx.)
   (c) af rows counted wrong          -> lower bound only

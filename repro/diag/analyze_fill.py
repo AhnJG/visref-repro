@@ -1,7 +1,8 @@
 """Pre-registered visref_fill analysis (EF 2026-10-10 "원인 분리 실험 사전등록 수정", amended 2026-10-11).
 Sample: complete prefix of the seed-0 shuffled order (2 shards) among finished fill rows.
 Comparisons: fill-TSR, fill-VisRef(raw_rank) paired difference, bootstrap 95% CI (2,000, seed 0), McNemar exact.
-b_main rows: llm/final/merged.jsonl (v3 + LLM). fill rows: v3 rescore (+ LLM merge file if given).
+b_main rows: llm/final/merged.jsonl (v3 + LLM). fill rows: rescored with the current rule scorer (v3 when this was
+written, v4 since 2026-10-11), then replaced by the LLM merge file if given (llm/fill/merged.jsonl: v3 rows + LLM).
 Strata (pre-specified): b_main ST first-step end (close/cap/eos). k strata: exploratory.
 Usage: cd repro && python3 diag/analyze_fill.py [fill_llm_merged.jsonl]"""
 import json, glob, sys, statistics, collections
@@ -17,7 +18,7 @@ for f in sorted(glob.glob('kaggle/runs/b_main_fill/output/results/results_*.json
         if l.strip():
             r = json.loads(l); F[(str(r['pid']), r['method'])] = r
 rescore_rows(F, data)
-reading = 'v3 rule only (LLM extraction pending)'
+reading = 'current rule scorer only (LLM extraction pending)'
 if len(sys.argv) > 1:
     for r in map(json.loads, open(sys.argv[1])):
         F[(r['pid'], r['method'])] = r
