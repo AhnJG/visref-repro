@@ -1,5 +1,7 @@
 # visref-repro
 
+[한국어 요약 (Korean summary)](README.ko.md)
+
 Unofficial reproduction of **VisRef** (Ghosal et al., *VisRef: Visual Refocusing while Thinking Improves Test-Time
 Scaling in Multi-Modal Large Reasoning Models*, arXiv:2603.00207, CVPR 2026), Appendix Table 6 row *InternVL-1B*:
 InternVL3.5-1B on MathVista *testmini* (1,000 questions), comparing
