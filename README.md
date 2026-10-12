@@ -1,6 +1,6 @@
 # visref-repro
 
-[한국어 요약 (Korean summary)](README.ko.md)
+[한국어 (Korean)](README.ko.md)
 
 Unofficial reproduction of **VisRef** (Ghosal et al., *VisRef: Visual Refocusing while Thinking Improves Test-Time
 Scaling in Multi-Modal Large Reasoning Models*, arXiv:2603.00207, CVPR 2026), Appendix Table 6 row *InternVL-1B*:
@@ -12,31 +12,17 @@ InternVL3.5-1B on MathVista *testmini* (1,000 questions), comparing
 | **TSR** – textual self-reflection | "Wait, think more" steps until the answer entropy is below δ | 48.5 |
 | **VisRef** | TSR + re-injecting a DPP-selected subset of the image's visual tokens after every step | 52.0 |
 
-![ST, TSR and VisRef as run in this reproduction; orange notes mark settings the paper leaves open](figures/method_overview.svg)
+![ST, TSR and VisRef as run in this reproduction; orange notes mark settings we could not find in the paper](figures/method_overview.svg)
 
-> **Status (2026-10-12): complete.** The main run and two pre-registered follow-ups are finished and analysed, and the
-> experiments are closed. One auxiliary run (`st_official`) stopped early on free Colab and is not analysed. The
-> original authors have not been contacted yet. Full write-up: **[REPORT.md](REPORT.md)**.
-
-## Who did what
-This reproduction was carried out by AhnJG with AI assistance (Claude models, Anthropic).
-
-- **AhnJG:** chose the target and the evidence rules (every external number is cited with file:line or marked
-  unverified); made the design decisions recorded as "사용자 결정" in `docs/EXPERIMENT_FLOW.md`, among them injecting
-  only the DPP's rank (`visref_raw_rank`), the answer handling (s1 prompt + DEER answer forcing), rule-based scoring
-  with a grounded LLM fallback, fixing the main comparisons and tests before the final analysis, the follow-up
-  experiments and their scope, and when to stop; ran every GPU session (Kaggle 2×T4, Colab) and the Gemini extraction
-  for the main run; raised the questions behind several recorded corrections.
-- **Claude (AI assistant):** wrote most of the code (generation engine, methods, DPP selection, scoring, analysis
-  scripts, tests); drafted the pre-registrations, analyses, REPORT.md and the figures; separate model sessions carried
-  out independent reviews (`repro/audit/`).
-- `make check` regenerates results/ and the results figure from the saved outputs and checks that both READMEs quote
-  the numbers in results/.
+> **Status (2026-10-12): complete.** The main run and two follow-up experiments are finished and analysed, and the
+> experiments are closed. Full write-up: **[REPORT.md](REPORT.md)**.
 
 ## Results
 
-Reading (a), the pre-specified one: rule-based answer extraction plus a grounded LLM fallback for the rows the rules
-cannot parse. n = 1,000; each method once per question, with shared seeds and a shared first thinking step.
+Scoring (reading (a), fixed in advance): answers are extracted by rules; for the rows the rules cannot parse (36 of
+3,000), an LLM extracts the answer with the official MathVista extraction prompt, and its answer counts only if it
+appears in the response ([Reproduce §3](#3-llm-fallback-extraction-rows-the-rule-scorer-cannot-parse-about-1)).
+n = 1,000; each method once per question, with shared seeds and a shared first thinking step.
 
 ![Paired accuracy differences with 95% CIs next to the paper's differences](figures/paired_differences.svg)
 
@@ -51,23 +37,52 @@ cannot parse. n = 1,000; each method once per question, with shared seeds and a 
 | VisRef − TSR (main) | −0.1 (−2.0, +1.7) | 44 / 45 | 1.000 | 1.000 | +3.5 | effect size not reproduced |
 | TSR − ST (supplementary) | +2.3 (+0.6, +4.0) | 51 / 28 | 0.013 | – | +2.4 | consistent with the paper value |
 
-- **In short:** TSR's gain over ST is consistent with the paper's value; this does not show that the effect or its
-  mechanism is the same. We did not confirm an additional gain of VisRef over TSR in our InternVL3.5-1B implementation,
-  and VisRef − ST is not significant after the pre-specified Holm correction (p = 0.033 without correction).
-- *Consistent* = the paired bootstrap 95% CI (2,000 resamples, seed 0) excludes 0 and contains the paper's delta (not a
-  proof of equivalence); *not reproduced* = the CI excludes the paper's delta. It is the same under every
-  answer-handling reading we tried (REPORT §3.2).
-- **Timing:** the main comparisons and tests were fixed after an interim look at the first 392 questions, and the CI
-  classification rule after an interim look at 759 questions, both before the final analysis. The main run is
-  therefore not a pre-registration in the strict sense (REPORT §2.4). The rules of the two follow-ups below were fixed
-  before their results.
-- Our absolute accuracies are 8–12 pp above the paper's; our ST is close to the official InternVL3.5-1B MathVista
-  score (59.3). The cause of the gap was not isolated.
-- We do **not** conclude that VisRef has no effect: our implementation injects about one fifth of the paper's token
-  budget m (a confirmed procedural difference), and several settings are not specified in the paper
-  (see [Known differences](#known-differences-from-the-paper)).
+- **In short:** TSR's gain over ST is consistent with the paper's value (this does not show that the effect or its
+  mechanism is the same). We did not confirm an additional gain of VisRef over TSR in our InternVL3.5-1B
+  implementation. VisRef − ST is smaller than in the paper (+2.2 vs +5.9 pp); its CI excludes 0, but after the Holm
+  correction we fixed in advance for the two main comparisons it is not significant (p = 0.067; 0.033 uncorrected).
+- **Classification column:** *consistent with the paper value* = our 95% CI contains the paper's difference and
+  excludes 0 (not a proof of equivalence); *effect size not reproduced* = our 95% CI excludes the paper's difference.
+  The CIs are paired bootstrap intervals (2,000 resamples, seed 0).
+- **When the rules were fixed:** the main comparisons and tests after an interim look at the first 392 questions, and
+  the classification rule after an interim look at 759 questions, both before the final analysis. The main run is
+  therefore not a pre-registration in the strict sense and its classification is not confirmatory (REPORT §2.4). The
+  classification is the same under every answer-handling reading we tried (REPORT §3.2). The decision rules of the two
+  follow-up experiments below were fixed before their results.
 
-### Pre-registered follow-ups
+### Why our accuracies are 8–12 pp above the paper's (not resolved)
+Our ST (57.8) is close to the official InternVL3.5-1B MathVista (mini) score of 59.3, while the paper's ST is 46.1.
+The paper's 8B ST (68.1) is also more than 10 pp below the official InternVL3.5-8B score (78.4). This suggests that the
+paper evaluated its baselines in a setting where the model scores lower than in the official evaluation, but we could
+not find that setting in the paper. Our estimates of the cause, none of them tested directly:
+
+1. **Unfinished answers counted as wrong.** If every answer that reached the answer cap and needed answer forcing is
+   counted wrong (reading (c)), our accuracies become ST 44.4 / TSR 48.3 / VisRef 47.4, close to the paper's ST and TSR
+   (46.1 / 48.5). We formed this hypothesis after seeing the results and picked it among four readings, so it is weak
+   evidence (REPORT §4.4).
+2. **A different model generation.** "InternVL-1B" in Table 6 does not name the generation, and the official
+   InternVL3-1B score (45.8) is close to the paper's ST of 46.1. We assumed InternVL3.5-1B because the paper writes
+   "InternVL-3.5" for its 8B model; InternVL3-1B was not run.
+3. **Token limits, answer extraction, prompt, hardware.** We could not find the first three in the paper, and its GPUs
+   (A10G) differ from ours (T4, fp16). A tighter thinking limit, for example, would cut more answers short.
+
+The official scores are from the InternVL3.5 report (Table 3); where each paper number comes from: `docs/SOURCES.md`.
+
+### Why VisRef showed no extra gain here
+We look for the cause in our implementation first. The differences that could explain it, and what we checked:
+
+| candidate on our side | why it could matter | checked? |
+|---|---|---|
+| We inject about one fifth of the paper's m tokens: the greedy DPP stops at the kernel rank (confirmed procedural difference) | less visual evidence per step | Filling up to m (`visref_fill`, below) gave no extra gain, but filling also changes which tokens are added, so "too few tokens" is not ruled out |
+| Injection format: visual embeddings appended without image tags right before `</think>` (format not found in the paper) | the model may not treat them as an image | Not tested. A side effect is visible: of the 713 questions where VisRef stopped at step 1, 352 VisRef final answers contain another `</think>`, versus 67 ST answers |
+| Where the injection lands: TSR and VisRef continued almost only after a step hit the 1,024-token cap, so the injection usually comes mid-sentence | the paper may have continued mostly after completed steps | A larger step cap (e.g. 4,096) was not run |
+| Reasoning-token representation Z: input embeddings (no layer found in the paper) | the DPP kernel, and so the selection, depends on it | Offline check on 12 questions: with hidden-state Z, too, only about 50–110 selected tokens add clear diversity, fewer than m; not run as a variant |
+| Stopping entropy H from one sampled answer | noisy stop decisions | Several samples per step not run |
+
+None of these is ruled out completely, and we could not find CIs or the number of runs behind the paper's numbers, so
+we cannot say how much of the gap comes from our implementation. Details: REPORT §4.
+
+### Follow-up experiments (decision rules fixed before the results)
 
 | experiment | question | result |
 |---|---|---|
@@ -163,27 +178,65 @@ python3 llm_extract.py prepare <results...> --out requests.jsonl --control 20
 GEMINI_API_KEY=... python3 gemini_extract.py requests.jsonl --out responses.jsonl --model gemini-3.5-flash-lite --sleep 6
 python3 llm_extract.py merge <results...> --responses responses.jsonl --out rescored.jsonl
 ```
-Uses the official MathVista extraction prompt; an LLM extraction is accepted only if it is grounded in the response
-text, and empty responses are never sent (see `docs/EXPERIMENT_FLOW.md`).
+The official MathVista evaluation uses an LLM (GPT-4 in the MathVista paper) to pull the short final answer out of a
+long response. Its prompt shows five worked examples (question, model response, extracted answer) and then the new
+response (`evaluation/prompts/ext_ans.py` in the MathVista repository, pinned in `references/SOURCES.json`). We send
+the same prompt to gemini-3.5-flash-lite, only for the rows the rules cannot parse. The LLM's answer counts only if it
+appears in the response text, so the LLM cannot solve the question itself, and empty responses are never sent (see
+`docs/EXPERIMENT_FLOW.md`).
 
-## Known differences from the paper
-The paper does not specify token limits, the handling of truncated thinking or capped answers, the answer-extraction
-method, the layer of the reasoning-token representation, the handling of a DPP kernel rank below the token budget m,
-the estimator of the stopping entropy, or the injection format (tags, separators, `</think>` handling, position ids).
-Our choices and their evidence are in `docs/SPEC_LEDGER.md` ("핵심 판단 요약"). The most consequential ones:
-- thinking capped at 1,024 tokens per step (10,240 total), answer 1,024; truncated thinking is answered after
-  `</think>\nFinal Answer:` (s1-style budget forcing); answers hitting the cap get DEER-style answer forcing;
-- VisRef injects only the tokens the greedy DPP selects (it stops at the kernel rank, as in the cited Chen et al.
-  code), about one fifth of m = ⌊0.3·|V|⌋ when the reasoning tokens are input embeddings; the paper states |V_k| = m;
-- the selected visual embeddings are appended without image tags right before `</think>`;
-- the stopping entropy H is the summed token entropy of one sampled answer (the paper defines it on the answer
-  distribution);
-- images use InternVL dynamic tiling with max_num 12 plus a thumbnail tile (mean 1,961.5 visual tokens; the paper
-  reports ∼1,772 for the 8B model, close to our 1,755.6 without the thumbnail);
-- Kaggle T4 GPUs with fp16 (paper: four A10G GPUs, PyTorch 2.7.0, Transformers 4.55.0).
+## Settings we could not find in the paper
+We could not find these in the paper: token limits, what to do with truncated thinking or capped answers, the
+answer-extraction method, the layer of the reasoning-token representation, what to do when the DPP kernel rank is below
+the token budget m, the estimator of the stopping entropy, the injection format (tags, separators, `</think>` handling,
+position ids) and the image tiling. We filled each gap from the strongest source available, in this order: the
+paper's figures and tables → works and code the paper cites → official InternVL3.5 material (model card; VLMEvalKit,
+which the InternVL3.5 report used) → public code the paper does not cite → our own choice.
 
-Questions for the authors are listed in REPORT §5.3. Where each paper claim comes from (arXiv version, page, table):
-`docs/SOURCES.md`.
+| setting | our choice | basis | other possibilities (status) |
+|---|---|---|---|
+| Model ("InternVL-1B") | InternVL3.5-1B | the paper writes "InternVL-3.5" for 8B, and its 8B row matches the InternVL3.5-8B row of its Table 1 | InternVL3-1B (official 45.8, close to the paper's ST 46.1); not run |
+| Thinking mode, sampling | R1 thinking system prompt; T 0.6, top-k 50, top-p 0.95 | InternVL3.5 model card | – |
+| Token limits | 1,024 per thinking step, 10,240 in total, 1,024 for the answer | 1,024 is the model card's example value; the rest is our choice | a larger step cap (e.g. 4,096) or the official evaluation's 65,536 new tokens; not run |
+| Truncated thinking | append `</think>\nFinal Answer:` (s1-style budget forcing) | s1, which the paper cites; applying it here is our interpretation | without the `Final Answer:` nudge: −2.0 pp on 150 questions, p = 0.73 (diagnostic run) |
+| Answer reaching the cap | DEER-style answer forcing (`\n**Final Answer**\n\boxed`, ≤ 100 tokens) | DEER code (not cited by the paper) | count it wrong: reading (c), REPORT §3.2 |
+| Answer extraction | rules, then the official MathVista extraction prompt for rows the rules cannot parse | MathVista extracts every answer with an LLM; rules first, LLM second is how VLMEvalKit works | an LLM for every row with the official GPT model; not run |
+| Text that is scored | the text after the last `</think>` | the same split rule as VLMEvalKit (whether the InternVL3.5 evaluation turned it on: not confirmed) | score the whole output; not tested |
+| DPP selection size | the greedy DPP stops at the kernel rank, about m/5 tokens | the cited DPP code (Chen et al. 2018); conflicts with the paper's \|V_k\| = m | fill up to m: tested (`visref_fill`), no extra gain |
+| Reasoning-token representation Z | input embeddings | our choice | hidden states: offline check only (see above) |
+| Stopping entropy H | one sampled answer (see below) | definition from the paper; estimator ours | several sampled answers, entropy over distinct answer values, log base 2 (δ = 0.25 bits ≈ 0.17 nats); not run |
+| Injection format | selected visual embeddings appended without image tags right before `</think>`; order z_k → Ṽ_k → H_k → "Wait, think more" | order from the paper (Algorithm 1); format our choice | with image tags, after `</think>`, other position ids; not tested |
+| Image tiling | dynamic tiling, max_num 12 plus a thumbnail tile (mean 1,961.5 visual tokens) | model card | without the thumbnail the mean is 1,755.6, closer to the paper's ∼1,772 (8B); not run |
+| Hardware | Kaggle T4, fp16 | free GPUs | paper: four A10G GPUs, PyTorch 2.7.0, Transformers 4.55.0; not tested |
+
+**The stopping entropy H.** The paper defines H as the entropy of the model's answer distribution (Algorithm 1,
+line 12), and the study it cites for this criterion (Ghosal et al.) samples several answers to measure it. We sample
+one short answer after `</think>` + `\n\n\boxed` (T = 1, at most 16 tokens) and add up the entropy of each of its
+tokens, in nats. On average this equals the entropy of the answer distribution (chain rule), so it measures the same
+quantity, but with one sample it is noisy, and the noise affects when a method stops. An earlier version sampled 10
+complete answers per step; with the 8B model, a TSR run on 3 development questions took 4,703.9 GPU-seconds. We
+replaced it with the one-sample estimator (decision log: `docs/EXPERIMENT_FLOW.md`, 2026-10-06 and 2026-10-07). An
+`Answer:` probe was also replaced, because its formatting tokens dominated H and TSR stopped by entropy in 0 of 18
+smoke-test questions.
+
+Every decision with its evidence and alternatives is in `docs/SPEC_LEDGER.md` (start at "핵심 판단 요약"); where each
+paper claim comes from (arXiv version, page, table) is in `docs/SOURCES.md`. Questions for the authors are listed in
+REPORT §5.3.
+
+## Contributions and AI use
+This reproduction was carried out by AhnJG with AI assistance (Claude models, Anthropic).
+
+- **AhnJG:** chose the target and the evidence rules (every external number is cited with file:line or marked
+  unverified); made the design decisions recorded as "사용자 결정" in `docs/EXPERIMENT_FLOW.md`, among them injecting
+  only the DPP's rank (`visref_raw_rank`), the answer handling (s1 prompt + DEER answer forcing), rule-based scoring
+  with an LLM fallback, fixing the main comparisons and tests before the final analysis, the follow-up experiments and
+  their scope, and when to stop; ran every GPU session (Kaggle 2×T4, Colab) and the Gemini extraction for the main
+  run; raised the questions behind several recorded corrections.
+- **Claude (AI assistant):** wrote most of the code (generation engine, methods, DPP selection, scoring, analysis
+  scripts, tests); drafted the pre-registrations, analyses, REPORT.md and the figures; separate model sessions carried
+  out independent reviews (`repro/audit/`).
+- **An LLM as part of the method:** gemini-3.5-flash-lite extracts the answer for the rows the rules cannot parse
+  (Reproduce §3).
 
 ## Citation
 See `CITATION.cff`. Please also cite the original paper:

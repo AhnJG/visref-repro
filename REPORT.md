@@ -6,7 +6,7 @@
 
 ## Summary
 
-We reimplemented the three methods of Table 6 (standard thinking ST, textual self-reflection TSR, and VisRef) for InternVL3.5-1B and evaluated each once on all 1,000 MathVista testmini questions, with the same questions, the same seeds and a shared first thinking step. Accuracies were ST 57.8, TSR 60.1 and VisRef 60.0 % (paper: 46.1, 48.5, 52.0). The TSR−ST difference (+2.3 pp, 95% CI +0.6 to +4.0) is consistent with the paper's +2.4; this is not proof of equivalence. VisRef−ST was +2.2 pp (CI +0.3 to +4.1): the CI excludes 0 but also the paper's +5.9, and the difference is not significant after the pre-specified Holm correction (p = 0.067). VisRef−TSR was −0.1 pp (CI −2.0 to +1.7), which excludes the paper's +3.5: we did not confirm an additional gain over TSR in our InternVL3.5-1B implementation. Two pre-registered follow-ups (filling the injection up to m tokens; re-testing step-1 re-injection in a four-condition design) did not change this picture. We do **not** conclude that the paper's mechanism is wrong or that VisRef has no effect: our implementation has a confirmed procedural difference (about one fifth of the paper's token budget m is injected), many choices the paper leaves open were made by us, our absolute accuracies are 8–12 pp above the paper's, and we cover one model size, one benchmark and one seed.
+We reimplemented the three methods of Table 6 (standard thinking ST, textual self-reflection TSR, and VisRef) for InternVL3.5-1B and evaluated each once on all 1,000 MathVista testmini questions, with the same questions, the same seeds and a shared first thinking step. Accuracies were ST 57.8, TSR 60.1 and VisRef 60.0 % (paper: 46.1, 48.5, 52.0). The TSR−ST difference (+2.3 pp, 95% CI +0.6 to +4.0) is consistent with the paper's +2.4; this is not proof of equivalence. VisRef−ST was +2.2 pp (CI +0.3 to +4.1): the CI excludes 0 but also the paper's +5.9, and the difference is not significant after the pre-specified Holm correction (p = 0.067). VisRef−TSR was −0.1 pp (CI −2.0 to +1.7), which excludes the paper's +3.5: we did not confirm an additional gain over TSR in our InternVL3.5-1B implementation. Two pre-registered follow-ups (filling the injection up to m tokens; re-testing step-1 re-injection in a four-condition design) did not change this picture. We look for the cause of the missing gain in our implementation first: it has a confirmed procedural difference (about one fifth of the paper's token budget m is injected), many settings we could not find in the paper were chosen by us, our absolute accuracies are 8–12 pp above the paper's, and we cover one model size, one benchmark and one seed.
 
 ## 1. Scope of reproducibility
 
@@ -24,7 +24,7 @@ The paper's headline claim is that VisRef improves over both ST and TSR, so C2 a
 
 ![ST, TSR and VisRef as run in this reproduction](figures/method_overview.svg)
 
-*Figure 1. The loop of Algorithm 1 as implemented here. Grey boxes are steps the paper specifies, the blue box is the step only VisRef has, and orange notes are settings the paper leaves open (our choices, listed in the table below).*
+*Figure 1. The loop of Algorithm 1 as implemented here. Grey boxes are steps the paper specifies, the blue box is the step only VisRef has, and orange notes are settings we could not find in the paper (our choices, listed in the table below).*
 
 Source codes: **P** paper; **C** work or code cited by the paper; **O** official InternVL3.5 material (model card, VLMEvalKit); **U** our own choice.
 
@@ -40,8 +40,8 @@ Source codes: **P** paper; **C** work or code cited by the paper; **O** official
 | Token limits | 1,024 per thinking step, 10,240 total thinking, 1,024 answer, 100 for answer forcing | U (1,024 is the model-card example value) |
 | Truncated thinking, capped answers | After truncated thinking: `</think>` + `\nFinal Answer:` (s1-style budget forcing). Answer reaching the cap without EOS: `\n**Final Answer**\n\boxed` + ≤100 tokens ("af", DEER-style) | s1 is cited (C) but applying it here is our interpretation; DEER is not cited by the paper (U) |
 | Stopping statistic H | Sum of token entropies of one answer sampled after `</think>` + `\n\n\boxed` (T = 1, ≤16 tokens) | Definition (entropy of the answer distribution): P. Estimator: U |
-| Reasoning-token representation Z | Input embeddings of the thinking-step tokens | U (the paper does not name a layer) |
-| Injection format | Selected visual embeddings appended without `<img>` tags directly before `</think>`; order z_k → Ṽ_k → H_k → "Wait, think more"; Ṽ_k ⊆ V | Order and subset: P (Alg. 1, Fig. 2). Tags, separators, `</think>` handling, position ids, answer prompt: not specified, U. The junction `[Ṽ_k] </think>` is our own choice |
+| Reasoning-token representation Z | Input embeddings of the thinking-step tokens | U (no layer found in the paper) |
+| Injection format | Selected visual embeddings appended without `<img>` tags directly before `</think>`; order z_k → Ṽ_k → H_k → "Wait, think more"; Ṽ_k ⊆ V | Order and subset: P (Alg. 1, Fig. 2). Tags, separators, `</think>` handling, position ids, answer prompt: not found in the paper, U. The junction `[Ṽ_k] </think>` is our own choice |
 | Visual tokens | Dynamic tiling, max_num = 12 plus thumbnail tile; mean \|V\| = 1,961.5 | O (model card); see §4.4 |
 
 ### 2.2 Scoring
@@ -124,7 +124,7 @@ We could not pin down a single cause. The items below are observations and candi
 2. **Questions where VisRef stops at step 1 (k = 1, 713 questions).** VisRef differs from ST only by injecting Ṽ_1 before the final answer: VisRef-only correct 15, ST-only correct 14. The extracted answer changed in 1 of 329 questions whose step closed naturally and in 33 of 366 truncated ones. Caveat: k = 1 is defined by the stopping decision after injection, and the TSR k = 1 noise baseline is a different item set, so this group alone cannot identify the cause. As a noise floor: on the 730 questions where TSR stopped at step 1 it answers from the same context and seed as ST, yet the final texts were identical in only 491 and the extracted answers in 714 (16, or 2.2%, differ), which we attribute to fp16 batch-composition noise.
 3. **Side effect of the injection.** In the same k = 1 group the final answer contains another `</think>` in 352 of 713 VisRef answers versus 67 of 713 for ST.
 4. **Injection amount: confirmed procedural difference.** The median injected/m ratio is 0.199, and 1,895 of 2,261 steps inject fewer than m tokens (median m 537, median injected 129). The cause is the early stop at the kernel rank, which is bounded by the number of distinct reasoning-token embeddings. §4.2 tests filling up to m.
-5. **The stopping statistic H is our estimator.** The paper defines H as the entropy of the answer distribution; the cited Ghosal et al. sample several answers. We use one answer sample. Multi-sample estimation was judged too costly and was not run.
+5. **The stopping statistic H is our estimator.** The paper defines H as the entropy of the answer distribution; the cited Ghosal et al. sample several answers. We use one answer sample, whose summed token entropy equals the answer-distribution entropy on average (chain rule) but is noisy. An earlier version sampled 10 complete answers per step; with the 8B model, a TSR run on 3 development questions took 4,703.9 GPU-seconds. It was replaced by the one-sample estimator (`docs/EXPERIMENT_FLOW.md`, 2026-10-06 and 2026-10-07), and multi-sample estimation was not run in the final pipeline.
 6. **Other checks.** Dropping the `Final Answer:` nudge after truncated thinking (150 questions, pre-registered diagnostic) changed accuracy by −2.0 pp (15 vs 18 discordant, McNemar p = 0.73), so the pre-registered criterion (a drop of 10 pp or more) was not met. An independent review of the injection path by a separate AI-model session found no implementation error in the paths and samples it examined.
 
 ### 4.2 visref_fill: injecting exactly m tokens (pre-registered)
@@ -188,7 +188,7 @@ ST with a thinking budget close to the official Thinking configuration of VLMEva
 
 ### 5.2 What was difficult
 
-The paper does not specify the following; each was a choice of ours (§2.1):
+We could not find the following in the paper; each was a choice of ours (§2.1):
 
 - token budgets per step and in total, and what happens when thinking is truncated or an answer hits the cap;
 - answer extraction and scoring (rules, LLM judge, which model);
@@ -220,7 +220,7 @@ None as of 2026-10-12. Questions we would send:
 - One model size (1B), one benchmark (MathVista testmini), one seed and one sample per question; the paper's 2B and 8B rows and other benchmarks were not tested.
 - T4 fp16 results depend on batch composition: the same seed can give different outputs (16 of 730 predictions differ between TSR at k = 1 and ST; 874 of 976 first-step end types agree between the fill run and the main run).
 - The paper provides no per-question outputs, so the difference between our result and the paper's cannot be tested formally; the CI classification is a coarse check.
-- Absolute accuracies are 8–12 pp above the paper's. Candidates (thinking budget, treatment of unfinished answers, extraction, prompt, hardware) were not isolated; the closeness of reading (c) to the paper's ST and TSR is a post-hoc hypothesis.
+- Absolute accuracies are 8–12 pp above the paper's. Candidates (treatment of unfinished answers, the model generation, thinking budget, extraction, prompt, hardware) were not isolated; the closeness of reading (c) to the paper's ST and TSR is a post-hoc hypothesis.
 - Choices of ours (Z layer, H estimator, injection format, token limits) and the confirmed shortfall in injected tokens limit what the null result on VisRef−TSR means; it concerns this implementation only.
 - The LLM fallback differs from the official GPT-based extractor; the fill run used another extractor.
 - The main comparisons and tests were fixed after an interim look at 392 questions and the CI classification rule after one at 759 (§2.4); the post-hoc analyses are exploratory.
