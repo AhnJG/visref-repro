@@ -1647,3 +1647,11 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - 절대 정확도 차이 원인에서 하드웨어 삭제(같은 GPU fp16 잡음으로 바뀐 답 2.2%, REPORT 4.1절), 사후 가설 문장은 한 구절로 줄임(사용자 결정). README에서 "읽기 (a)/(c)"를 설명형 이름으로(REPORT는 표로 정의된 (a)~(f) 유지).
 - st_official(사용자 결정: 글 + 전용 파일 삭제): REPORT 4.5절과 위치 표 언급 삭제, 공개 저장소에서 `repro/diag/analyze_st_official.py`, `repro/colab/runs/st_official_c1/run_config.json` 삭제(Mac 공개 폴더도 삭제 권한 받아 같은 두 파일 삭제). export 스크립트가 다시 복사하지 않도록 수정(이전 판 `scripts/.make_github_export.bak_20261012c`). 이 실험 기록·`repro/audit/`의 검토 기록 안 언급은 이력이라 유지. Colab 빌더 `repro/colab/build_colab.py`는 일반 도구라 유지.
 - push: `main` = 0b508f3.
+
+## 2026-10-12 채점 방식 이름 풀어 쓰기, README 문장 정정 3건 (사용자 지시·질문) — 결과·판정 불변
+- 사용자 지시: 기호 대신 설명형 이름을 전체 문서에. REPORT·results/ 라벨·결과 그림 부제에서 "reading (a)~(f)"를 "main scoring", "rules only", "scored before answer forcing", "unfinished answers counted wrong", "answers forced after cut thinking counted wrong" 등으로 바꿈(`scripts/make_results.py`, `scripts/make_figures.py` 수정 후 재생성). 이 실험 기록과 SPEC_LEDGER의 "읽기 (a)" 등은 당시 기록이라 그대로 둠.
+- 정정 1(주입 형식): README가 "태그 붙인 주입은 시험하지 않음"이라고 썼으나, 2026-10-07 smoke2(방법당 약 21문항, 다른 설정)에서 `<img>…</img>` 태그 주입은 두 번째 `</think>`가 63단계 중 31단계, 태그 없음은 65단계 중 10단계라 태그를 뺐다(이 파일 2026-10-07 Fable 검토·smoke2 항목). README에 이 사실을 넣음.
+- 정정 2(`Final Answer:` 진단): "이 문구가 논문과의 차이를 만든 것은 아님"은 과한 표현. 150문항, 불일치 15:18이라 95% 범위 약 −9.5 ~ +5.5 pp(정규 근사)로 몇 pp 크기의 효과는 가려낼 수 없다. README·REPORT 4.1절 6번 고침. 사용자 지적대로 이 문구는 잘린 생각에서만 쓰이고 ST가 TSR보다 더 자주 쓰므로 방법 간 차이에도 영향을 줄 수 있다.
+- 정정 3(사고 모드): 논문에 사고 모드 사용이 있으므로(`LAY` L428-429) "찾지 못한 설정"에서 빼고 샘플링 값만 남김. 모델 카드는 사고 모드에서 반복을 막으려면 T 0.6 샘플링을 권장(`internvl_README.md` L412).
+- 보강: Z 행에 논문 표현 "text token embeddings"(`LAY` L304-305)와 "더 깊은 층이면 DPP가 m개를 돌려줄 수 있음"(2026-10-08 hidden_rank_check) 추가. 참고: 2026-10-06 사용자는 last hidden state를 우선 후보로 정했으나(이 파일 2026-10-06 항목), 10-07 lean 재작성에서 입력 임베딩으로 구현했고 hidden-state 변형은 오프라인 확인만 했다. H 문단에 "최종 답 전 각 단계에서 재야 하므로 그 시점에 답을 써 보게 하고, 엔트로피는 가능한 답들의 평균이라 T = 1로 샘플링"을 추가.
+- push: `main` = 6e95c3e.
