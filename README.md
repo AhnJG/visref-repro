@@ -16,6 +16,20 @@ InternVL3.5-1B on MathVista *testmini* (1,000 questions), comparing
 > experiments are closed. One auxiliary run (`st_official`) stopped early on free Colab and is not analysed. The
 > original authors have not been contacted yet. Full write-up: **[REPORT.md](REPORT.md)**.
 
+## Who did what
+This reproduction was carried out by AhnJG with AI assistance (Claude models, Anthropic).
+
+- **AhnJG:** chose the target and the evidence rules (every external number is cited with file:line or marked
+  unverified); made the design decisions recorded as "사용자 결정" in `docs/EXPERIMENT_FLOW.md`, among them injecting
+  only the DPP's rank (`visref_raw_rank`), the answer handling (s1 prompt + DEER answer forcing), rule-based scoring
+  with a grounded LLM fallback, fixing the main comparisons and tests before the final analysis, the follow-up
+  experiments and their scope, and when to stop; ran every GPU session (Kaggle 2×T4, Colab) and the Gemini extraction
+  for the main run; raised the questions behind several recorded corrections.
+- **Claude (AI assistant):** wrote most of the code (generation engine, methods, DPP selection, scoring, analysis
+  scripts, tests); drafted the pre-registrations, analyses, REPORT.md and the figures; separate model sessions carried
+  out independent reviews (`repro/audit/`).
+- The result tables and the results figure are regenerated from the saved outputs by `make check`.
+
 ## Results
 
 Reading (a), the pre-specified one: rule-based answer extraction plus a grounded LLM fallback for the rows the rules
@@ -90,13 +104,17 @@ The documents in `docs/` are written in Korean; `REPORT.md` points to the releva
 
 ## Reproduce
 
-### 1. Rebuild every table from the saved outputs (CPU only)
+### 1. Rebuild every table and the results figure from the saved outputs (CPU only)
+Needs Python 3.10 or newer (standard library only), `make` and a git checkout. No GPU and no PyTorch.
 ```bash
-pip install -r requirements.txt   # the offline steps need only the standard library + the fetched files
 make fetch     # MathVista testmini.json, official extraction prompt and cited code, sha256-checked
 make check     # re-runs the pre-registered analyses, results/ and the results figure; fails on any difference
 make report    # optional: descriptive per-method report (rule-based scorer v4, no LLM fallback) in build/
-make test      # CPU unit tests; need torch + transformers (a CPU build is enough)
+```
+The unit tests need PyTorch and transformers (a CPU build is enough):
+```bash
+pip install -r requirements.txt
+make test
 ```
 The individual commands are listed in the `Makefile`. `repro/reports/b_main_report.json` is rule-based only, which is
 why its TSR accuracy (60.0) differs from reading (a) (60.1, one row recovered by the LLM fallback).
@@ -104,7 +122,8 @@ why its TSR accuracy (60.0) differs from reading (a) (60.1, one row recovered by
 ### 2. Regenerate the model outputs (GPU)
 Pinned: model `OpenGVLab/InternVL3_5-1B` @ `2f71cf52542334823e48a46ffba0e2bc9add3446`,
 data `AI4Math/MathVista` @ `2b6ad69445fbb5695c9b165475e8decdbeb97747`, `transformers==4.55.0`, fp16.
-Each session's exact settings are in `repro/kaggle/runs/<session>/run_config.json`.
+Each session's exact settings are in `repro/kaggle/runs/<session>/run_config.json`. The main run took 9 Kaggle
+sessions on 2×T4, about 14.9 session-hours in total (REPORT §2.5).
 ```bash
 # Kaggle (2×T4): put your kaggle.json in the repo root (never commit it)
 python3 repro/kaggle/build.py b_main_s1 --timeout 7200 \
