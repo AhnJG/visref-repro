@@ -182,7 +182,10 @@ See `CITATION.cff`. Please also cite the original paper:
 
 ## License
 - Code: MIT (`LICENSE`).
-- `repro/**/results_*.jsonl`, `repro/**/step1_branch_*.jsonl`, `results/` and reports contain fields derived from
-  MathVista (questions' answers), which is distributed under CC BY-SA 4.0; these data files are therefore shared under
-  CC BY-SA 4.0. Model outputs were produced with InternVL3.5-1B (Apache-2.0).
-- Third-party files are not included; `scripts/fetch_sources.py` downloads them from their original locations.
+- Data files contain material derived from MathVista, which is distributed under CC BY-SA 4.0: the run outputs
+  (`repro/**/results_*.jsonl`, `repro/**/step1_branch_*.jsonl`), the LLM-extraction requests and responses in
+  `repro/llm/` (questions, answers and the official MathVista extraction prompt), the analysis JSON in `repro/diag/`,
+  `results/` and the reports. These data files are therefore shared under CC BY-SA 4.0. Model outputs were produced
+  with InternVL3.5-1B (Apache-2.0).
+- Other third-party files (MathVista data, cited code) are not included; `scripts/fetch_sources.py` downloads them from
+  their original locations.
