@@ -210,9 +210,10 @@ which the InternVL3.5 report used) → public code the paper does not cite → o
 line 12), and the study it cites for this criterion (Ghosal et al.) samples several answers to measure it. We sample
 one short answer after `</think>` + `\n\n\boxed` (T = 1, at most 16 tokens) and add up the entropy of each of its
 tokens, in nats. On average this equals the entropy of the answer distribution (chain rule), so it measures the same
-quantity, but with one sample it is noisy, and the noise affects when a method stops. An earlier version sampled 10
-complete answers per step; with the 8B model, a TSR run on 3 development questions took 4,703.9 GPU-seconds. We
-replaced it with the one-sample estimator (decision log: `docs/EXPERIMENT_FLOW.md`, 2026-10-06 and 2026-10-07). An
+quantity, but with one sample it is noisy, and the noise affects when a method stops. We started with one sampled answer. After reading the study the paper cites for this criterion
+(Ghosal et al.), we also tried sampling 10 complete answers per step; with the 8B model, a TSR run on 3 development
+questions took 4,703.9 GPU-seconds. We then went back to one sample, in the form described above (decision log:
+`docs/EXPERIMENT_FLOW.md`, 2026-10-05 to 2026-10-07). An
 `Answer:` probe was also replaced, because its formatting tokens dominated H and TSR stopped by entropy in 0 of 18
 smoke-test questions.
 
@@ -221,17 +222,17 @@ paper claim comes from (arXiv version, page, table) is in `docs/SOURCES.md`. Que
 [REPORT, Section 5.3](REPORT.md#53-communication-with-original-authors).
 
 ## Contributions and AI use
-This reproduction was carried out by AhnJG with AI assistance (Claude models, Anthropic).
+This reproduction was carried out by AhnJG with AI assistance (Claude models by Anthropic, Codex by OpenAI).
 
 - **AhnJG:** chose the target and the evidence rules (every external number is cited with file:line or marked
   unverified); made the design decisions recorded as "사용자 결정" in `docs/EXPERIMENT_FLOW.md`, among them injecting
   only the DPP's rank (`visref_raw_rank`), the answer handling (s1 prompt + DEER answer forcing), rule-based scoring
   with an LLM fallback, fixing the main comparisons and tests before the final analysis, the follow-up experiments and
-  their scope, and when to stop; ran every GPU session (Kaggle 2×T4, Colab) and the Gemini extraction for the main
-  run; raised the questions behind several recorded corrections.
+  their scope, and when to stop; raised the questions behind several recorded corrections.
 - **Claude (AI assistant):** wrote most of the code (generation engine, methods, DPP selection, scoring, analysis
   scripts, tests); drafted the pre-registrations, analyses, REPORT.md and the figures; separate model sessions carried
   out independent reviews (`repro/audit/`).
+- **Codex (OpenAI):** used throughout the project to review the content.
 - **An LLM as part of the method:** gemini-3.5-flash-lite extracts the answer for the rows the rules cannot parse
   (see [LLM fallback extraction](#3-llm-fallback-extraction-rows-the-rule-scorer-cannot-parse-about-1)).
 
