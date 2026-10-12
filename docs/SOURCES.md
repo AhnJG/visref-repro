@@ -14,7 +14,7 @@ the results depend on.
 | `REF/InternVL3.5.txt` | InternVL3.5 report, layout text | `pdftotext -layout` of the report PDF |
 | `REF/Ghosal_…`, `REF/MathVista.txt`, `REF/VLMEvalKit.txt` | other cited papers | same procedure (not re-checked byte for byte) |
 | `SRC/…` | third-party code and the official MathVista prompt | `make fetch` (see `references/SOURCES.json`) |
-| `SRC/internvl_README.md` | model card README, local copy collected 2026-10-07 | compare with the model card at the pinned revision below |
+| `SRC/internvl_README.md` | README of the official model page on Hugging Face, local copy collected 2026-10-07 | compare with the model page at the pinned revision below |
 
 The VisRef and InternVL3.5 text files we cited are byte-identical to the output of the commands above on the PDFs
 listed below (checked 2026-10-12). `pdftotext` separates pages with a form feed, so the page of a line is one plus the
@@ -48,7 +48,7 @@ are the stable ones.
 ## Pinned model, data and code
 
 - Model: [OpenGVLab/InternVL3_5-1B @ 2f71cf52542334823e48a46ffba0e2bc9add3446](https://huggingface.co/OpenGVLab/InternVL3_5-1B/tree/2f71cf52542334823e48a46ffba0e2bc9add3446)
-  (license apache-2.0 on the model card).
+  (license apache-2.0 on the official model page).
 - Data: [AI4Math/MathVista @ 2b6ad69445fbb5695c9b165475e8decdbeb97747](https://huggingface.co/datasets/AI4Math/MathVista/tree/2b6ad69445fbb5695c9b165475e8decdbeb97747).
 - Third-party code, the official MathVista extraction prompt and `testmini.json`: every URL in
   `references/SOURCES.json` points to a fixed commit (pinned 2026-10-12; each file has the sha256 of the copy used).

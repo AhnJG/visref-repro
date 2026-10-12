@@ -26,7 +26,7 @@ The paper's headline claim is that VisRef improves over both ST and TSR, so C2 a
 
 *Figure 1. The loop of Algorithm 1 as implemented here. Grey boxes are steps the paper specifies, the blue box is the step only VisRef has, and orange notes are settings we could not find in the paper (our choices, listed in the table below).*
 
-Source codes: **P** paper; **C** work or code cited by the paper; **O** official InternVL3.5 material (model card, VLMEvalKit); **U** our own choice.
+Source codes: **P** paper; **C** work or code cited by the paper; **O** official InternVL3.5 material (the official model page on Hugging Face, VLMEvalKit); **U** our own choice.
 
 | Item | Value | Source |
 |---|---|---|
@@ -42,7 +42,7 @@ Source codes: **P** paper; **C** work or code cited by the paper; **O** official
 | Stopping statistic H | Sum of token entropies of one answer sampled after `</think>` + `\n\n\boxed` (T = 1, ≤16 tokens) | Definition (entropy of the answer distribution): P. Estimator: U |
 | Reasoning-token representation Z | Input embeddings of the thinking-step tokens | U (no layer found in the paper) |
 | Injection format | Selected visual embeddings appended without `<img>` tags directly before `</think>`; order z_k → Ṽ_k → H_k → "Wait, think more"; Ṽ_k ⊆ V | Order and subset: P (Alg. 1, Fig. 2). Tags, separators, `</think>` handling, position ids, answer prompt: not found in the paper, U. The junction `[Ṽ_k] </think>` is our own choice |
-| Visual tokens | Dynamic tiling, max_num = 12 plus thumbnail tile; mean \|V\| = 1,961.5 | O (model card); see Section 4.4 |
+| Visual tokens | Dynamic tiling, max_num = 12 plus thumbnail tile; mean \|V\| = 1,961.5 | O (official model page); see Section 4.4 |
 
 ### 2.2 Scoring
 
@@ -178,7 +178,7 @@ We could not pin down a single cause. The items below are observations and candi
 
 ### 5.1 What was easy
 
-- Model, dataset and benchmark are public and could be pinned by revision; the model card gives the thinking prompt and the sampling parameters.
+- Model, dataset and benchmark are public and could be pinned by revision; the official model page gives the thinking prompt and the sampling parameters.
 - Algorithm 1 fixes the loop, the order z_k → Ṽ_k → H_k → cue, and δ, m and K_max; the DPP greedy MAP has public reference code.
 - Pairing (common random numbers, shared first step) made differences of 2 pp measurable with 1,000 questions on free-tier GPUs.
 
