@@ -9,10 +9,12 @@ the cited code stops there too (ε test); here the threshold is relative, 1e-9 *
 import torch
 
 
-def select_tokens(V, Z, m, rel_eps=1e-9):
+def select_tokens(V, Z, m, rel_eps=1e-9, trace=None):
     """Sorted indices of the visual tokens chosen by greedy MAP (at most m).
 
     V: [N, d] visual token embeddings, Z: [T, d] text token embeddings of step z_k.
+    trace: optional list; receives (index, residual / relevance, relevance) per pick in pick order (diagnostic only,
+    the selection is the same with or without it).
     """
     N = V.shape[0]
     m = max(0, min(int(m), N))
@@ -20,6 +22,7 @@ def select_tokens(V, Z, m, rel_eps=1e-9):
         return []
     A = V.double() @ Z.double().T  # [N, T]; phi_k(v) = Z v (same Gram as M_k^{1/2} v)
     d2 = (A * A).sum(1)  # relevance r_i^2 = L_ii
+    r2 = d2.clone() if trace is not None else None
     floor = rel_eps * float(d2.max()) if float(d2.max()) > 0 else 0.0
     c = torch.zeros(N, m, dtype=A.dtype, device=A.device)
     chosen = torch.zeros(N, dtype=torch.bool, device=A.device)
@@ -30,6 +33,8 @@ def select_tokens(V, Z, m, rel_eps=1e-9):
         if not float(gains[j]) > floor:
             break
         sel.append(j)
+        if trace is not None:
+            trace.append((j, float(d2[j] / r2[j]), float(r2[j])))
         chosen[j] = True
         Lj = A @ A[j]
         e = (Lj - c[:, :k] @ c[j, :k]) / torch.sqrt(d2[j])
@@ -94,3 +99,25 @@ def select_tokens_fill(V, Z, m, rel_eps=1e-9, ridge_rel=1e-6):
         pr, rr = pos_rank - pos_rank.mean(), rel_rank - rel_rank.mean()
         info['tail_rel_spearman'] = round(float((pr * rr).sum() / torch.sqrt((pr * pr).sum() * (rr * rr).sum())), 4)
     return sorted(order), info
+
+
+def pick_stats(trace, thr=1e-2):
+    """Diagnostics of a select_tokens trace (EF 2026-10-12, visref_hs): n_meaningful = picks made while the normalized
+    residual (residual / relevance at pick time) was still >= thr (the measure of the 2026-10-08 hidden_rank_check);
+    tail_rel_spearman = Spearman correlation between pick order and relevance over the later picks (negative = more
+    relevant first), None if fewer than 3 later picks."""
+    n_meaningful = 0
+    for _, ratio, _ in trace:
+        if ratio < thr:
+            break
+        n_meaningful += 1
+    tail = [rel for _, _, rel in trace[n_meaningful:]]
+    rho = None
+    if len(tail) >= 3:
+        rel = torch.tensor(tail, dtype=torch.float64)
+        pos_rank = torch.arange(len(tail), dtype=torch.float64)
+        rel_rank = torch.empty(len(tail), dtype=torch.float64)
+        rel_rank[torch.argsort(rel)] = torch.arange(len(tail), dtype=torch.float64)
+        pr, rr = pos_rank - pos_rank.mean(), rel_rank - rel_rank.mean()
+        rho = round(float((pr * rr).sum() / torch.sqrt((pr * pr).sum() * (rr * rr).sum())), 4)
+    return {'n_meaningful': n_meaningful, 'tail_rel_spearman': rho}

@@ -3,7 +3,9 @@
 Methods: 'st' (one thinking step, then the answer), 'tsr' (textual self-reflection [34]) and 'visref_raw_rank'
 (VisRef: after each step the visual tokens chosen by DPP greedy MAP are appended as bare embeddings; only the
 greedy picks, <= rank(L), as the cited Chen et al. code does) and 'visref_fill' (same, but after the greedy stops at
-rank(L) a ridge eps*I continues it to exactly m tokens: dpp.select_tokens_fill; pre-registered variant, EF 2026-10-10/11).
+rank(L) a ridge eps*I continues it to exactly m tokens: dpp.select_tokens_fill; pre-registered variant, EF 2026-10-10/11)
+and 'visref_hs' (same as visref_raw_rank, but Z = the last-layer hidden states of z_k (after the final norm) instead
+of its input embeddings, Engine.last_hidden; pre-registered variant, EF 2026-10-12).
 
 Dual probe (cfg dual_probe, VisRef methods only, logging only): after the stopping probe a second probe is sampled on
 z_k without V_k (`... z_k </think>` + probe prompt) from its own generator; its H_noV is recorded on the step and is
@@ -37,11 +39,11 @@ same final answer as ST (same context, same draws). The distribution of each met
 """
 import torch
 
-from .dpp import budget, select_tokens, select_tokens_fill
+from .dpp import budget, pick_stats, select_tokens, select_tokens_fill
 from .engine import Request
 
-METHODS = ('st', 'tsr', 'visref_raw_rank', 'visref_fill')
-VISREF = ('visref_raw_rank', 'visref_fill')
+METHODS = ('st', 'tsr', 'visref_raw_rank', 'visref_fill', 'visref_hs')
+VISREF = ('visref_raw_rank', 'visref_fill', 'visref_hs')
 PROBE_SAMPLING = (1.0, 0, 1.0)  # T=1, no top-k/top-p: sampled from the distribution whose entropy is summed
 
 
@@ -192,6 +194,11 @@ class Job:
             if self.method == 'visref_fill':
                 sel, fill_info = select_tokens_fill(self.vis, self.eng.embed(z), m)  # asserts head = raw_rank picks
                 step.update(fill_info)
+            elif self.method == 'visref_hs':  # Z = last-layer hidden states of z_k in its own context (causal: the
+                tr = []                      # separator / V_k appended after z_k do not change them)
+                Z = self.eng.last_hidden(torch.cat([self.ctx, self.eng.embed(z)], 0), len(z))
+                sel = select_tokens(self.vis, Z, m, trace=tr)
+                step.update(pick_stats(tr))
             else:
                 sel = select_tokens(self.vis, self.eng.embed(z), m)
             ctx = torch.cat([ctx, self.vis[sel]], 0)

@@ -79,6 +79,27 @@ class Engine:
         return self.emb(torch.as_tensor(ids, dtype=torch.long, device=dev))
 
     @torch.no_grad()
+    def last_hidden(self, ctx, n):
+        """Last-layer hidden states (after the final norm, i.e. the decoder's last_hidden_state that feeds lm_head) of
+        the last n positions of one context ctx [L, d]. Chunked prefill with a KV cache bounds attention memory as in
+        generate(); positions 0..L-1 as for an unpadded row. Used by 'visref_hs' for Z (EF 2026-10-12)."""
+        L = ctx.shape[0]
+        n = min(int(n), L)
+        if n <= 0:
+            return ctx[:0]
+        dec = self.lm.get_decoder()
+        cache = DynamicCache()
+        pos = torch.arange(L, device=ctx.device)[None]
+        q = max(16, self.attn_budget // (self.lm.config.num_attention_heads * L))
+        outs = []
+        for s in range(0, L, q):
+            e = min(L, s + q)
+            o = dec(inputs_embeds=ctx[None, s:e], position_ids=pos[:, s:e], past_key_values=cache, use_cache=True)
+            if e > L - n:
+                outs.append(o.last_hidden_state[0, max(s, L - n) - s:])
+        return torch.cat(outs, 0)
+
+    @torch.no_grad()
     def generate(self, reqs, chunk, stop_at=None):
         """stop_at: wall-clock time after which all unfinished rows return early with finish='chunk'."""
         B = len(reqs)
