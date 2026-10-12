@@ -65,13 +65,14 @@ VisRef가 인용한 InternVL3.5[45]는 평가에 VLMEvalKit을 썼다(`REF/Inter
 - `SRC` = `references/sources/` (모델 카드 `internvl_README.md`, `internvl_conversation.py`, `internvl_modeling_internvl_chat.py`, `mathvista_evaluation.py`, `cited_code/{chen_fast-map-dpp, ceil_icl-ceil, s1, deer}`)
 - `repro/` = 현재 구현. 아래 `file:line`은 `repro/` 기준이다.
 - `OUT/ref_texts/` = `/mnt/user-data/outputs/ref_texts/` (alphaXiv로 받은 인용 논문 원문)
+- 공개 저장소에서는 `docs/SOURCES.md`가 이 약어들을 공개 출처(arXiv 버전, PDF sha256, 페이지·절·표 번호, 고정된 모델·데이터·코드 리비전)로 연결한다(2026-10-12 추가).
 
 **상태 4종**: 명시 / 그림·표에서 유도 / 인용 구현에서 확인 / 가정(미명시). 가정(미명시)로 표시한 행은 5항목 검색 기록을 아래 "2. 검색 기록"에 남겼다.
 
 **5항목 체크리스트(이 문서에서의 해석)**: 작업 지시문에 항목 정의가 없어 다음 다섯 곳으로 해석했다. ① 본문(§3-5) ② 부록(A-K) ③ 그림·표(Fig 1-5, Table 1-8, 페이지 PNG) ④ 인용 문헌·공식 코드([7] Chen, [19] Ghosal, [34] s1, [55] CEIL, [46]) ⑤ 모델 카드·공식 평가 코드·InternVL3.5/MathVista 논문.
 
 **읽지 못했거나 불완전한 소스 (정직 공개)**
-1. 논문 PDF는 로컬에 없다. `arxiv.org/pdf/2603.00207`은 프록시에서 `CONNECT tunnel failed, response 403`으로 막혔다. 논문 근거는 `LAY`와 페이지 PNG 01-16뿐이다.
+1. (2026-10-07 작성 당시 상태) 논문 PDF는 로컬에 없다. `arxiv.org/pdf/2603.00207`은 프록시에서 `CONNECT tunnel failed, response 403`으로 막혔다. 논문 근거는 `LAY`와 페이지 PNG 01-16뿐이다. → 이후 PDF를 받아 확인했다(X-21, 2026-10-11). 2026-10-12 확인: `LAY`와 `VisRef_plain.txt`는 그 PDF(sha256 f51f8f31…)에 `pdftotext -layout` / `pdftotext`(poppler 22.02.0)를 실행한 결과와 바이트 단위로 같다.
 2. Fig 3, Fig 4의 값은 저해상도 PNG(원본 약 2100px 폭 크롭)에서 눈금을 읽은 근사치다(정확도 ±0.2pt, 토큰 ±150). 본문·표에 적힌 수치와 다르면 본문·표를 우선했다.
 3. Chen et al. 2018(1709.05135)은 alphaXiv가 추출 원문을 응답에 인라인으로만 돌려주고 파일로 저장하지 않았다. `OUT/ref_texts/1709.05135.md`에는 §3/Algorithm 1, §5, §6.1, Supp. B Theorem 1의 원문 발췌만 있다. 수식 줄바꿈은 손으로 재정렬했고 단어는 바꾸지 않았다. 나머지 5편(2501.19393 s1, 2302.05698, 1207.6083, 2503.04697, 2504.15895)은 alphaXiv가 돌려준 전문 추출 텍스트(AI 요약이 아님)를 그대로 저장했다.
 4. alphaXiv 추출본에는 Ghosal 논문의 entropy 추정 표본 수·온도가 없다(`REF/Ghosal_DoesThinkingMoreAlwaysHelp.txt`에서 temperature, samples, top-p, max tokens, N= 검색 결과 entropy 추정과 관련된 서술 0건. hit은 데이터셋 표본 수 같은 무관한 문장뿐). 부록 원문이 누락됐을 가능성이 있다.

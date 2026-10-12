@@ -35,8 +35,8 @@
     14
    ],
    "p_mcnemar_greedy": 0.5966,
-   "p_boot": 0.289,
-   "p_holm": 0.578
+   "p_boot": 0.329,
+   "p_holm": 0.658
   },
   "D-C": {
    "n": 309,
@@ -50,8 +50,8 @@
     20
    ],
    "p_mcnemar_greedy": 0.3915,
-   "p_boot": 0.575,
-   "p_holm": 0.578
+   "p_boot": 0.584,
+   "p_holm": 0.658
   }
  },
  "secondary": {

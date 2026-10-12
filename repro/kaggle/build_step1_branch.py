@@ -18,7 +18,7 @@ HERE = Path(__file__).resolve().parent
 REPRO = HERE.parent
 ROOT = REPRO.parent
 sys.path.insert(0, str(HERE))
-from build import DATA_REV, MODEL, MODEL_REV, PARQUET  # noqa: E402  same pins as the main runs
+from build import DATA_REV, MODEL, MODEL_REV, PARQUET, new_run_dir  # noqa: E402  same pins as the main runs
 
 CELL = r'''
 import os, sys, io, json, time, base64, zipfile, pathlib, subprocess
@@ -66,6 +66,7 @@ def main():
     ap.add_argument('--timeout', type=int, default=5400, help='Kaggle session timeout (s)')
     ap.add_argument('--accelerator', default='NvidiaTeslaT4')
     ap.add_argument('--skip-from', nargs='*', default=[], help='earlier step1_branch JSONL files; their pids are skipped')
+    ap.add_argument('--overwrite', action='store_true', help='rebuild an existing, not yet pushed run folder')
     a = ap.parse_args()
     files = sorted(FILES + [str(p.relative_to(REPRO)) for p in (REPRO / 'visref').glob('*.py')])
     buf, sha = io.BytesIO(), {}
@@ -80,8 +81,7 @@ def main():
            'skip': skip, 'time_limit': a.timeout - 900}
     owner = json.loads((ROOT / 'kaggle.json').read_text())['username']
     slug = f'visref-{a.name}'.replace('_', '-').lower()
-    out = HERE / 'runs' / a.name
-    out.mkdir(parents=True, exist_ok=True)
+    out = new_run_dir(HERE, a.name, a.overwrite)
     cell = CELL.format(cfg=base64.b64encode(json.dumps(cfg).encode()).decode(), bundle=base64.b64encode(buf.getvalue()).decode())
     nb = {'cells': [{'cell_type': 'code', 'execution_count': None, 'metadata': {}, 'outputs': [],
                      'source': cell.strip().splitlines(keepends=True)}],

@@ -54,7 +54,7 @@ The unit is the question, compared pairwise. We report paired bootstrap 95% CIs 
 
 ### 2.4 Timing of pre-registration
 
-The main comparisons, the tests (McNemar + Holm) and the sensitivity readings (a), (b), (c) were fixed on 2026-10-10 before the final 1,000-question analysis. The choice of main comparisons followed the paper's claim but was made after an interim look (VisRef−TSR was about +1.0 pp then). The **CI classification rule was fixed after we had seen the interim result on 759 questions** (sessions 1–7), and the final 1,000 include those 759, so the classification is not confirmatory in the strict sense. The two follow-ups (§4.2, §4.3) were registered with their decision rules before their results. Scorer v4 was a change after results. Every other analysis is labelled post-hoc and has no multiplicity correction.
+The main comparisons, the tests (McNemar + Holm) and the sensitivity readings (a), (b), (c) were fixed on 2026-10-10 before the final 1,000-question analysis. The choice of main comparisons and tests followed the paper's claim but was made after an interim look at the first 392 questions (sessions 1–4; VisRef−TSR was about +1.0 pp then), so the main run is not a pre-registration in the strict sense. The **CI classification rule was fixed after we had seen the interim result on 759 questions** (sessions 1–7), and the final 1,000 include those 759, so the classification is not confirmatory in the strict sense. The two follow-ups (§4.2, §4.3) were registered with their decision rules before their results. Scorer v4 was a change after results. Every other analysis is labelled post-hoc and has no multiplicity correction.
 
 ### 2.5 Code versions and compute
 
@@ -141,7 +141,7 @@ We could not pin down a single cause. The items below are observations and candi
 | fill − VisRef | +0.10 | −2.15 to +2.36 | 65 / 64 | 1.000 |
 | fill − ST | +2.25 | −0.31 to +4.71 | 87 / 65 | 0.088 |
 
-*Result.* The pre-registered reading "too few injected tokens caused the missing gain" is not supported; the CI excludes gains larger than about +2.4 pp. Every step injected exactly m tokens (2,231 steps; the filled tail had a median of 420 tokens). *Strata* (by the first-step end in the main ST run): closed 322 q, fill−TSR −0.62 (−2.48, +1.24); truncated 629 q, +1.75 (−1.43, +5.09); EOS 25 q, −36.0 (−64, −8; 4 vs 13). *Caveats.* The filled tail was not relevance-ordered (median Spearman correlation of tail order with relevance −0.10), and εI also changes the selection, so this tests "more tokens of little relevance", not "top-m by relevance". An earlier relevance-filled variant ran on the first 74 questions only and was dropped. The small EOS stratum is a post-hoc observation: when step 1 ended almost at once, the kernel held few tokens and filling added hundreds. The LLM fallback for this run used a Claude Haiku-class extractor instead of gemini-3.5-flash-lite (a documented deviation); it changed no label. *Dual stopping probe* (recorded by design, decision unchanged; interpretation post-hoc; H recorded with and without Ṽ_k in context): median H − H_noV = 0.0006; the stop/continue decision would differ at 151 of 2,231 steps (6.8%), 110 continuing only with Ṽ_k and 41 only without, 129 of the 151 at truncated steps.
+*Result.* This filled variant showed no extra gain; the CI excludes gains larger than about +2.4 pp. The pre-registered reading ("too few injected tokens caused the missing gain" is not supported) is kept as the recorded verdict, but its scope is narrow: filling changes both the amount and, through the ridge term, which tokens are added, so this run does not isolate the effect of the amount. Every step injected exactly m tokens (2,231 steps; the filled tail had a median of 420 tokens). *Strata* (by the first-step end in the main ST run): closed 322 q, fill−TSR −0.62 (−2.48, +1.24); truncated 629 q, +1.75 (−1.43, +5.09); EOS 25 q, −36.0 (−64, −8; 4 vs 13). *Caveats.* The filled tail was not relevance-ordered (median Spearman correlation of tail order with relevance −0.10), and εI also changes the selection, so this tests "more tokens of little relevance", not "top-m by relevance". An earlier relevance-filled variant ran on the first 74 questions only and was dropped. The small EOS stratum is a post-hoc observation: when step 1 ended almost at once, the kernel held few tokens and filling added hundreds. The LLM fallback for this run used a Claude Haiku-class extractor instead of gemini-3.5-flash-lite (a documented deviation); it changed no label. *Dual stopping probe* (recorded by design, decision unchanged; interpretation post-hoc; H recorded with and without Ṽ_k in context): median H − H_noV = 0.0006; the stop/continue decision would differ at 151 of 2,231 steps (6.8%), 110 continuing only with Ṽ_k and 41 only without, 129 of the 151 at truncated steps.
 
 ### 4.3 step1_branch: re-injection at step 1 (pre-registered)
 
@@ -158,11 +158,13 @@ We could not pin down a single cause. The items below are observations and candi
 
 | Comparison | Diff (pp) | 95% CI | Holm p | Greedy: only first / only second (McNemar p) |
 |---|---|---|---|---|
-| B − A (co-primary) | +1.40 | −1.19 to +3.99 | 0.578 | 18 / 14 (0.597) |
-| D − C (co-primary) | +0.97 | −2.27 to +4.21 | 0.578 | 14 / 20 (0.392) |
+| B − A (co-primary) | +1.40 | −1.19 to +3.99 | 0.658 | 18 / 14 (0.597) |
+| D − C (co-primary) | +0.97 | −2.27 to +4.21 | 0.658 | 14 / 20 (0.392) |
 | D − B (secondary) | +0.86 | −2.16 to +3.88 | n/a | 20 / 16 (0.618) |
 | C − A (secondary) | +1.29 | −1.83 to +4.42 | n/a | 25 / 11 (0.029, uncorrected) |
 | (D−C) − (B−A) (secondary) | −0.43 | −4.21 to +3.24 | n/a | n/a |
+
+*Correction (2026-10-12, after publication):* the bootstrap p-values were first computed on float accuracies (thirds), so resample means that are exactly 0 fell into one tail or the other depending on the Python version (p 0.289 / 0.575 and Holm 0.578 on Python ≤ 3.11; 0.281 / 0.583 on 3.12+). The analysis now uses integer counts of correct answers; the bootstrap p is 0.329 / 0.584 (Holm 0.658 for both) on every Python version. The CIs, the other numbers and the verdict are unchanged; the earlier output is kept in `repro/diag/step1_branch_analysis_float_py311.json`.
 
 *Verdict by the pre-registered rule (④): the immediate-answer gain was not reproduced.* The gap seen in the stored probes may have been noise. The pre-registered wording for a null result is that effects of about 5–6 pp or more were not detected (5–6 pp was the planned 80%-power minimum detectable effect); the realised CI upper bounds are about +4 pp. In the free-thinking arms the model closed `</think>` itself in 99 (C) vs 82 (D) of 309 cases, reached the 512 cap in 203 vs 220, and used image-related words in 22.7% vs 31.4% of the free-thinking texts, so re-injection changed what the model wrote about without a detectable change in accuracy. *Reconstruction check:* re-tokenised length matched the main run in 301 of 309 questions and the selection size in 296; restricting to the 293 matching both gives the same conclusion. *Post-hoc, not pre-registered:* D−A is +2.27 pp (95% CI −0.97 to +5.72); under greedy decoding the order was C 39.81 > D 37.86 > B 36.57 > A 35.28, so "D is best" is not robust. *Scale:* the experiment covers only re-injection at step 1 on these 309 questions. If a +3.5 pp gap on 1,000 questions came from these 309 alone it would need about +11 pp within them, while the CI upper bounds correspond to about +1.2 to +1.3 pp on the 1,000-question scale. It says nothing about stopping rules, step lengths, injection format, or steps after the first.
 
@@ -221,7 +223,7 @@ None as of 2026-10-12. Questions we would send:
 - Absolute accuracies are 8–12 pp above the paper's. Candidates (thinking budget, treatment of unfinished answers, extraction, prompt, hardware) were not isolated; the closeness of reading (c) to the paper's ST and TSR is a post-hoc hypothesis.
 - Choices of ours (Z layer, H estimator, injection format, token limits) and the confirmed shortfall in injected tokens limit what the null result on VisRef−TSR means; it concerns this implementation only.
 - The LLM fallback differs from the official GPT-based extractor; the fill run used another extractor.
-- The CI classification rule was fixed after an interim look (§2.4), and the post-hoc analyses are exploratory.
+- The main comparisons and tests were fixed after an interim look at 392 questions and the CI classification rule after one at 759 (§2.4); the post-hoc analyses are exploratory.
 - Several analysis and review passes (`repro/audit/`) were done by AI-model sessions, not by human reviewers. Untried ideas, such as a step cap of 4,096, hidden-state Z or multi-sample H, were not run.
 
 ## 7. Where to find things
@@ -231,7 +233,7 @@ None as of 2026-10-12. Questions we would send:
 | Chronological log with pre-registrations and decisions (Korean) | `docs/EXPERIMENT_FLOW.md` |
 | Evidence per implementation decision, external-number ledger (Korean) | `docs/SPEC_LEDGER.md` (start at "핵심 판단 요약") |
 | Main verdict script and numbers | `repro/diag/final_judgment.py`, `repro/diag/final_judgment.json` |
-| Follow-up analyses | `repro/diag/analyze_fill.json`, `repro/diag/step1_branch_analysis.json`, `repro/diag/paper_fingerprints.json`, `repro/diag/step1_probe_analysis.json`, `repro/diag/analyze_k1_injection.json`, `repro/diag/st_plain_analysis.json` |
+| Follow-up analyses | `repro/diag/analyze_fill.json`, `repro/diag/step1_branch_analysis.json` (earlier float version: `step1_branch_analysis_float_py311.json`), `repro/diag/paper_fingerprints.json`, `repro/diag/step1_probe_analysis.json`, `repro/diag/analyze_k1_injection.json`, `repro/diag/st_plain_analysis.json` |
 | Raw generations, run configs and environments per session | `repro/kaggle/runs/<session>/` (`b_main_s1`–`b_main_s9`, `b_main_fill`, `step1_branch_pilot`, `step1_branch_main`, `diag_st_plain`); `repro/colab/runs/st_official_c1/` |
 | Final scored rows (rules + LLM fallback) | `repro/llm/final/merged.jsonl` (fill run: `repro/llm/fill/`) |
 | Final tables (CSV/JSON, built from the `repro/diag/*.json` files by `scripts/make_results.py`) | `results/` |
@@ -239,6 +241,7 @@ None as of 2026-10-12. Questions we would send:
 | Descriptive per-method report (rule-based scorer v4 only, no LLM fallback) | `repro/reports/b_main_report.html`, `repro/reports/b_main_report.json` |
 | Code | `repro/run.py`, `repro/visref/` (engine, methods, DPP, scoring), `repro/diag/step1_branch.py` |
 | Reviews and audits | `repro/audit/`, `docs/AUDIT_REPORT_20261007.md`, `docs/REVIEW_20261007.md` |
+| Public sources behind the logs' citations (arXiv versions, pages, tables) | `docs/SOURCES.md` |
 | Reproduction commands | `README.md` |
 
 *Process note.* Implementation, analysis scripts, review passes and the drafting of this report were carried out with AI assistants (Claude models) under the author's direction; decisions marked "사용자 결정" in `docs/EXPERIMENT_FLOW.md` are the author's.

@@ -114,6 +114,7 @@ def main():
     ap.add_argument('--ids-first', type=int, required=True, help='first N pids of the seed-0 shuffled order (same as b_main)')
     ap.add_argument('--shuffle-seed', type=int, default=0)
     ap.add_argument('--run-args', default='')
+    ap.add_argument('--overwrite', action='store_true', help='rebuild an existing, not yet started run folder')
     a = ap.parse_args()
     ids = [str(i) for i in range(1, 1001)]
     random.Random(a.shuffle_seed).shuffle(ids)
@@ -131,6 +132,9 @@ def main():
                        'kernelspec': {'display_name': 'Python 3', 'name': 'python3'}},
           'nbformat': 4, 'nbformat_minor': 0}
     out = HERE / 'runs' / a.name
+    if not a.overwrite and any((out / f).exists() for f in ('run_config.json', f'{a.name}.ipynb', 'output')):
+        raise SystemExit(f'refusing to overwrite the existing run record {out}: choose a new run name '
+                         '(or pass --overwrite to rebuild a run that has not been started yet)')
     out.mkdir(parents=True, exist_ok=True)
     (out / f'{a.name}.ipynb').write_text(json.dumps(nb))
     rc = {k: v for k, v in cfg.items()}

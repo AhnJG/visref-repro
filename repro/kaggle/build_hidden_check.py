@@ -15,7 +15,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 REPRO = HERE.parent
 sys.path.insert(0, str(HERE))
-from build import DATA_REV, MODEL, MODEL_REV, PARQUET  # noqa: E402  same pins as the main runs
+from build import DATA_REV, MODEL, MODEL_REV, PARQUET, new_run_dir  # noqa: E402  same pins as the main runs
 
 FILES = ['visref/__init__.py', 'visref/model.py', 'visref/dpp.py', 'diag/hidden_rank_check.py',
          'diag/hidden_rank_samples.json']
@@ -44,9 +44,9 @@ print((OUT / 'log.txt').read_text()[-6000:])
 
 
 def main():
-    name = sys.argv[1] if len(sys.argv) > 1 else 'hidden_rank_check'
-    run = HERE / 'runs' / name
-    run.mkdir(parents=True, exist_ok=True)
+    args = [x for x in sys.argv[1:] if x != '--overwrite']
+    name = args[0] if args else 'hidden_rank_check'
+    run = new_run_dir(HERE, name, '--overwrite' in sys.argv)
     buf = io.BytesIO()
     sha = {}
     with zipfile.ZipFile(buf, 'w', zipfile.ZIP_DEFLATED) as z:

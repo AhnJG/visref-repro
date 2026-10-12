@@ -1,6 +1,6 @@
 {
  "data/raw/mathvista_testmini.json": {
-  "url": "https://raw.githubusercontent.com/lupantech/MathVista/main/data/testmini.json",
+  "url": "https://raw.githubusercontent.com/lupantech/MathVista/c5acd37d75a8c8f9756cb66c78fe2e54fa2c31fb/data/testmini.json",
   "sha256": "ab0148dca9d401c31cc47f29b3826eec28a76ff155a1c0878d81e8daf0413480",
   "license": "CC BY-SA 4.0 (MathVista repo)"
  },
@@ -65,23 +65,23 @@
   "license": "Apache-2.0 (VLMEvalKit)"
  },
  "references/sources/cited_code/chen_fast-map-dpp/dpp.py": {
-  "url": "https://raw.githubusercontent.com/laming-chen/fast-map-dpp/master/dpp.py",
+  "url": "https://raw.githubusercontent.com/laming-chen/fast-map-dpp/6ab745ca1273941412a7f32ce6432549cfe4b5af/dpp.py",
   "sha256": "1596818afc31cb797adf5d31fbe3161c3828e8f4d5a075c75422e2aed019803b",
-  "note": "branch head at collection (2026-10-07); sha256 is of the copy used"
+  "note": "pinned to a commit on 2026-10-12; the file there has the sha256 of the copy used (collected 2026-10-07)"
  },
  "references/sources/cited_code/chen_fast-map-dpp/dpp_test.py": {
-  "url": "https://raw.githubusercontent.com/laming-chen/fast-map-dpp/master/dpp_test.py",
+  "url": "https://raw.githubusercontent.com/laming-chen/fast-map-dpp/6ab745ca1273941412a7f32ce6432549cfe4b5af/dpp_test.py",
   "sha256": "762290e6d27b9b96ca6e8d84e45f0e806edef130d44970bc8322a7dc4b089ee4",
-  "note": "branch head at collection (2026-10-07); sha256 is of the copy used"
+  "note": "pinned to a commit on 2026-10-12; the file there has the sha256 of the copy used (collected 2026-10-07)"
  },
  "references/sources/cited_code/deer/vanilla_deer.py": {
-  "url": "https://raw.githubusercontent.com/iie-ycx/DEER/main/vanilla_deer.py",
+  "url": "https://raw.githubusercontent.com/iie-ycx/DEER/c9dd19fbffa27f841cfe47502d015b63811b4d1b/vanilla_deer.py",
   "sha256": "8a20fdc45ae3511ca569191f0fa1c82680ed47bdde07f4279d8a0282c6ba0707",
-  "note": "branch head at collection (2026-10-07); sha256 is of the copy used"
+  "note": "pinned to a commit on 2026-10-12; the file there has the sha256 of the copy used (collected 2026-10-07)"
  },
  "references/sources/cited_code/deer/vllm-deer.py": {
-  "url": "https://raw.githubusercontent.com/iie-ycx/DEER/main/vllm-deer.py",
+  "url": "https://raw.githubusercontent.com/iie-ycx/DEER/c9dd19fbffa27f841cfe47502d015b63811b4d1b/vllm-deer.py",
   "sha256": "7a11719f968216ef6a2c68bee0e099cc9603428da6209aff3e0ff27422cfd876",
-  "note": "branch head at collection (2026-10-07); sha256 is of the copy used"
+  "note": "pinned to a commit on 2026-10-12; the file there has the sha256 of the copy used (collected 2026-10-07)"
  }
 }

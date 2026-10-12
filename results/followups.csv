@@ -3,8 +3,8 @@ visref_fill (pre-registered),976,VisRef-fill - TSR,0.0,-2.15,2.36,1.0,
 visref_fill (pre-registered),976,VisRef-fill - VisRef,0.1,-2.15,2.36,1.0,
 visref_fill (pre-registered),976,VisRef-fill - ST,2.25,-0.31,4.71,0.0882,
 visref_fill (pre-registered),976,VisRef - TSR,-0.1,-2.05,1.95,1.0,
-step1_branch co-primary (pre-registered),309,B-A,1.4,-1.19,3.99,0.5966,0.578
-step1_branch co-primary (pre-registered),309,D-C,0.97,-2.27,4.21,0.3915,0.578
+step1_branch co-primary (pre-registered),309,B-A,1.4,-1.19,3.99,0.5966,0.658
+step1_branch co-primary (pre-registered),309,D-C,0.97,-2.27,4.21,0.3915,0.658
 step1_branch secondary (pre-registered),309,D-B,0.86,-2.16,3.88,0.6177,
 step1_branch secondary (pre-registered),309,C-A,1.29,-1.83,4.42,0.0288,
 step1_branch secondary (pre-registered),309,DiD_(D-C)-(B-A),-0.43,-4.21,3.24,,

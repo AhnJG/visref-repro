@@ -8,6 +8,7 @@ import base64
 import hashlib
 import io
 import json
+import sys
 import time
 import zipfile
 from pathlib import Path
@@ -68,6 +69,18 @@ def bundle():
     return buf.getvalue(), {str(f.relative_to(REPRO)): hashlib.sha256(f.read_bytes()).hexdigest() for f in files}
 
 
+def new_run_dir(root, name, overwrite=False):
+    """Folder for a new build under ROOT/runs. A folder that already holds a run record (run_config.json, a built
+    notebook) or downloaded outputs is a historical record, so it is never touched unless overwrite=True (meant only
+    for rebuilding a session that has not been pushed yet)."""
+    out = root / 'runs' / name
+    if not overwrite and out.exists() and any((out / f).exists() for f in ('run_config.json', 'notebook.ipynb', 'output')):
+        sys.exit(f'refusing to overwrite the existing run record {out}: choose a new run name '
+                 '(or pass --overwrite to rebuild a session that has not been pushed yet)')
+    out.mkdir(parents=True, exist_ok=True)
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('name')
@@ -79,6 +92,7 @@ def main():
     ap.add_argument('--accelerator', default='NvidiaTeslaT4')
     ap.add_argument('--skip-from', nargs='*', default=[], help='earlier result JSONL files; their (pid, method) pairs are skipped')
     ap.add_argument('--run-args', default='', help='extra run.py arguments, space separated')
+    ap.add_argument('--overwrite', action='store_true', help='rebuild an existing, not yet pushed run folder')
     a = ap.parse_args()
     if a.ids and Path(a.ids).exists():
         ids = json.loads(Path(a.ids).read_text())
@@ -100,8 +114,7 @@ def main():
            'skip': skip}
     owner = json.loads((ROOT / 'kaggle.json').read_text())['username']
     slug = f'visref-repro-{a.name}'.replace('_', '-').lower()  # Kaggle slugs: lowercase, digits, hyphens
-    out = HERE / 'runs' / a.name
-    out.mkdir(parents=True, exist_ok=True)
+    out = new_run_dir(HERE, a.name, a.overwrite)
     cell = CELL.format(cfg=base64.b64encode(json.dumps(cfg).encode()).decode(), bundle=base64.b64encode(data).decode())
     nb = {'cells': [{'cell_type': 'code', 'execution_count': None, 'metadata': {}, 'outputs': [],
                      'source': cell.strip().splitlines(keepends=True)}],

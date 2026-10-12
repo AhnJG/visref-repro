@@ -50,12 +50,16 @@ cannot parse. n = 1,000; each method once per question, with shared seeds and a 
 | VisRef − TSR (main) | −0.1 (−2.0, +1.7) | 44 / 45 | 1.000 | 1.000 | +3.5 | effect size not reproduced |
 | TSR − ST (supplementary) | +2.3 (+0.6, +4.0) | 51 / 28 | 0.013 | – | +2.4 | consistent with the paper value |
 
-- **In short:** TSR's gain over ST matches the paper. We did not confirm an additional gain of VisRef over TSR in our
-  InternVL3.5-1B implementation, and VisRef − ST is not significant after the pre-specified Holm correction.
+- **In short:** TSR's gain over ST is consistent with the paper's value; this does not show that the effect or its
+  mechanism is the same. We did not confirm an additional gain of VisRef over TSR in our InternVL3.5-1B implementation,
+  and VisRef − ST is not significant after the pre-specified Holm correction (p = 0.033 without correction).
 - *Consistent* = the paired bootstrap 95% CI (2,000 resamples, seed 0) excludes 0 and contains the paper's delta (not a
-  proof of equivalence); *not reproduced* = the CI excludes the paper's delta. The tests were fixed before the final
-  analysis, the CI classification rule after an interim look at 759 questions, so the classification is not
-  confirmatory (REPORT §2.4). It is the same under every answer-handling reading we tried (REPORT §3.2).
+  proof of equivalence); *not reproduced* = the CI excludes the paper's delta. It is the same under every
+  answer-handling reading we tried (REPORT §3.2).
+- **Timing:** the main comparisons and tests were fixed after an interim look at the first 392 questions, and the CI
+  classification rule after an interim look at 759 questions, both before the final analysis. The main run is
+  therefore not a pre-registration in the strict sense (REPORT §2.4). The rules of the two follow-ups below were fixed
+  before their results.
 - Our absolute accuracies are 8–12 pp above the paper's; our ST is close to the official InternVL3.5-1B MathVista
   score (59.3). The cause of the gap was not isolated.
 - We do **not** conclude that VisRef has no effect: our implementation injects about one fifth of the paper's token
@@ -66,8 +70,8 @@ cannot parse. n = 1,000; each method once per question, with shared seeds and a 
 
 | experiment | question | result |
 |---|---|---|
-| `visref_fill` (976 q) | Does injecting exactly m tokens (DPP filled up to m with a ridge term) change VisRef? | fill − TSR 0.0 pp (−2.15, +2.36); fill − VisRef +0.1 pp (−2.15, +2.36): "too few injected tokens" not supported. The filled tail was not ordered by relevance, so top-m-by-relevance remains untested. |
-| `step1_branch` (309 q) | On the questions where TSR or VisRef continued after step 1: does re-injecting Ṽ₁ help an immediate answer (B − A), or an answer after ≤ 512 more thinking tokens (D − C)? | B − A +1.40 pp (−1.19, +3.99); D − C +0.97 pp (−2.27, +4.21); Holm p 0.578 for both: the immediate-answer gain seen post hoc in the main run was not reproduced. |
+| `visref_fill` (976 q) | Does injecting exactly m tokens (DPP filled up to m with a ridge term) change VisRef? | fill − TSR 0.0 pp (−2.15, +2.36); fill − VisRef +0.1 pp (−2.15, +2.36): this filled variant showed no extra gain. Filling changes both the amount and, through the ridge term, which tokens are added (the filled tail was not ordered by relevance), so it does not isolate the effect of the amount; whether too few tokens limit VisRef stays open. |
+| `step1_branch` (309 q) | On the questions where TSR or VisRef continued after step 1: does re-injecting Ṽ₁ help an immediate answer (B − A), or an answer after ≤ 512 more thinking tokens (D − C)? | B − A +1.40 pp (−1.19, +3.99); D − C +0.97 pp (−2.27, +4.21); Holm p 0.658 for both: the immediate-answer gain seen post hoc in the main run was not reproduced. |
 
 All final tables are in [`results/`](results) (built from `repro/diag/*.json`). Post-hoc analyses (cause analysis,
 answer-handling readings, visual-token counts) are in REPORT §4 and are not part of the verdicts.
@@ -99,6 +103,7 @@ docs/
   SPEC_LEDGER.md           every implementation decision with its evidence grade (paper / cited code / official
                            model docs / our choice) — start at "핵심 판단 요약"
   EXPERIMENT_FLOW.md       chronological log: pre-registrations, decisions, results
+  SOURCES.md               (English) how the logs' citations map to public sources: arXiv versions, pages, tables
 references/SOURCES.json    third-party files (MathVista data & eval prompt, cited code, VLMEvalKit) with URL + sha256
 scripts/                   fetch_sources.py (downloads and verifies them), make_results.py, make_figures.py
 ```
@@ -107,15 +112,17 @@ The documents in `docs/` are written in Korean; `REPORT.md` points to the releva
 ## Reproduce
 
 ### 1. Rebuild every table and the results figure from the saved outputs (CPU only)
-Needs Python 3.10 or newer (standard library only), `make` and a git checkout. No GPU and no PyTorch.
+Needs Python 3.10 or newer (standard library only; `make check` passes on 3.10, 3.11, 3.12 and 3.13), `make` and a
+git checkout. No GPU and no PyTorch.
 ```bash
 make fetch     # MathVista testmini.json, official extraction prompt and cited code, sha256-checked
 make check     # re-runs the pre-registered analyses, results/ and the results figure; fails on any difference
 make report    # optional: descriptive per-method report (rule-based scorer v4, no LLM fallback) in build/
 ```
-The unit tests need PyTorch and transformers (a CPU build is enough):
+The unit tests need PyTorch, transformers and pytest (a CPU build is enough):
 ```bash
-pip install -r requirements.txt
+python3 -m venv .venv && . .venv/bin/activate
+pip install -r requirements.txt pytest
 make test
 ```
 The individual commands are listed in the `Makefile`. `repro/reports/b_main_report.json` is rule-based only, which is
@@ -126,17 +133,21 @@ Pinned: model `OpenGVLab/InternVL3_5-1B` @ `2f71cf52542334823e48a46ffba0e2bc9add
 data `AI4Math/MathVista` @ `2b6ad69445fbb5695c9b165475e8decdbeb97747`, `transformers==4.55.0`, fp16.
 Each session's exact settings are in `repro/kaggle/runs/<session>/run_config.json`. The main run took 9 Kaggle
 sessions on 2×T4, about 14.9 session-hours in total (REPORT §2.5).
+Use new run names: the folders under `repro/kaggle/runs/` are the records of the published sessions, and the
+builders refuse to overwrite an existing run folder (`--overwrite` exists only for rebuilding a session that has not
+been pushed yet).
 ```bash
 # Kaggle (2×T4): put your kaggle.json in the repo root (never commit it)
-python3 repro/kaggle/build.py b_main_s1 --timeout 7200 \
+python3 repro/kaggle/build.py rerun_b_main_s1 --timeout 7200 \
   --run-args="--methods st,tsr,visref_raw_rank --think-cap 1024 --total-think-cap 10240"
-python3 repro/kaggle/kaggle_ctl.py push b_main_s1      # then: status / pull
-# next sessions skip what is done:  --skip-from repro/kaggle/runs/b_main_s*/output/results/results_*.jsonl
+python3 repro/kaggle/kaggle_ctl.py push rerun_b_main_s1      # then: status / pull
+# later sessions skip what your own sessions finished:
+#   --skip-from repro/kaggle/runs/rerun_b_main_s*/output/results/results_*.jsonl
 
 # step1_branch follow-up (pilot of 20 questions, then the rest)
-cd repro && python3 kaggle/build_step1_branch.py step1_branch_pilot --limit 20 --timeout 3600
-python3 kaggle/build_step1_branch.py step1_branch_main --timeout 7200 \
-  --skip-from kaggle/runs/step1_branch_pilot/output/results/step1_branch_*.jsonl
+cd repro && python3 kaggle/build_step1_branch.py rerun_step1_branch_pilot --limit 20 --timeout 3600
+python3 kaggle/build_step1_branch.py rerun_step1_branch_main --timeout 7200 \
+  --skip-from kaggle/runs/rerun_step1_branch_pilot/output/results/step1_branch_*.jsonl
 ```
 Questions are processed in a fixed seed-0 shuffled order, so any completed prefix is a random subset; every
 (question, method) uses a per-question seed (common random numbers across methods). Outputs depend slightly on batch
@@ -168,7 +179,8 @@ Our choices and their evidence are in `docs/SPEC_LEDGER.md` ("핵심 판단 요�
   reports ∼1,772 for the 8B model, close to our 1,755.6 without the thumbnail);
 - Kaggle T4 GPUs with fp16 (paper: four A10G GPUs, PyTorch 2.7.0, Transformers 4.55.0).
 
-Questions for the authors are listed in REPORT §5.3.
+Questions for the authors are listed in REPORT §5.3. Where each paper claim comes from (arXiv version, page, table):
+`docs/SOURCES.md`.
 
 ## Citation
 See `CITATION.cff`. Please also cite the original paper:
