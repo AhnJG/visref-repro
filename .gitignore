@@ -14,3 +14,5 @@ repro/kaggle/runs/*/output/src/
 repro/colab/runs/*/*.ipynb
 # make targets
 build/
+# re-scored copies of run rows (rebuilt by rescore.py / diag/analyze_hs.py rows)
+repro/llm/*/rows_v*.jsonl

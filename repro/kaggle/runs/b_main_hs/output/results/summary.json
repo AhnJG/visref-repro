@@ -1,0 +1,173 @@
+{
+ "basis": "shuffled-order complete prefix",
+ "n_common": 839,
+ "methods": {
+  "visref_hs": {
+   "n": 839,
+   "accuracy": 60.07,
+   "accuracy_all_rows": 60.07,
+   "n_all_rows": 839,
+   "n_error": 0,
+   "paper_1b": null,
+   "mean_k": 2.34,
+   "mean_think_tokens": 2053.7,
+   "stop_reason": {
+    "kmax": 64,
+    "entropy": 775
+   },
+   "step_end": {
+    "cap": 1565,
+    "close": 354,
+    "eos": 47
+   },
+   "final_forced_close": 527,
+   "n_final_forced_answer": 509,
+   "n_final_forced_invalid": 164,
+   "n_stop_at_k1": 580,
+   "extract_rule": {
+    "boxed": 666,
+    "answer_phrase": 146,
+    "last_line": 23,
+    "empty": 4
+   },
+   "dpp_frac_mean": 0.896,
+   "mean_n_visual": 1948.8,
+   "mean_wall_s": 1023.2,
+   "probe_H_first_step": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "probe_finish": {
+    "end": 1964,
+    "cap": 2
+   },
+   "final_finish": {
+    "cap": 169,
+    "eos": 670
+   },
+   "n_extract_failed": 4,
+   "code_versions": [
+    "f1376774850d"
+   ],
+   "n_continued": 259,
+   "k_hist": {
+    "1": 580,
+    "2": 80,
+    "3": 40,
+    "4": 19,
+    "5": 15,
+    "6": 13,
+    "7": 7,
+    "8": 8,
+    "9": 6,
+    "10": 71
+   },
+   "mean_gen_tokens": 2409.7,
+   "n_final_inner_think_end": 395,
+   "n_steps": 1966,
+   "n_final_question_text": 14,
+   "n_probes": 1966,
+   "probe_H_q10_25_50_75_90": [
+    0.0,
+    0.015,
+    0.476,
+    0.787,
+    1.267
+   ],
+   "n_probe_H_below_delta": 775,
+   "n_entropy_stop_at_k1": 580,
+   "probe_inner_step1": [
+    "0.012",
+    "C",
+    "4",
+    "A",
+    "A",
+    "E",
+    "B",
+    "D",
+    "A",
+    "6",
+    "A",
+    "2",
+    "B",
+    "2",
+    "B",
+    "400",
+    "A",
+    "2",
+    "0",
+    "B"
+   ],
+   "median_tokens_k2plus_step": 1024,
+   "median_rank_V": 1003.0,
+   "median_n_unique_z": 140.5,
+   "median_n_dpp": 537.0,
+   "median_n_inject": 537.0,
+   "median_inject_over_m": 1.0,
+   "by_step1_end": {
+    "close": {
+     "n": 281,
+     "acc": 72.2,
+     "mean_k": 1.05
+    },
+    "cap": {
+     "n": 535,
+     "acc": 53.5,
+     "mean_k": 2.98
+    },
+    "eos": {
+     "n": 23,
+     "acc": 65.2,
+     "mean_k": 3.43
+    }
+   },
+   "n_close_probe_H_ge_delta": 47,
+   "n_close_probes": 354,
+   "n_loop_steps": 250,
+   "n_final_forced_valid": 345,
+   "n_final_forced_unusable": 0,
+   "n_final_af": 169,
+   "n_final_af_valid": 169,
+   "median_m": 537.0
+  }
+ },
+ "paired": {}
+}
