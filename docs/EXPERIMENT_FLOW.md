@@ -1770,3 +1770,6 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - 동작(기술): 추가 생각이 끝난 방식(닫음 / EOS / 512 도달 / 건너뜀), 길이 사분위, 상한이 512보다 줄어든 행 수, 추가 생각 글에 이미지 단어가 있는 비율(step1_branch와 같은 정규식), 정지 사유, k, 주입/m, 최종 답 안 두 번째 `</think>`, 답 강제 횟수, 저장 첫 단계 재토큰화 일치 수.
 - 코드와 테스트(결과 전에 작성): `repro/visref/methods.py`(THINK, `_start_extra`, `_end_extra`, `stored_step1`), `repro/run.py`(`--step1-from`, think_extra 기본값 512), `repro/kaggle/build.py`(`--data`), `repro/diag/make_step1_store.py`, 분석 `repro/diag/analyze_think.py`(rows / analyze). 테스트 `repro/tests/test_think.py`(추가 생각 20개: 세 정지 사유, 512 도달·EOS·닫음 뒤 답 처리, 자리 없음, hs, 저장 첫 단계, run.py 통합), `test_analyze_think.py`(15개), `test_decisions.py`(think_extra 512, 저장 파일 = 본 실험 ST 행, `b_main_think*` 실행 인자). CPU 테스트 183 passed.
 - 해석 범위: 추가 이득이 검출되지 않으면 "우리 구현에서 멈춘 뒤 생각을 이어가게 해도 검출 안 됨"까지만 말한다. 남은 차이(주입 형식·위치, 정지 추정, 토큰 상한)는 이 실험이 시험하지 않는다.
+
+## 2026-10-13 결정 대장 코드 줄 번호 갱신 (사전등록 커밋 8cd8d62 뒤, 코드 변경 없음)
+- 사전등록 커밋에서 `run.py`·`visref/methods.py`·`kaggle/build.py` 머리말과 코드가 늘어 SPEC_LEDGER 결정 대장 J-1~J-20의 코드 줄 번호와 문서 머리말 "DEFAULTS(L20-23)"가 밀림. 옛 판(d708dd1)과 새 판을 diff로 줄 단위 대응시켜 같은 내용의 새 줄로 고침(예: DEFAULTS L20-23 → L25-28, 정지 판정 뒤 이어가기 L299-306 → L333-343, 주 VisRef 선택 L203 → L237). 반성 기록 "남은 불일치"의 SPEC_LEDGER 줄 번호는 행 이름으로 바꿈(표를 넣을 때마다 밀리므로).
