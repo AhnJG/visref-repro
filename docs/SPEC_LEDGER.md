@@ -40,6 +40,7 @@
 | J-20 | 정지 판정용 답과 최종 답 | 최종 답은 정지 판정에 쓴 probe 답을 다시 쓰지 않고 따로 생성 | A (Alg. 1) | — | EF L776 (사용자 결정) |
 | J-21 | LLM 추출 가드 | 채점 텍스트가 빈 행은 보내지 않음, LLM이 뽑은 답은 응답 텍스트에 실제로 있을 때만 인정 | F | — | EF L1237 (사용자 승인) |
 | J-22 | 판정 문구 규칙 | 본 실험은 CI가 0과 논문 값을 포함하는지로 판정, 후속 실험은 각 사전등록 규칙 | F | — | EF L1296, L1277, L1534·L1543, L1666-1669 |
+| J-23 | 멈춘 뒤 생각 이어가기 (후속 실험 `tsr_think`·`visref_think`·`visref_hs_think`) | 방법이 멈추기로 하면(이유 무관) 마지막 단계 문맥 뒤(VisRef는 Ṽ_k 뒤)에 "Wait, think more" + 최대 512토큰 더 생각, 합계 상한과 별도. 답 처리는 본 실험 규칙. 세 방법 모두 본 실험에 저장된 첫 단계에서 출발 | 문구 A(3절 c, 그림 2), 나머지 F | LAY L205-206, L224 | EF L1741, L1752, L1754-1772 (사용자 결정·승인) |
 
 원칙 1 (2026-10-10 사용자 채택): A–C(VisRef 본문·그림, 인용 문헌·코드)가 정하지 않은 부분은 D(InternVL3.5 공식 자료: 모델 카드, InternVL3.5가 평가에 쓴 VLMEvalKit 설정)를 기본값으로 삼는다. 단, 이미 사전등록하고 진행 중인 b_main 설정은 바꾸지 않고, D와 다른 점은 아래 "D 자료 대조" 표로 관리하며 필요하면 보조 실험으로 확인한다(첫 보조 실험 st_official은 빌드·사전등록 후 보류: b_main 우선, EF 2026-10-10).
 
@@ -73,6 +74,7 @@
 | J-20 | 사용자(L776) | `visref/methods.py` L109, L216 | `test_tsr_probe_sums_entropy_and_continues_until_confident`(최종 답 문맥에 probe 토큰 없음) | 일치 |
 | J-21 | 사용자 승인(L1237) | `llm_extract.py` L104, L131, L163 | `test_decisions`(가드 2, LLM에 보낼 행 고르기) | 일치 |
 | J-22 | 사용자: 본 실험(L1296), fill(L1277), step1_branch(L1534, L1543), `visref_hs`(L1666-1669) | `diag/final_judgment.py` L24, `diag/analyze_step1_branch.py`, `diag/analyze_hs.py` L59. fill 규칙만 코드 없이 사람이 적용(결과 L1452) | `make check`, `test_analyze_step1_branch.py`, `test_analyze_hs.py` | 일치 (fill만 수동 적용) |
+| J-23 | 사용자: 512토큰·문구(L1741), 모든 정지 사유(L1752), 합계 상한과 별도·답 처리·주 비교와 +3.5 기준(L1757) | `visref/methods.py` L58, L62, L337, L347, L362; `run.py` L25, L88, L192; `kaggle/build.py` L100; `diag/make_step1_store.py`; `diag/analyze_think.py` | `test_think.py`, `test_analyze_think.py`, `test_decisions`(think_extra 512, 저장 파일 = 본 실험 ST 행, `b_main_think*` 실행 인자) | 일치 (2026-10-13 작성, 실행 전) |
 
 `run.py` 기본값(J-10)은 code_version이 바뀌므로 점검 때는 미뤘다가, `visref_hs` 실행이 끝난 뒤 2026-10-13 사용자 지시로 1,024 / 10,240으로 고쳤다(code_version f1376774850d → cf46b2e6222e, EF 2026-10-13). 표에 없는 사용자 결정(대체된 9건 포함)은 하위 에이전트 원본 표에 있다.
 
@@ -312,6 +314,7 @@ VisRef가 인용한 InternVL3.5[45]는 평가에 VLMEvalKit을 썼다(`REF/Inter
 - 2026-10-07 코드 정리(f2422d0e72ff): 방법은 st / tsr / visref_raw_rank만 남김. VisRef 주입 = greedy 선택만(rank<m이면 채우지 않음, 인용 Chen 코드와 같음), 강제 답 = s1 + DEER af. 이전 코드(79eef648ebd1)와 세 방법 출력 동일 810/810(`.backup_79eef648ebd1/EQUIVALENCE.md`).
 - 2026-10-10 보강: 맨 앞에 "핵심 판단 요약"(근거 등급 A-F, J-1~J-18) 추가. 43행에 VLMEvalKit `SPLIT_THINK` 근거 추가, 44행 강제 답 문자열을 실제 값 `\nFinal Answer:`로 정정, 45행에 LLM 보조 추출 반영, 52행(DEER af) 신설. 이전 판은 `repro/.SPEC_LEDGER.bak_20261010`.
 - 2026-10-12 결정 점검: "핵심 판단 요약"에 J-19~J-22(문항 순서와 분석 표본, 정지 판정용 답과 최종 답 분리, LLM 추출 가드, 판정 문구 규칙)를 넣고, J-1~J-22의 결정 주체·코드 위치·테스트를 "결정 대장" 표로 추가. J-14의 채점 규칙을 v4로 고침. 결정된 값을 고정하는 `repro/tests/test_decisions.py` 추가. 이전 판은 `repro/.backup_decision_check_20261012/SPEC_LEDGER.md`.
+- 2026-10-13 생각 이어가기 실험 사전등록(EF L1754-1772): "핵심 판단 요약"과 "결정 대장"에 J-23 추가.
 
 ## 외부 수치 확인 대장 (2026-10-10 신설)
 규칙: 외부 수치는 이번에 직접 확인한 파일:줄 또는 URL과 함께 적는다. 확인하지 못한 것은 "미확인"으로 적고, 직접 확인하기 전에는 지우지 않는다. 대화·요약·서브에이전트 보고에서 온 수치는 여기서 대조한 뒤에만 사실로 쓴다.

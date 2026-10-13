@@ -92,7 +92,12 @@ InternVL3.5 보고서는 59.3을 포함한 3절 점수를 테스트 시점 확�
 방식, 시각 토큰 수)은 [REPORT 4절](REPORT.md#4-beyond-the-paper)에 있으며 판정에는 포함되지 않습니다.
 
 ### 다음에 돌릴 실험 (계획, 아직 실행 안 함)
-아래 설계는 제안입니다. 위 후속 실험들처럼, 각 판정 규칙은 실행 전에 정해 공개합니다.
+위 후속 실험들처럼 각 판정 규칙은 실행 전에 정해 공개합니다. 생각 이어가기 실험 두 개(표의 둘째·셋째 줄)는 2026-10-13
+실행 전에 사전등록했습니다(`docs/EXPERIMENT_FLOW.md`의 "사전등록: 생각 이어가기 실험" 항목, 분석 코드
+`repro/diag/analyze_think.py`는 결과 전에 작성·테스트). 세 방법 `tsr_think`·`visref_think`·`visref_hs_think`를 함께 돌리고,
+본 실험에 저장된 첫 단계에서 출발하며, 합계 10,240토큰과 별도로 최대 512토큰 더 생각합니다. 답 처리는 본 실험과 같고, 주 비교
+`visref_think` − `tsr_think`는 `visref_hs`와 같은 세 갈래 규칙으로 논문의 +3.5 pp에 대해 판정합니다. `visref_hs` 남은
+161문항은 아직 일정이 없습니다.
 
 | 실험 | 질문 | 제안 설계 |
 |---|---|---|
@@ -102,8 +107,9 @@ InternVL3.5 보고서는 59.3을 포함한 3절 점수를 테스트 시점 확�
 
 2026-10-13 독립 검토([검토](repro/audit/independent_review_20261013/review.md))에서, 지금까지의 후속 실행은 첫 생각 단계를 새로 생성해서 `visref_hs` 첫 단계가
 본 실험과 같은 문항이 839개 중 193개뿐이었고 짝 비교의 잡음이 약 두 배가 된 것이 확인됐습니다. 그래서 새 실험 두 개는
-본 실험에 저장된 첫 단계에서 출발하고(`step1_branch`처럼) 대조군을 같은 세션에서 돌리며, 검출력 계산에는 본 실험의 9%가
-아니라 실제로 잰 불일치율(`visref_hs` − TSR 16%)을 씁니다. 대략의 비용(`visref_hs` 실측 속도: 2×T4에서 839문항 약
+본 실험에 저장된 첫 단계에서 출발하고(`step1_branch`처럼) 대조군을 같은 세션에서 돌립니다. 검출력은 실제로 잰 불일치율 두
+개로 계획했습니다: 9%(본 실험 VisRef − TSR, 첫 단계를 공유하는 같은 설계)와 16%(`visref_hs` − TSR). 1,000문항이면 +3.5 pp를
+검출할 확률이 0.96–0.79입니다. 대략의 비용(`visref_hs` 실측 속도: 2×T4에서 839문항 약
 7.7시간 기준): 남은 161문항 약 2시간, 새 방법은 1,000문항에 방법당 9시간 이상(추정, 실측 아님).
 
 ## 저장소 구성
@@ -122,7 +128,9 @@ repro/                     구현(간결하게 유지)과 분석
   report.py, rescore.py    오프라인 집계 / 재채점(GPU 불필요)
   llm_extract.py, gemini_extract.py   규칙이 실패한 행에 대한 LLM 보조 추출
   diag/                    판정 규칙을 미리 정한 분석(final_judgment.py: 최종 분석 전에 고정; analyze_fill.py,
-                           step1_branch.py, analyze_step1_branch.py, analyze_hs.py: 결과 전 사전등록)과 사후 진단, 그리고 그 JSON 출력
+                           step1_branch.py, analyze_step1_branch.py, analyze_hs.py, analyze_think.py: 결과 전 사전등록)과 사후 진단,
+                           그리고 그 JSON 출력. step1_store_bmain.json은 생각 이어가기 실험이 출발할 본 실험 첫 단계
+                           (make_step1_store.py로 생성)
   audit/                   독립 검토와 감사
   kaggle/runs/<session>/   모든 세션: run_config.json(소스 sha256, id, 인자), env.json, 로그, 원본 출력
                            (b_main_s1–s9, b_main_fill, b_main_rescore_v2/v3, diag_st_plain, hidden_rank_check,

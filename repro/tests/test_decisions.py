@@ -4,24 +4,29 @@ The behaviour tests in test_repro.py use their own small configs, so they do not
 the runs. These tests do: if a decided value changes, the change has to be made here too, on purpose.
 EF = docs/EXPERIMENT_FLOW.md (the working copy has the same line numbers)."""
 import glob
+import hashlib
 import json
 import pathlib
+import sys
 
 import pytest
 
 import llm_extract as LX
 import run
 from visref.dpp import budget
-from visref.methods import METHODS, PROBE_SAMPLING
+from visref.methods import METHODS, PROBE_SAMPLING, THINK
 from visref.scoring import SCORER_VERSION
 
-RUNS = pathlib.Path(__file__).resolve().parent.parent / 'kaggle' / 'runs'
+REPRO = pathlib.Path(__file__).resolve().parent.parent
+RUNS = REPRO / 'kaggle' / 'runs'
+STORE = 'diag/step1_store_bmain.json'
 
 DECIDED = {
     'delta': 0.25, 'kmax': 10, 'vis_frac': 0.3,              # J-4, paper (A)
     'temperature': 0.6, 'top_k': 50, 'top_p': 0.95,          # J-3, official model page (D); EF L925
     'wait_text': 'Wait, think more',                         # J-5
     'think_cap': 1024, 'total_think_cap': 10240,             # J-10, EF L952-956 (default fixed 2026-10-13)
+    'think_extra': 512,                                      # J-23, think experiments (user decision 2026-10-13)
     'answer_cap': 1024,                                      # J-10
     'probe_prompt': '\n\n\\boxed', 'probe_cap': 16,          # J-9, EF L827 (user agreed)
     'forced_prompt': '\nFinal Answer:',                      # J-11, EF L891 -> L912/L922 (s1 string)
@@ -38,6 +43,7 @@ def test_run_defaults_hold_the_decided_values(key):
 def test_probe_sampling_and_method_names():
     assert PROBE_SAMPLING == (1.0, 0, 1.0)  # J-9: T = 1, no top-k/top-p (EF L820)
     assert {'st', 'tsr', 'visref_raw_rank'} <= set(METHODS)  # J-7: main VisRef = visref_raw_rank (EF L976)
+    assert THINK == ('tsr_think', 'visref_think', 'visref_hs_think') and set(THINK) <= set(METHODS)  # J-23
     assert budget(1961, 0.3) == 588  # m = floor(0.3 |V|)
 
 
@@ -64,6 +70,28 @@ def test_generation_runs_were_built_with_the_decided_caps_and_order():
         assert a[a.index('--think-cap') + 1] == '1024', name
         assert a[a.index('--total-think-cap') + 1] == '10240', name
         assert c['shuffle_seed'] == 0, name
+
+
+def test_think_runs_start_from_the_stored_main_run_step1():
+    """J-23: the think runs pass --step1-from with the store bundled, the extra cap 512 and the three methods."""
+    for name, c in generation_runs():
+        if not name.startswith('b_main_think'):
+            continue
+        a = c['run_args']
+        assert a[a.index('--step1-from') + 1] == STORE and a[a.index('--think-extra') + 1] == '512', name
+        assert a[a.index('--methods') + 1] == ','.join(THINK), name
+        assert c['source_sha256'][STORE] == hashlib.sha256((REPRO / STORE).read_bytes()).hexdigest(), name
+
+
+def test_step1_store_is_the_main_run_st_rows():
+    """diag/step1_store_bmain.json = make_step1_store.build over the b_main_s1..s9 result files."""
+    sys.path.insert(0, str(REPRO / 'diag'))
+    import make_step1_store as M
+    files = sorted(glob.glob(str(REPRO / M.RUNS)))
+    doc = json.loads((REPRO / STORE).read_text())
+    assert doc['pids'] == M.build(files) and doc['n'] == 1000
+    assert doc['files_sha256'] == {str(pathlib.Path(f).relative_to(REPRO)): hashlib.sha256(pathlib.Path(f).read_bytes()).hexdigest()
+                                   for f in files}
 
 
 @pytest.mark.parametrize('pred, text, ok', [

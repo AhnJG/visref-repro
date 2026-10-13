@@ -1,7 +1,10 @@
 """Pack repro/ into a single-cell Kaggle notebook (one GPU kernel; one run.py process per visible GPU).
 
 usage: python3 repro/kaggle/build.py NAME [--ids PATH|LIST] [--limit N] [--timeout S] [--run-args "--methods st,tsr"]
-Writes repro/kaggle/runs/NAME/{notebook.ipynb,kernel-metadata.json,run_config.json}.
+                                     [--data diag/step1_store_bmain.json ...]
+Writes repro/kaggle/runs/NAME/{notebook.ipynb,kernel-metadata.json,run_config.json}. --data adds files (paths relative to
+repro/) to the bundle at the same relative path, so run.py can read them (e.g. --run-args "--step1-from <path>"); their
+sha256 is recorded in run_config.json with the code.
 """
 import argparse
 import base64
@@ -60,9 +63,10 @@ if res:
 '''
 
 
-def bundle():
+def bundle(data=()):
     buf = io.BytesIO()
     files = sorted([REPRO / 'run.py', REPRO / 'summarize.py', *(REPRO / 'visref').glob('*.py')])
+    files += [REPRO / d for d in data]
     with zipfile.ZipFile(buf, 'w', zipfile.ZIP_DEFLATED) as z:
         for f in files:
             z.writestr(str(f.relative_to(REPRO)), f.read_bytes())
@@ -93,6 +97,7 @@ def main():
     ap.add_argument('--skip-from', nargs='*', default=[], help='earlier result JSONL files; their (pid, method) pairs are skipped')
     ap.add_argument('--run-args', default='', help='extra run.py arguments, space separated')
     ap.add_argument('--overwrite', action='store_true', help='rebuild an existing, not yet pushed run folder')
+    ap.add_argument('--data', nargs='*', default=[], help='extra files to bundle, relative to repro/')
     a = ap.parse_args()
     if a.ids and Path(a.ids).exists():
         ids = json.loads(Path(a.ids).read_text())
@@ -108,7 +113,7 @@ def main():
     ids = ids[: a.limit or None]
     skip = sorted({(json.loads(l)['pid'], json.loads(l)['method']) for f in a.skip_from
                    for l in Path(f).read_text().splitlines() if l.strip()})
-    data, hashes = bundle()
+    data, hashes = bundle(a.data)
     cfg = {'model': MODEL, 'model_rev': MODEL_REV, 'data_rev': DATA_REV, 'parquet': PARQUET, 'ids': ids,
            'time_limit': a.timeout - min(2700, a.timeout // 3), 'deadline': a.timeout - 600, 'run_args': a.run_args.split(),
            'skip': skip}

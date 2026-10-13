@@ -2,6 +2,11 @@
 
 Resumable: (pid, method) pairs already in --out are skipped. Rows are appended as
 JSON lines with raw thinking, per-step probe records and the scored final answer.
+
+Step 1: by default the first method of a pid (the leader) generates the step-1 thinking and the other methods are
+forked from it (same context and seed). With --step1-from STORE (diag/make_step1_store.py) every method instead starts
+from the step-1 thinking stored by an earlier run (methods.stored_step1), all with the same sampler state after it
+(seeded with job_seed(seed, f'{pid}:stored_step1')), and the row records step1_info.
 """
 import argparse
 import hashlib
@@ -13,11 +18,11 @@ from pathlib import Path
 import torch
 
 from visref.engine import Engine
-from visref.methods import METHODS, Job
+from visref.methods import METHODS, Job, stored_step1
 from visref.model import encode_sample, load_mathvista, load_model, special_ids
 from visref.scoring import score
 
-DEFAULTS = dict(delta=0.25, kmax=10, vis_frac=0.3, think_cap=1024, total_think_cap=10240, answer_cap=1024,
+DEFAULTS = dict(delta=0.25, kmax=10, vis_frac=0.3, think_cap=1024, total_think_cap=10240, think_extra=512, answer_cap=1024,
                 max_context=40960, min_step_tokens=256, probe_cap=16, probe_prompt='\n\n\\boxed', wait_text='Wait, think more',
                 forced_prompt='\nFinal Answer:', af_prompt='\n**Final Answer**\n\\boxed', af_cap=100, cut_sep='\n', temperature=0.6, top_k=50,
                 top_p=0.95, seed=42, batch=16, chunk=1024, batch_tokens=72000, max_num=12, fast_kv=1, dual_probe=0)
@@ -80,6 +85,8 @@ def main():
     ap.add_argument('--time-limit', type=float, default=0, help='seconds; stop admitting jobs after this')
     ap.add_argument('--skip', default='', help='JSON list of [pid, method] pairs finished in earlier sessions')
     ap.add_argument('--deadline', type=float, default=0, help='seconds; dump in-flight jobs to <out>.partial and exit')
+    ap.add_argument('--step1-from', default='', help='stored step-1 thinking of an earlier run (diag/make_step1_store.py); '
+                                                     'every method starts from it instead of generating step 1')
     for k, v in DEFAULTS.items():
         ap.add_argument('--' + k.replace('_', '-'), type=type(v), default=v)
     a = ap.parse_args()
@@ -111,7 +118,15 @@ def main():
     if a.skip:
         done |= {tuple(x) for x in json.loads(Path(a.skip).read_text())}
     todo = [(pid, m) for pid in ids for m in methods if (pid, m) not in done]
-    print(json.dumps({'event': 'start', 'code_version': code_version(), 'shard': a.shard, 'todo': len(todo), 'done': len(done), 'cfg': cfg}), flush=True)
+    store, store_sha = None, None
+    if a.step1_from:
+        raw = Path(a.step1_from).read_bytes()
+        store_sha = hashlib.sha256(raw).hexdigest()
+        store = json.loads(raw)['pids']
+        missing = sorted({pid for pid, _ in todo} - set(store))
+        assert not missing, f'no stored step 1 for {len(missing)} pids, e.g. {missing[:5]}'
+    print(json.dumps({'event': 'start', 'code_version': code_version(), 'shard': a.shard, 'todo': len(todo), 'done': len(done), 'cfg': cfg,
+                      'step1_from': a.step1_from or None, 'step1_store_sha256': store_sha}), flush=True)
 
     torch.manual_seed(cfg['seed'])
     version = code_version()
@@ -129,6 +144,7 @@ def main():
     sp = special_ids(tok, cfg['wait_text'], cfg['probe_prompt'])
     enc = {}  # pid -> [base, vis, remaining jobs]
     pending = {}  # pid -> methods waiting for the leader's step-1 thinking
+    s1info = {}  # pid -> step1_info of a stored step 1 (--step1-from)
     queue = []
     for pid, m in todo:
         if not queue or queue[-1][0] != pid:
@@ -172,6 +188,18 @@ def main():
                 row = rows[pid]
                 base, vis = encode_sample(model, tok, row['image'](), row['query'], cfg['max_num'])
                 enc[pid] = [base, vis, len(ms)]
+                if store is not None:  # every method from the stored step 1, with one shared sampler state after it
+                    ids1, fin1, info = stored_step1(tok, sp, store[pid], cfg['cut_sep'])
+                    state = torch.Generator(device=lm.device).manual_seed(
+                        job_seed(cfg['seed'], f'{pid}:stored_step1')).get_state()
+                    s1info[pid] = {**info, 'step1_store_sha': store_sha[:12]}
+                    t = time.time()
+                    for m in ms:
+                        j = new_job(pid, m, step1=(ids1, fin1, state))
+                        j.t0 = t
+                        active.append(j)
+                    pending[pid] = []
+                    continue
                 j = new_job(pid, ms[0])
                 j.t0 = time.time()
                 pending[pid] = ms[1:]
@@ -217,6 +245,8 @@ def main():
                        **score(j.out['final_answer'], j.row), 'wall_s': round(time.time() - j.t0, 2),
                        'n_visual': int(j.vis.shape[0]), 'prompt_len': int(enc[j.pid][0].shape[0]),
                        'code_version': version}
+                if j.pid in s1info:
+                    rec['step1_info'] = s1info[j.pid]
                 if rec['status'] == 'error':
                     rec['correct'] = 0
                 f.write(json.dumps(rec, ensure_ascii=False) + '\n')
@@ -227,6 +257,7 @@ def main():
                 enc[j.pid][2] -= 1
                 if enc[j.pid][2] == 0:
                     del enc[j.pid]
+                    s1info.pop(j.pid, None)
             if a.deadline and time.time() - t0 > a.deadline:
                 with open(str(out) + '.partial', 'a') as pf:
                     for j in active:

@@ -96,8 +96,13 @@ All final tables are in [`results/`](results) (built from `repro/diag/*.json`). 
 scoring variants, visual-token counts) are in [REPORT, Section 4](REPORT.md#4-beyond-the-paper) and are not part of the verdicts.
 
 ### Planned next experiments (not yet run)
-The designs below are proposals. As for the follow-ups above, each decision rule will be fixed and published before
-its run.
+As for the follow-ups above, each decision rule is fixed and published before its run. The two thinking experiments
+(the second and third rows) were pre-registered on 2026-10-13, before any run (`docs/EXPERIMENT_FLOW.md`, entry
+"사전등록: 생각 이어가기 실험"; analysis `repro/diag/analyze_think.py`, written and tested before the results): the three
+methods `tsr_think`, `visref_think` and `visref_hs_think` run together, start from the main run's stored first step, and
+think up to 512 more tokens outside the 10,240-token budget; answers are handled as in the main run; the main comparison
+`visref_think` − `tsr_think` is judged by the same three-way rule as `visref_hs`, against the paper's +3.5 pp. The
+remaining 161 `visref_hs` questions are not scheduled yet.
 
 | experiment | question | proposed design |
 |---|---|---|
@@ -107,9 +112,10 @@ its run.
 
 The independent review of 2026-10-13 ([review](repro/audit/independent_review_20261013/review.md), Korean) found that the follow-up runs so far regenerated the
 first thinking step: only 193 of 839 `visref_hs` first steps match the main run, which roughly doubled the paired
-noise. The two new experiments should therefore start from the main run's stored first step (as `step1_branch` did)
-and run their control in the same session, and their power calculation should use the measured disagreement rate
-(16% for `visref_hs` − TSR) rather than the main run's 9%. Rough cost from the measured `visref_hs` speed (839
+noise. The two new experiments therefore start from the main run's stored first step (as `step1_branch` did) and run
+their control in the same session. Their power is planned with both measured disagreement rates, 9% (main run
+VisRef − TSR, the same shared-first-step design) and 16% (`visref_hs` − TSR): on 1,000 questions the power to detect
++3.5 pp is 0.96 to 0.79. Rough cost from the measured `visref_hs` speed (839
 questions in about 7.7 h on 2×T4): about 2 h for the remaining 161 questions and 9 h or more per method for 1,000
 questions (an estimate, not measured).
 
@@ -129,8 +135,9 @@ repro/                     implementation (lean) and analysis
   report.py, rescore.py    offline aggregation / re-scoring (no GPU)
   llm_extract.py, gemini_extract.py   LLM fallback answer extraction for rule-failed rows
   diag/                    analyses with fixed decision rules (final_judgment.py: fixed before the final analysis;
-                           analyze_fill.py, step1_branch.py, analyze_step1_branch.py, analyze_hs.py: pre-registered)
-                           and post-hoc diagnostics, with their JSON outputs
+                           analyze_fill.py, step1_branch.py, analyze_step1_branch.py, analyze_hs.py, analyze_think.py:
+                           pre-registered) and post-hoc diagnostics, with their JSON outputs; step1_store_bmain.json is
+                           the main run's stored first step (made by make_step1_store.py) for the thinking experiments
   audit/                   independent reviews and audits
   kaggle/runs/<session>/   every session: run_config.json (source sha256, ids, args), env.json, logs, raw outputs
                            (b_main_s1–s9, b_main_fill, b_main_rescore_v2/v3, diag_st_plain, hidden_rank_check,

@@ -7,6 +7,16 @@ rank(L) a ridge eps*I continues it to exactly m tokens: dpp.select_tokens_fill; 
 and 'visref_hs' (same as visref_raw_rank, but Z = the last-layer hidden states of z_k (after the final norm) instead
 of its input embeddings, Engine.last_hidden; pre-registered variant, EF 2026-10-12).
 
+Thinking after the last step ('tsr_think', 'visref_think', 'visref_hs_think'; EF 2026-10-13, decided by the user): the
+same loop as 'tsr' / 'visref_raw_rank' / 'visref_hs', but when the method stops (any reason: entropy, Kmax or budget),
+the paper's continuation cue cfg['wait_text'] is appended after the last step's context (for VisRef after V_k) and the
+model thinks up to cfg['think_extra'] more tokens (</think> / EOS / cap; outside the thinking budget) before the final
+answer, which then follows the same rules as after any step (natural answer after the model's own </think>; after a
+cut, cut_sep + </think> + forced_prompt; after EOS, </think> + natural answer; DEER answer forcing at answer_cap).
+
+Stored step 1 (stored_step1): a job can start from a step-1 thinking stored by an earlier run (re-tokenised text), so
+methods of a new run share the main run's first step instead of regenerating it.
+
 Dual probe (cfg dual_probe, VisRef methods only, logging only): after the stopping probe a second probe is sampled on
 z_k without V_k (`... z_k </think>` + probe prompt) from its own generator; its H_noV is recorded on the step and is
 never used for the decision, so every decision, context and answer is the same as without it.
@@ -42,9 +52,28 @@ import torch
 from .dpp import budget, pick_stats, select_tokens, select_tokens_fill
 from .engine import Request
 
-METHODS = ('st', 'tsr', 'visref_raw_rank', 'visref_fill', 'visref_hs')
-VISREF = ('visref_raw_rank', 'visref_fill', 'visref_hs')
+METHODS = ('st', 'tsr', 'visref_raw_rank', 'visref_fill', 'visref_hs', 'tsr_think', 'visref_think', 'visref_hs_think')
+VISREF = ('visref_raw_rank', 'visref_fill', 'visref_hs', 'visref_think', 'visref_hs_think')
+HS = ('visref_hs', 'visref_hs_think')  # Z = last-layer hidden states
+THINK = ('tsr_think', 'visref_think', 'visref_hs_think')  # extra thinking after the stop decision
 PROBE_SAMPLING = (1.0, 0, 1.0)  # T=1, no top-k/top-p: sampled from the distribution whose entropy is summed
+
+
+def stored_step1(tok, special, s, cut_sep):
+    """Step-1 thinking stored by an earlier run, as (ids, finish, info) for Job(step1=...).
+    s = {'thinking': decode(z_1) + separator, 'think_tokens': len(z_1), 'think_end': 'close' | 'eos' | 'cap'} (the
+    main run's ST row). The separator added after a cut step is split off again (same rule as diag/step1_branch.py);
+    a closed step gets the model's </think> back and an EOS step its EOS. info records whether re-tokenising gave the
+    stored length."""
+    thinking, n, end = s['thinking'], int(s['think_tokens']), s['think_end']
+    cands = []
+    if end == 'cap' and cut_sep and thinking.endswith(cut_sep):
+        cands.append(tok.encode(thinking[:-len(cut_sep)], add_special_tokens=False))
+    cands.append(tok.encode(thinking, add_special_tokens=False))
+    z = list(next((c for c in cands if len(c) == n), cands[0]))
+    ids = z + ([special['think_end']] if end == 'close' else [special['eos']] if end == 'eos' else [])
+    return ids, ('cap' if end == 'cap' else 'stop'), {'step1_source': 'stored', 'step1_tokens_match': len(z) == n,
+                                                      'step1_n_z': len(z), 'step1_think_tokens_stored': n}
 
 
 class Job:
@@ -66,6 +95,7 @@ class Job:
         self.done, self.out, self.step1 = False, None, None
         self.forked = step1 is not None
         self.forced_ids = tok.encode(cfg['forced_prompt'], add_special_tokens=False)
+        self.extra = None  # THINK methods: record of the extra thinking after the stop decision
         self.af_ids = tok.encode(cfg['af_prompt'], add_special_tokens=False)
         self._start_think()
         if step1 is not None:
@@ -76,10 +106,12 @@ class Job:
             self._end_think(finish)
 
     # ---- phases -------------------------------------------------------------
+    def _answer_room(self):
+        return max(self.cfg['answer_cap'] + len(self.af_ids) + self.cfg['af_cap'] + len(self.forced_ids),
+                   self.cfg['probe_cap'] + len(self.sp['probe_prompt']))
+
     def _think_cap(self, ctx_len):
-        answer_room = max(self.cfg['answer_cap'] + len(self.af_ids) + self.cfg['af_cap'] + len(self.forced_ids),
-                          self.cfg['probe_cap'] + len(self.sp['probe_prompt']))
-        room = self.cfg['max_context'] - ctx_len - answer_room - self._vis_room() - 1
+        room = self.cfg['max_context'] - ctx_len - self._answer_room() - self._vis_room() - 1
         return min(self.cfg['think_cap'], self.cfg['total_think_cap'] - self.think_used, room)
 
     def _vis_room(self):
@@ -113,7 +145,7 @@ class Job:
         self.forced, self.reason = forced, reason or getattr(self, 'reason', None)
 
     def request(self):
-        if self.phase == 'think':
+        if self.phase in ('think', 'extra'):
             return Request(self.cur, self.stop, self.cap - len(self.partial), self.gen)
         probe = self.phase in ('probe', 'probe_nov')
         pgen = self.probe2_gen if self.phase == 'probe_nov' else self.probe_gen
@@ -170,6 +202,8 @@ class Job:
             return
         if self.phase == 'think':
             self._end_think(res.finish)
+        elif self.phase == 'extra':
+            self._end_extra(res.finish)
         else:
             self._end_answer(res.finish)
 
@@ -194,7 +228,7 @@ class Job:
             if self.method == 'visref_fill':
                 sel, fill_info = select_tokens_fill(self.vis, self.eng.embed(z), m)  # asserts head = raw_rank picks
                 step.update(fill_info)
-            elif self.method == 'visref_hs':  # Z = last-layer hidden states of z_k in its own context (causal: the
+            elif self.method in HS:  # Z = last-layer hidden states of z_k in its own context (causal: the
                 tr = []                      # separator / V_k appended after z_k do not change them)
                 Z = self.eng.last_hidden(torch.cat([self.ctx, self.eng.embed(z)], 0), len(z))
                 sel = select_tokens(self.vis, Z, m, trace=tr)
@@ -300,12 +334,44 @@ class Job:
         reason = ('entropy' if H < cfg['delta'] else 'kmax' if self.k >= cfg['kmax']
                   else 'budget' if self._think_cap(nxt.shape[0]) < cfg['min_step_tokens'] else None)
         if reason:
+            if self.method in THINK and self.extra is None:
+                self._start_extra(reason)
+                return
             self._start_answer('final', self.forced, reason)
             return
         self.ctx = nxt
         self.trace.append(self.cfg['wait_text'])
         self.k += 1
         self._start_think()
+
+    def _start_extra(self, reason):
+        """THINK methods: after the stop decision, the cue and up to think_extra more thinking tokens."""
+        self.reason = reason
+        base = torch.cat([self.step_ctx, self.eng.embed(self.sp['wait'])], 0)  # a cut step already ends with cut_sep
+        cap = min(self.cfg['think_extra'], self.cfg['max_context'] - base.shape[0] - self._answer_room() - 1)
+        self.extra = {'extra_think_cap': int(cap)}
+        if cap <= 0:  # no room left in the context: answer as the base method would
+            self.extra.update(extra_think_tokens=0, extra_think_end='skipped')
+            self._start_answer('final', self.forced, reason)
+            return
+        self.extra_base = base
+        self.trace.append('<EXTRA>' + self.cfg['wait_text'])
+        self.phase, self.cur, self.partial, self.cap = 'extra', base, [], cap
+        self.stop = frozenset({self.sp['think_end'], self.sp['eos']})
+
+    def _end_extra(self, finish):
+        sp, ids = self.sp, self.partial
+        closed = finish == 'stop' and bool(ids) and ids[-1] == sp['think_end']
+        z = ids[:-1] if finish == 'stop' and ids else ids
+        self.cut = finish == 'cap'
+        zt = self.tok.decode(z)
+        sep = self.cfg['cut_sep'] if self.cut and not zt.endswith('\n') else ''
+        sep_ids = self.tok.encode(sep, add_special_tokens=False) if sep else []
+        ctx = torch.cat([self.extra_base, self.eng.embed(list(z) + sep_ids)], 0) if (z or sep_ids) else self.extra_base
+        self.trace.append(zt + sep)
+        self.extra.update(extra_think_tokens=len(z), extra_think_end='close' if closed else ('eos' if finish == 'stop' else 'cap'))
+        self.answer_ctx = torch.cat([ctx, self.eng.embed([sp['think_end']])], 0)
+        self._start_answer('final', forced=not closed, reason=self.reason)
 
     def _finish(self, text, raw, y0, finish, **extra):
         self.done = True
@@ -317,6 +383,8 @@ class Job:
                     'thinking': ''.join(self.trace), 'final_forced_answer': self.forced_answer}
         if self.dual:
             self.out['gen_tokens_noV'] = self.gen_tokens_noV
+        if self.extra is not None:
+            self.out.update(self.extra)
         self.out.update(extra)
 
     def fail(self, why):
