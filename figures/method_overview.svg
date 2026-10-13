@@ -80,5 +80,5 @@
 <rect class="vis" x="240" y="397" width="22" height="14" rx="3" stroke-width="1.25"/>
 <text x="270" y="408" class="ink2" font-size="12" text-anchor="start">VisRef only</text>
 <rect class="chip" x="372" y="397" width="22" height="14" rx="3" stroke-width="1.25"/>
-<text x="402" y="408" class="ink2" font-size="12" text-anchor="start">our choice: not found in the paper (evidence in docs/SPEC_LEDGER.md)</text>
+<text x="402" y="408" class="ink2" font-size="12" text-anchor="start">our choice: not found in the paper (evidence in docs/IMPLEMENTATION_CHOICES.md)</text>
 </svg>

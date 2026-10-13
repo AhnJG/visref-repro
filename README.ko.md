@@ -138,8 +138,8 @@ repro/                     구현(간결하게 유지)과 분석
   llm/final, llm/fill, llm/hs   LLM 보조 추출: 요청, 응답, 병합된 행(diag/*.py가 읽음)
   reports/                 방법별 서술 보고서(규칙 기반 scorer v4만 사용)
 docs/
-  SPEC_LEDGER.md           모든 구현 결정과 그 근거 등급(논문 / 인용한 코드 /
-                           공식 모델 문서 / 우리의 선택) — "핵심 판단 요약"부터 읽을 것
+  IMPLEMENTATION_CHOICES.md  구현 근거 대장: 모든 구현 결정과 그 근거 등급(논문 / 인용한 코드 /
+                           공식 모델 문서 / 우리의 선택) — "핵심 판단 요약"부터 읽을 것(2026-10-13까지 이름 SPEC_LEDGER.md)
   EXPERIMENT_FLOW.md       시간순 기록: 사전 등록, 결정, 결과
   SOURCES.md               (영문) 기록의 인용이 공개 출처(arXiv 버전, 페이지, 표)에 어떻게 대응하는지
   AI_USE_REFLECTION.md     이 프로젝트에서 AI 활용이 잘못된 사례와 재발 방지 방법
@@ -242,7 +242,7 @@ T = 1로 샘플링합니다. 이 답의 토큰을 하나씩 낼 때마다 모델
 `docs/EXPERIMENT_FLOW.md`, 2026-10-05~2026-10-07). `Answer:` 프로브도 바꿨는데, 서식 토큰이 H의 대부분을 차지했고 스모크
 테스트 문항 18개 중 TSR이 엔트로피로 멈춘 것은 0개였기 때문입니다.
 
-모든 결정과 그 근거, 대안은 `docs/SPEC_LEDGER.md`에 있습니다("핵심 판단 요약"부터 읽을 것). 논문의 각 주장이 어디에서
+모든 결정과 그 근거, 대안은 구현 근거 대장 `docs/IMPLEMENTATION_CHOICES.md`에 있습니다("핵심 판단 요약"부터 읽을 것). 논문의 각 주장이 어디에서
 왔는지(arXiv 버전, 페이지, 표)는 `docs/SOURCES.md`에 있습니다. 저자에게 할 질문은
 [REPORT 5.3절](REPORT.md#53-communication-with-original-authors)에 있습니다.
 

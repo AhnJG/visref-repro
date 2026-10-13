@@ -1,4 +1,4 @@
-"""Decision tests (2026-10-12 decision check, SPEC_LEDGER "핵심 판단 요약" J table, column "테스트").
+"""Decision tests (2026-10-12 decision check, docs/IMPLEMENTATION_CHOICES.md (formerly SPEC_LEDGER) "핵심 판단 요약" J table, column "테스트").
 
 The behaviour tests in test_repro.py use their own small configs, so they do not pin the values that were decided for
 the runs. These tests do: if a decided value changes, the change has to be made here too, on purpose.

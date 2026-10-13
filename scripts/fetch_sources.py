@@ -4,7 +4,7 @@
 
 Needed for offline scoring: data/raw/mathvista_testmini.json (MathVista, CC BY-SA 4.0) and the official MathVista
 answer-extraction prompt (references/sources/mathvista_official_r4/evaluation/prompts/ext_ans.py). The other files are
-the cited reference code used as evidence in docs/SPEC_LEDGER.md.
+the cited reference code used as evidence in docs/IMPLEMENTATION_CHOICES.md.
 """
 import hashlib
 import json

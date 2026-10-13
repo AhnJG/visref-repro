@@ -145,8 +145,8 @@ repro/                     implementation (lean) and analysis
   llm/final, llm/fill, llm/hs   LLM fallback extraction: requests, responses, merged rows (read by diag/*.py)
   reports/                 descriptive per-method report (rule-based scorer v4 only)
 docs/
-  SPEC_LEDGER.md           every implementation decision with its evidence grade (paper / cited code / official
-                           model docs / our choice) — start at "핵심 판단 요약"
+  IMPLEMENTATION_CHOICES.md  every implementation decision with its evidence grade (paper / cited code / official
+                           model docs / our choice) — start at "핵심 판단 요약" (named SPEC_LEDGER.md until 2026-10-13)
   EXPERIMENT_FLOW.md       chronological log: pre-registrations, decisions, results
   SOURCES.md               (English) how the logs' citations map to public sources: arXiv versions, pages, tables
   AI_USE_REFLECTION.md     (Korean) where using AI went wrong in this project, and how to prevent it
@@ -256,7 +256,7 @@ average is not the entropy of the answer (decision log: `docs/EXPERIMENT_FLOW.md
 `Answer:` probe was also replaced, because its formatting tokens dominated H and TSR stopped by entropy in 0 of 18
 smoke-test questions.
 
-Every decision with its evidence and alternatives is in `docs/SPEC_LEDGER.md` (start at "핵심 판단 요약"); where each
+Every decision with its evidence and alternatives is in `docs/IMPLEMENTATION_CHOICES.md` (start at "핵심 판단 요약"); where each
 paper claim comes from (arXiv version, page, table) is in `docs/SOURCES.md`. Questions for the authors are listed in
 [REPORT, Section 5.3](REPORT.md#53-communication-with-original-authors).
 

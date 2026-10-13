@@ -86,7 +86,7 @@ def main():
         }
     ra = out['readings']['a']
     out['criterion_a_drop_ge_10pp'] = ra['diff_pp'] <= -10
-    out['paper_st'] = 46.1  # VisRef App. Table 6, 1B ST (SPEC_LEDGER)
+    out['paper_st'] = 46.1  # VisRef App. Table 6, 1B ST (docs/IMPLEMENTATION_CHOICES.md)
     if os.path.exists(a.out):
         sys.exit(f'refusing to overwrite {a.out}')
     Path(a.out).write_text(json.dumps(out, indent=1, ensure_ascii=False))

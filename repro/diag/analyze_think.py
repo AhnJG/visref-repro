@@ -54,7 +54,7 @@ from analyze_step1_branch import IMG  # noqa: E402  (image-word regex of the ste
 from report import inner_think_diag  # noqa: E402
 from visref.scoring import SCORER_VERSION  # noqa: E402
 
-PAPER_GAIN_OVER_TSR = Fraction('3.5')  # paper Table 6, InternVL3.5-1B: VisRef 52.0 - TSR 48.5 (SPEC_LEDGER A-5)
+PAPER_GAIN_OVER_TSR = Fraction('3.5')  # paper Table 6, InternVL3.5-1B: VisRef 52.0 - TSR 48.5 (docs/IMPLEMENTATION_CHOICES.md A-5)
 THINK = ('tsr_think', 'visref_think', 'visref_hs_think')
 BMAIN = ('st', 'tsr', 'visref_raw_rank')
 EXTRA_CAP = 512

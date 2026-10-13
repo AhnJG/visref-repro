@@ -40,7 +40,7 @@ import summarize as S  # noqa: E402
 from report import inner_think_diag, mcnemar_exact  # noqa: E402
 from visref.scoring import SCORER_VERSION, score  # noqa: E402
 
-PAPER_GAIN_OVER_TSR = Fraction('3.5')  # paper Table 6, InternVL3.5-1B: VisRef 52.0 - TSR 48.5 (SPEC_LEDGER A-5)
+PAPER_GAIN_OVER_TSR = Fraction('3.5')  # paper Table 6, InternVL3.5-1B: VisRef 52.0 - TSR 48.5 (docs/IMPLEMENTATION_CHOICES.md A-5)
 MIN_N = 300
 N_BOOT, SEED = 2000, 0
 BMAIN = ('st', 'tsr', 'visref_raw_rank')

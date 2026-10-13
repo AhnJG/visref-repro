@@ -209,7 +209,7 @@ We could not find the following in the paper; each was a choice of ours (Section
 - the injection format: tags, separators, `</think>` handling, position ids, answer prompt after Ṽ_k;
 - the image tiling (thumbnail tile).
 
-We also recorded internal tensions in the paper (for example the latency table versus the token-usage figure; `docs/SPEC_LEDGER.md`, items A-4, A-8 to A-10, C-12) and did not use them as targets.
+We also recorded internal tensions in the paper (for example the latency table versus the token-usage figure; `docs/IMPLEMENTATION_CHOICES.md`, items A-4, A-8 to A-10, C-12) and did not use them as targets.
 
 ### 5.3 Communication with original authors
 
@@ -245,7 +245,7 @@ Three experiments are planned; their decision rules are fixed and published befo
 | What | Where (in this repository) |
 |---|---|
 | Chronological log with pre-registrations and decisions (Korean) | `docs/EXPERIMENT_FLOW.md` |
-| Evidence per implementation decision, external-number ledger (Korean) | `docs/SPEC_LEDGER.md` (start at "핵심 판단 요약") |
+| Evidence per implementation decision, external-number ledger (Korean) | `docs/IMPLEMENTATION_CHOICES.md` (start at "핵심 판단 요약"; named `SPEC_LEDGER.md` until 2026-10-13) |
 | Main verdict script and numbers | `repro/diag/final_judgment.py`, `repro/diag/final_judgment.json` |
 | Follow-up analyses | `repro/diag/analyze_fill.json`, `repro/diag/step1_branch_analysis.json` (earlier float version: `step1_branch_analysis_float_py311.json`), `repro/diag/paper_fingerprints.json`, `repro/diag/step1_probe_analysis.json`, `repro/diag/analyze_k1_injection.json`, `repro/diag/st_plain_analysis.json`; `repro/diag/analyze_hs.json` (Section 4.5; the script was written before the results) |
 | Raw generations, run configs and environments per session | `repro/kaggle/runs/<session>/` (`b_main_s1`–`b_main_s9`, `b_main_fill`, `step1_branch_pilot`, `step1_branch_main`, `diag_st_plain`, `b_main_hs`) |
