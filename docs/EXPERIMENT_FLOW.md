@@ -1736,3 +1736,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 ## 2026-10-13 다음 실험 설계 결정: `tsr_think` 대조군 포함 (사용자 결정)
 - 사용자 질문("대조군 tsr_think은 왜 또 돌려? 이미 결과가 있잖아?")에 Claude 설명: 기존 TSR 행은 추가 생각이 없어서, `visref_think`와 비교하면 이미지 재주입과 추가 생각(최대 512토큰) 두 가지가 함께 달라짐. 우리 자료에서도 생각을 더 하는 것만으로 점수가 오르는 경향(TSR − ST +2.3 pp (0.6, 4.0); step1_branch C − A +1.29 pp (−1.83, +4.42)). 기존 결과 중 같은 역할은 step1_branch C뿐인데 309문항·1단계·짧은 답 형식이라 1,000문항 실험의 짝이 될 수 없음. 첫 단계를 본 실험 저장본에서 시작하면 첫 단계 잡음 문제는 그것으로 풀리므로, 대조군의 목적은 "이미지 효과와 추가 생각 효과의 분리".
 - 사용자 결정: `tsr_think` 포함(README·REPORT 5.4절의 계획 그대로). `visref_hs` 남은 161문항 실행 묶음은 나중에(사용자).
+
+## 2026-10-13 `visref_think`·`tsr_think` 설계 결정 일부 (사용자 결정)
+- 추가 생각 상한 512토큰(step1_branch C·D와 같음). 다시 생각을 시작할 때의 문구는 논문 문구 "Wait, think more"(논문 3절 "special instruction tokens (e.g., “Wait”, “Think more”), denoted by c", LAY L205-206; 그림 2 노란 상자 "Wait, think more", LAY L224; 현재 `run.py` wait_text와 같음, SPEC_LEDGER 16행). README·README.ko 계획 표와 REPORT 5.4절에 반영.
+- 아직 정하지 않은 세부(사용자 확인 대기): 추가 생각을 모든 정지 사유(엔트로피·K_max·예산)에 적용할지, 추가 512토큰을 합계 상한 10,240과 별도로 둘지, 추가 생각 뒤 답 처리(본 실험 규칙 그대로: 스스로 닫으면 자연 답, 512에서 잘리면 s1 `\nFinal Answer:`, 답이 끝나지 않으면 DEER 답 강제), 판정 규칙과 보조 비교, 세션 분할.
