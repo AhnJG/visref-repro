@@ -156,12 +156,44 @@ def test_stored_step1_ids(s, z, finish, match):
                     'step1_think_tokens_stored': s['think_tokens']}
 
 
-@pytest.mark.parametrize('end', ['close', 'cap', 'eos'])
-def test_job_from_stored_step1_equals_job_that_generated_it(end):
-    tok = CharTok()
-    gen_ids = tok.encode('abc') + {'close': [1], 'eos': [0], 'cap': []}[end]
+class NLTok(CharTok):
+    """CharTok with one merged token for '\\n\\n' (as real tokenizers have), to test the cut-step separator."""
+
+    def __init__(self):
+        super().__init__()
+        self.vocab = self.vocab + ['\n\n']
+
+    def encode(self, s, add_special_tokens=False):
+        out, i = [], 0
+        while i < len(s):
+            if s[i:i + 2] == '\n\n':
+                out.append(len(self.vocab) - 1)
+                i += 2
+            else:
+                out.append(self.vocab.index(s[i]))
+                i += 1
+        return out
+
+
+def test_stored_cut_step_ending_in_two_newlines_keeps_both():
+    """2026-10-13 review: z_1 = 'ab' + '\\n\\n' (3 tokens) cut at the cap got no separator (it ends with '\\n'); splitting
+    off the last '\\n' as a separator would give 'ab\\n', also 3 tokens, and lose a newline."""
+    tok = NLTok()
+    ids, fin, info = stored_step1(tok, SP, {'thinking': 'ab\n\n', 'think_tokens': 3, 'think_end': 'cap'}, '\n')
+    assert tok.decode(ids) == 'ab\n\n' and fin == 'cap' and info['step1_tokens_match']
+    ids, _, info = stored_step1(tok, SP, {'thinking': 'ab\n', 'think_tokens': 2, 'think_end': 'cap'}, '\n')
+    assert tok.decode(ids) == 'ab' and info['step1_tokens_match']  # separator added after 'ab' is split off
+
+
+@pytest.mark.parametrize('end, text', [('close', 'abc'), ('cap', 'abc'), ('eos', 'abc'), ('cap', 'ab\n\n'), ('cap', 'a\n')])
+def test_job_from_stored_step1_equals_job_that_generated_it(end, text):
+    tok = NLTok()
+    gen_ids = tok.encode(text) + {'close': [1], 'eos': [0], 'cap': []}[end]
     fin = 'cap' if end == 'cap' else 'stop'
     ref, eng, _ = make_job('visref_think', [], kmax=2, think_extra=40)
+    ref.tok, eng.tok = tok, tok  # one-hot width = len(NLTok.vocab)
+    ref = Job('visref_think', ref.row, eng.embed(tok.encode('Q?')), torch.randn(10, len(tok.vocab)), ref.cfg, tok, eng,
+              ref.sp, torch.Generator(), torch.Generator())
     ref.consume(Result(ids=gen_ids, finish=fin))
     stored = {'thinking': ref.trace[0], 'think_tokens': ref.steps[0]['think_tokens'], 'think_end': end}
     ids, f, info = stored_step1(tok, ref.sp, stored, '\n')

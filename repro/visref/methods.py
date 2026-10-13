@@ -62,12 +62,12 @@ PROBE_SAMPLING = (1.0, 0, 1.0)  # T=1, no top-k/top-p: sampled from the distribu
 def stored_step1(tok, special, s, cut_sep):
     """Step-1 thinking stored by an earlier run, as (ids, finish, info) for Job(step1=...).
     s = {'thinking': decode(z_1) + separator, 'think_tokens': len(z_1), 'think_end': 'close' | 'eos' | 'cap'} (the
-    main run's ST row). The separator added after a cut step is split off again (same rule as diag/step1_branch.py);
-    a closed step gets the model's </think> back and an EOS step its EOS. info records whether re-tokenising gave the
-    stored length."""
+    main run's ST row). A cut step's separator is split off again unless the text before it ends with '\n' (then none
+    was added: 2026-10-13 review, a step ending in '\n\n' lost a newline). A closed step gets </think> back, an EOS
+    step its EOS; info records whether re-tokenising gave the stored length."""
     thinking, n, end = s['thinking'], int(s['think_tokens']), s['think_end']
     cands = []
-    if end == 'cap' and cut_sep and thinking.endswith(cut_sep):
+    if end == 'cap' and cut_sep and thinking.endswith(cut_sep) and not thinking[:-len(cut_sep)].endswith('\n'):
         cands.append(tok.encode(thinking[:-len(cut_sep)], add_special_tokens=False))
     cands.append(tok.encode(thinking, add_special_tokens=False))
     z = list(next((c for c in cands if len(c) == n), cands[0]))
