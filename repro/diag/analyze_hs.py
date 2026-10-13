@@ -17,7 +17,7 @@ same resamples as summarize.paired) and the exact McNemar test. Verdict from the
   3 upper bound < +3.5 (and not 1)          -> no paper-size (+3.5 pp) extra gain with last-layer Z
 The bounds are compared as integers (sums of paired differences), so a bound of exactly +3.5 is not lost to rounding.
 Fewer than 300 questions -> the verdict is computed by the same rule and flagged "검출력 부족".
-Secondary (descriptive, no verdict): hs - VisRef (only Z differs), hs - ST; injected/m; n_meaningful; rank correlation
+Secondary (descriptive, no verdict): hs - VisRef (Z differs by design; step 1 is regenerated in the new session), hs - ST; injected/m; n_meaningful; rank correlation
 of late picks with relevance; second `</think>` in the final answer; k and stop reasons; agreement of the first-step
 end type with b_main.
 

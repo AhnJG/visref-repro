@@ -52,7 +52,10 @@ n = 1,000; each method once per question, with shared seeds and a shared first t
   follow-up experiments below were fixed before their results.
 
 ### Why our accuracies are 8–12 pp above the paper's (not resolved)
-Our ST (57.8) is close to the official InternVL3.5-1B MathVista (mini) score of 59.3, while the paper's ST is 46.1.
+Our ST (57.8, thinking mode) is close to the official InternVL3.5-1B MathVista (mini) score of 59.3, while the paper's ST
+is 46.1. The InternVL3.5 report says its Section 3 scores, 59.3 among them, were obtained without test-time scaling,
+which it defines to include the thinking mode, so the official score is most likely a non-thinking score (which
+evaluation setting produced it is not confirmed).
 The paper's 8B ST (68.1) is also more than 10 pp below the official InternVL3.5-8B score (78.4). This suggests that the
 paper evaluated its baselines in a setting where the model scores lower than in the official evaluation, but we could
 not find that setting in the paper. Our estimates of the cause, none of them tested directly:
@@ -71,10 +74,10 @@ We look for the cause in our implementation first. The differences that could ex
 
 | candidate on our side | why it could matter | checked? |
 |---|---|---|
-| We inject about one fifth of the paper's m tokens: the greedy DPP stops at the kernel rank (confirmed procedural difference) | less visual evidence per step | Not settled. A variant that topped the selection up to m (`visref_fill`, below) gave no extra gain, but the top-up chose tokens without regard to relevance (rank correlation with relevance −0.10), and in the paper random selection is also close to ST (Table 7). Injecting m relevant tokens was not tested |
+| We inject about one fifth of the paper's m tokens: the greedy DPP stops at the kernel rank (confirmed procedural difference) | less visual evidence per step | Not settled. A variant that topped the selection up to m (`visref_fill`, below) gave no extra gain, but the top-up order was nearly unrelated to relevance (rank correlation −0.10; negative means more relevant tokens first). In the paper, random selection is close to ST (Table 7: 67.3 against ST 68.1, 8B model), but selection by diversity alone, without relevance, is well above ST (Table 3: 77.4; Table 8 at λ = 0: 71.2; the two tables disagree), so ignoring relevance need not remove the whole gain. Injecting m relevant tokens was not tested |
 | Injection format: InternVL wraps an image in `<img>` … `</img>` tags; we re-inject the selected visual embeddings without these tags, right before `</think>` (we could not find the paper's format) | the model may not treat them as part of an image | In a small early test (about 20 questions per method, other settings) the tags made the model write a second `</think>` in 31 of 63 steps, against 10 of 65 without them, so we dropped the tags; not tested in the main run. A side effect remains without tags: of the 713 questions where VisRef stopped at step 1, 352 VisRef final answers contain another `</think>`, versus 67 ST answers |
 | Where the injection lands: TSR and VisRef continued almost only after a step hit the 1,024-token cap, so the injection usually comes mid-sentence | the paper may have continued mostly after completed steps | A larger step cap (e.g. 4,096) was not run |
-| What the image pieces are matched against: the DPP picks image pieces that fit the thinking text, which it reads as vectors. We use the vectors right after the words are turned into numbers (input embeddings), not those of a deeper layer of the model; we could not find which layer the paper uses | a different layer would pick different image pieces | Tested as a follow-up (`visref_hs`, below): with last-layer vectors the DPP injected m tokens (median injected/m 1.0, against 0.205 with input embeddings on the same questions), but VisRef still showed no extra gain over TSR. Only a median of 70 of the m picks add clear diversity, in line with an earlier offline check (about 50–110) |
+| What the image pieces are matched against: the DPP picks image pieces that fit the thinking text, which it reads as vectors. We use the vectors right after the words are turned into numbers (input embeddings), not those of a deeper layer of the model; we could not find which layer the paper uses | a different layer would pick different image pieces | Tested as a follow-up (`visref_hs`, below): with last-layer vectors the DPP injected m tokens (median injected/m 1.0, against 0.205 with input embeddings on the same questions), but no extra gain over TSR was detected. Only a median of 70 of the m picks add clear diversity, in line with an earlier offline check (about 50–110) |
 | Stopping entropy H from one sampled answer (see below) | noisy stop decisions | Several samples per step were not used in the final runs |
 
 None of these is ruled out (the last-layer test shows only that this change alone did not bring a paper-size gain),
@@ -85,9 +88,9 @@ from our implementation. Details: [REPORT, Section 4](REPORT.md#4-beyond-the-pap
 
 | experiment | question | result |
 |---|---|---|
-| `visref_fill` (976 q) | Does VisRef change if the DPP selection is topped up to exactly m tokens? (The top-up turned out to choose tokens without regard to relevance.) | fill − TSR 0.0 pp (−2.15, +2.36); fill − VisRef +0.1 pp (−2.15, +2.36): adding tokens chosen without regard to relevance gave no extra gain. Whether m relevant tokens help was not tested. |
+| `visref_fill` (976 q) | Does VisRef change if the DPP selection is topped up to exactly m tokens? (The top-up order turned out to be nearly unrelated to relevance.) | fill − TSR 0.0 pp (−2.15, +2.36); fill − VisRef +0.1 pp (−2.15, +2.36): adding these tokens brought no detectable gain. Whether m relevant tokens help was not tested. |
 | `step1_branch` (309 q) | On the questions where TSR or VisRef continued after step 1: does re-injecting Ṽ₁ help an immediate answer (B − A), or an answer after ≤ 512 more thinking tokens (D − C)? | B − A +1.40 pp (−1.19, +3.99); D − C +0.97 pp (−2.27, +4.21); Holm p 0.658 for both: the immediate-answer gain seen post hoc in the main run was not reproduced. |
-| `visref_hs` (839 q) | Does VisRef gain over TSR when Z, the vectors of the thinking text, are the model's last-layer vectors instead of input embeddings? (With them the DPP can pick m tokens when a step has at least m tokens.) | hs − TSR +0.24 pp (−2.38, +3.10); hs − VisRef +0.60 pp (−1.67, +2.98): the injection reached m tokens, but there was no extra gain. By the rule fixed before the results, a paper-size gain (+3.5 pp) is not reproduced with last-layer Z ([REPORT, Section 4.5](REPORT.md#45-visref_hs-last-layer-z-pre-registered)). The 23 answers the rules could not parse were extracted by a Claude Haiku subagent instead of the pre-registered Gemini model; scoring by rules only gives the same verdict. |
+| `visref_hs` (839 q) | Does VisRef gain over TSR when Z, the vectors of the thinking text, are the model's last-layer vectors instead of input embeddings? (With them the DPP can pick m tokens when a step has at least m tokens.) | hs − TSR +0.24 pp (−2.38, +3.10); hs − VisRef +0.60 pp (−1.67, +2.98): the injection reached m tokens, but no extra gain was detected. The first thinking step was generated anew, so only 193 of 839 first steps match the main run, which made this comparison noisier than planned. By the rule fixed before the results, a paper-size gain (+3.5 pp) is not reproduced with last-layer Z ([REPORT, Section 4.5](REPORT.md#45-visref_hs-last-layer-z-pre-registered)). The 23 answers the rules could not parse were extracted by a Claude Haiku subagent instead of the pre-registered Gemini model; scoring by rules only gives the same verdict. |
 
 All final tables are in [`results/`](results) (built from `repro/diag/*.json`). Post-hoc analyses (cause analysis,
 scoring variants, visual-token counts) are in [REPORT, Section 4](REPORT.md#4-beyond-the-paper) and are not part of the verdicts.
@@ -125,8 +128,9 @@ repro/                     implementation (lean) and analysis
   colab/build_colab.py     same for one Colab GPU, resumable via Google Drive
   report.py, rescore.py    offline aggregation / re-scoring (no GPU)
   llm_extract.py, gemini_extract.py   LLM fallback answer extraction for rule-failed rows
-  diag/                    pre-registered analyses (final_judgment.py, analyze_fill.py, step1_branch.py,
-                           analyze_step1_branch.py, analyze_hs.py) and post-hoc diagnostics, with their JSON outputs
+  diag/                    analyses with fixed decision rules (final_judgment.py: fixed before the final analysis;
+                           analyze_fill.py, step1_branch.py, analyze_step1_branch.py, analyze_hs.py: pre-registered)
+                           and post-hoc diagnostics, with their JSON outputs
   audit/                   independent reviews and audits
   kaggle/runs/<session>/   every session: run_config.json (source sha256, ids, args), env.json, logs, raw outputs
                            (b_main_s1–s9, b_main_fill, b_main_rescore_v2/v3, diag_st_plain, hidden_rank_check,
@@ -148,11 +152,11 @@ The documents in `docs/` are written in Korean; `REPORT.md` points to the releva
 ## Reproduce
 
 ### 1. Rebuild every table and the results figure from the saved outputs (CPU only)
-Needs Python 3.10 or newer (standard library only; `make check` passes on 3.10, 3.11, 3.12 and 3.13), `make` and a
+Needs Python 3.10 or newer (standard library only; `make check` passes on 3.11, 3.12 and 3.13; the README number check also ran on 3.10), `make` and a
 git checkout. No GPU and no PyTorch.
 ```bash
 make fetch     # MathVista testmini.json, official extraction prompt and cited code, sha256-checked
-make check     # re-runs the pre-registered analyses, results/ and the results figure, checks the README numbers;
+make check     # re-runs the analyses behind the verdicts, results/ and the results figure, checks the README numbers;
                # fails on any difference
 make report    # optional: descriptive per-method report (rule-based scorer v4, no LLM fallback) in build/
 ```
@@ -221,8 +225,8 @@ paper does not cite → our own choice.
 | Answer that does not finish | force a final answer: append `\n**Final Answer**\n\boxed` and allow up to 100 more tokens | answers often restarted thinking ("Wait, wait …") and ran to the 1,024-token limit; we found no rule for this in the paper or its cited works, and the public code of DEER (Yang et al. 2025, an early-exit method for reasoning models; not cited by the paper) has a rule for exactly this case | count such answers wrong ([REPORT, Section 3.2](REPORT.md#32-sensitivity-to-answer-handling)) |
 | Answer extraction | rules first (boxed answer, "answer is", last line); the official MathVista extraction prompt with an LLM only for rows the rules cannot parse | the official MathVista code handles only bare answers by rule (a choice or a number as the whole response) and sends every other response to an LLM (GPT); VLMEvalKit also tries a rule first, then GPT | the LLM for every response that is not a bare answer, with the official GPT model; not run |
 | Text that is scored | the text after the last `</think>` | the same split rule as VLMEvalKit (whether the InternVL3.5 evaluation turned it on: not confirmed) | score the whole output; not tested |
-| DPP selection size | the greedy DPP stops at the kernel rank, about m/5 tokens | the cited DPP code (Chen et al. 2018); conflicts with the paper's \|V_k\| = m | top up to m with tokens chosen without regard to relevance: no extra gain (`visref_fill`); m relevant tokens: not tested |
-| Vectors for the thinking text (Z) | input embeddings: the vectors right after the words are turned into numbers | our choice; the paper says "text token embeddings" without naming a layer | a deeper layer (e.g. the last): the DPP could then return m tokens for long enough steps, as the paper states; the last layer: follow-up `visref_hs`, no extra gain over TSR (see above) |
+| DPP selection size | the greedy DPP stops at the kernel rank, about m/5 tokens | the cited DPP code (Chen et al. 2018); conflicts with the paper's \|V_k\| = m | top up to m in an order nearly unrelated to relevance: no detectable gain (`visref_fill`); m relevant tokens: not tested |
+| Vectors for the thinking text (Z) | input embeddings: the vectors right after the words are turned into numbers | our choice; the paper says "text token embeddings" without naming a layer | a deeper layer (e.g. the last): the DPP could then return m tokens for long enough steps, as the paper states; the last layer: follow-up `visref_hs`, no detectable gain over TSR (see above) |
 | Stopping entropy H | one sampled answer (see below) | definition from the paper; the way to estimate it is ours | several sampled answers, entropy over distinct answer values, base-2 logarithm (the same δ = 0.25 would then be stricter); not used in the final runs |
 | Injection format | selected visual embeddings appended right before `</think>`, without the `<img>` … `</img>` tags InternVL uses around an image; order z_k → Ṽ_k → H_k → "Wait, think more" | order from the paper (Algorithm 1); format our choice | with the tags: dropped after a small early test (see above); after `</think>`, other position ids: not tested |
 | Image tiling | InternVL's standard input: the image is cut into up to 12 tiles of 448×448 to fit its shape, plus one shrunken copy of the whole image; each tile becomes 256 visual tokens (mean 1,961.5 per image) | the official model page's example code (`load_image(max_num=12)`, shrunken copy on) and the model's configuration file (`max_dynamic_patch` 12, `use_thumbnail` true) | without the shrunken copy the mean is 1,755.6, closer to the paper's ∼1,772 (8B); not run |
