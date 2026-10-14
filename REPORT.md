@@ -1,6 +1,6 @@
 # Reproducibility report: VisRef, Appendix Table 6 row "InternVL-1B" on MathVista testmini
 
-*Unofficial reproduction, MLRC / ReScience style. The main run and three follow-up experiments are finished; the decision rules of the follow-ups were fixed before their results. Three more experiments are planned (Section 5.4). The original authors have not been contacted yet.*
+*Unofficial reproduction, MLRC / ReScience style. The main run and three follow-up experiments are finished; the decision rules of the follow-ups were fixed before their results. Three more experiments are planned (Section 5.4).*
 
 **Paper.** Ghosal, Kim, Li, Chaudhry, Xu, Zhang, Zablocki, Xing, Zhang. *VisRef: Visual Refocusing while Thinking Improves Test-Time Scaling in Multi-Modal Large Reasoning Models.* arXiv 2603.00207, CVPR 2026. No official code was released (the CVPR 2026 supplementary material was checked).
 
@@ -17,6 +17,52 @@ We reimplemented the three methods of Table 6 (standard thinking ST, textual sel
 | C3 | VisRef > TSR | +3.5 pp | main comparison 2 |
 
 The paper's headline claim is that VisRef improves over both ST and TSR, so C2 and C3 are the main comparisons. We target the paired differences, not the absolute accuracies: the paper's ST (46.1) is far below the official InternVL3.5-1B MathVista (mini) score of 59.3 (InternVL3.5 report, Table 3; the report says its Section 3 results were obtained without test-time scaling, which it defines to include the thinking mode, so this is most likely a non-thinking score; which evaluation setting produced it is not confirmed), and the paper's 8B ST (68.1) is likewise more than 10 pp below the official 78.4. Table 6 labels the row "InternVL-1B". We use InternVL3.5-1B: the only InternVL generation the paper names is InternVL3.5, it runs its models in thinking mode, it compares the 1B, 2B and 8B models "under the same decoding setup and token budget", and its 8B row equals the InternVL3.5-8B row of Table 1.
+
+### 1.1 Experiments at a glance
+
+The work has two kinds of experiment. **Result experiments** (A1–A5) test the paper's claim or look for the reason it was not reproduced; their decision rules were fixed before their results (for A1 with the caveat of Section 2.4), and the verdicts come from them. **Setting checks** (B1–B6, [Section 2.6](#26-setting-checks-how-the-unstated-settings-were-chosen)) are small runs that chose settings the paper does not state, such as how to compute the stopping signal or how to re-insert the image. They gave no verdicts, but the settings they chose shape every result.
+
+<!-- check:glance -->
+| | Question | Questions | Result | Paper | Main limitation | Section |
+|---|---|---|---|---|---|---|
+| A1 | Does VisRef beat TSR and ST? | 1,000 | VisRef − TSR: −0.1 pp | +3.5 pp | only about one fifth of the paper's m image tokens were re-inserted | [3.1](#31-main-result-main-scoring-n--1000) |
+| A2 | Does topping the re-inserted image tokens up to m help? | 976 | fill − TSR: 0.0 pp | – | the added tokens were nearly unrelated to the thinking | [4.2](#42-visref_fill-topping-up-the-injection-to-m-tokens-pre-registered) |
+| A3 | Does re-inserting the image after step 1 help by itself? | 309 | with − without the image: +1.40 pp (answer at once), +0.97 pp (answer after more thinking) | – | only the questions where a method continued after step 1 | [4.3](#43-step1_branch-re-injection-at-step-1-pre-registered) |
+| A4 | Does choosing image tokens with the model's last-layer vectors help? | 839 | hs − TSR: +0.24 pp | – | the first step was generated anew (193 of 839 match the main run) | [4.5](#45-visref_hs-last-layer-z-pre-registered) |
+| A5 | Does thinking more after the re-inserted image help? | planned | not run yet | – | changes the paper's stopping behaviour | [5.4](#54-planned-next-experiments-not-yet-run) |
+<!-- /check -->
+
+| | Setting to decide | What we chose | Evidence | Where the setting comes from |
+|---|---|---|---|---|
+| B1 | When to stop thinking | the entropy of one short answer in `\boxed{…}` | 4 checks, 10–60 questions each | paper: the stopping rule<br>cited work (Ghosal et al.): several answers<br>ours: one answer |
+| B2 | How to re-insert the image tokens | without InternVL's image tags, right before `</think>` | 2 checks, 10 and 30 questions | paper: the order of the steps<br>official (InternVL): the image tags<br>ours: leaving them out |
+| B3 | Thinking length limit, and how to get an answer after a cut | 1,024 tokens per step, 10,240 in total; a prompt for the answer | 5 checks, 18–150 questions | official (InternVL): 1,024 is its example value<br>cited work (s1): the answer prompt<br>related work (DEER, not cited): the last-resort answer |
+| B4 | How many image tokens to pick | as many as the selection can pick, usually fewer than m | 74 questions and a calculation check | paper: m tokens<br>cited code (Chen et al. 2018): stops when no more can be picked<br>→ **conflict; we follow the code** |
+| B5 | How to extract and score answers | rules first; an LLM only where the rules fail | a pre-check on 49 rows | official (VLMEvalKit): which text is scored<br>official (MathVista): the extraction prompt<br>ours: which LLM, the grounding check |
+| B6 | Do the same inputs give the same outputs? | compare on the same questions from the same first step | 730–1,000 questions | ours |
+
+The raw outputs of every check are in `repro/kaggle/runs/`, except for the 10-answer check of B1 (8B model, earlier code) and the official-setting run of B3.
+
+**The setting checks used evaluation questions.** They ran on part of a 100-question development split drawn from MathVista testmini and on the first questions of the main run's order. All of these questions are also among the 1,000 evaluated questions (`docs/EXPERIMENT_FLOW.md`, the opening entry and the entry of 2026-10-07 on the lean code), so the settings may be fitted to them to some degree. Most settings were chosen from stopping rates and broken answer formats, and several checks stated in advance that accuracy would not be used for the decision.
+
+### 1.2 Terms
+
+| Term | Meaning |
+|---|---|
+| ST (standard thinking) | The model thinks once and answers. The baseline. |
+| TSR (textual self-reflection) | When a thinking step ends, "Wait, think more" is appended and the model thinks again. The image is not shown again. |
+| VisRef | Like TSR, but just before each continuation a selected part of the image is inserted again. The paper's method. |
+| thinking step | One stretch of thinking, until the model closes it (`</think>`) or hits the length limit. TSR and VisRef can run several steps. |
+| token | The unit the model reads and writes, roughly a piece of a word. |
+| image tokens | The pieces the model cuts an image into (visual tokens); 1,961.5 per question on average here. |
+| m | The number of image tokens the paper re-inserts at each step: 30% of all image tokens of the question. |
+| DPP selection | The calculation that picks image tokens that are relevant to the current thinking and do not repeat each other; we follow the code the paper cites. |
+| stopping entropy H | How uncertain the answer would be if the model answered now. Thinking stops when H is below 0.25. |
+| pp | Percentage points: the difference between two accuracies (60.0% − 57.8% = 2.2 pp). |
+| 95% CI | The range in which the difference would fall in most repetitions of the experiment. If it contains 0, we cannot say there is a difference. |
+| paired comparison | Two methods compared on the same questions, which removes differences in question difficulty. |
+| pre-registered | The decision rule was written down before the result was seen. |
+| raw outputs | The text the model generated and the scored rows, from which anyone can recompute the numbers. |
 
 ## 2. Methodology
 
@@ -60,25 +106,113 @@ The main comparisons, the tests (McNemar + Holm) and the scoring variants of Sec
 
 Three code versions produced the 1,000 questions: `79eef648ebd1` (session 1, 74 questions), `f2422d0e72ff` (sessions 2–4, 318) and `d0095f79e691` (sessions 5–9, 608). The follow-ups ran later versions (`visref_fill` `39b3fb1b4121`, `visref_hs` `f1376774850d`); changing `run.py`'s default token caps on 2026-10-13 (every run passed the caps explicitly) made the current version `cf46b2e6222e`. The first change removed unused branches (outputs identical on 810 of 810 compared outputs); the second changed only the scorer. All outputs were re-scored with the final scorer and merged. Compute (from the experiment log): the main run took 9 Kaggle sessions on 2×T4 (about 14.9 session-hours); visref_fill one session of about 11.3 h; step1_branch about 2,900 s per GPU for 289 questions plus a 20-question pilot.
 
+### 2.6 Setting checks: how the unstated settings were chosen
+
+Each table lists the checks in time order; the name in brackets is the run folder in `repro/kaggle/runs/`. "Development questions" are questions of the 100-question development split (Section 1.1).
+
+**B1. When to stop thinking.** The paper stops thinking when the entropy of the answer distribution falls below 0.25, but does not say how this entropy is computed. We tried four ways.
+
+| Check | How H was computed | What happened | Decision |
+|---|---|---|---|
+| first small check (`smoke`, 10 development questions) | mean entropy over the answer part of the response | almost always 0 (at most 0.003), so every question stopped after step 1 and TSR became identical to ST | compute over the whole response |
+| second small check (`smoke2`, 30 development questions) | the whole response | long responses give large values: summed as in the paper they were below 0.25 in only 0.8% of probes | let the model write one short answer after "Answer:" and sum its token entropies |
+| third small check (`smoke3`, 20 development questions) | one short answer after "Answer:" | TSR stopped by entropy in 0 of 18 questions: the answer content was certain (about 0.01 per token) but the leading space (about 0.47) and the line end (about 0.84) kept H high | read the answer inside `\boxed{…}` (at most 16 tokens), with the closing-brace tokens counted as one outcome |
+| check before the main run (`main_s0`, 59 questions) | the answer inside `\boxed{…}` | stopped after step 1 by entropy: TSR 50 of 59, VisRef 51 of 59; without merging the closing-brace tokens only 41 of 70 probes were below 0.25 (55 of 70 with it) | used in the main run |
+| ten answers per step (8B model, 3 development questions, earlier code) | ten complete answers per step | a TSR run on 3 questions took 4,703.9 GPU-seconds | back to one answer (from the paper's latency table we judged that the authors did not generate several long answers per step; our judgment) |
+
+- *Where the setting comes from.* The stopping rule (entropy of the answer distribution below 0.25) is from the paper. Ghosal et al., whom the paper cites for this criterion, sample several answers. One answer and the `\boxed{…}` format are our choice.
+- *Also recorded.* In the fill run (Section 4.2), H was measured both with and without the re-inserted image tokens: the median difference was 0.0006, and the stop-or-continue decision differed at 151 of 2,231 steps (6.8%).
+- *Limits.* The choice rests on 10 to 60 questions each. One sampled answer gives the right entropy on average but is noisy. In this setting TSR and VisRef rarely continued after a step the model had closed itself (7 of 359 and 35 of 398 probes); almost all continuations came after a 1,024-token cut.
+- *Sources.* `docs/EXPERIMENT_FLOW.md`, entries of 2026-10-07 (smoke1, smoke2, smoke3, main_s0); Sections 4.1 (items 1 and 5) and 4.2.
+
+**B2. How to re-insert the image tokens.** InternVL reads an image wrapped in `<img>` … `</img>` tags. The paper does not say how the selected image tokens are inserted during thinking.
+
+| Check | What happened | Decision |
+|---|---|---|
+| first small check (`smoke`, 10 development questions, with tags) | 7 to 8 of 9 VisRef responses broke into "draft answer + a second `</think>` + answer" (TSR 1 of 10) | also try inserting without tags |
+| second small check (`smoke2`, 30 development questions) | steps followed by a second `</think>`: with tags 31 of 63, with tags and the ridge variant 25 of 67, without tags 10 of 65, TSR 4 of 70 | insert without tags, right before `</think>` |
+| review of the insertion code (separate AI session) | no implementation error; the junction "image tokens, then `</think>`" may cause the broken formats | kept (we do not change settings after seeing results) |
+
+- *Where the setting comes from.* The order thinking → selected image tokens → stopping check → "Wait, think more", and the use of a subset of the original image tokens, are from the paper (Algorithm 1, Fig. 2). The `<img>` tags are InternVL's official format. Leaving them out and the position before `</think>` are our choice.
+- *Limits.* Tags were compared only in the small checks, not in the main run. Separators, position ids and other insertion points were not tried. Without tags the broken format remains (A1: a second `</think>` in 352 of 713 VisRef answers).
+- *Sources.* `docs/EXPERIMENT_FLOW.md`, entries of 2026-10-07 (smoke1, smoke2); Section 4.1 (items 3 and 6).
+
+**B3. Thinking length limit, and how to get an answer after a cut.**
+
+| Check | Setting | What happened | Decision |
+|---|---|---|---|
+| long limit (`main_s0`, `full_s1`, about 60 questions each) | 4,096 tokens per step | 48–57% of ST first steps were cut, about half of those in repetition loops; 58 questions × 3 methods took 2 hours, too slow for 1,000 questions on free GPUs | 1,024 tokens per step, 10,240 in total |
+| short limit (`b_test`, 18 questions, stopped after about 8 minutes) | after a cut, `Final Answer:` asks for the answer | 12 of 26 prompted answers ran to the 1,024-token answer limit again, as often as without the prompt (14 of 30 in `main_s0`) | if the answer still does not finish, append `**Final Answer**\boxed` and allow 100 more tokens |
+| first main session (`b_main_s1`, 74 questions) | as above | no question was left without an answer | used in the main run |
+| answer prompt removed (`diag_st_plain`, 150 questions, pre-registered) | no `Final Answer:` after a cut | −2.0 pp, 15 against 18 discordant questions | kept; 150 questions cannot detect a change of a few pp |
+| official setting (`st_official`, target 100 questions, free Colab, pre-registered) | InternVL's official thinking evaluation: up to 65,536 new tokens, no answer prompt; ST with practically unlimited thinking | long questions took hours each; stopped at the free usage limit after 33 questions | not analysed |
+
+- *Where the setting comes from.* The paper gives no length limits. 1,024 is the example value of the official InternVL model page. Appending `Final Answer:` after a cut is the budget forcing of s1 (Muennighoff et al. 2025), which the paper cites; applying it here is our interpretation. The last-resort `**Final Answer**\boxed` comes from the public code of DEER (Yang et al. 2025), which the paper does not cite. The official-setting run followed VLMEvalKit's InternVL3.5 configuration.
+- *Limits.* The 1,024-token limit shortens ST's thinking (Section 3.1, limit 2). The main run was not repeated with a 4,096-token limit. The outputs of the official-setting run are not in this repository.
+- *Sources.* `docs/EXPERIMENT_FLOW.md`, entries of 2026-10-07 (main_s0, full_s1, b_test, b_main_s1) and 2026-10-10 (st_official, the 4,096-cap check); Sections 2.1, 3.3 and 4.1 (item 6).
+
+**B4. How many image tokens to pick.** The paper picks exactly m tokens at each step.
+
+| Check | What happened | Decision |
+|---|---|---|
+| the cited selection code (Chen et al. 2018) | the greedy selection can pick only as many tokens as the kernel rank allows, which is bounded by the number of distinct tokens in the thinking step, and then stops; short steps give far fewer than m | stop where the code stops; recorded as a confirmed difference from the paper |
+| first main session (`b_main_s1`, 74 questions) | ran "stop where the code stops" next to "fill up to m by relevance" | after this session, before the next one, the fill variant was dropped |
+| deeper-layer vectors checked offline (`hidden_rank_check`, 6 cut steps) | with hidden-state vectors, too, only about 50–110 picks add clearly new information; none of the 6 steps reached m | the deeper-layer variant was postponed (run later as Section 4.5) |
+
+- *Where the setting comes from.* "m tokens at every step" is from the paper. The selection follows the code the paper cites (Chen et al. 2018), which stops when no further token can be picked. The two conflict; we follow the code and state the difference. The stopping threshold (relative to the largest diagonal) is our choice.
+- *Confirmed in the main run.* Median injected/m ratio 0.199; 1,895 of 2,261 steps injected fewer than m tokens.
+- *Limits.* How the authors handled this is unknown (Section 5.3, question 6). Dropping the fill variant was decided after 74 questions.
+- *Sources.* Section 2.1 ("DPP selection size"), Section 4.1 (item 4), Section 4.2; `docs/EXPERIMENT_FLOW.md`, entries of 2026-10-07 (selection rule, b_main_s1) and 2026-10-08 (hidden_rank_check).
+
+**B5. How to extract and score answers.** The text after the last `</think>` is scored. Answers are taken by rules first (`\boxed{…}`, "answer is", the last line); only where the rules fail does an LLM extract the answer with the official MathVista extraction prompt.
+
+| Check | What happened | Decision |
+|---|---|---|
+| LLM extraction pre-check (49 rows, gemini-3.5-flash-lite) | both rows the LLM "fixed" were wrong: it invented an answer for an empty response, and picked a different number from the text | empty responses are not sent, and an LLM answer counts only if it appears in the response; re-run: 0 wrongly fixed |
+| final extraction of the main run (1,000 questions) | of 36 rule-failed rows, 30 extractions used and 6 rejected; 1 label changed; 20 control rows all agreed with the rules | used in the main scoring |
+| scoring variants (five, Section 3.2) | the classification is the same under every variant; VisRef − TSR lies between −0.9 and +1.0 pp | answer handling alone does not explain the gap to the paper |
+
+- *Where the setting comes from.* Scoring the text after the last `</think>` is VLMEvalKit's split rule. The extraction prompt is MathVista's official one. Rules first, the LLM model and the grounding check are our choice. Scorer v4, changed after the results (an empty multiple-choice extraction counts as wrong), behaves like the official MathVista option `--ignore_empty_extractions`.
+- *Limits.* The official extractor is GPT; ours differs. The fill and `visref_hs` runs used a different LLM (Claude Haiku). The grounding check stops invented answers but not a wrong number picked from the text.
+- *Sources.* `docs/EXPERIMENT_FLOW.md`, entry of 2026-10-10 (LLM extraction pre-check); Sections 2.2, 3.2 and 4.4.
+
+**B6. Do the same inputs give the same outputs?**
+
+| Check | What happened |
+|---|---|
+| TSR and ST from the same context and seed (730 questions where TSR stopped after step 1) | identical text in 491; extracted answers differ in 16 (2.2%), from the order of fp16 arithmetic when questions are batched together |
+| first steps regenerated in follow-up runs | first-step text identical to the main run: fill 242 of 994, `visref_hs` 193 of 839 |
+| before and after removing unused code | 810 of 810 compared outputs identical |
+
+- *Decision.* The three methods share the first thinking step, so that they are compared on the same questions from the same start; the planned experiments start from the stored first step.
+- *Limits.* The paper used A10G GPUs; we used T4. The effect of this difference was not tested.
+- *Sources.* Sections 2.5, 4.1 (item 2) and 6.
+
 ## 3. Results
 
 ### 3.1 Main result (main scoring, n = 1,000)
+
+> **Card A1.** *Question:* does VisRef beat TSR and ST? *Method:* 1,000 questions; the three methods share questions, seeds and the first thinking step; 1,024 tokens per step, 10,240 in total. *Result:* VisRef − TSR −0.1 pp (CI −2.0 to +1.7; paper +3.5). *Limits:* (1) about one fifth of the paper's m image tokens were re-inserted (median 129 of 537), so this is not "the paper's method, without effect"; (2) ST answered after a 1,024-token cut in 641 questions while TSR and VisRef could continue, so TSR − ST and VisRef − ST include extra thinking time, which the main comparison VisRef − TSR does not; (3) a second `</think>` in 352 of 713 VisRef answers that stopped after step 1 (ST 67); (4) the rules were fixed after interim looks (Section 2.4). *Files:* `repro/kaggle/runs/b_main_s1`–`b_main_s9`, `repro/llm/final/merged.jsonl`, `repro/diag/final_judgment.py`.
 
 ![Paired accuracy differences with 95% CIs next to the paper's differences](figures/paired_differences.svg)
 
 *Figure 2. Our paired differences (dot, 95% bootstrap CI) next to the paper's differences (diamond). Drawn by `scripts/make_figures.py` from `results/paired_differences.csv`.*
 
+<!-- check:accuracy_report -->
 | Method | Ours % | Paper % | Ours − paper |
 |---|---|---|---|
 | ST | 57.8 | 46.1 | +11.7 |
 | TSR | 60.1 | 48.5 | +11.6 |
 | VisRef | 60.0 | 52.0 | +8.0 |
+<!-- /check -->
 
+<!-- check:paired_report -->
 | Comparison | Ours (pp) | 95% CI | Only first / only second correct | McNemar p | Holm p | Paper (pp) | Classification |
 |---|---|---|---|---|---|---|---|
-| VisRef − ST (main) | +2.2 | +0.3 to +4.1 | 60 / 38 | 0.033 | 0.067 | +5.9 | effect size not reproduced (same direction, smaller) |
+| VisRef − ST (main) | +2.2 | +0.3 to +4.1 | 60 / 38 | 0.033 | 0.067 | +5.9 | effect size not reproduced (same direction, different size) |
 | VisRef − TSR (main) | −0.1 | −2.0 to +1.7 | 44 / 45 | 1.000 | 1.000 | +3.5 | effect size not reproduced |
-| TSR − ST (suppl.) | +2.3 | +0.6 to +4.0 | 51 / 28 | 0.013 | n/a | +2.4 | consistent with the paper's value |
+| TSR − ST (suppl.) | +2.3 | +0.6 to +4.0 | 51 / 28 | 0.013 | n/a | +2.4 | consistent with the paper value |
+<!-- /check -->
 
 - VisRef−ST: the unadjusted CI excludes 0, but the difference is not significant after the pre-specified Holm correction (p = 0.067).
 - VisRef−TSR: the CI excludes +3.5 but not a small positive gain (up to +1.7 pp). We did not confirm an additional gain over TSR.
@@ -129,6 +263,8 @@ We could not pin down a single cause. The items below are observations and candi
 
 ### 4.2 visref_fill: topping up the injection to m tokens (pre-registered)
 
+> **Card A2.** *Question:* does topping the selection up to m tokens help? *Result:* fill − TSR 0.0 pp (976 questions). *Limits:* the added tokens were nearly unrelated to relevance, so this tests "more tokens of little relevance"; the first step was regenerated (242 of 994 identical); the rows the rules could not parse were extracted by a different LLM (Claude Haiku; no label changed). *Files:* `repro/kaggle/runs/b_main_fill`, `repro/diag/analyze_fill.py`.
+
 *Design.* Identical to VisRef except that, after the greedy selection stops at the kernel rank, the same greedy continues on L + εI (ε = 1e-6 × mean diagonal) until m tokens are chosen (the leading part is asserted identical to VisRef). *Sample.* All 1,000 questions were submitted; the session ended with 994 rows, and the pre-registered analysis uses the complete prefix of the shuffled order (976 questions). *Rule.* A fill−TSR CI lower bound above 0 would support "too few injected tokens reduced VisRef's gain".
 
 | Method | ST | TSR | VisRef (main run) | VisRef-fill |
@@ -141,9 +277,11 @@ We could not pin down a single cause. The items below are observations and candi
 | fill − VisRef | +0.10 | −2.15 to +2.36 | 65 / 64 | 1.000 |
 | fill − ST | +2.25 | −0.31 to +4.71 | 87 / 65 | 0.088 |
 
-*Result.* This filled variant showed no detectable gain; the CI excludes gains larger than about +2.4 pp. The pre-registered reading ("too few injected tokens caused the missing gain" is not supported) is kept as the recorded verdict, but its scope is narrow: filling changes both the amount and, through the ridge term, which tokens are added, so this run does not isolate the effect of the amount. Every step injected exactly m tokens (2,231 steps; the filled tail had a median of 420 tokens). *Strata* (pre-specified, by the first-step end in the main ST run): closed 322 q, fill−TSR −0.62 (−2.48, +1.24); truncated 629 q, +1.75 (−1.43, +5.09); EOS 25 q, −36.0 (−64, −8; 4 vs 13). *Caveats.* The filled tail was nearly unrelated to relevance (median Spearman correlation of tail order with relevance −0.10; negative means more relevant tokens first), and εI also changes the selection, so this tests "more tokens of little relevance", not "top-m by relevance". In the paper, random selection is close to ST (Table 7) while selection by diversity alone is well above it (Table 3: 77.4; Table 8 at λ = 0: 71.2; the two tables disagree); the top-up is neither random nor relevance-ordered, so the paper's ablations do not settle what to expect from it. The fill run also generated the first thinking step anew: its text matches the main run in 242 of 994 questions, which adds noise to the paired comparisons. An earlier relevance-filled variant ran on the first 74 questions only and was dropped. The reading of the small EOS stratum is post hoc: when step 1 ended almost at once, the kernel held few tokens and filling added hundreds. The LLM fallback for this run used a Claude Haiku-class extractor instead of gemini-3.5-flash-lite (a documented deviation); it changed no label. *Dual stopping probe* (recorded by design, decision unchanged; interpretation post-hoc; H recorded with and without Ṽ_k in context): median H − H_noV = 0.0006; the stop/continue decision would differ at 151 of 2,231 steps (6.8%), 110 continuing only with Ṽ_k and 41 only without, 129 of the 151 at truncated steps.
+*Result.* This filled variant showed no detectable gain; the CI excludes gains larger than about +2.4 pp. The pre-registered reading ("too few injected tokens caused the missing gain" is not supported) is kept as the recorded verdict, but its scope is narrow: filling changes both the amount and, through the ridge term, which tokens are added, so this run does not isolate the effect of the amount. Every step injected exactly m tokens (2,231 steps; the filled tail had a median of 420 tokens). *Strata* (pre-specified, by the first-step end in the main ST run): closed 322 q, fill−TSR −0.62 (−2.48, +1.24); truncated 629 q, +1.75 (−1.43, +5.09); EOS 25 q, −36.0 (−64, −8; 4 vs 13). *Caveats.* The filled tail was nearly unrelated to relevance (median Spearman correlation of tail order with relevance −0.10; negative means more relevant tokens first), and εI also changes the selection, so this tests "more tokens of little relevance", not "top-m by relevance". In the paper, random selection is close to ST (Table 7) while selection by diversity alone is well above it (Table 3: 77.4; Table 8 at λ = 0: 71.2; the two settings may differ); the top-up is neither random nor relevance-ordered, so the paper's ablations do not settle what to expect from it. The fill run also generated the first thinking step anew: its text matches the main run in 242 of 994 questions, which adds noise to the paired comparisons. An earlier relevance-filled variant ran on the first 74 questions only and was dropped. The reading of the small EOS stratum is post hoc: when step 1 ended almost at once, the kernel held few tokens and filling added hundreds. The LLM fallback for this run used a Claude Haiku-class extractor instead of gemini-3.5-flash-lite (a documented deviation); it changed no label. *Dual stopping probe* (recorded by design, decision unchanged; interpretation post-hoc; H recorded with and without Ṽ_k in context): median H − H_noV = 0.0006; the stop/continue decision would differ at 151 of 2,231 steps (6.8%), 110 continuing only with Ṽ_k and 41 only without, 129 of the 151 at truncated steps.
 
 ### 4.3 step1_branch: re-injection at step 1 (pre-registered)
+
+> **Card A3.** *Question:* does re-inserting the image after step 1 help by itself? *Result:* with − without the image +1.40 pp (answer at once) and +0.97 pp (answer after up to 512 more tokens), both Holm p 0.658. *Limits:* only the 309 questions where a method continued after step 1; designed to detect effects of about 5–6 pp; says nothing about later steps, the stopping rule or the insertion format. *Files:* `repro/kaggle/runs/step1_branch_pilot`, `step1_branch_main`, `repro/diag/analyze_step1_branch.py`.
 
 *Motivation (post-hoc).* The stored step-1 stopping-probe answers of the main run (1 sample, T = 1) gave VisRef 58.9 vs TSR 57.2 on 1,000 questions (28 vs 11 discordant, McNemar p = 0.0095, CI +0.5 to +3.0). All of the gap lies in the 309 questions where TSR or VisRef continued after step 1 (36.6 vs 31.1); the other 691 had no discordant pair. Their final answers did not differ (42.4 vs 43.0, 30 vs 32 discordant). These exploratory p-values are uncorrected.
 
@@ -166,16 +304,19 @@ We could not pin down a single cause. The items below are observations and candi
 
 *Correction (2026-10-12, after publication):* the bootstrap p-values were first computed on float accuracies (thirds), so resample means that are exactly 0 fell into one tail or the other depending on the Python version (p 0.289 / 0.575 and Holm 0.578 on Python ≤ 3.11; 0.281 / 0.583 on 3.12+). The analysis now uses integer counts of correct answers; the bootstrap p is 0.329 / 0.584 (Holm 0.658 for both) on every Python version. The CIs, the other numbers and the verdict are unchanged; the earlier output is kept in `repro/diag/step1_branch_analysis_float_py311.json`.
 
-*Verdict by the pre-registered rule (④): the immediate-answer gain was not reproduced.* The gap seen in the stored probes may have been noise. The pre-registered wording for a null result is that effects of about 5–6 pp or more were not detected (5–6 pp was the planned 80%-power minimum detectable effect); the realised CI upper bounds are about +4 pp. In the free-thinking arms the model closed `</think>` itself in 99 (C) vs 82 (D) of 309 cases, reached the 512 cap in 203 vs 220, and used image-related words in 22.7% vs 31.4% of the free-thinking texts, so re-injection changed what the model wrote about without a detectable change in accuracy. *Reconstruction check:* re-tokenised length matched the main run in 301 of 309 questions and the selection size in 296; restricting to the 293 matching both gives the same conclusion. *Post-hoc, not pre-registered:* D−A is +2.27 pp (95% CI −0.97 to +5.72); under greedy decoding the order was C 39.81 > D 37.86 > B 36.57 > A 35.28, so "D is best" is not robust. *Scale:* the experiment covers only re-injection at step 1 on these 309 questions. If a +3.5 pp gap on 1,000 questions came from these 309 alone it would need about +11 pp within them, while the CI upper bounds correspond to about +1.2 to +1.3 pp on the 1,000-question scale. It says nothing about stopping rules, step lengths, injection format, or steps after the first. Outside these 309 questions, where both methods stopped at step 1 and VisRef injected Ṽ_1 just before the answer, VisRef and TSR final answers also differ in correctness in 27 questions (14 vs 13).
+*Verdict by the pre-registered rule (case 4): the immediate-answer gain was not reproduced.* The gap seen in the stored probes may have been noise. The pre-registered wording for a null result is that effects of about 5–6 pp or more were not detected (5–6 pp was the planned 80%-power minimum detectable effect); the realised CI upper bounds are about +4 pp. In the free-thinking arms the model closed `</think>` itself in 99 (C) vs 82 (D) of 309 cases, reached the 512 cap in 203 vs 220, and used image-related words in 22.7% vs 31.4% of the free-thinking texts, so re-injection changed what the model wrote about without a detectable change in accuracy. *Reconstruction check:* re-tokenised length matched the main run in 301 of 309 questions and the selection size in 296; restricting to the 293 matching both gives the same conclusion. *Post-hoc, not pre-registered:* D−A is +2.27 pp (95% CI −0.97 to +5.72); under greedy decoding the order was C 39.81 > D 37.86 > B 36.57 > A 35.28, so "D is best" is not robust. *Scale:* the experiment covers only re-injection at step 1 on these 309 questions. If a +3.5 pp gap on 1,000 questions came from these 309 alone it would need about +11 pp within them, while the CI upper bounds correspond to about +1.2 to +1.3 pp on the 1,000-question scale. It says nothing about stopping rules, step lengths, injection format, or steps after the first. Outside these 309 questions, where both methods stopped at step 1 and VisRef injected Ṽ_1 just before the answer, VisRef and TSR final answers also differ in correctness in 27 questions (14 vs 13).
 
-### 4.4 Paper fingerprints (post-hoc)
+### 4.4 Comparison with other numbers in the paper (post-hoc)
 
 - **Visual tokens.** The paper reports ∼1,772 visual tokens per image (InternVL-3.5-8B, MathVista; the 1B and 8B models use the same InternViT-300M). Recomputing InternVL's dynamic tiling from the image sizes reproduces our recorded counts on 1,000/1,000 questions. Mean |V|: max_num 12 with thumbnail 1,961.5 (+10.7% vs 1,772); max_num 12 without thumbnail 1,755.6 (−0.9%); max_num 6, 8 or 10 give −24% to −41%. This is compatible with, but does not show, that the authors dropped the thumbnail tile.
 - **Answer handling.** Accuracy under four scoring variants against Table 6 (ST / TSR / VisRef, gap = ours − paper): main scoring 57.8 / 60.1 / 60.0 (+11.7 / +11.6 / +8.0); unfinished answers (rows that needed af) counted wrong 44.4 / 48.3 / 47.4 (−1.7 / −0.2 / −4.6); answers forced after cut thinking counted wrong 25.2 / 26.4 / 26.9 (−20.9 / −22.1 / −25.1); both counted wrong 24.4 / 25.3 / 26.3 (−21.7 / −23.2 / −25.7). Only counting unfinished answers wrong lands near the paper's ST and TSR. That is a hypothesis formed after the results and selected among four variants; under it TSR−ST is +3.9, farther from +2.4 than the main scoring's +2.3. VisRef−TSR lies between −0.9 and +1.0 under all four variants, so answer handling alone does not explain a missing +3.5.
 - **Thinking volume.** Generated tokens relative to ST: TSR 1.98×, VisRef 2.14×. The paper's latency ratios (Table 5, 8B on H100) are 1.08× and 1.15×. The models differ, so this is only indicative that continuation was rarer in the authors' setup. In ours, 64.1% of ST first steps hit the cap, and 73.0% (TSR) and 71.3% (VisRef) of questions stopped at step 1.
 
 ### 4.5 visref_hs: last-layer Z (pre-registered)
-*Question.* Does VisRef gain over TSR when the thinking-step vectors Z in the DPP kernel are the model's last-layer hidden states (after the final norm, the vectors that feed the output layer) instead of the input embeddings? With input embeddings the kernel rank is bounded by the number of distinct tokens in a step, so only about one fifth of m is injected (Section 4.1, item 4). Last-layer vectors differ at every position, so the DPP can pick m tokens when a step has at least m tokens. On 2026-10-06 the author had chosen the last hidden state as the first candidate for Z; the code rewritten on 2026-10-07 used input embeddings, and the reason is not recorded (`docs/AI_USE_REFLECTION.md`, Section 1). This experiment was added after the main results.
+
+> **Card A4.** *Question:* does choosing image tokens with the model's last-layer vectors help? *Result:* hs − TSR +0.24 pp (839 questions); the injection reached m tokens. *Limits:* the first step was regenerated (193 of 839 identical), which lowered the power for +3.5 pp to about 72%; only a median of 70 picks add clearly new information; the extractor was changed after the rules-only result (rules only: same verdict); 161 questions not run. *Files:* `repro/kaggle/runs/b_main_hs`, `repro/diag/analyze_hs.py`.
+
+*Question.* Does VisRef gain over TSR when the thinking-step vectors Z in the DPP kernel are the model's last-layer hidden states (after the final norm, the vectors that feed the output layer) instead of the input embeddings? With input embeddings the kernel rank is bounded by the number of distinct tokens in a step, so only about one fifth of m is injected (Section 4.1, item 4). Last-layer vectors differ at every position, so the DPP can pick m tokens when a step has at least m tokens. This experiment was added after the main results.
 
 *Design (fixed before results: [commit ccac0d9](https://github.com/AhnJG/visref-repro/commit/ccac0d9), entry of 2026-10-12 in `docs/EXPERIMENT_FLOW.md`).* Only Z changes; the DPP, the visual vectors V, the injection format, the stopping probe, answer handling, token caps (1,024 per step, 10,240 in total), seeds and question order are those of the main run. By design only Z changes, but the first thinking step was generated anew in this session: with the same seeds, the text diverged (batch-dependent fp16 arithmetic, Section 6) and matches the main run in only 193 of 839 questions, whereas the main run's TSR and VisRef share ST's step 1 in all 1,000. All 1,000 questions are queued in the seed-0 order in one Kaggle session (2×T4, timeout 29,000 s); only the complete prefix is analysed, against the main run's ST, TSR and VisRef rows of the same questions. Scoring as in Section 2.2; the rules-only result is reported too. Main comparison hs − TSR (paired bootstrap 95% CI, exact McNemar test): CI lower bound > 0 → extra gain with last-layer Z; CI contains 0 and upper bound ≥ +3.5 pp → undecided; upper bound < +3.5 pp → the paper-size gain (+3.5 pp) is not reproduced with last-layer Z. Fewer than 300 finished questions → reported as underpowered. Run settings: `repro/kaggle/runs/b_main_hs/run_config.json` (its code hashes equal `repro/` at commit ccac0d9). Analysis: `repro/diag/analyze_hs.py`, written and tested before the results.
 
@@ -185,7 +326,7 @@ We could not pin down a single cause. The items below are observations and candi
 
 *Mechanism (descriptive).* The injection reached m: median injected/m 1.0 (quartiles 0.977 / 1.0 / 1.0), against 0.205 for VisRef with input embeddings on the same questions; 1,130 of the 1,678 steps with at least m tokens injected exactly m. The steps that stayed below m were of two kinds: 288 steps shorter than m tokens (242 of them closed naturally), where the DPP can pick at most one image token per thinking token (284 picked exactly that many); and 548 steps of large images (544 with m = 998, i.e. 3,328 visual tokens, and 4 with m = 844), where m is close to the rank of the visual vectors (median 1,009) and the greedy DPP stopped at its numerical threshold at a median of 98.2% of m (of the 582 steps with m = 998 that were at least m tokens long, 38 reached m). Only a median of 70 picks (13.6% of m) added clear diversity (normalized residual ≥ 0.01), and the later picks followed relevance only weakly (median rank correlation −0.171; negative means more relevant tokens first). A second `</think>` appeared in 395 of 839 final answers (VisRef 392, ST 109, TSR 99). Mean number of steps k: 2.34 (VisRef 2.27, TSR 2.10). The first-step end type agreed with the main run in 763 of 839 questions, the step-1 text in 193.
 
-*Deviation from the pre-registration.* At the author's request, the 23 rows the rules could not parse were extracted by a Claude Haiku subagent with the same official MathVista prompt and no ground truth, instead of gemini-3.5-flash-lite (as in the fill run). 21 extractions were used and 2 were empty (rule result kept); the 20 control rows all agreed with the rules. One row changed from correct to wrong (pid 722, whose response ends with "The correct answer should be B) no"). The change of extractor was decided after the rules-only result had been computed and logged. The compared main-run rows were extracted with gemini-3.5-flash-lite, so the rules-only reading, which scores all four methods the same way, is the like-for-like comparison; it gives the same verdict.
+*Deviation from the pre-registration.* The 23 rows the rules could not parse were extracted with Claude Haiku, with the same official MathVista prompt and no ground truth, instead of gemini-3.5-flash-lite (as in the fill run). 21 extractions were used and 2 were empty (rule result kept); the 20 control rows all agreed with the rules. One row changed from correct to wrong (pid 722, whose response ends with "The correct answer should be B) no"). The change of extractor was decided after the rules-only result had been computed and logged. The compared main-run rows were extracted with gemini-3.5-flash-lite, so the rules-only reading, which scores all four methods the same way, is the like-for-like comparison; it gives the same verdict.
 
 *Reading.* Injecting m tokens chosen with last-layer vectors brought VisRef no detectable gain over TSR in this implementation (CI upper bound +3.10 pp). The other differences on our side (injection format and position, the stopping estimate, token limits; Section 4.1) remain untested.
 
@@ -209,16 +350,16 @@ We could not find the following in the paper; each was a choice of ours (Section
 - the injection format: tags, separators, `</think>` handling, position ids, answer prompt after Ṽ_k;
 - the image tiling (thumbnail tile).
 
-We also recorded internal tensions in the paper (for example the latency table versus the token-usage figure; `docs/IMPLEMENTATION_CHOICES.md`, items A-4, A-8 to A-10, C-12) and did not use them as targets.
+Some quantities in the paper were hard for us to relate to each other (for example the latency table and the token-usage figure); we did not use them as targets.
 
-### 5.3 Communication with original authors
+### 5.3 Questions for the original authors
 
-None as of 2026-10-13. Questions we would send:
+Questions we could not answer from the paper or the works it cites:
 
 1. Per-step and total thinking token limits; handling of truncated thinking.
 2. How answers that reach the length limit were scored.
 3. The answer extraction method (rules or LLM; which model).
-4. The estimator of H: samples, temperature, probe prompt, log base.
+4. The estimator of H: samples, temperature, probe prompt, log base, and whether token entropies are summed or averaged.
 5. The layer used for Z and V in the DPP kernel, and whether the two are taken from the same vector space.
 6. How |Ṽ_k| = m is enforced when the kernel rank is below m.
 7. Injection format, separators, `</think>` handling and position ids.
@@ -227,7 +368,10 @@ None as of 2026-10-13. Questions we would send:
 10. Sampling parameters, number of runs and hardware/precision for Table 6.
 
 ### 5.4 Planned next experiments (not yet run)
-Three experiments are planned; their decision rules are fixed and published before each run (details: README, "Planned next experiments"). (2) and (3) were pre-registered on 2026-10-13, before any run (entry "사전등록: 생각 이어가기 실험" in `docs/EXPERIMENT_FLOW.md`; analysis `repro/diag/analyze_think.py`). (1) `visref_hs` on the 161 questions the session did not reach, with the same design, reported next to the recorded 839-question verdict. (2) Thinking after the image (`visref_think`): when the stopping rule fires, the model continues after Ṽ_k with the paper's cue "Wait, think more" and thinks up to 512 more tokens before answering, against TSR with the same extra thinking and no image (`tsr_think`); VisRef stopped at step 1 in 71.3% of questions, so in most questions the re-injected image currently comes right before the answer. (3) Both together (`visref_hs_think`), which completes a 2 × 2 design with the main run and `visref_hs`. Following the independent review of 2026-10-13 (`repro/audit/independent_review_20261013/review.md`), (2) and (3) start from the main run's stored first thinking step and run together with their control, because the follow-up runs so far regenerated step 1 (only 193 of 839 `visref_hs` first steps match the main run), which roughly doubled the paired noise. The extra 512 tokens are outside the 10,240-token budget, answers are handled as in the main run, and the main comparison `visref_think` − `tsr_think` uses the three-way rule of `visref_hs` against the paper's +3.5 pp. With the measured disagreement rates of 9% (main run VisRef − TSR) and 16% (`visref_hs` − TSR), the power to detect +3.5 pp on 1,000 questions is 0.96 to 0.79.
+
+> **Card A5.** *Question:* does thinking more after the re-inserted image help? *Status:* pre-registered, not run. *Limits:* it changes the paper's stopping behaviour, so a gain would support "a variant with thinking after the image", not a reproduction of VisRef; the extra 512 tokens are outside the 10,240-token budget; because `visref_hs` regenerated step 1, the 2 × 2 comparison with it is not like-for-like in that cell. *Files:* `repro/diag/analyze_think.py`.
+
+Three experiments are planned; their decision rules are fixed and published before each run. (2) and (3) were pre-registered on 2026-10-13, before any run (entry of 2026-10-13 in `docs/EXPERIMENT_FLOW.md`; analysis `repro/diag/analyze_think.py`). (1) `visref_hs` on the 161 questions the session did not reach, with the same design, reported next to the recorded 839-question verdict. (2) Thinking after the image (`visref_think`): when the stopping rule fires, the model continues after Ṽ_k with the paper's cue "Wait, think more" and thinks up to 512 more tokens before answering, against TSR with the same extra thinking and no image (`tsr_think`); VisRef stopped at step 1 in 71.3% of questions, so in most questions the re-injected image currently comes right before the answer. (3) Both together (`visref_hs_think`), which completes a 2 × 2 design with the main run and `visref_hs`. Following an independent review on 2026-10-13, (2) and (3) start from the main run's stored first thinking step and run together with their control, because the follow-up runs so far regenerated step 1 (only 193 of 839 `visref_hs` first steps match the main run), which roughly doubled the paired noise. The extra 512 tokens are outside the 10,240-token budget, answers are handled as in the main run, and the main comparison `visref_think` − `tsr_think` uses the three-way rule of `visref_hs` against the paper's +3.5 pp. With the measured disagreement rates of 9% (main run VisRef − TSR) and 16% (`visref_hs` − TSR), the power to detect +3.5 pp on 1,000 questions is 0.96 to 0.79. Rough cost from the measured `visref_hs` speed (839 questions in about 7.7 h on 2×T4): about 2 h for the remaining 161 questions and 9 h or more per method for 1,000 questions (an estimate, not measured). Because the existing `visref_hs` run regenerated step 1, its cell of the 2 × 2 design is not like-for-like with the other three.
 
 ## 6. Limitations
 
@@ -236,27 +380,33 @@ Three experiments are planned; their decision rules are fixed and published befo
 - The paper provides no per-question outputs, so the difference between our result and the paper's cannot be tested formally; the CI classification is a coarse check.
 - Absolute accuracies are 8–12 pp above the paper's. Candidates (treatment of unfinished answers, thinking budget, extraction, prompt) were not isolated; the closeness of the variant that counts unfinished answers wrong to the paper's ST and TSR is a post-hoc hypothesis.
 - Choices of ours (Z layer, H estimator, injection format, token limits) and the confirmed shortfall in injected tokens limit what the null result on VisRef−TSR means; it concerns this implementation only.
-- The LLM fallback differs from the official GPT-based extractor; the fill and visref_hs runs used a Claude Haiku subagent instead of the Gemini model of the main run.
+- The LLM fallback differs from the official GPT-based extractor; the fill and visref_hs runs used Claude Haiku instead of the Gemini model of the main run.
+- The setting checks (Section 2.6) ran on questions that are also among the 1,000 evaluated questions, so the settings may be fitted to them to some degree; most were chosen from stopping rates and broken answer formats, not from accuracy.
 - The main comparisons and tests were fixed after an interim look at 392 questions and the CI classification rule after one at 759 (Section 2.4); the post-hoc analyses are exploratory.
-- Several analysis and review passes (`repro/audit/`) were done by AI-model sessions, not by human reviewers. Untried ideas, such as a step cap of 4,096 or multi-sample H, were not run; last-layer Z was run as a follow-up (Section 4.5).
+- The independent reviews of the code and analyses were done by separate AI sessions, not by human reviewers. Untried ideas, such as a step cap of 4,096 or multi-sample H, were not run; last-layer Z was run as a follow-up (Section 4.5).
 
 ## 7. Where to find things
 
 | What | Where (in this repository) |
 |---|---|
 | Chronological log with pre-registrations and decisions (Korean) | `docs/EXPERIMENT_FLOW.md` |
-| Evidence per implementation decision, external-number ledger (Korean) | `docs/IMPLEMENTATION_CHOICES.md` (start at "핵심 판단 요약"; named `SPEC_LEDGER.md` until 2026-10-13) |
+| Evidence per implementation decision, external-number ledger (Korean) | `docs/IMPLEMENTATION_CHOICES.md` (start with its summary table) |
 | Main verdict script and numbers | `repro/diag/final_judgment.py`, `repro/diag/final_judgment.json` |
 | Follow-up analyses | `repro/diag/analyze_fill.json`, `repro/diag/step1_branch_analysis.json` (earlier float version: `step1_branch_analysis_float_py311.json`), `repro/diag/paper_fingerprints.json`, `repro/diag/step1_probe_analysis.json`, `repro/diag/analyze_k1_injection.json`, `repro/diag/st_plain_analysis.json`; `repro/diag/analyze_hs.json` (Section 4.5; the script was written before the results) |
-| Raw generations, run configs and environments per session | `repro/kaggle/runs/<session>/` (`b_main_s1`–`b_main_s9`, `b_main_fill`, `step1_branch_pilot`, `step1_branch_main`, `diag_st_plain`, `b_main_hs`) |
+| Raw generations, run configs and environments per session | `repro/kaggle/runs/<session>/` (`b_main_s1`–`b_main_s9`, `b_main_fill`, `step1_branch_pilot`, `step1_branch_main`, `diag_st_plain`, `b_main_hs`; setting checks of Section 2.6: `smoke`, `smoke2`, `smoke3`, `main_s0`, `full_s1`, `b_test`, `hidden_rank_check`) |
 | Final scored rows (rules + LLM fallback) | `repro/llm/final/merged.jsonl` (fill run: `repro/llm/fill/`, visref_hs: `repro/llm/hs/`) |
 | Final tables (CSV/JSON, built from the `repro/diag/*.json` files by `scripts/make_results.py`) | `results/` |
 | Figures (results figure drawn by `scripts/make_figures.py`; method diagram drawn by hand) | `figures/` |
 | Descriptive per-method report (rule-based scorer v4 only, no LLM fallback) | `repro/reports/b_main_report.html`, `repro/reports/b_main_report.json` |
 | Code | `repro/run.py`, `repro/visref/` (engine, methods, DPP, scoring), `repro/diag/step1_branch.py` |
-| Reviews and audits | `repro/audit/`, `docs/AUDIT_REPORT_20261007.md`, `docs/REVIEW_20261007.md` |
 | Public sources behind the logs' citations (arXiv versions, pages, tables) | `docs/SOURCES.md` |
-| Where using AI went wrong in this project and how to prevent it (Korean) | `docs/AI_USE_REFLECTION.md` |
-| Reproduction commands | `README.md` |
+| Reproduction commands and repository layout | `docs/REPRODUCE.md` |
 
-*Process note.* Implementation, analysis scripts, review passes and the drafting of this report were carried out with AI assistants (Claude models; Codex for content reviews) under the author's direction; what went wrong in that use is summarized in `docs/AI_USE_REFLECTION.md`; decisions marked "사용자 결정" in `docs/EXPERIMENT_FLOW.md` are the author's.
+## 8. Contributions and AI use
+
+This reproduction was carried out by AhnJG with AI assistance (Claude models by Anthropic, Codex by OpenAI).
+
+- **AhnJG:** chose the target and the evidence rules; made the design decisions recorded in `docs/EXPERIMENT_FLOW.md`, among them injecting only the DPP's rank (`visref_raw_rank`), the answer handling (s1 prompt + DEER answer forcing), rule-based scoring with an LLM fallback, fixing the main comparisons and tests before the final analysis, the follow-up experiments and their scope, and when to stop; raised the questions behind several recorded corrections.
+- **Claude (AI assistant):** wrote most of the code (generation engine, methods, DPP selection, scoring, analysis scripts, tests); drafted the pre-registrations, analyses, this report and the figures; separate AI sessions carried out independent reviews of the code and analyses.
+- **Codex (OpenAI):** used throughout the project to review the content.
+- **An LLM as part of the method:** gemini-3.5-flash-lite extracts the answer for the rows the rules cannot parse (Section 2.2).

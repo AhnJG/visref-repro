@@ -1,6 +1,6 @@
 # External sources: how to follow the citations
 
-The Korean logs (`docs/IMPLEMENTATION_CHOICES.md`, named `SPEC_LEDGER.md` until 2026-10-13, and `docs/EXPERIMENT_FLOW.md`) cite the paper and related reports as line numbers
+The Korean logs (`docs/IMPLEMENTATION_CHOICES.md` and `docs/EXPERIMENT_FLOW.md`) cite the paper and related reports as line numbers
 in plain-text extractions, for example `LAY L900` or `REF/InternVL3.5.txt L775`. Those extractions and the PDFs are
 not redistributed here. This file maps the abbreviations to public sources and lists the page and table of the claims
 the results depend on.
@@ -56,4 +56,4 @@ are the stable ones.
 ## Dated notes in the logs
 
 Some notes in `docs/IMPLEMENTATION_CHOICES.md` describe the state on the day they were written. For example, "the paper PDF is not
-available locally" was true on 2026-10-07; the PDF was checked later (ledger item X-21, 2026-10-11).
+available locally" was true on 2026-10-07; the PDF was checked later (2026-10-11).

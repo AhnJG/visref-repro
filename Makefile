@@ -1,4 +1,4 @@
-# CPU-only targets, run from the repository root. GPU generation: see README, "Regenerate the model outputs".
+# CPU-only targets, run from the repository root. GPU generation: see docs/REPRODUCE.md.
 SHELL := /bin/bash
 PY ?= python3
 STEP1 := kaggle/runs/step1_branch_pilot/output/results/step1_branch_*.jsonl \
@@ -31,11 +31,11 @@ figures: results
 	$(PY) scripts/make_figures.py
 
 # Everything regenerated must equal the committed files (needs a git checkout),
-# and both READMEs must quote the numbers in results/.
+# and the result tables in README.md, README.ko.md and REPORT.md must match results/ cell by cell.
 check: analysis results figures
 	git diff --exit-code -- repro/diag results figures
 	$(PY) scripts/check_readme_numbers.py
-	@echo "OK: the analyses, results/ and figures/ reproduce the committed files; the READMEs quote results/"
+	@echo "OK: the analyses, results/ and figures/ reproduce the committed files; the tables in the READMEs and REPORT match results/"
 
 # Descriptive per-method report (rule-based scorer v4 only, no LLM fallback) -> build/b_main_report.{html,json}.
 # Equals repro/reports/b_main_report.json; the HTML differs only in its generation timestamp.
