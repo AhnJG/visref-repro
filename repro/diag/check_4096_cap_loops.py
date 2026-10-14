@@ -12,6 +12,8 @@ def load(name):
                 rows.append(json.loads(l))
             except ValueError:
                 pass
+    if not rows:  # never overwrite the committed evidence with empty counts
+        raise SystemExit(f'no rows found for kaggle/runs/{name}; run from repro/ with the raw outputs present')
     return rows
 
 def zr(t, w):
