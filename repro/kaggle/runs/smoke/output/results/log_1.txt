@@ -1,0 +1,23 @@
+{"event": "start", "shard": "1/2", "todo": 20, "done": 0, "cfg": {"delta": 0.25, "kmax": 10, "vis_frac": 0.3, "think_cap": 8192, "total_think_cap": 16384, "answer_cap": 1024, "max_context": 40960, "min_step_tokens": 256, "wait_text": "Wait, think more", "temperature": 0.6, "top_k": 50, "top_p": 0.95, "seed": 42, "batch": 8, "chunk": 512, "batch_tokens": 64000, "max_num": 12}}
+FlashAttention2 is not installed.
+{"event": "row", "pid": "479", "method": "st", "correct": 0, "k": 1, "think": 252, "stop": "st", "wall": 76.24, "elapsed": 112}
+{"event": "row", "pid": "761", "method": "st", "correct": 0, "k": 1, "think": 275, "stop": "st", "wall": 75.26, "elapsed": 112}
+{"event": "row", "pid": "479", "method": "tsr", "correct": 0, "k": 1, "think": 252, "stop": "entropy", "wall": 130.26, "elapsed": 166}
+{"event": "row", "pid": "479", "method": "visref", "correct": 0, "k": 1, "think": 252, "stop": "entropy", "wall": 130.26, "elapsed": 166}
+{"event": "row", "pid": "479", "method": "visref_reg", "correct": 0, "k": 1, "think": 252, "stop": "entropy", "wall": 130.26, "elapsed": 166}
+{"event": "row", "pid": "761", "method": "tsr", "correct": 0, "k": 1, "think": 275, "stop": "entropy", "wall": 129.28, "elapsed": 166}
+{"event": "row", "pid": "761", "method": "visref", "correct": 0, "k": 1, "think": 275, "stop": "entropy", "wall": 129.28, "elapsed": 166}
+{"event": "row", "pid": "761", "method": "visref_reg", "correct": 0, "k": 1, "think": 275, "stop": "entropy", "wall": 129.28, "elapsed": 166}
+{"event": "row", "pid": "160", "method": "st", "correct": 1, "k": 1, "think": 488, "stop": "st", "wall": 127.37, "elapsed": 241}
+{"event": "row", "pid": "160", "method": "tsr", "correct": 1, "k": 1, "think": 488, "stop": "entropy", "wall": 189.76, "elapsed": 303}
+{"event": "row", "pid": "368", "method": "st", "correct": 1, "k": 1, "think": 430, "stop": "st", "wall": 135.52, "elapsed": 303}
+{"event": "row", "pid": "160", "method": "visref", "correct": 1, "k": 1, "think": 488, "stop": "entropy", "wall": 206.94, "elapsed": 373}
+{"event": "row", "pid": "160", "method": "visref_reg", "correct": 1, "k": 1, "think": 488, "stop": "entropy", "wall": 206.94, "elapsed": 373}
+{"event": "row", "pid": "368", "method": "tsr", "correct": 1, "k": 1, "think": 430, "stop": "entropy", "wall": 205.55, "elapsed": 373}
+{"event": "row", "pid": "368", "method": "visref", "correct": 1, "k": 1, "think": 430, "stop": "entropy", "wall": 205.55, "elapsed": 373}
+{"event": "row", "pid": "368", "method": "visref_reg", "correct": 1, "k": 1, "think": 430, "stop": "entropy", "wall": 205.55, "elapsed": 373}
+{"event": "row", "pid": "922", "method": "st", "correct": 1, "k": 1, "think": 967, "stop": "st", "wall": 158.15, "elapsed": 399}
+{"event": "row", "pid": "922", "method": "tsr", "correct": 1, "k": 1, "think": 958, "stop": "entropy", "wall": 128.12, "elapsed": 432}
+{"event": "row", "pid": "922", "method": "visref", "correct": 1, "k": 1, "think": 958, "stop": "entropy", "wall": 128.12, "elapsed": 432}
+{"event": "row", "pid": "922", "method": "visref_reg", "correct": 1, "k": 1, "think": 967, "stop": "entropy", "wall": 68.13, "elapsed": 442}
+{"event": "end", "elapsed": 442, "left_in_queue": 0}

@@ -1,0 +1,187 @@
+{
+ "methods": {
+  "st": {
+   "n": 10,
+   "accuracy": 50.0,
+   "paper_1b": 46.1,
+   "mean_k": 1.0,
+   "mean_think_tokens": 1445.3,
+   "stop_reason": {
+    "st": 10
+   },
+   "step_end": {
+    "close": 9,
+    "cap": 1
+   },
+   "final_forced_close": 1,
+   "extract_rule": {
+    "boxed": 8,
+    "answer_phrase": 2
+   },
+   "dpp_frac_mean": null,
+   "mean_n_visual": 1792.0,
+   "mean_wall_s": 339.4,
+   "probe_H_first_step": [
+    0.0,
+    0.002,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "tsr": {
+   "n": 10,
+   "accuracy": 50.0,
+   "paper_1b": 48.5,
+   "mean_k": 1.0,
+   "mean_think_tokens": 1476.8,
+   "stop_reason": {
+    "entropy": 10
+   },
+   "step_end": {
+    "close": 9,
+    "cap": 1
+   },
+   "final_forced_close": 1,
+   "extract_rule": {
+    "boxed": 7,
+    "answer_phrase": 3
+   },
+   "dpp_frac_mean": null,
+   "mean_n_visual": 1792.0,
+   "mean_wall_s": 423.9,
+   "probe_H_first_step": [
+    0.0,
+    0.002,
+    0.0,
+    0.0,
+    0.001,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "visref": {
+   "n": 9,
+   "accuracy": 44.44,
+   "paper_1b": 52.0,
+   "mean_k": 1.0,
+   "mean_think_tokens": 730.7,
+   "stop_reason": {
+    "entropy": 9
+   },
+   "step_end": {
+    "close": 9
+   },
+   "final_forced_close": 0,
+   "extract_rule": {
+    "last_line": 1,
+    "answer_phrase": 4,
+    "boxed": 4
+   },
+   "dpp_frac_mean": 0.471,
+   "mean_n_visual": 1792.0,
+   "mean_wall_s": 256.7,
+   "probe_H_first_step": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  "visref_reg": {
+   "n": 9,
+   "accuracy": 44.44,
+   "paper_1b": 52.0,
+   "mean_k": 1.0,
+   "mean_think_tokens": 723.0,
+   "stop_reason": {
+    "entropy": 9
+   },
+   "step_end": {
+    "close": 9
+   },
+   "final_forced_close": 0,
+   "extract_rule": {
+    "boxed": 7,
+    "answer_phrase": 2
+   },
+   "dpp_frac_mean": 1.0,
+   "mean_n_visual": 1792.0,
+   "mean_wall_s": 252.1,
+   "probe_H_first_step": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.003,
+    0.0,
+    0.0
+   ]
+  }
+ },
+ "paired": {
+  "tsr-st": {
+   "diff_pp": 0.0,
+   "ci95_pp": [
+    0.0,
+    0.0
+   ],
+   "n": 9
+  },
+  "visref-st": {
+   "diff_pp": 0.0,
+   "ci95_pp": [
+    0.0,
+    0.0
+   ],
+   "n": 9
+  },
+  "visref-tsr": {
+   "diff_pp": 0.0,
+   "ci95_pp": [
+    0.0,
+    0.0
+   ],
+   "n": 9
+  },
+  "visref_reg-st": {
+   "diff_pp": 0.0,
+   "ci95_pp": [
+    0.0,
+    0.0
+   ],
+   "n": 9
+  },
+  "visref_reg-tsr": {
+   "diff_pp": 0.0,
+   "ci95_pp": [
+    0.0,
+    0.0
+   ],
+   "n": 9
+  },
+  "visref_reg-visref": {
+   "diff_pp": 0.0,
+   "ci95_pp": [
+    0.0,
+    0.0
+   ],
+   "n": 9
+  }
+ }
+}

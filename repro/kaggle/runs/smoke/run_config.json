@@ -1,0 +1,38 @@
+{
+ "model": "OpenGVLab/InternVL3_5-1B",
+ "model_rev": "2f71cf52542334823e48a46ffba0e2bc9add3446",
+ "data_rev": "2b6ad69445fbb5695c9b165475e8decdbeb97747",
+ "parquet": "data/testmini-00000-of-00001-725687bf7a18d64b.parquet",
+ "ids": [
+  "243",
+  "479",
+  "419",
+  "761",
+  "912",
+  "160",
+  "979",
+  "368",
+  "746",
+  "922"
+ ],
+ "time_limit": 6300,
+ "run_args": [
+  "--methods",
+  "st,tsr,visref,visref_reg"
+ ],
+ "n_ids": 10,
+ "kernel": "arki13/visref-repro-smoke",
+ "accelerator": "NvidiaTeslaT4",
+ "timeout": 7200,
+ "source_sha256": {
+  "run.py": "0d4711585ffed59d9b85b94ee7fb60fd95d349964b7370fe6c2f6f4cd21df231",
+  "summarize.py": "19b0ba19626a4034600367f7fbd919df51d982830930b51faa0e2adb81764e62",
+  "visref/dpp.py": "beed118ffb0e6f101f1fc8004c007e34deeca73b70bb02fb27e08bafd509e38d",
+  "visref/engine.py": "16cbc0ed7bf5a316bf47fd14b293bc87aab83fc33d954196780d392a9c8737b6",
+  "visref/methods.py": "d8aed94f5e1b743bcb98f298b0483a6410c59f10da5e0b6c5830e78499a4f671",
+  "visref/model.py": "d48889b2cecf8a6cdb4df42afa72305cdee297957eb0702917fdf3b75c79a739",
+  "visref/scoring.py": "82e36b806d9cbc0a3313fe88eafc828e08aff3872ab4c35077ee47e213ea1dac"
+ },
+ "notebook_sha256": "45ee3c8022532c345cee732ff7a546a4e68a025d3e4bb217871ff29fc75b99f8",
+ "built_at": "2026-10-06T16:04:13+0000"
+}

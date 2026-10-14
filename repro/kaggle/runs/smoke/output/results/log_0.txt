@@ -1,0 +1,102 @@
+{"event": "start", "shard": "0/2", "todo": 20, "done": 0, "cfg": {"delta": 0.25, "kmax": 10, "vis_frac": 0.3, "think_cap": 8192, "total_think_cap": 16384, "answer_cap": 1024, "max_context": 40960, "min_step_tokens": 256, "wait_text": "Wait, think more", "temperature": 0.6, "top_k": 50, "top_p": 0.95, "seed": 42, "batch": 8, "chunk": 512, "batch_tokens": 64000, "max_num": 12}}
+FlashAttention2 is not installed.
+{"event": "row", "pid": "243", "method": "st", "correct": 0, "k": 1, "think": 187, "stop": "st", "wall": 55.97, "elapsed": 92}
+{"event": "row", "pid": "243", "method": "tsr", "correct": 0, "k": 1, "think": 187, "stop": "entropy", "wall": 91.92, "elapsed": 128}
+{"event": "row", "pid": "243", "method": "visref", "correct": 0, "k": 1, "think": 187, "stop": "entropy", "wall": 91.92, "elapsed": 128}
+{"event": "row", "pid": "243", "method": "visref_reg", "correct": 0, "k": 1, "think": 187, "stop": "entropy", "wall": 91.92, "elapsed": 128}
+{"event": "row", "pid": "419", "method": "st", "correct": 0, "k": 1, "think": 1893, "stop": "st", "wall": 290.96, "elapsed": 327}
+{"event": "row", "pid": "419", "method": "visref", "correct": 0, "k": 1, "think": 1893, "stop": "entropy", "wall": 383.37, "elapsed": 420}
+{"event": "row", "pid": "419", "method": "visref_reg", "correct": 0, "k": 1, "think": 1893, "stop": "entropy", "wall": 383.37, "elapsed": 420}
+{"event": "row", "pid": "419", "method": "tsr", "correct": 0, "k": 1, "think": 1893, "stop": "entropy", "wall": 486.4, "elapsed": 523}
+{"event": "row", "pid": "979", "method": "st", "correct": 0, "k": 1, "think": 1179, "stop": "st", "wall": 414.35, "elapsed": 743}
+{"event": "row", "pid": "979", "method": "tsr", "correct": 0, "k": 1, "think": 1503, "stop": "entropy", "wall": 535.86, "elapsed": 956}
+{"event": "row", "pid": "979", "method": "visref", "correct": 0, "k": 1, "think": 1503, "stop": "entropy", "wall": 535.86, "elapsed": 956}
+{"event": "row", "pid": "979", "method": "visref_reg", "correct": 0, "k": 1, "think": 1425, "stop": "entropy", "wall": 565.73, "elapsed": 1089}
+{"event": "row", "pid": "746", "method": "st", "correct": 1, "k": 1, "think": 590, "stop": "st", "wall": 345.71, "elapsed": 1089}
+{"event": "row", "pid": "746", "method": "tsr", "correct": 1, "k": 1, "think": 590, "stop": "entropy", "wall": 498.93, "elapsed": 1455}
+{"event": "row", "pid": "746", "method": "visref", "correct": 1, "k": 1, "think": 590, "stop": "entropy", "wall": 498.93, "elapsed": 1455}
+{"event": "row", "pid": "746", "method": "visref_reg", "correct": 1, "k": 1, "think": 590, "stop": "entropy", "wall": 487.99, "elapsed": 1577}
+{"event": "row", "pid": "912", "method": "st", "correct": 1, "k": 1, "think": 8192, "stop": "st", "wall": 1714.74, "elapsed": 1808}
+{"event": "row", "pid": "912", "method": "tsr", "correct": 1, "k": 1, "think": 8192, "stop": "entropy", "wall": 1843.38, "elapsed": 1972}
+Traceback (most recent call last):
+  File "/kaggle/working/src/run.py", line 127, in <module>
+    main()
+    ~~~~^^
+  File "/kaggle/working/src/run.py", line 107, in main
+    for i, r in zip(g, eng.generate([reqs[i] for i in g], cfg['chunk'])):
+                       ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "/kaggle/working/src/visref/engine.py", line 75, in generate
+    out = self.lm(inputs_embeds=emb, attention_mask=mask, position_ids=pos,
+                  past_key_values=cache, use_cache=True, logits_to_keep=1)
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/utils/generic.py", line 959, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/models/qwen3/modeling_qwen3.py", line 481, in forward
+    outputs: BaseModelOutputWithPast = self.model(
+                                       ~~~~~~~~~~^
+        input_ids=input_ids,
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/utils/generic.py", line 1083, in wrapper
+    outputs = func(self, *args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/models/qwen3/modeling_qwen3.py", line 405, in forward
+    hidden_states = decoder_layer(
+        hidden_states,
+    ...<6 lines>...
+        **kwargs,
+    )
+  File "/usr/local/lib/python3.13/dist-packages/transformers/modeling_layers.py", line 94, in __call__
+    return super().__call__(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/models/qwen3/modeling_qwen3.py", line 257, in forward
+    hidden_states, _ = self.self_attn(
+                       ~~~~~~~~~~~~~~^
+        hidden_states=hidden_states,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/models/qwen3/modeling_qwen3.py", line 214, in forward
+    attn_output, attn_weights = attention_interface(
+                                ~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<7 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/usr/local/lib/python3.13/dist-packages/transformers/integrations/sdpa_attention.py", line 89, in sdpa_attention_forward
+    attn_output = torch.nn.functional.scaled_dot_product_attention(
+        query,
+    ...<6 lines>...
+        **sdpa_kwargs,
+    )
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 15.00 GiB. GPU 0 has a total capacity of 14.56 GiB of which 9.12 GiB is free. Including non-PyTorch memory, this process has 5.44 GiB memory in use. Of the allocated memory 4.11 GiB is allocated by PyTorch, and 1.20 GiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)

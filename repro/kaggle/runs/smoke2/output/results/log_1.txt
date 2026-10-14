@@ -1,0 +1,135 @@
+{"event": "start", "shard": "1/2", "todo": 75, "done": 0, "cfg": {"delta": 0.25, "kmax": 10, "vis_frac": 0.3, "think_cap": 8192, "total_think_cap": 16384, "answer_cap": 1024, "max_context": 40960, "min_step_tokens": 256, "wait_text": "Wait, think more", "temperature": 0.6, "top_k": 50, "top_p": 0.95, "seed": 42, "batch": 20, "chunk": 1024, "batch_tokens": 48000, "max_num": 12}}
+FlashAttention2 is not installed.
+{"event": "round", "elapsed": 67, "active": 4, "groups": [4], "tokens": 1449, "queue": 11, "peak_alloc_gb": 3.81, "peak_reserved_gb": 3.95}
+{"event": "round", "elapsed": 175, "active": 20, "groups": [9, 8, 3], "tokens": 3368, "queue": 11, "peak_alloc_gb": 7.08, "peak_reserved_gb": 8.0}
+{"event": "row", "pid": "479", "method": "st", "correct": 0, "k": 1, "think": 252, "stop": "st", "wall": 142.76, "elapsed": 175}
+{"event": "row", "pid": "761", "method": "st", "correct": 0, "k": 1, "think": 275, "stop": "st", "wall": 141.79, "elapsed": 175}
+{"event": "row", "pid": "160", "method": "st", "correct": 1, "k": 1, "think": 488, "stop": "st", "wall": 140.82, "elapsed": 175}
+{"event": "row", "pid": "368", "method": "st", "correct": 1, "k": 1, "think": 430, "stop": "st", "wall": 139.85, "elapsed": 175}
+{"event": "round", "elapsed": 267, "active": 16, "groups": [8, 7, 1], "tokens": 2427, "queue": 11, "peak_alloc_gb": 7.08, "peak_reserved_gb": 8.0}
+{"event": "row", "pid": "479", "method": "visref", "correct": 0, "k": 1, "think": 252, "stop": "entropy", "wall": 234.32, "elapsed": 267}
+{"event": "row", "pid": "160", "method": "tsr", "correct": 1, "k": 1, "think": 488, "stop": "entropy", "wall": 232.39, "elapsed": 267}
+{"event": "row", "pid": "160", "method": "visref", "correct": 1, "k": 1, "think": 488, "stop": "entropy", "wall": 232.39, "elapsed": 267}
+{"event": "row", "pid": "160", "method": "visref_reg", "correct": 1, "k": 1, "think": 488, "stop": "entropy", "wall": 232.39, "elapsed": 267}
+{"event": "row", "pid": "160", "method": "visref_raw", "correct": 1, "k": 1, "think": 488, "stop": "entropy", "wall": 232.39, "elapsed": 267}
+{"event": "round", "elapsed": 363, "active": 12, "groups": [6, 6], "tokens": 2514, "queue": 10, "peak_alloc_gb": 7.08, "peak_reserved_gb": 8.0}
+{"event": "round", "elapsed": 430, "active": 16, "groups": [9, 6, 1], "tokens": 1727, "queue": 10, "peak_alloc_gb": 7.08, "peak_reserved_gb": 8.0}
+{"event": "row", "pid": "479", "method": "visref_reg", "correct": 0, "k": 2, "think": 546, "stop": "entropy", "wall": 397.24, "elapsed": 430}
+{"event": "row", "pid": "922", "method": "st", "correct": 1, "k": 1, "think": 967, "stop": "st", "wall": 162.84, "elapsed": 430}
+{"event": "round", "elapsed": 561, "active": 15, "groups": [9, 5, 1], "tokens": 3424, "queue": 9, "peak_alloc_gb": 7.08, "peak_reserved_gb": 8.0}
+{"event": "round", "elapsed": 671, "active": 15, "groups": [9, 5, 1], "tokens": 2260, "queue": 9, "peak_alloc_gb": 7.08, "peak_reserved_gb": 8.0}
+{"event": "row", "pid": "479", "method": "tsr", "correct": 0, "k": 3, "think": 428, "stop": "entropy", "wall": 638.57, "elapsed": 671}
+{"event": "row", "pid": "479", "method": "visref_raw", "correct": 0, "k": 3, "think": 571, "stop": "entropy", "wall": 638.57, "elapsed": 671}
+{"event": "round", "elapsed": 904, "active": 13, "groups": [7, 5, 1], "tokens": 4321, "queue": 9, "peak_alloc_gb": 7.27, "peak_reserved_gb": 8.49}
+{"event": "round", "elapsed": 1020, "active": 13, "groups": [7, 5, 1], "tokens": 2886, "queue": 9, "peak_alloc_gb": 7.27, "peak_reserved_gb": 8.49}
+{"event": "row", "pid": "368", "method": "visref_raw", "correct": 1, "k": 4, "think": 726, "stop": "entropy", "wall": 984.32, "elapsed": 1020}
+{"event": "round", "elapsed": 1190, "active": 12, "groups": [7, 4, 1], "tokens": 3904, "queue": 9, "peak_alloc_gb": 7.27, "peak_reserved_gb": 8.49}
+{"event": "round", "elapsed": 1336, "active": 12, "groups": [7, 4, 1], "tokens": 3195, "queue": 9, "peak_alloc_gb": 7.27, "peak_reserved_gb": 8.49}
+{"event": "round", "elapsed": 1612, "active": 12, "groups": [6, 4, 2], "tokens": 3495, "queue": 9, "peak_alloc_gb": 7.36, "peak_reserved_gb": 8.62}
+{"event": "row", "pid": "922", "method": "visref", "correct": 1, "k": 4, "think": 1475, "stop": "entropy", "wall": 1345.15, "elapsed": 1612}
+{"event": "round", "elapsed": 1913, "active": 12, "groups": [5, 4, 3], "tokens": 4624, "queue": 8, "peak_alloc_gb": 7.36, "peak_reserved_gb": 8.78}
+{"event": "row", "pid": "368", "method": "visref_reg", "correct": 1, "k": 6, "think": 937, "stop": "entropy", "wall": 1878.04, "elapsed": 1913}
+{"event": "round", "elapsed": 2215, "active": 19, "groups": [8, 4, 3, 3, 1], "tokens": 5101, "queue": 8, "peak_alloc_gb": 7.36, "peak_reserved_gb": 8.78}
+{"event": "row", "pid": "747", "method": "st", "correct": 1, "k": 1, "think": 8192, "stop": "st", "wall": 1785.84, "elapsed": 2215}
+{"event": "row", "pid": "948", "method": "st", "correct": 1, "k": 1, "think": 811, "stop": "st", "wall": 602.96, "elapsed": 2215}
+{"event": "round", "elapsed": 2589, "active": 17, "groups": [8, 4, 3, 2], "tokens": 6490, "queue": 8, "peak_alloc_gb": 7.36, "peak_reserved_gb": 8.78}
+{"event": "row", "pid": "948", "method": "tsr", "correct": 1, "k": 1, "think": 811, "stop": "entropy", "wall": 976.65, "elapsed": 2589}
+{"event": "row", "pid": "948", "method": "visref", "correct": 1, "k": 1, "think": 811, "stop": "entropy", "wall": 976.65, "elapsed": 2589}
+{"event": "row", "pid": "948", "method": "visref_reg", "correct": 1, "k": 1, "think": 811, "stop": "entropy", "wall": 976.65, "elapsed": 2589}
+{"event": "row", "pid": "948", "method": "visref_raw", "correct": 1, "k": 1, "think": 811, "stop": "entropy", "wall": 976.65, "elapsed": 2589}
+{"event": "round", "elapsed": 2882, "active": 14, "groups": [5, 4, 3, 2], "tokens": 4837, "queue": 7, "peak_alloc_gb": 7.7, "peak_reserved_gb": 9.5}
+{"event": "row", "pid": "922", "method": "visref_reg", "correct": 1, "k": 6, "think": 1725, "stop": "entropy", "wall": 2616.05, "elapsed": 2883}
+{"event": "round", "elapsed": 3353, "active": 17, "groups": [8, 4, 3, 2], "tokens": 7120, "queue": 7, "peak_alloc_gb": 8.26, "peak_reserved_gb": 9.68}
+{"event": "row", "pid": "416", "method": "st", "correct": 1, "k": 1, "think": 116, "stop": "st", "wall": 762.44, "elapsed": 3353}
+{"event": "round", "elapsed": 3887, "active": 16, "groups": [7, 3, 3, 3], "tokens": 7000, "queue": 7, "peak_alloc_gb": 8.26, "peak_reserved_gb": 9.68}
+{"event": "row", "pid": "922", "method": "visref_raw", "correct": 1, "k": 7, "think": 1539, "stop": "entropy", "wall": 3619.85, "elapsed": 3887}
+{"event": "row", "pid": "416", "method": "tsr", "correct": 1, "k": 1, "think": 116, "stop": "entropy", "wall": 1296.14, "elapsed": 3887}
+{"event": "row", "pid": "416", "method": "visref", "correct": 1, "k": 1, "think": 116, "stop": "entropy", "wall": 1296.14, "elapsed": 3887}
+{"event": "row", "pid": "416", "method": "visref_reg", "correct": 1, "k": 1, "think": 116, "stop": "entropy", "wall": 1296.14, "elapsed": 3887}
+{"event": "row", "pid": "416", "method": "visref_raw", "correct": 1, "k": 1, "think": 116, "stop": "entropy", "wall": 1296.14, "elapsed": 3887}
+{"event": "round", "elapsed": 4369, "active": 12, "groups": [3, 3, 3, 3], "tokens": 6793, "queue": 6, "peak_alloc_gb": 8.26, "peak_reserved_gb": 9.68}
+{"event": "round", "elapsed": 4838, "active": 12, "groups": [3, 3, 3, 2, 1], "tokens": 5859, "queue": 6, "peak_alloc_gb": 8.26, "peak_reserved_gb": 9.72}
+{"event": "round", "elapsed": 5523, "active": 12, "groups": [3, 3, 3, 2, 1], "tokens": 6992, "queue": 6, "peak_alloc_gb": 8.26, "peak_reserved_gb": 9.82}
+{"event": "row", "pid": "761", "method": "visref", "correct": 0, "k": 10, "think": 1460, "stop": "kmax", "wall": 5489.97, "elapsed": 5523}
+{"event": "row", "pid": "761", "method": "visref_reg", "correct": 0, "k": 10, "think": 1675, "stop": "kmax", "wall": 5489.98, "elapsed": 5523}
+{"event": "row", "pid": "761", "method": "visref_raw", "correct": 0, "k": 10, "think": 895, "stop": "kmax", "wall": 5489.98, "elapsed": 5523}
+{"event": "row", "pid": "368", "method": "tsr", "correct": 1, "k": 10, "think": 1144, "stop": "kmax", "wall": 5488.03, "elapsed": 5523}
+{"event": "row", "pid": "368", "method": "visref", "correct": 1, "k": 10, "think": 1630, "stop": "entropy", "wall": 5488.04, "elapsed": 5523}
+{"event": "round", "elapsed": 6216, "active": 8, "groups": [3, 3, 2], "tokens": 7496, "queue": 5, "peak_alloc_gb": 8.26, "peak_reserved_gb": 10.95}
+{"event": "round", "elapsed": 6867, "active": 8, "groups": [3, 2, 2, 1], "tokens": 6283, "queue": 5, "peak_alloc_gb": 8.26, "peak_reserved_gb": 10.95}
+{"event": "round", "elapsed": 7325, "active": 8, "groups": [3, 2, 2, 1], "tokens": 4522, "queue": 5, "peak_alloc_gb": 8.26, "peak_reserved_gb": 10.95}
+{"event": "row", "pid": "747", "method": "visref_raw", "correct": 1, "k": 2, "think": 16384, "stop": "budget", "wall": 6895.28, "elapsed": 7325}
+{"event": "round", "elapsed": 7728, "active": 8, "groups": [3, 2, 2, 1], "tokens": 4263, "queue": 4, "peak_alloc_gb": 8.26, "peak_reserved_gb": 10.95}
+{"event": "row", "pid": "922", "method": "tsr", "correct": 1, "k": 4, "think": 16384, "stop": "entropy", "wall": 7461.22, "elapsed": 7728}
+{"event": "round", "elapsed": 8251, "active": 7, "groups": [3, 2, 2], "tokens": 5638, "queue": 4, "peak_alloc_gb": 8.26, "peak_reserved_gb": 10.95}
+{"event": "row", "pid": "747", "method": "visref", "correct": 1, "k": 3, "think": 16384, "stop": "budget", "wall": 7824.08, "elapsed": 8254}
+{"event": "row", "pid": "747", "method": "visref_reg", "correct": 1, "k": 3, "think": 16384, "stop": "budget", "wall": 7824.08, "elapsed": 8254}
+{"event": "round", "elapsed": 8770, "active": 9, "groups": [3, 3, 3], "tokens": 6144, "queue": 4, "peak_alloc_gb": 8.26, "peak_reserved_gb": 10.95}
+{"event": "row", "pid": "342", "method": "st", "correct": 0, "k": 1, "think": 8192, "stop": "st", "wall": 4882.18, "elapsed": 8770}
+{"event": "round", "elapsed": 9353, "active": 8, "groups": [3, 3, 2], "tokens": 7058, "queue": 4, "peak_alloc_gb": 8.26, "peak_reserved_gb": 10.95}
+{"event": "row", "pid": "342", "method": "tsr", "correct": 0, "k": 1, "think": 8192, "stop": "entropy", "wall": 5465.14, "elapsed": 9353}
+{"event": "round", "elapsed": 10027, "active": 7, "groups": [3, 3, 1], "tokens": 7168, "queue": 4, "peak_alloc_gb": 8.26, "peak_reserved_gb": 10.95}
+Traceback (most recent call last):
+  File "/kaggle/working/src/run.py", line 174, in <module>
+    main()
+    ~~~~^^
+  File "/kaggle/working/src/run.py", line 136, in main
+    for i, r in zip(g, gen_safe([reqs[i] for i in g])):
+                       ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/kaggle/working/src/run.py", line 109, in gen_safe
+    return eng.generate(rs, cfg['chunk'])
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+  File "/kaggle/working/src/visref/engine.py", line 116, in generate
+    out = self.lm(inputs_embeds=self.embed(toks)[:, None], attention_mask=mask,
+                  position_ids=nxt[:, None], past_key_values=cache, use_cache=True)
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/utils/generic.py", line 959, in wrapper
+    output = func(self, *args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/models/qwen3/modeling_qwen3.py", line 481, in forward
+    outputs: BaseModelOutputWithPast = self.model(
+                                       ~~~~~~~~~~^
+        input_ids=input_ids,
+        ^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/utils/generic.py", line 1083, in wrapper
+    outputs = func(self, *args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/models/qwen3/modeling_qwen3.py", line 405, in forward
+    hidden_states = decoder_layer(
+        hidden_states,
+    ...<6 lines>...
+        **kwargs,
+    )
+  File "/usr/local/lib/python3.13/dist-packages/transformers/modeling_layers.py", line 94, in __call__
+    return super().__call__(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/models/qwen3/modeling_qwen3.py", line 255, in forward
+    hidden_states = self.input_layernorm(hidden_states)
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/torch/nn/modules/module.py", line 1790, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/usr/local/lib/python3.13/dist-packages/transformers/models/qwen3/modeling_qwen3.py", line 62, in forward
+    hidden_states = hidden_states * torch.rsqrt(variance + self.variance_epsilon)
+                                    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
