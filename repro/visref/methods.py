@@ -11,7 +11,7 @@ positions (Job(vis_hs=...), Engine.hidden_at; the injected vectors stay the inpu
 tokens are wrapped in the official image tags, <img> + V + </img> + '\\n', and placed after '</think>\\n' whenever the
 model answers (z_k </think> \\n <img>V</img> \\n: probe, forced and free answers all start from there, whatever z_k
 ends with) but inside the thinking block when it goes on (z_k [\\n unless z_k / cut_sep ends with one] <img>V</img> \\n
-Wait, think more)).
+Wait, think more)); every final answer of visref_bundle starts after forced_prompt (2026-10-15).
 
 Thinking after the last step ('tsr_think', 'visref_think', 'visref_hs_think'; EF 2026-10-13, decided by the user): the
 same loop as 'tsr' / 'visref_raw_rank' / 'visref_hs', but when the method stops (any reason: entropy, Kmax or budget),
@@ -148,12 +148,12 @@ class Job:
             self.cap = self.cfg['probe_cap']
             self.stop_check = lambda ids: self._brace_scan(self.partial + ids, decode=False)[0] is not None
             self.ent_lump = self.sp['close_ids']
-        elif forced and self.cut:  # s1 budget forcing: the thinking was cut, so prompt the answer
+        elif (forced and self.cut) or self.method in BUNDLE:  # s1 forcing after a cut; bundle: always (a free answer
             self.cur = torch.cat([self.answer_ctx, self.eng.embed(self.forced_ids)], 0)
-            self.cap = self.cfg['answer_cap']
+            self.cap = self.cfg['answer_cap']  # after '</img>\n' restated the question, as in the user prompt; 2026-10-15)
         else:
             self.cur, self.cap = self.answer_ctx, self.cfg['answer_cap']
-        self.forced_answer = phase == 'final' and bool(forced) and self.cut
+        self.forced_answer = phase == 'final' and ((bool(forced) and self.cut) or self.method in BUNDLE)
         self.partial = []
         self.stop = frozenset({self.sp['eos']})
         self.forced, self.reason = forced, reason or getattr(self, 'reason', None)

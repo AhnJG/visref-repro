@@ -87,13 +87,14 @@ def test_bundle_contexts_closed_step(monkeypatch):
     assert s['n_inject'] == s['n_dpp'] == n and s['m'] == 3 and 'n_meaningful' in s and 'n_unique_z' in s
     base = 2 + 8 + 1 + 1 + 1 + n + 1 + 1  # Q? z </think> '\n' <img> V </img> '\n'
     assert ctxs['probe'].shape[0] == base + P
-    assert ctxs['final'].shape[0] == base == j.out['final_context_len']
+    assert ctxs['final'].shape[0] == base + len(S1) and j.out['final_context_len'] == base  # answer after S1 (closed step too)
     c = ctxs['probe']
     assert ids_of(c[:10]) == tok.encode('Q?') + tok.encode('a' * 8)
     assert ids_of(c[10:13]) == [1, NL, 2]
     assert torch.equal(c[13:13 + n], j.vis[sel]) and not torch.equal(c[13:13 + n], vis_hs[sel])  # input embeddings
     assert ids_of(c[13 + n:]) == [3, NL] + tok.encode(BOX)
-    assert torch.equal(ctxs['final'], c[:base])
+    assert torch.equal(ctxs['final'][:base], c[:base]) and ids_of(ctxs['final'][base:]) == tok.encode(S1)
+    assert j.out['final_answer'].startswith(S1) and j.out['final_forced_answer']
     assert j.trace[1] == f'<VISREF_IMG m=3 dpp={n}>'
 
 
