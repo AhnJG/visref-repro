@@ -1,0 +1,234 @@
+{
+ "basis": "shuffled-order complete prefix",
+ "n_common": 10,
+ "methods": {
+  "visref_raw_rank": {
+   "n": 10,
+   "accuracy": 70.0,
+   "accuracy_all_rows": 70.0,
+   "n_all_rows": 10,
+   "n_error": 0,
+   "paper_1b": 52.0,
+   "mean_k": 1.0,
+   "mean_think_tokens": 696.9,
+   "stop_reason": {
+    "entropy": 10
+   },
+   "step_end": {
+    "cap": 5,
+    "close": 5
+   },
+   "final_forced_close": 5,
+   "n_final_forced_answer": 5,
+   "n_final_forced_invalid": 2,
+   "n_stop_at_k1": 10,
+   "extract_rule": {
+    "boxed": 8,
+    "answer_phrase": 2
+   },
+   "dpp_frac_mean": 0.292,
+   "mean_n_visual": 2252.8,
+   "mean_wall_s": 93.6,
+   "probe_H_first_step": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.005,
+    0.08,
+    0.155
+   ],
+   "probe_finish": {
+    "end": 10
+   },
+   "final_finish": {
+    "eos": 8,
+    "cap": 2
+   },
+   "n_extract_failed": 0,
+   "code_versions": [
+    "aa11cdaa52a9"
+   ],
+   "n_continued": 0,
+   "k_hist": {
+    "1": 10
+   },
+   "mean_gen_tokens": 1071.6,
+   "n_final_inner_think_end": 5,
+   "n_steps": 10,
+   "n_final_question_text": 1,
+   "n_probes": 10,
+   "probe_H_q10_25_50_75_90": [
+    0.0,
+    0.0,
+    0.0,
+    0.005,
+    0.155
+   ],
+   "n_probe_H_below_delta": 10,
+   "n_entropy_stop_at_k1": 10,
+   "probe_inner_step1": [
+    "0.012",
+    "5500",
+    "C",
+    "4",
+    "A",
+    "A",
+    "B",
+    "400",
+    "2",
+    "0"
+   ],
+   "median_tokens_k2plus_step": null,
+   "median_rank_V": 1009.0,
+   "median_n_unique_z": 140.5,
+   "median_n_dpp": 140.5,
+   "median_n_inject": 140.5,
+   "median_inject_over_m": 0.1925,
+   "by_step1_end": {
+    "close": {
+     "n": 5,
+     "acc": 80.0,
+     "mean_k": 1.0
+    },
+    "cap": {
+     "n": 5,
+     "acc": 60.0,
+     "mean_k": 1.0
+    }
+   },
+   "n_close_probe_H_ge_delta": 0,
+   "n_close_probes": 5,
+   "n_loop_steps": 0,
+   "n_final_forced_valid": 3,
+   "n_final_forced_unusable": 0,
+   "n_final_af": 2,
+   "n_final_af_valid": 2,
+   "median_m": 614.0
+  },
+  "visref_bundle": {
+   "n": 10,
+   "accuracy": 60.0,
+   "accuracy_all_rows": 60.0,
+   "n_all_rows": 10,
+   "n_error": 0,
+   "paper_1b": null,
+   "mean_k": 1.9,
+   "mean_think_tokens": 1618.5,
+   "stop_reason": {
+    "entropy": 9,
+    "kmax": 1
+   },
+   "step_end": {
+    "cap": 14,
+    "close": 5
+   },
+   "final_forced_close": 5,
+   "n_final_forced_answer": 5,
+   "n_final_forced_invalid": 0,
+   "n_stop_at_k1": 9,
+   "extract_rule": {
+    "boxed": 8,
+    "answer_phrase": 1,
+    "empty": 1
+   },
+   "dpp_frac_mean": 0.838,
+   "mean_n_visual": 2252.8,
+   "mean_wall_s": 148.1,
+   "probe_H_first_step": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.001,
+    0.001,
+    0.079,
+    0.094,
+    0.386
+   ],
+   "probe_finish": {
+    "end": 19
+   },
+   "final_finish": {
+    "eos": 10
+   },
+   "n_extract_failed": 1,
+   "code_versions": [
+    "aa11cdaa52a9"
+   ],
+   "n_continued": 1,
+   "k_hist": {
+    "1": 9,
+    "10": 1
+   },
+   "mean_gen_tokens": 1743.4,
+   "n_final_inner_think_end": 3,
+   "n_steps": 19,
+   "n_final_question_text": 5,
+   "n_probes": 19,
+   "probe_H_q10_25_50_75_90": [
+    0.0,
+    0.0,
+    0.311,
+    0.568,
+    0.774
+   ],
+   "n_probe_H_below_delta": 9,
+   "n_entropy_stop_at_k1": 9,
+   "probe_inner_step1": [
+    "0.012",
+    "5500",
+    "C",
+    "4",
+    "A",
+    "A",
+    "B",
+    "400",
+    "2",
+    "0"
+   ],
+   "median_tokens_k2plus_step": 1024,
+   "median_rank_V": 1015,
+   "median_n_unique_z": 109,
+   "median_n_dpp": 896,
+   "median_n_inject": 896,
+   "median_inject_over_m": 0.971,
+   "by_step1_end": {
+    "close": {
+     "n": 5,
+     "acc": 60.0,
+     "mean_k": 1.0
+    },
+    "cap": {
+     "n": 5,
+     "acc": 60.0,
+     "mean_k": 2.8
+    }
+   },
+   "n_close_probe_H_ge_delta": 0,
+   "n_close_probes": 5,
+   "n_loop_steps": 7,
+   "n_final_forced_valid": 5,
+   "n_final_forced_unusable": 0,
+   "n_final_af": 0,
+   "n_final_af_valid": 0,
+   "median_m": 998
+  }
+ },
+ "paired": {
+  "visref_bundle-visref_raw_rank": {
+   "a_only": 0,
+   "b_only": 1,
+   "diff_pp": -10.0,
+   "ci95_pp": [
+    -30.0,
+    0.0
+   ],
+   "n": 10
+  }
+ }
+}

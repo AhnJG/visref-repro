@@ -1,0 +1,333 @@
+{
+ "methods": {
+  "visref_bundle": {
+   "all": {
+    "n_rows": 10,
+    "n_steps": 13,
+    "k_dist": {
+     "1": 9,
+     "4": 1
+    },
+    "stop_reason": {
+     "entropy": 10
+    },
+    "status_not_ok": 0,
+    "n_dual_steps": 13,
+    "n_crn_steps": 13,
+    "n_pairs_valid": 13,
+    "n_pairs_differ": 1,
+    "pair_differ_rate": 0.0769,
+    "pairs_not_interpretable": false,
+    "final_y_start_gt0": 3,
+    "final_raw_has_think_end": 3,
+    "n_final_raw": 3,
+    "final_len_q": [
+     4.9,
+     5.25,
+     19.0,
+     69.0,
+     126.6
+    ],
+    "final_finish_cap": 0,
+    "final_forced_answer": 10,
+    "empty_final_answer": 0,
+    "steps_n_inject_0": 0,
+    "immediate_close_steps": 0,
+    "inject_frac_q": [
+     0.327,
+     0.4991,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "inject_format": {
+     "img_tag_outside_think": 13
+    },
+    "step1_source": {
+     "stored": 10
+    },
+    "step1_tokens_mismatch": 0
+   },
+   "close": {
+    "n_rows": 5,
+    "n_steps": 5,
+    "k_dist": {
+     "1": 5
+    },
+    "stop_reason": {
+     "entropy": 5
+    },
+    "status_not_ok": 0,
+    "n_dual_steps": 5,
+    "n_crn_steps": 5,
+    "n_pairs_valid": 5,
+    "n_pairs_differ": 0,
+    "pair_differ_rate": 0.0,
+    "pairs_not_interpretable": false,
+    "final_y_start_gt0": 0,
+    "final_raw_has_think_end": 0,
+    "n_final_raw": 0,
+    "final_len_q": [
+     4.4,
+     5.0,
+     5.0,
+     32.0,
+     36.2
+    ],
+    "final_finish_cap": 0,
+    "final_forced_answer": 5,
+    "empty_final_answer": 0,
+    "steps_n_inject_0": 0,
+    "immediate_close_steps": 0,
+    "inject_frac_q": [
+     0.2282,
+     0.2849,
+     0.4953,
+     0.4991,
+     0.7996
+    ],
+    "inject_format": {
+     "img_tag_outside_think": 5
+    },
+    "step1_source": {
+     "stored": 5
+    },
+    "step1_tokens_mismatch": 0
+   },
+   "cap": {
+    "n_rows": 5,
+    "n_steps": 8,
+    "k_dist": {
+     "1": 4,
+     "4": 1
+    },
+    "stop_reason": {
+     "entropy": 5
+    },
+    "status_not_ok": 0,
+    "n_dual_steps": 8,
+    "n_crn_steps": 8,
+    "n_pairs_valid": 8,
+    "n_pairs_differ": 1,
+    "pair_differ_rate": 0.125,
+    "pairs_not_interpretable": false,
+    "final_y_start_gt0": 3,
+    "final_raw_has_think_end": 3,
+    "n_final_raw": 3,
+    "final_len_q": [
+     6.0,
+     6.0,
+     79.0,
+     95.0,
+     284.6
+    ],
+    "final_finish_cap": 0,
+    "final_forced_answer": 5,
+    "empty_final_answer": 0,
+    "steps_n_inject_0": 0,
+    "immediate_close_steps": 0,
+    "inject_frac_q": [
+     1.0,
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "inject_format": {
+     "img_tag_outside_think": 8
+    },
+    "step1_source": {
+     "stored": 5
+    },
+    "step1_tokens_mismatch": 0
+   },
+   "eos": {
+    "n_rows": 0,
+    "n_steps": 0,
+    "k_dist": {},
+    "stop_reason": {},
+    "status_not_ok": 0,
+    "n_dual_steps": 0,
+    "n_crn_steps": 0,
+    "n_pairs_valid": 0,
+    "n_pairs_differ": 0,
+    "pair_differ_rate": null,
+    "pairs_not_interpretable": false,
+    "final_y_start_gt0": 0,
+    "final_raw_has_think_end": 0,
+    "n_final_raw": 0,
+    "final_len_q": null,
+    "final_finish_cap": 0,
+    "final_forced_answer": 0,
+    "empty_final_answer": 0,
+    "steps_n_inject_0": 0,
+    "immediate_close_steps": 0,
+    "inject_frac_q": null,
+    "inject_format": {}
+   }
+  },
+  "visref_raw_rank": {
+   "all": {
+    "n_rows": 10,
+    "n_steps": 10,
+    "k_dist": {
+     "1": 10
+    },
+    "stop_reason": {
+     "entropy": 10
+    },
+    "status_not_ok": 0,
+    "n_dual_steps": 10,
+    "n_crn_steps": 10,
+    "n_pairs_valid": 10,
+    "n_pairs_differ": 0,
+    "pair_differ_rate": 0.0,
+    "pairs_not_interpretable": false,
+    "final_y_start_gt0": 5,
+    "final_raw_has_think_end": 5,
+    "n_final_raw": 5,
+    "final_len_q": [
+     45.4,
+     66.25,
+     212.0,
+     486.0,
+     1024.0
+    ],
+    "final_finish_cap": 2,
+    "final_forced_answer": 5,
+    "empty_final_answer": 0,
+    "steps_n_inject_0": 0,
+    "immediate_close_steps": 0,
+    "inject_frac_q": [
+     0.1399,
+     0.1563,
+     0.1927,
+     0.3018,
+     0.6174
+    ],
+    "inject_format": {},
+    "step1_source": {
+     "stored": 10
+    },
+    "step1_tokens_mismatch": 0
+   },
+   "close": {
+    "n_rows": 5,
+    "n_steps": 5,
+    "k_dist": {
+     "1": 5
+    },
+    "stop_reason": {
+     "entropy": 5
+    },
+    "status_not_ok": 0,
+    "n_dual_steps": 5,
+    "n_crn_steps": 5,
+    "n_pairs_valid": 5,
+    "n_pairs_differ": 0,
+    "pair_differ_rate": 0.0,
+    "pairs_not_interpretable": false,
+    "final_y_start_gt0": 2,
+    "final_raw_has_think_end": 2,
+    "n_final_raw": 2,
+    "final_len_q": [
+     37.4,
+     47.0,
+     66.0,
+     187.0,
+     217.0
+    ],
+    "final_finish_cap": 0,
+    "final_forced_answer": 0,
+    "empty_final_answer": 0,
+    "steps_n_inject_0": 0,
+    "immediate_close_steps": 0,
+    "inject_frac_q": [
+     0.1197,
+     0.149,
+     0.203,
+     0.2216,
+     0.446
+    ],
+    "inject_format": {},
+    "step1_source": {
+     "stored": 5
+    },
+    "step1_tokens_mismatch": 0
+   },
+   "cap": {
+    "n_rows": 5,
+    "n_steps": 5,
+    "k_dist": {
+     "1": 5
+    },
+    "stop_reason": {
+     "entropy": 5
+    },
+    "status_not_ok": 0,
+    "n_dual_steps": 5,
+    "n_crn_steps": 5,
+    "n_pairs_valid": 5,
+    "n_pairs_differ": 0,
+    "pair_differ_rate": 0.0,
+    "pairs_not_interpretable": false,
+    "final_y_start_gt0": 3,
+    "final_raw_has_think_end": 3,
+    "n_final_raw": 3,
+    "final_len_q": [
+     143.4,
+     258.0,
+     562.0,
+     1024.0,
+     1024.0
+    ],
+    "final_finish_cap": 2,
+    "final_forced_answer": 5,
+    "empty_final_answer": 0,
+    "steps_n_inject_0": 0,
+    "immediate_close_steps": 0,
+    "inject_frac_q": [
+     0.1579,
+     0.1784,
+     0.1824,
+     0.3285,
+     0.6192
+    ],
+    "inject_format": {},
+    "step1_source": {
+     "stored": 5
+    },
+    "step1_tokens_mismatch": 0
+   },
+   "eos": {
+    "n_rows": 0,
+    "n_steps": 0,
+    "k_dist": {},
+    "stop_reason": {},
+    "status_not_ok": 0,
+    "n_dual_steps": 0,
+    "n_crn_steps": 0,
+    "n_pairs_valid": 0,
+    "n_pairs_differ": 0,
+    "pair_differ_rate": null,
+    "pairs_not_interpretable": false,
+    "final_y_start_gt0": 0,
+    "final_raw_has_think_end": 0,
+    "n_final_raw": 0,
+    "final_len_q": null,
+    "final_finish_cap": 0,
+    "final_forced_answer": 0,
+    "empty_final_answer": 0,
+    "steps_n_inject_0": 0,
+    "immediate_close_steps": 0,
+    "inject_frac_q": null,
+    "inject_format": {}
+   }
+  }
+ },
+ "warnings": [],
+ "files": [
+  "kaggle/runs/bundle_pilot2/output/results/results_0.jsonl",
+  "kaggle/runs/bundle_pilot2/output/results/results_1.jsonl"
+ ]
+}

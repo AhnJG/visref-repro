@@ -40,6 +40,7 @@ The work has two kinds of experiment. **Result experiments** (A1–A5) test the 
 | B4 | How many image tokens to pick | as many as the selection can pick, usually fewer than m | 74 questions and a calculation check | paper: m tokens<br>cited code (Chen et al. 2018): stops when no more can be picked<br>→ **conflict; we follow the code** |
 | B5 | How to extract and score answers | rules first; an LLM only where the rules fail | a pre-check on 49 rows | official (VLMEvalKit): which text is scored<br>official (MathVista): the extraction prompt<br>ours: which LLM, the grounding check |
 | B6 | Do the same inputs give the same outputs? | compare on the same questions from the same first step | 730–1,000 questions | ours |
+| B7 | Where to put a tagged image block, and how to start the answer (exploratory, after the main run) | after `</think>` when answering, inside the thinking when continuing; every answer after `\nFinal Answer:` | 2 trial runs, 10 questions each | official (InternVL): the image tags<br>cited code (s1): the answer prompt<br>ours: the position, and using the prompt for every answer |
 
 The raw outputs of every check are in `repro/kaggle/runs/`, except for the 10-answer check of B1 (8B model, earlier code) and the official-setting run of B3.
 
@@ -134,7 +135,7 @@ Each table lists the checks in time order; the name in brackets is the run folde
 | review of the insertion code (separate AI session) | no implementation error; the junction "image tokens, then `</think>`" may cause the broken formats | kept (we do not change settings after seeing results) |
 
 - *Where the setting comes from.* The order thinking → selected image tokens → stopping check → "Wait, think more", and the use of a subset of the original image tokens, are from the paper (Algorithm 1, Fig. 2). The `<img>` tags are InternVL's official format. Leaving them out and the position before `</think>` are our choice.
-- *Limits.* Tags were compared only in the small checks, not in the main run. Separators, position ids and other insertion points were not tried. Without tags the broken format remains (A1: a second `</think>` in 352 of 713 VisRef answers).
+- *Limits.* Tags were compared only in the small checks, not in the main run. Separators and position ids were not tried; another insertion point was tried later in a small exploratory trial (B7). Without tags the broken format remains (A1: a second `</think>` in 352 of 713 VisRef answers).
 - *Sources.* `docs/EXPERIMENT_FLOW.md`, entries of 2026-10-07 (smoke1, smoke2); Section 4.1 (items 3 and 6).
 
 **B3. Thinking length limit, and how to get an answer after a cut.**
@@ -187,6 +188,19 @@ Each table lists the checks in time order; the name in brackets is the run folde
 - *Decision.* The three methods share the first thinking step, so that they are compared on the same questions from the same start; the planned experiments start from the stored first step.
 - *Limits.* The paper used A10G GPUs; we used T4. The effect of this difference was not tested.
 - *Sources.* Sections 2.5, 4.1 (item 2) and 6.
+
+**B7. Where to put a tagged image block, and how to start the answer** (exploratory, 2026-10-15; method `visref_imgtag`). After the main run, the image tags were tried again at another position: the selected tokens wrapped in `<img>` … `</img>` with newlines, placed after `</think>` when the model answers and inside the thinking block when it continues; the selection uses last-layer vectors for both the thinking step and the image tokens. Both trials ran the main VisRef (`visref_raw_rank`) and this variant from the stored first step on the same 10 questions (5 whose first step the model closed itself, 5 cut at 1,024 tokens). Only the shape of the outputs was examined, not their correctness.
+
+| Insertion | Example output (question whose first step the model closed itself) | Count |
+|---|---|---|
+| main run: untagged, before `</think>` (B2) | `The correct answer is A) Tilapia. … **Answer:** A.` → `</think>` → `The food web shows that tilapia directly relies on algae …` (the answer is written a second time) | second `</think>` in the answer: ST 20, VisRef 156 of 329 questions whose first step was closed and where VisRef stopped after it |
+| `smoke2`: tagged, before `</think>` (B2) | `… was \boxed{7}.` → `</think>` → `To determine the rate of change between 2013 and 2014, …` | 31 of 63 steps |
+| first trial: tagged, after `</think>`, free answer | `Question: Which organism with be most affected if algae was eliminated? …` (the question is written again); one answer restarted with `<think>`, one ended empty | 5 of 5 |
+| second trial: as above, answer after `\nFinal Answer:` | `Final Answer: A. Tilapia`, `Final Answer: 400`, `Final Answer: 0` | 0 of 5 with any of these problems |
+
+- *Reading.* In InternVL's prompt the question always follows `</img>\n`, so after a tagged block the model continues as if a new question started. Inside the thinking block, with or without tags, it writes an answer, closes the thinking again and repeats the answer. The answer prompt removed both patterns in this small trial. With the last-layer selection the injection reached about m tokens (median injected/m 0.97 in these trials, against 0.19 for the main VisRef on the same questions).
+- *Limits.* Ten questions, two trials; no accuracy was computed. The answer prompt now precedes every answer of this variant, so a comparison needs a TSR with the same prompt (`tsr_answer_prompt`).
+- *Sources.* `docs/EXPERIMENT_FLOW.md`, entries of 2026-10-15; `repro/diag/analyze_imgtag.py`.
 
 ## 3. Results
 

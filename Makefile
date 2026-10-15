@@ -11,7 +11,7 @@ fetch:
 	$(PY) scripts/fetch_sources.py
 
 # Re-run the pre-registered analyses from the saved outputs (needs `make fetch`).
-# final_judgment / analyze_fill / analyze_hs rewrite repro/diag/*.json in place; step1_branch is written to build/ and compared.
+# final_judgment / analyze_fill / analyze_hs / analyze_imgtag (two 10-question trials) rewrite repro/diag/*.json in place; step1_branch is written to build/ and compared.
 analysis:
 	mkdir -p build
 	cd repro && $(PY) diag/final_judgment.py > /dev/null
@@ -21,6 +21,9 @@ analysis:
 	cd repro && $(PY) diag/analyze_step1_branch.py $(STEP1) --ids diag/step1_branch_ids.json \
 	  --out ../build/step1_branch_analysis.json > /dev/null
 	cmp build/step1_branch_analysis.json repro/diag/step1_branch_analysis.json
+	cd repro && for n in 1 2; do r=bundle_pilot; [ $$n = 2 ] && r=bundle_pilot2; \
+	  $(PY) diag/analyze_imgtag.py kaggle/runs/$$r/output/results/results_0.jsonl kaggle/runs/$$r/output/results/results_1.jsonl \
+	  --out diag/analyze_imgtag_pilot$$n.json > /dev/null 2>&1; done
 
 # Rebuild the final tables in results/ from repro/diag/*.json.
 results:
