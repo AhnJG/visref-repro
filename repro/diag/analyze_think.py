@@ -1,4 +1,4 @@
-"""Pre-registered analysis of the think experiments (EF 2026-10-13 "사전등록: 생각 이어가기 실험"), written before the
+"""Pre-registered analysis of the think experiments (EF 2026-10-13 "실행 전 계획: 생각 이어가기 실험"), written before the
 results.
 
 Methods (one new run, possibly several Kaggle sessions): 'tsr_think', 'visref_think', 'visref_hs_think' = TSR, VisRef

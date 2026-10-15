@@ -1,4 +1,4 @@
-"""step1_branch -- pre-registered diagnostic (EXPERIMENT_FLOW 2026-10-11 "사전등록: step1_branch").
+"""step1_branch -- pre-registered diagnostic (EXPERIMENT_FLOW 2026-10-11 "실행 전 계획: step1_branch").
 
 From the saved b_main step-1 thinking z_1 (shared by ST/TSR/VisRef through the fork), four conditions per item; each
 ends with the stopping-probe style answer ("\n\n\\boxed", stops when the box closes, <= probe_cap tokens):

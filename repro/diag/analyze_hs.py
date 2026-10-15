@@ -1,4 +1,4 @@
-"""Pre-registered visref_hs analysis (EF 2026-10-12 "후속 실험 3 `visref_hs` 사전등록"), written before the results.
+"""Pre-registered visref_hs analysis (EF 2026-10-12 "후속 실험 3 `visref_hs` 실행 전 계획"), written before the results.
 
 visref_hs changes one thing against VisRef (visref_raw_rank): Z, the vectors of the thinking step, are the model's
 last-layer hidden states instead of the input embeddings. Everything else is as in b_main.

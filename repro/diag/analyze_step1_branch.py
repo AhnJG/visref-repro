@@ -1,4 +1,4 @@
-"""Pre-registered analysis of step1_branch (EXPERIMENT_FLOW 2026-10-11 "사전등록: step1_branch"), fixed before results.
+"""Pre-registered analysis of step1_branch (EXPERIMENT_FLOW 2026-10-11 "실행 전 계획: step1_branch"), fixed before results.
 
 Item-level accuracy = mean over the n_t1 T=1 answers. Co-primary paired comparisons B-A (immediate answer) and D-C
 (after free thinking): bootstrap 95% CI (2,000 resamples, seed 0) and two-sided bootstrap p with Holm over the

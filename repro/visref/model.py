@@ -92,7 +92,8 @@ def load_model(model_id, revision, dtype=torch.float16, device='cuda'):
 
 
 def special_ids(tok, wait_text, probe_prompt='\n\n\\boxed'):
-    ids = {name: tok.convert_tokens_to_ids(t) for name, t in [('think_end', '</think>'), ('eos', '<|im_end|>')]}
+    ids = {name: tok.convert_tokens_to_ids(t) for name, t in [('think_end', '</think>'), ('eos', '<|im_end|>'),
+                                                              ('img_start', '<img>'), ('img_end', '</img>')]}
     ids['wait'] = tok.encode(wait_text, add_special_tokens=False)
     ids['probe_prompt'] = tok.encode(probe_prompt, add_special_tokens=False)
     texts = [tok.decode([i]) for i in range(len(tok))]
@@ -115,18 +116,24 @@ def build_prompt(question, num_image_tokens):
             f'<|im_start|>user\n{image}\n{question}<|im_end|>\n<|im_start|>assistant\n')
 
 
+def image_positions(ids, img_context_id):
+    """LongTensor of the indices of the <IMG_CONTEXT> tokens in the prompt ids [L]."""
+    return (ids == img_context_id).nonzero().squeeze(1)
+
+
 @torch.no_grad()
-def encode_sample(model, tok, image, question, max_num=12):
-    """Return (prompt embeddings [L, d], visual tokens V [N, d])."""
+def encode_sample(model, tok, image, question, max_num=12, with_positions=False):
+    """Return (prompt embeddings [L, d], visual tokens V [N, d]); with_positions=True also the LongTensor of the
+    <IMG_CONTEXT> positions in the prompt, (emb, vis, pos)."""
     lm = model.language_model
     pv = load_image(image, max_num=max_num).to(lm.device, dtype=lm.dtype)
     vis = model.extract_feature(pv).reshape(-1, lm.config.hidden_size)
     ids = tok(build_prompt(question, vis.shape[0]), return_tensors='pt').input_ids[0].to(lm.device)
     emb = lm.get_input_embeddings()(ids).clone()
-    sel = ids == tok.convert_tokens_to_ids('<IMG_CONTEXT>')
-    assert int(sel.sum()) == vis.shape[0]
-    emb[sel] = vis.to(emb.dtype)
-    return emb, vis
+    pos = image_positions(ids, tok.convert_tokens_to_ids('<IMG_CONTEXT>'))
+    assert pos.numel() == vis.shape[0]
+    emb[pos] = vis.to(emb.dtype)
+    return (emb, vis, pos) if with_positions else (emb, vis)
 
 
 def load_mathvista(parquet_path):

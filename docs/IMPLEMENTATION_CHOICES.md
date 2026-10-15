@@ -5,7 +5,7 @@
 - 이름: 2026-10-13 `SPEC_LEDGER.md`에서 바꿈(작성자 결정). 논문에 없는 부분을 어떻게 채웠고 근거가 얼마나 강한지, 작성자 결정과 코드 위치, 외부 수치 확인을 한곳에 모은 문서다. 이전 기록(실험 기록 EF, 독립 검토 기록(비공개))에는 옛 이름 SPEC_LEDGER가 그대로 남아 있다.
 
 - 목표 수치: ST 46.1 / TSR 48.5 / VisRef 52.0 (VisRef_layout.txt L900, Table 6)
-- 점검 대상 실행 구성: `repro/run.py` DEFAULTS(L25-28) + `--methods st,tsr,visref_raw_rank --think-cap 1024 --total-think-cap 10240`
+- 점검 대상 실행 구성: `repro/run.py` DEFAULTS(L27-30) + `--methods st,tsr,visref_raw_rank --think-cap 1024 --total-think-cap 10240`
 - 작성: 2026-10-07. 근거는 원본 소스(논문 layout 텍스트·페이지 PNG, 인용 논문, 공식 인용 코드, 모델 카드, 공식 MathVista 평가 코드)만 사용했다. `repro/README.md`의 주석은 근거로 쓰지 않고, 확인 대상으로만 다뤘다.
 
 ## 핵심 판단 요약 (2026-10-10 신설 — 재현 판단 시 먼저 읽는 곳)
@@ -45,6 +45,7 @@
 | J-21 | LLM 추출 가드 | 채점 텍스트가 빈 행은 보내지 않음, LLM이 뽑은 답은 응답 텍스트에 실제로 있을 때만 인정 | F | — | EF L1235 (작성자 승인) |
 | J-22 | 판정 문구 규칙 | 본 실험은 CI가 0과 논문 값을 포함하는지로 판정, 후속 실험은 각 사전등록 규칙 | F | — | EF L1294, L1277, L1534·L1543, L1666-1669 |
 | J-23 | 멈춘 뒤 생각 이어가기 (후속 실험 `tsr_think`·`visref_think`·`visref_hs_think`) | 방법이 멈추기로 하면(이유 무관) 마지막 단계 문맥 뒤(VisRef는 Ṽ_k 뒤)에 "Wait, think more" + 최대 512토큰 더 생각, 합계 상한과 별도. 답 처리는 본 실험 규칙. 세 방법 모두 본 실험에 저장된 첫 단계에서 출발 | 문구 A(3절 c, 그림 2), 나머지 F | LAY L205-206, L224 | EF L1734, L1752, L1754-1772 (작성자 결정·승인) |
+| J-24 | 이미지 태그 주입 (탐색 변형 `visref_bundle`, 시험 가동 10문항) | 고른 토큰을 `<img>`…`</img>`와 줄바꿈으로 감싸고, 멈출 때는 `</think>` 뒤에, 이어갈 때는 생각 블록 안에 넣음. 커널의 Z와 V 모두 마지막 층 은닉 상태, 주입 벡터는 입력 임베딩. 선택 수는 m 이하(37행과 같음). 이미지 없는 기록용 probe는 결정 probe의 난수 상태를 복사 | 형식·위치·층·줄바꿈 모두 F (논문 미명시) | LAY L137-138, L178-180, L304-306 | EF 2026-10-15 (작성자 결정) |
 
 원칙 1 (2026-10-10 작성자 채택): A–C(VisRef 본문·그림, 인용 문헌·코드)가 정하지 않은 부분은 D(InternVL3.5 공식 자료: 모델 카드, InternVL3.5가 평가에 쓴 VLMEvalKit 설정)를 기본값으로 삼는다. 단, 이미 사전등록하고 진행 중인 b_main 설정은 바꾸지 않고, D와 다른 점은 아래 "D 자료 대조" 표로 관리하며 필요하면 보조 실험으로 확인한다(첫 보조 실험 st_official은 빌드·사전등록 후 보류: b_main 우선, EF 2026-10-10).
 
@@ -56,29 +57,30 @@
 
 | J | 결정 주체 (EF 줄) | 코드 위치 | 테스트 | 점검 결과 |
 |---|---|---|---|---|
-| J-1 | 작성자: 주 목표 행(L750), InternVL3.5-1B로 확정(L923) | `run.py` L78, `kaggle/build.py` L22 (revision 고정) | 없음 (각 실행의 run_config에 기록) | 일치 |
+| J-1 | 작성자: 주 목표 행(L750), InternVL3.5-1B로 확정(L923) | `run.py` L80, `kaggle/build.py` L22 (revision 고정) | 없음 (각 실행의 run_config에 기록) | 일치 |
 | J-2 | 공식 자료에서 고름. 작성자 원칙 1(L1139)과 같은 방향 | `visref/model.py` L6 | 없음 | 일치 |
-| J-3 | 작성자: 최종 답은 T 0.6 자연 응답(L820), top-p 0.95는 문서화만(L925) | `run.py` L25-28, `visref/engine.py` L69 | `test_decisions`, `test_sampler_topk_first_respects_top_p_and_k` | 일치 |
-| J-4 | 논문 값 | `run.py` L25, `visref/dpp.py` L46-48 | `test_decisions` | 일치 |
-| J-5 | 기록된 작성자 결정 없음 (논문·인용 근거) | `visref/methods.py` L221, L333-343 | `test_cut_step_gets_separator_before_wait_then_natural_answer_at_kmax`, `test_closed_step_continues_without_separator`, `test_decisions`(문구) | 일치 |
-| J-6 | 위치는 논문. 태그 없이 주입은 작성자(L775) | `visref/methods.py` L238 | `test_kmax_and_visref_injection_of_greedy_picks`, `test_visref_cut_step_separator_comes_before_injected_tokens` | 일치 |
-| J-7 | 작성자: rank만큼만(L899), 주 VisRef = `visref_raw_rank`(L976) | `visref/dpp.py` L26-34, `visref/methods.py` L237, `diag/final_judgment.py` L17 | `test_dpp_matches_naive_greedy`, `test_dpp_rank_deficient_returns_only_greedy_picks`, `test_raw_rank_with_the_same_step_is_rank_limited` | 일치 |
-| J-8 | 10-07 코드 재작성 때 입력 임베딩으로 구현. 그 전 작성자 결정 Z에 입력 임베딩이 아닌 last hidden state가 타당(L497-499)과 다르고, 바꾼 경위 기록을 찾지 못함. 10-12 작성자 지시로 마지막 층 Z 변형 `visref_hs` 사전등록(L1659) | `visref/methods.py` L237(주 VisRef), L231-234(`visref_hs`), `visref/engine.py` `last_hidden` | `tests/test_hs.py` 6개 | **불일치**: 이번 점검에서 찾은 빠진 작성자 결정은 이 하나. `visref_hs` 결과(EF 2026-10-13): 주입 수 m 도달, hs − TSR +0.24 pp (−2.38, +3.10), 사전등록 판정 ③(논문 크기 추가 이득 재현 안 됨) |
-| J-9 | 작성자: 답 하나로 측정(L750), 엔트로피 합·T 1(L820), `\boxed` probe(L827), 현행 유지(L955) | `visref/methods.py` L59, L136, L311-314, `run.py` L26 | `test_tsr_probe_sums_entropy_and_continues_until_confident`, `test_brace_probe_*` 6개, `test_engine_lumped_entropy_and_stop_check`, `test_decisions` | 일치 |
-| J-10 | 작성자: 단계 1,024 / 합계 10,240(L952-956) | `run.py` L25 기본값(2026-10-13 정정 전에는 옛 결정 L804의 4,096 / 8,192), 실행마다 run_args로도 전달(`kaggle/runs/*/run_config.json`) | `test_decisions`(기본값, b_main 실행 11개(s1–s9, fill, hs)의 run_config가 1,024 / 10,240) | 실행 기록은 일치. 코드 기본값은 10-12 점검에서 불일치를 찾아 10-13 정정(작성자 지시) |
-| J-11 | 작성자: s1 방식(L888-891). 줄바꿈 수는 감사 반영(L912)을 작성자가 수용(L922) | `visref/methods.py` L137-138, L274, `run.py` L27 | `test_st_cut_step_gets_s1_forced_answer`, `test_s1_*` 4개, `test_decisions` | 일치 |
-| J-12 | 작성자(L952-954) | `visref/methods.py` L277-281, `run.py` L27 | `test_s1_answer_hitting_cap_gets_deer_answer_forcing`, `test_natural_answer_hitting_cap_also_gets_answer_forcing_and_eos_answer_does_not`, `test_answer_forcing_after_later_think_end_keeps_scored_tail`, `test_decisions` | 일치 |
-| J-13 | 작성자: 10-06 지시(L646), 유지 결정(L1127) | `visref/methods.py` L268-270 | `test_final_text_after_last_generated_think_end`, `test_s1_later_think_end_is_respected` | 일치 |
+| J-3 | 작성자: 최종 답은 T 0.6 자연 응답(L820), top-p 0.95는 문서화만(L925) | `run.py` L27-30, `visref/engine.py` L69 | `test_decisions`, `test_sampler_topk_first_respects_top_p_and_k` | 일치 |
+| J-4 | 논문 값 | `run.py` L27, `visref/dpp.py` L46-48 | `test_decisions` | 일치 |
+| J-5 | 기록된 작성자 결정 없음 (논문·인용 근거) | `visref/methods.py` L235, L364-374 | `test_cut_step_gets_separator_before_wait_then_natural_answer_at_kmax`, `test_closed_step_continues_without_separator`, `test_decisions`(문구) | 일치 |
+| J-6 | 위치는 논문. 태그 없이 주입은 작성자(L775) | `visref/methods.py` L259 | `test_kmax_and_visref_injection_of_greedy_picks`, `test_visref_cut_step_separator_comes_before_injected_tokens` | 일치 |
+| J-7 | 작성자: rank만큼만(L899), 주 VisRef = `visref_raw_rank`(L976) | `visref/dpp.py` L26-34, `visref/methods.py` L252, `diag/final_judgment.py` L17 | `test_dpp_matches_naive_greedy`, `test_dpp_rank_deficient_returns_only_greedy_picks`, `test_raw_rank_with_the_same_step_is_rank_limited` | 일치 |
+| J-8 | 10-07 코드 재작성 때 입력 임베딩으로 구현. 그 전 작성자 결정 Z에 입력 임베딩이 아닌 last hidden state가 타당(L497-499)과 다르고, 바꾼 경위 기록을 찾지 못함. 10-12 작성자 지시로 마지막 층 Z 변형 `visref_hs` 사전등록(L1659) | `visref/methods.py` L252(주 VisRef), L246-249(`visref_hs`), `visref/engine.py` `last_hidden` | `tests/test_hs.py` 6개 | **불일치**: 이번 점검에서 찾은 빠진 작성자 결정은 이 하나. `visref_hs` 결과(EF 2026-10-13): 주입 수 m 도달, hs − TSR +0.24 pp (−2.38, +3.10), 사전등록 판정 ③(논문 크기 추가 이득 재현 안 됨) |
+| J-9 | 작성자: 답 하나로 측정(L750), 엔트로피 합·T 1(L820), `\boxed` probe(L827), 현행 유지(L955) | `visref/methods.py` L68, L150, L341-344, `run.py` L28 | `test_tsr_probe_sums_entropy_and_continues_until_confident`, `test_brace_probe_*` 6개, `test_engine_lumped_entropy_and_stop_check`, `test_decisions` | 일치 |
+| J-10 | 작성자: 단계 1,024 / 합계 10,240(L952-956) | `run.py` L27 기본값(2026-10-13 정정 전에는 옛 결정 L804의 4,096 / 8,192), 실행마다 run_args로도 전달(`kaggle/runs/*/run_config.json`) | `test_decisions`(기본값, b_main 실행 11개(s1–s9, fill, hs)의 run_config가 1,024 / 10,240) | 실행 기록은 일치. 코드 기본값은 10-12 점검에서 불일치를 찾아 10-13 정정(작성자 지시) |
+| J-11 | 작성자: s1 방식(L888-891). 줄바꿈 수는 감사 반영(L912)을 작성자가 수용(L922) | `visref/methods.py` L151-152, L303, `run.py` L29 | `test_st_cut_step_gets_s1_forced_answer`, `test_s1_*` 4개, `test_decisions` | 일치 |
+| J-12 | 작성자(L952-954) | `visref/methods.py` L306-310, `run.py` L29 | `test_s1_answer_hitting_cap_gets_deer_answer_forcing`, `test_natural_answer_hitting_cap_also_gets_answer_forcing_and_eos_answer_does_not`, `test_answer_forcing_after_later_think_end_keeps_scored_tail`, `test_decisions` | 일치 |
+| J-13 | 작성자: 10-06 지시(L646), 유지 결정(L1127) | `visref/methods.py` L297-299 | `test_final_text_after_last_generated_think_end`, `test_s1_later_think_end_is_respected` | 일치 |
 | J-14 | 작성자: 규칙 먼저 + LLM(L928), b_main은 gemini-3.5-flash-lite(L1250), fill과 `visref_hs`는 Claude Haiku(L1449, EF 2026-10-13), 채점 v4(L1466) | `visref/scoring.py` L18-19, L130, L156, `llm_extract.py` L35, L93-94 | `test_score` 등 채점 테스트, `test_v4_*`, `test_decisions` | 일치 |
 | J-15 | 운영 조건, "문서화만"(L925) | `visref/model.py` L82 | 없음 | 논문과 다름 (기록됨) |
 | J-16 | 기록된 작성자 결정 없음 | `run.py`(문항별 시드), `visref/methods.py` | `test_crn_tsr_stopping_at_k1_reproduces_st_final_answer`, `test_fork_from_step1_matches_running_step1`, `test_probe_uses_its_own_generator` | 일치 |
 | J-17 | 작성자: 주 비교·Holm(L1081-1083), 판정 규칙(L1296) | `diag/final_judgment.py` L17, L24, L71, `summarize.py` L39 | `make check`(저장된 판정 결과를 다시 계산해 비교) | 일치 |
 | J-18 | 작성자 승인(L1098-1106: 같은 민감도 분석을 b_main 최종 보고에도 싣고, 주 검정은 주 채점 하나) | `diag/final_judgment.py` (`views`) | `make check` | 일치 |
 | J-19 | 작성자 요청(L807) | `kaggle/build.py` L112, `summarize.py` L50 | `test_decisions`(shuffle_seed 0), `test_complete_prefix_stops_at_the_first_unfinished_question_of_each_shard` | 일치 |
-| J-20 | 작성자(L776) | `visref/methods.py` L141, L250 | `test_tsr_probe_sums_entropy_and_continues_until_confident`(최종 답 문맥에 probe 토큰 없음) | 일치 |
+| J-20 | 작성자(L776) | `visref/methods.py` L155, L279 | `test_tsr_probe_sums_entropy_and_continues_until_confident`(최종 답 문맥에 probe 토큰 없음) | 일치 |
 | J-21 | 작성자 승인(L1237) | `llm_extract.py` L104, L131, L163 | `test_decisions`(가드 2, LLM에 보낼 행 고르기) | 일치 |
 | J-22 | 작성자: 본 실험(L1296), fill(L1277), step1_branch(L1534, L1543), `visref_hs`(L1666-1669) | `diag/final_judgment.py` L24, `diag/analyze_step1_branch.py`, `diag/analyze_hs.py` L59. fill 규칙만 코드 없이 사람이 적용(결과 L1452) | `make check`, `test_analyze_step1_branch.py`, `test_analyze_hs.py` | 일치 (fill만 수동 적용) |
-| J-23 | 작성자: 512토큰·문구(L1741), 모든 정지 사유(L1752), 합계 상한과 별도·답 처리·주 비교와 +3.5 기준(L1757) | `visref/methods.py` L58, L62, L337, L347, L362; `run.py` L25, L88, L192; `kaggle/build.py` L100; `diag/make_step1_store.py`; `diag/analyze_think.py` | `test_think.py`, `test_analyze_think.py`, `test_decisions`(think_extra 512, 저장 파일 = 본 실험 ST 행, `b_main_think*` 실행 인자) | 일치 (2026-10-13 작성, 실행 전) |
+| J-23 | 작성자: 512토큰·문구(L1741), 모든 정지 사유(L1752), 합계 상한과 별도·답 처리·주 비교와 +3.5 기준(L1757) | `visref/methods.py` L67, L71, L368, L378, L393; `run.py` L27, L90, L200; `kaggle/build.py` L100; `diag/make_step1_store.py`; `diag/analyze_think.py` | `test_think.py`, `test_analyze_think.py`, `test_decisions`(think_extra 512, 저장 파일 = 본 실험 ST 행, `b_main_think*` 실행 인자) | 일치 (2026-10-13 작성, 실행 전) |
+| J-24 | 작성자: 묶음 변형과 Z·V 마지막 층, 10문항 시험 가동, 비교 난수 통일(EF 2026-10-15) | `visref/methods.py` L66, L246-279, L146, L318, L355; `visref/engine.py` L103; `visref/model.py` L96, L119; `run.py` L193; `diag/analyze_bundle.py` | `test_bundle.py`, `test_probe_crn.py`, `test_analyze_bundle.py` | 일치 (2026-10-15 작성, 실행 전) |
 
 `run.py` 기본값(J-10)은 code_version이 바뀌므로 점검 때는 미뤘다가, `visref_hs` 실행이 끝난 뒤 2026-10-13 작성자 지시로 1,024 / 10,240으로 고쳤다(code_version f1376774850d → cf46b2e6222e, EF 2026-10-13). 표에 없는 작성자 결정(대체된 9건 포함)은 독립 검토 기록(비공개)에 있다.
 
@@ -322,6 +324,7 @@ VisRef가 인용한 InternVL3.5[45]는 평가에 VLMEvalKit을 썼다(`REF/Inter
 - 2026-10-12 결정 점검: "핵심 판단 요약"에 J-19~J-22(문항 순서와 분석 표본, 정지 판정용 답과 최종 답 분리, LLM 추출 가드, 판정 문구 규칙)를 넣고, J-1~J-22의 결정 주체·코드 위치·테스트를 "결정 대장" 표로 추가. J-14의 채점 규칙을 v4로 고침. 결정된 값을 고정하는 `repro/tests/test_decisions.py` 추가.
 - 2026-10-13 생각 이어가기 실험 사전등록(EF L1747-1765): "핵심 판단 요약"과 "결정 대장"에 J-23 추가. 사전등록 커밋 8cd8d62의 코드 변경(`run.py` 머리말·DEFAULTS, `methods.py` 머리말·THINK, `build.py` 머리말)으로 밀린 결정 대장 J-1~J-20의 코드 줄 번호와 문서 머리말의 DEFAULTS 줄을 새 줄로 고침(옛 줄과 새 줄의 내용을 diff로 대조).
 - 2026-10-13 37·44행 상태를 "가정(미명시)"로 고치고 19행에 부분 충돌 표시, 상태별 집계 갱신(2026-10-07 감사 메모를 표에 반영). 파일 이름을 `SPEC_LEDGER.md`에서 `IMPLEMENTATION_CHOICES.md`(구현 근거 대장)로 바꿈(작성자 결정).
+- 2026-10-15 이미지 태그 주입 변형(`visref_bundle`)과 기록용 probe 난수 통일로 `run.py`·`visref/methods.py`·`visref/engine.py`·`visref/model.py` 줄이 밀려, 결정 대장과 머리말의 코드 줄 번호를 HEAD(86a5fc0f3cd9)와 새 코드의 줄 대응으로 고침(내용은 그대로).
 
 ## 외부 수치 확인 대장 (2026-10-10 신설)
 규칙: 외부 수치는 이번에 직접 확인한 파일:줄 또는 URL과 함께 적는다. 확인하지 못한 것은 "미확인"으로 적고, 직접 확인하기 전에는 지우지 않는다. 대화·요약·독립 검토 보고에서 온 수치는 여기서 대조한 뒤에만 사실로 쓴다.

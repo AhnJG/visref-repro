@@ -7,6 +7,8 @@ Step 1: by default the first method of a pid (the leader) generates the step-1 t
 forked from it (same context and seed). With --step1-from STORE (diag/make_step1_store.py) every method instead starts
 from the step-1 thinking stored by an earlier run (methods.stored_step1), all with the same sampler state after it
 (seeded with job_seed(seed, f'{pid}:stored_step1')), and the row records step1_info.
+
+'visref_bundle' (2026-10-15): V in the kernel is the prompt's last-layer hidden states at the image positions, computed once per pid (Engine.hidden_at) and passed to the Job as vis_hs.
 """
 import argparse
 import hashlib
@@ -18,7 +20,7 @@ from pathlib import Path
 import torch
 
 from visref.engine import Engine
-from visref.methods import METHODS, Job, stored_step1
+from visref.methods import BUNDLE, METHODS, Job, stored_step1
 from visref.model import encode_sample, load_mathvista, load_model, special_ids
 from visref.scoring import score
 
@@ -142,7 +144,7 @@ def main():
             set_enabled(False)
             eng.fast_kv = False
     sp = special_ids(tok, cfg['wait_text'], cfg['probe_prompt'])
-    enc = {}  # pid -> [base, vis, remaining jobs]
+    enc = {}  # pid -> [base, vis, remaining jobs, vis_hs]
     pending = {}  # pid -> methods waiting for the leader's step-1 thinking
     s1info = {}  # pid -> step1_info of a stored step 1 (--step1-from)
     queue = []
@@ -156,11 +158,12 @@ def main():
         gen = torch.Generator(device=lm.device).manual_seed(job_seed(cfg['seed'], pid))
         # the probe has its own stream, so the final answer's draws do not depend on how many probes ran (CRN)
         pgen = torch.Generator(device=lm.device).manual_seed(job_seed(cfg['seed'], f'{pid}:probe'))
-        # logging-only second probe without V_k (cfg dual_probe, VisRef methods): its own stream, never used for decisions
+        # logging-only second probe without V_k (cfg dual_probe, VisRef methods): its own generator object, never used for
+        # decisions; its seed is irrelevant (methods.py replaces its state by the decision probe's: common random numbers)
         p2gen = (torch.Generator(device=lm.device).manual_seed(job_seed(cfg['seed'], f'{pid}:probe_noV'))
                  if cfg['dual_probe'] else None)
         j = Job(m, rows[pid], enc[pid][0], enc[pid][1], cfg, tok, eng, sp, gen, step1=step1, probe_gen=pgen,
-                probe2_gen=p2gen)
+                probe2_gen=p2gen, vis_hs=enc[pid][3])
         j.pid = pid
         return j
 
@@ -186,8 +189,13 @@ def main():
             while queue and (not active or len(active) + sum(map(len, pending.values())) + len(queue[0][1]) <= cfg['batch']) and not (a.time_limit and time.time() - t0 > a.time_limit):
                 pid, ms = queue.pop(0)
                 row = rows[pid]
-                base, vis = encode_sample(model, tok, row['image'](), row['query'], cfg['max_num'])
-                enc[pid] = [base, vis, len(ms)]
+                vis_hs = None
+                if any(m in BUNDLE for m in ms):  # V of the bundle kernel: hidden states at the image positions, once per pid
+                    base, vis, pos = encode_sample(model, tok, row['image'](), row['query'], cfg['max_num'], with_positions=True)
+                    vis_hs = eng.hidden_at(base, pos)
+                else:
+                    base, vis = encode_sample(model, tok, row['image'](), row['query'], cfg['max_num'])
+                enc[pid] = [base, vis, len(ms), vis_hs]
                 if store is not None:  # every method from the stored step 1, with one shared sampler state after it
                     ids1, fin1, info = stored_step1(tok, sp, store[pid], cfg['cut_sep'])
                     state = torch.Generator(device=lm.device).manual_seed(

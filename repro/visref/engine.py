@@ -100,6 +100,32 @@ class Engine:
         return torch.cat(outs, 0)
 
     @torch.no_grad()
+    def hidden_at(self, ctx, idx):
+        """Last-layer hidden states (after the final norm, as last_hidden) of one context ctx [L, d] at the positions
+        idx (LongTensor or list of ints), returned [len(idx), d] in the order of idx. Same chunked prefill as
+        last_hidden. Used by 'visref_bundle' for V: the prompt's hidden states at the image-token positions."""
+        idx = torch.as_tensor(list(idx) if not torch.is_tensor(idx) else idx, dtype=torch.long, device=ctx.device)
+        L = ctx.shape[0]
+        if idx.numel() == 0:
+            return ctx[:0]
+        assert int(idx.min()) >= 0 and int(idx.max()) < L
+        dec = self.lm.get_decoder()
+        cache = DynamicCache()
+        pos = torch.arange(L, device=ctx.device)[None]
+        q = max(16, self.attn_budget // (self.lm.config.num_attention_heads * L))
+        out = None
+        for s in range(0, L, q):
+            e = min(L, s + q)
+            o = dec(inputs_embeds=ctx[None, s:e], position_ids=pos[:, s:e], past_key_values=cache, use_cache=True)
+            hit = (idx >= s) & (idx < e)
+            if hit.any():
+                h = o.last_hidden_state[0]
+                if out is None:
+                    out = h.new_empty(idx.numel(), h.shape[-1])
+                out[hit] = h[idx[hit] - s]
+        return out
+
+    @torch.no_grad()
     def generate(self, reqs, chunk, stop_at=None):
         """stop_at: wall-clock time after which all unfinished rows return early with finish='chunk'."""
         B = len(reqs)

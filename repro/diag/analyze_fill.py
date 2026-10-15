@@ -1,4 +1,4 @@
-"""Pre-registered visref_fill analysis (EF 2026-10-10 "원인 분리 실험 사전등록 수정", amended 2026-10-11).
+"""Pre-registered visref_fill analysis (EF 2026-10-10 "원인 분리 실험 실행 전 계획 수정", amended 2026-10-11).
 Sample: complete prefix of the seed-0 shuffled order (2 shards) among finished fill rows.
 Comparisons: fill-TSR, fill-VisRef(raw_rank) paired difference, bootstrap 95% CI (2,000, seed 0), McNemar exact.
 b_main rows: llm/final/merged.jsonl (v3 + LLM). fill rows: rescored with the current rule scorer (v3 when this was

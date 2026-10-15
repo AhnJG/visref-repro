@@ -1,4 +1,4 @@
-"""Pre-registered final judgment for b_main (EF 2026-10-10 "재현 판정 기준 사전등록" and the analysis plan).
+"""Pre-registered final judgment for b_main (EF 2026-10-10 "재현 판정 기준" and the analysis plan).
 Reading (a) = scorer v3 + LLM fallback extraction (guards 1-2), from llm/final/merged.jsonl.
 Paired difference + bootstrap 95% CI (summarize.paired: 2,000 resamples, seed 0), McNemar exact p, Holm over the
 two main comparisons (VisRef-ST, VisRef-TSR); TSR-ST is supplementary. Judgment by the CI rule only.

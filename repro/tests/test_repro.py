@@ -318,10 +318,11 @@ AF = '\n**Final Answer**\n\\boxed'
 P = len(BOX)
 
 
-def make_job(method, scripts, kmax=3, nvis=10, **over):
+def make_job(method, scripts, kmax=3, nvis=10, vis_hs=None, **over):
     from visref.model import brace_ids
     tok = CharTok()
-    sp = {'think_end': 1, 'eos': 0, 'wait': tok.encode('Wait'), 'probe_prompt': tok.encode(BOX), **brace_ids(tok.vocab)}
+    sp = {'think_end': 1, 'eos': 0, 'img_start': 2, 'img_end': 3, 'wait': tok.encode('Wait'),
+          'probe_prompt': tok.encode(BOX), **brace_ids(tok.vocab)}
     cfg = dict(delta=0.25, kmax=kmax, vis_frac=0.3, think_cap=100, total_think_cap=1000, answer_cap=50,
                max_context=5000, min_step_tokens=1, wait_text='Wait', probe_cap=16, probe_prompt=BOX,
                forced_prompt=S1, af_prompt=AF, af_cap=8, cut_sep='\n')
@@ -329,7 +330,7 @@ def make_job(method, scripts, kmax=3, nvis=10, **over):
     eng = ScriptEngine(tok, scripts)
     base = eng.embed(tok.encode('Q?'))
     vis = torch.randn(nvis, len(tok.vocab))
-    job = Job(method, IN, base, vis, cfg, tok, eng, sp, torch.Generator(), torch.Generator())
+    job = Job(method, IN, base, vis, cfg, tok, eng, sp, torch.Generator(), torch.Generator(), vis_hs=vis_hs)
     return job, eng, tok
 
 

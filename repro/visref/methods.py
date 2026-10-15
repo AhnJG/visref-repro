@@ -5,7 +5,13 @@ Methods: 'st' (one thinking step, then the answer), 'tsr' (textual self-reflecti
 greedy picks, <= rank(L), as the cited Chen et al. code does) and 'visref_fill' (same, but after the greedy stops at
 rank(L) a ridge eps*I continues it to exactly m tokens: dpp.select_tokens_fill; pre-registered variant, EF 2026-10-10/11)
 and 'visref_hs' (same as visref_raw_rank, but Z = the last-layer hidden states of z_k (after the final norm) instead
-of its input embeddings, Engine.last_hidden; pre-registered variant, EF 2026-10-12).
+of its input embeddings, Engine.last_hidden; pre-registered variant, EF 2026-10-12) and 'visref_bundle' (2026-10-15
+exploratory variant: as visref_hs, but V in the kernel is also the last-layer hidden states of the prompt at the image
+positions (Job(vis_hs=...), Engine.hidden_at; the injected vectors stay the input embeddings vis[sel]), and the picked
+tokens are wrapped in the official image tags, <img> + V + </img> + '\\n', and placed after '</think>\\n' whenever the
+model answers (z_k </think> \\n <img>V</img> \\n: probe, forced and free answers all start from there, whatever z_k
+ends with) but inside the thinking block when it goes on (z_k [\\n unless z_k / cut_sep ends with one] <img>V</img> \\n
+Wait, think more)).
 
 Thinking after the last step ('tsr_think', 'visref_think', 'visref_hs_think'; EF 2026-10-13, decided by the user): the
 same loop as 'tsr' / 'visref_raw_rank' / 'visref_hs', but when the method stops (any reason: entropy, Kmax or budget),
@@ -18,8 +24,9 @@ Stored step 1 (stored_step1): a job can start from a step-1 thinking stored by a
 methods of a new run share the main run's first step instead of regenerating it.
 
 Dual probe (cfg dual_probe, VisRef methods only, logging only): after the stopping probe a second probe is sampled on
-z_k without V_k (`... z_k </think>` + probe prompt) from its own generator; its H_noV is recorded on the step and is
-never used for the decision, so every decision, context and answer is the same as without it.
+z_k without V_k (`... z_k </think>` + probe prompt) from its own generator object, set to the state the decision probe
+started from (common random numbers: the two probes differ only in their contexts); its H_noV is recorded on the step
+and is never used for the decision, so every decision, context and answer is the same as without it.
 
 Step k: sample z_k until the model emits </think> (or EOS / the step cap). A step cut by the cap gets 'cut_sep'
 ('\n') right after its text unless it already ends with one -- before V_k, </think> and the continuation text --
@@ -52,9 +59,11 @@ import torch
 from .dpp import budget, pick_stats, select_tokens, select_tokens_fill
 from .engine import Request
 
-METHODS = ('st', 'tsr', 'visref_raw_rank', 'visref_fill', 'visref_hs', 'tsr_think', 'visref_think', 'visref_hs_think')
-VISREF = ('visref_raw_rank', 'visref_fill', 'visref_hs', 'visref_think', 'visref_hs_think')
+METHODS = ('st', 'tsr', 'visref_raw_rank', 'visref_fill', 'visref_hs', 'tsr_think', 'visref_think', 'visref_hs_think',
+           'visref_bundle')
+VISREF = ('visref_raw_rank', 'visref_fill', 'visref_hs', 'visref_think', 'visref_hs_think', 'visref_bundle')
 HS = ('visref_hs', 'visref_hs_think')  # Z = last-layer hidden states
+BUNDLE = ('visref_bundle',)  # Z and V = last-layer hidden states; image-tag block outside </think> (2026-10-15)
 THINK = ('tsr_think', 'visref_think', 'visref_hs_think')  # extra thinking after the stop decision
 PROBE_SAMPLING = (1.0, 0, 1.0)  # T=1, no top-k/top-p: sampled from the distribution whose entropy is summed
 
@@ -77,13 +86,16 @@ def stored_step1(tok, special, s, cut_sep):
 
 
 class Job:
-    def __init__(self, method, row, base, vis, cfg, tok, engine, special, gen, probe_gen, step1=None, probe2_gen=None):
+    def __init__(self, method, row, base, vis, cfg, tok, engine, special, gen, probe_gen, step1=None, probe2_gen=None,
+                 vis_hs=None):
         """step1=(ids, finish, gen_state): reuse another job's step-1 thinking (identical context and seed).
         probe_gen: generator used only by the stopping probe.
-        probe2_gen: generator of the logging-only second probe without V_k (cfg dual_probe, VisRef methods only)."""
+        probe2_gen: generator of the logging-only second probe without V_k (cfg dual_probe, VisRef methods only).
+        vis_hs [N, d]: last-layer hidden states of the prompt at the image positions (visref_bundle: V of the kernel)."""
         assert method in METHODS
+        assert method not in BUNDLE or (vis_hs is not None and vis_hs.shape == vis.shape)
         self.method, self.row, self.cfg, self.tok, self.eng, self.sp = method, row, cfg, tok, engine, special
-        self.vis, self.gen, self.probe_gen = vis, gen, probe_gen
+        self.vis, self.vis_hs, self.gen, self.probe_gen = vis, vis_hs, gen, probe_gen
         self.dual = bool(cfg.get('dual_probe')) and method in VISREF
         assert not self.dual or probe2_gen is not None
         self.probe2_gen = probe2_gen
@@ -117,7 +129,8 @@ class Job:
     def _vis_room(self):
         if self.method not in VISREF:
             return 0
-        return budget(self.vis.shape[0], self.cfg['vis_frac']) + 2  # + 2: margin (kept so caps match earlier runs)
+        # + 2: margin (kept so caps match earlier runs); bundle: + 4 for the two image tags and two newlines
+        return budget(self.vis.shape[0], self.cfg['vis_frac']) + 2 + (4 if self.method in BUNDLE else 0)
 
     def _start_think(self):
         cap = self._think_cap(self.ctx.shape[0])
@@ -130,6 +143,7 @@ class Job:
         self.phase, self.ent, self.ent_l = phase, [], []
         self.stop_check, self.ent_lump = None, frozenset()
         if phase == 'probe':
+            self._probe_state = self.probe_gen.get_state()  # before any draw of this probe: the no-V probe replays it
             self.cur = torch.cat([self.answer_ctx, self.eng.embed(self.sp['probe_prompt'])], 0)
             self.cap = self.cfg['probe_cap']
             self.stop_check = lambda ids: self._brace_scan(self.partial + ids, decode=False)[0] is not None
@@ -222,20 +236,27 @@ class Job:
         sep_ids = self.tok.encode(sep, add_special_tokens=False) if sep else []
         ctx = torch.cat([self.ctx, self.eng.embed(list(z) + sep_ids)], 0) if (z or sep_ids) else self.ctx
         self.trace.append(zt + sep)
+        img = None
         self.ctx_nov = ctx  # z_k (+ separator) without V_k: context of the logging-only second probe
         if self.method in VISREF and z:
             m = budget(self.vis.shape[0], self.cfg['vis_frac'])
             if self.method == 'visref_fill':
                 sel, fill_info = select_tokens_fill(self.vis, self.eng.embed(z), m)  # asserts head = raw_rank picks
                 step.update(fill_info)
-            elif self.method in HS:  # Z = last-layer hidden states of z_k in its own context (causal: the
+            elif self.method in HS + BUNDLE:  # Z = last-layer hidden states of z_k in its own context (causal: the
                 tr = []                      # separator / V_k appended after z_k do not change them)
                 Z = self.eng.last_hidden(torch.cat([self.ctx, self.eng.embed(z)], 0), len(z))
-                sel = select_tokens(self.vis, Z, m, trace=tr)
+                sel = select_tokens(self.vis_hs if self.method in BUNDLE else self.vis, Z, m, trace=tr)
                 step.update(pick_stats(tr))
             else:
                 sel = select_tokens(self.vis, self.eng.embed(z), m)
-            ctx = torch.cat([ctx, self.vis[sel]], 0)
+            if self.method in BUNDLE:  # <img> + V + </img> + '\n'; placed below
+                nl = self.tok.encode('\n', add_special_tokens=False)
+                pre = [] if (zt + sep).endswith('\n') else nl  # continuing: exactly one newline before <img>
+                img = torch.cat([self.eng.embed([sp['img_start']]), self.vis[sel],
+                                 self.eng.embed([sp['img_end']] + nl)], 0)
+            else:
+                ctx = torch.cat([ctx, self.vis[sel]], 0)
             # rank diagnostics: n_dpp <= rank(V Z^T) <= min(rank V, #distinct tokens in z_k)
             if not hasattr(self, 'rank_V'):  # diagnostic only: CPU, never fatal; 1e-4 is above fp16 noise
                 try:
@@ -244,10 +265,18 @@ class Job:
                 except Exception:
                     self.rank_V = -1
             step.update(m=m, n_dpp=len(sel), n_inject=len(sel), rank_V=self.rank_V, n_unique_z=len(set(z)))
-            self.trace.append(f'<VISREF m={m} dpp={len(sel)}>')
+            if self.method in BUNDLE:
+                step.update(inject_format='img_tag_outside_think', v_space='last_hidden')
+                self.trace.append(f'<VISREF_IMG m={m} dpp={len(sel)}>')
+            else:
+                self.trace.append(f'<VISREF m={m} dpp={len(sel)}>')
         self.steps.append(step)
-        self.step_ctx = ctx
-        self.answer_ctx = torch.cat([ctx, self.eng.embed([sp['think_end']])], 0)
+        if img is not None:  # next step continues inside the thinking block; the answer starts after </think> '\n' + block
+            self.step_ctx = torch.cat([ctx, self.eng.embed(pre), img], 0)
+            self.answer_ctx = torch.cat([ctx, self.eng.embed([sp['think_end']] + nl), img], 0)
+        else:
+            self.step_ctx = ctx
+            self.answer_ctx = torch.cat([ctx, self.eng.embed([sp['think_end']])], 0)
         phase = 'final' if self.method == 'st' else 'probe'
         self._start_answer(phase, forced=not closed, reason='st' if self.method == 'st' else None)
 
@@ -286,6 +315,7 @@ class Job:
         if self.phase == 'probe_nov':  # logging-only probe without V_k: record, then act on the stored decision
             H, valid, ended, inner, ent = self._probe_entropy(finish)
             self.steps[-1].update(H_noV=H, probe_noV_finish='end' if valid else ('cap' if not ended else 'invalid'),
+                                  probe_noV_crn=True,
                                   probe_noV_answer=self.tok.decode([t for t in self.partial if t != eos]),
                                   probe_noV_inner=inner, probe_noV_ent=[round(e, 4) for e in ent])
             self._decide(self._pending_H)
@@ -298,7 +328,7 @@ class Job:
                               forced_close=self.forced, probe_ids=list(self.partial),
                               probe_ent=[round(e, 4) for e in ent], probe_inner=inner, probe_valid=valid,
                               probe_ent_full=[round(e, 4) for e in self.ent])
-        if self.dual:  # decision uses H only; the second probe has its own generator and never feeds the context
+        if self.dual:  # decision uses H only; the second probe has its own generator object and never feeds the context
             self._pending_H = H
             self._start_probe_nov()
             return
@@ -322,6 +352,7 @@ class Job:
     def _start_probe_nov(self):
         """Second stopping probe on z_k (+ separator) without V_k, then </think> + probe prompt (logging only)."""
         self.phase, self.ent, self.ent_l, self.partial = 'probe_nov', [], [], []
+        self.probe2_gen.set_state(self._probe_state)  # same random state as the decision probe; probe_gen is untouched
         self.cur = torch.cat([self.ctx_nov, self.eng.embed([self.sp['think_end']]), self.eng.embed(self.sp['probe_prompt'])], 0)
         self.cap = self.cfg['probe_cap']
         self.stop = frozenset({self.sp['eos']})
