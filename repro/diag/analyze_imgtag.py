@@ -1,4 +1,4 @@
-"""Mechanism readout for visref_bundle vs visref_raw_rank result rows (2026-10-15). No scoring: it only looks at what the
+"""Mechanism readout for visref_imgtag vs visref_raw_rank result rows (2026-10-15). No scoring: it only looks at what the
 runs did, per method and per group of rows (all / close / cap / eos by how step 1 ended).
 
   (i)   probe-pair disagreement: over steps where both probes are valid (probe_valid and probe_noV_finish == 'end'),
@@ -11,7 +11,7 @@ runs did, per method and per group of rows (all / close / cap / eos by how step 
         <= 2 thinking tokens).
   mechanism: n_inject / m quantiles and the inject_format values seen.
 
-  python3 diag/analyze_bundle.py RESULTS.jsonl... [--out diag/analyze_bundle.json]
+  python3 diag/analyze_imgtag.py RESULTS.jsonl... [--out diag/analyze_imgtag.json]
 """
 import argparse
 import glob
@@ -149,7 +149,7 @@ def load(paths):
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument('files', nargs='+', help='result JSONL paths or globs')
-    ap.add_argument('--out', default='diag/analyze_bundle.json')
+    ap.add_argument('--out', default='diag/analyze_imgtag.json')
     a = ap.parse_args(argv)
     files, rows = load(a.files)
     assert rows, f'no rows in {a.files}'

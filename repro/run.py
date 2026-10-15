@@ -8,7 +8,7 @@ forked from it (same context and seed). With --step1-from STORE (diag/make_step1
 from the step-1 thinking stored by an earlier run (methods.stored_step1), all with the same sampler state after it
 (seeded with job_seed(seed, f'{pid}:stored_step1')), and the row records step1_info.
 
-'visref_bundle' (2026-10-15): V in the kernel is the prompt's last-layer hidden states at the image positions, computed once per pid (Engine.hidden_at) and passed to the Job as vis_hs.
+'visref_imgtag' (2026-10-15): V in the kernel is the prompt's last-layer hidden states at the image positions, computed once per pid (Engine.hidden_at) and passed to the Job as vis_hs.
 """
 import argparse
 import hashlib
@@ -20,7 +20,7 @@ from pathlib import Path
 import torch
 
 from visref.engine import Engine
-from visref.methods import BUNDLE, METHODS, Job, stored_step1
+from visref.methods import IMGTAG, METHODS, Job, stored_step1
 from visref.model import encode_sample, load_mathvista, load_model, special_ids
 from visref.scoring import score
 
@@ -190,7 +190,7 @@ def main():
                 pid, ms = queue.pop(0)
                 row = rows[pid]
                 vis_hs = None
-                if any(m in BUNDLE for m in ms):  # V of the bundle kernel: hidden states at the image positions, once per pid
+                if any(m in IMGTAG for m in ms):  # V of the image-tag kernel: hidden states at the image positions, once per pid
                     base, vis, pos = encode_sample(model, tok, row['image'](), row['query'], cfg['max_num'], with_positions=True)
                     vis_hs = eng.hidden_at(base, pos)
                 else:

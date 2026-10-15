@@ -5,13 +5,13 @@ Methods: 'st' (one thinking step, then the answer), 'tsr' (textual self-reflecti
 greedy picks, <= rank(L), as the cited Chen et al. code does) and 'visref_fill' (same, but after the greedy stops at
 rank(L) a ridge eps*I continues it to exactly m tokens: dpp.select_tokens_fill; pre-registered variant, EF 2026-10-10/11)
 and 'visref_hs' (same as visref_raw_rank, but Z = the last-layer hidden states of z_k (after the final norm) instead
-of its input embeddings, Engine.last_hidden; pre-registered variant, EF 2026-10-12) and 'visref_bundle' (2026-10-15
+of its input embeddings, Engine.last_hidden; pre-registered variant, EF 2026-10-12) and 'visref_imgtag' (2026-10-15
 exploratory variant: as visref_hs, but V in the kernel is also the last-layer hidden states of the prompt at the image
 positions (Job(vis_hs=...), Engine.hidden_at; the injected vectors stay the input embeddings vis[sel]), and the picked
 tokens are wrapped in the official image tags, <img> + V + </img> + '\\n', and placed after '</think>\\n' whenever the
 model answers (z_k </think> \\n <img>V</img> \\n: probe, forced and free answers all start from there, whatever z_k
 ends with) but inside the thinking block when it goes on (z_k [\\n unless z_k / cut_sep ends with one] <img>V</img> \\n
-Wait, think more)); every final answer of visref_bundle starts after forced_prompt (2026-10-15).
+Wait, think more)); every final answer of visref_imgtag, and of 'tsr_answer_prompt' (TSR otherwise), starts after forced_prompt.
 
 Thinking after the last step ('tsr_think', 'visref_think', 'visref_hs_think'; EF 2026-10-13, decided by the user): the
 same loop as 'tsr' / 'visref_raw_rank' / 'visref_hs', but when the method stops (any reason: entropy, Kmax or budget),
@@ -60,10 +60,10 @@ from .dpp import budget, pick_stats, select_tokens, select_tokens_fill
 from .engine import Request
 
 METHODS = ('st', 'tsr', 'visref_raw_rank', 'visref_fill', 'visref_hs', 'tsr_think', 'visref_think', 'visref_hs_think',
-           'visref_bundle')
-VISREF = ('visref_raw_rank', 'visref_fill', 'visref_hs', 'visref_think', 'visref_hs_think', 'visref_bundle')
+           'visref_imgtag', 'tsr_answer_prompt')
+VISREF = ('visref_raw_rank', 'visref_fill', 'visref_hs', 'visref_think', 'visref_hs_think', 'visref_imgtag')
 HS = ('visref_hs', 'visref_hs_think')  # Z = last-layer hidden states
-BUNDLE = ('visref_bundle',)  # Z and V = last-layer hidden states; image-tag block outside </think> (2026-10-15)
+IMGTAG = ('visref_imgtag',); ANSWER_PROMPT = IMGTAG + ('tsr_answer_prompt',)  # every final answer after forced_prompt
 THINK = ('tsr_think', 'visref_think', 'visref_hs_think')  # extra thinking after the stop decision
 PROBE_SAMPLING = (1.0, 0, 1.0)  # T=1, no top-k/top-p: sampled from the distribution whose entropy is summed
 
@@ -91,9 +91,9 @@ class Job:
         """step1=(ids, finish, gen_state): reuse another job's step-1 thinking (identical context and seed).
         probe_gen: generator used only by the stopping probe.
         probe2_gen: generator of the logging-only second probe without V_k (cfg dual_probe, VisRef methods only).
-        vis_hs [N, d]: last-layer hidden states of the prompt at the image positions (visref_bundle: V of the kernel)."""
+        vis_hs [N, d]: last-layer hidden states of the prompt at the image positions (visref_imgtag: V of the kernel)."""
         assert method in METHODS
-        assert method not in BUNDLE or (vis_hs is not None and vis_hs.shape == vis.shape)
+        assert method not in IMGTAG or (vis_hs is not None and vis_hs.shape == vis.shape)
         self.method, self.row, self.cfg, self.tok, self.eng, self.sp = method, row, cfg, tok, engine, special
         self.vis, self.vis_hs, self.gen, self.probe_gen = vis, vis_hs, gen, probe_gen
         self.dual = bool(cfg.get('dual_probe')) and method in VISREF
@@ -129,8 +129,8 @@ class Job:
     def _vis_room(self):
         if self.method not in VISREF:
             return 0
-        # + 2: margin (kept so caps match earlier runs); bundle: + 4 for the two image tags and two newlines
-        return budget(self.vis.shape[0], self.cfg['vis_frac']) + 2 + (4 if self.method in BUNDLE else 0)
+        # + 2: margin (kept so caps match earlier runs); image tags: + 4 for the two image tags and two newlines
+        return budget(self.vis.shape[0], self.cfg['vis_frac']) + 2 + (4 if self.method in IMGTAG else 0)
 
     def _start_think(self):
         cap = self._think_cap(self.ctx.shape[0])
@@ -148,12 +148,12 @@ class Job:
             self.cap = self.cfg['probe_cap']
             self.stop_check = lambda ids: self._brace_scan(self.partial + ids, decode=False)[0] is not None
             self.ent_lump = self.sp['close_ids']
-        elif (forced and self.cut) or self.method in BUNDLE:  # s1 forcing after a cut; bundle: always (a free answer
+        elif (forced and self.cut) or self.method in ANSWER_PROMPT:  # s1 forcing after a cut; ANSWER_PROMPT methods: always (a free answer
             self.cur = torch.cat([self.answer_ctx, self.eng.embed(self.forced_ids)], 0)
             self.cap = self.cfg['answer_cap']  # after '</img>\n' restated the question, as in the user prompt; 2026-10-15)
         else:
             self.cur, self.cap = self.answer_ctx, self.cfg['answer_cap']
-        self.forced_answer = phase == 'final' and ((bool(forced) and self.cut) or self.method in BUNDLE)
+        self.forced_answer = phase == 'final' and ((bool(forced) and self.cut) or self.method in ANSWER_PROMPT)
         self.partial = []
         self.stop = frozenset({self.sp['eos']})
         self.forced, self.reason = forced, reason or getattr(self, 'reason', None)
@@ -243,14 +243,14 @@ class Job:
             if self.method == 'visref_fill':
                 sel, fill_info = select_tokens_fill(self.vis, self.eng.embed(z), m)  # asserts head = raw_rank picks
                 step.update(fill_info)
-            elif self.method in HS + BUNDLE:  # Z = last-layer hidden states of z_k in its own context (causal: the
+            elif self.method in HS + IMGTAG:  # Z = last-layer hidden states of z_k in its own context (causal: the
                 tr = []                      # separator / V_k appended after z_k do not change them)
                 Z = self.eng.last_hidden(torch.cat([self.ctx, self.eng.embed(z)], 0), len(z))
-                sel = select_tokens(self.vis_hs if self.method in BUNDLE else self.vis, Z, m, trace=tr)
+                sel = select_tokens(self.vis_hs if self.method in IMGTAG else self.vis, Z, m, trace=tr)
                 step.update(pick_stats(tr))
             else:
                 sel = select_tokens(self.vis, self.eng.embed(z), m)
-            if self.method in BUNDLE:  # <img> + V + </img> + '\n'; placed below
+            if self.method in IMGTAG:  # <img> + V + </img> + '\n'; placed below
                 nl = self.tok.encode('\n', add_special_tokens=False)
                 pre = [] if (zt + sep).endswith('\n') else nl  # continuing: exactly one newline before <img>
                 img = torch.cat([self.eng.embed([sp['img_start']]), self.vis[sel],
@@ -265,7 +265,7 @@ class Job:
                 except Exception:
                     self.rank_V = -1
             step.update(m=m, n_dpp=len(sel), n_inject=len(sel), rank_V=self.rank_V, n_unique_z=len(set(z)))
-            if self.method in BUNDLE:
+            if self.method in IMGTAG:
                 step.update(inject_format='img_tag_outside_think', v_space='last_hidden')
                 self.trace.append(f'<VISREF_IMG m={m} dpp={len(sel)}>')
             else:

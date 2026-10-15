@@ -1830,3 +1830,9 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - 확인 항목: 생각을 스스로 닫은 5문항에서 `visref_bundle`의 최종 답은 5/5 `Final Answer:` 뒤의 짧은 답이었다. 질문 재작성, 생각 다시 시작, 빈 답, 답 안 `</think>` 재출력은 0/5(앞 실행은 질문 재작성 5/5, 빈 답 1). 같은 문항의 `visref_raw_rank` 최종 답 텍스트는 앞 실행과 5/5 같았다(재출력 2/5; 잘린 묶음에서는 3/5만 같음).
 - 그 밖(5문항씩이라 비율은 읽지 않음): 실행 문제 표시(빈 답, 오류, 주입 0개 단계, 2토큰 이하에서 닫힌 단계) 모두 0. 첫 단계가 잘린 5문항에서는 두 방법 모두 답 안 `</think>` 재출력이 3/5. `visref_bundle`에서 1문항(pid 2)이 4단계까지 이어갔다(앞 실행에서는 10단계; 코드에서 바뀐 것은 최종 답 문구뿐이므로 GPU 계산의 비결정성으로 보인다, 미확인).
 - 다음: 300문항 비교를 할지, 할 경우 같은 답 문구를 붙인 TSR 비교 조건을 넣을지 작성자가 정한다(남은 GPU 할당량으로는 이번 주에 돌릴 수 없음).
+
+## 2026-10-15 이름 바꿈: `visref_bundle` → `visref_imgtag`, `tsr_cue` → `tsr_answer_prompt` (작성자 결정, 코드 동작은 그대로)
+- 읽기 쉬운 이름으로 바꿈. `visref_imgtag`는 이미지 태그 주입 변형, `tsr_answer_prompt`는 모든 최종 답을 `\nFinal Answer:` 뒤에서 받는 TSR(이미지 태그 주입의 비교 조건, 이번에 추가)이다. 코드 상수 `BUNDLE` → `IMGTAG`, `CUE` → `ANSWER_PROMPT`.
+- 파일: `repro/diag/analyze_bundle.py` → `repro/diag/analyze_imgtag.py`, `repro/tests/test_bundle.py` → `repro/tests/test_imgtag.py`, `repro/tests/test_analyze_bundle.py` → `repro/tests/test_analyze_imgtag.py`. 시험 가동 결과 파일 `repro/diag/analyze_bundle.json` → `analyze_imgtag_pilot1.json`, `analyze_bundle_pilot2.json` → `analyze_imgtag_pilot2.json`.
+- 그대로 둔 것: 앞 항목들의 옛 이름(당시 기록), 실행 이름 `bundle_pilot`·`bundle_pilot2`와 그 결과 행의 메서드 이름 `visref_bundle`. 같은 동작이다.
+- 테스트 202개 통과(`tsr_answer_prompt` 테스트 1개 포함). code_version 6e218887d2b5.

@@ -1,4 +1,4 @@
-"""visref_bundle (2026-10-15 exploratory variant): V and Z are last-layer hidden states, the picked input embeddings
+"""visref_imgtag (2026-10-15 exploratory variant): V and Z are last-layer hidden states, the picked input embeddings
 are wrapped in <img>...</img> and placed after </think> when answering, inside the thinking block when continuing."""
 import pytest
 import torch
@@ -15,13 +15,13 @@ NL = TOK.encode('\n')[0]
 NVIS = 10
 
 
-def bundle_job(scripts, **over):
-    """A visref_bundle Job on an HSEngine (distinct Z rows), with vis_hs different from vis."""
+def imgtag_job(scripts, **over):
+    """A visref_imgtag Job on an HSEngine (distinct Z rows), with vis_hs different from vis."""
     tok = TOK
     vis_hs = torch.randn(NVIS, len(tok.vocab), generator=torch.Generator().manual_seed(5))
-    job, _, _ = make_job('visref_bundle', [], vis_hs=vis_hs, **over)
+    job, _, _ = make_job('visref_imgtag', [], vis_hs=vis_hs, **over)
     eng = HSEngine(tok, scripts)
-    j = Job('visref_bundle', job.row, eng.embed(tok.encode('Q?')), job.vis, job.cfg, tok, eng, job.sp,
+    j = Job('visref_imgtag', job.row, eng.embed(tok.encode('Q?')), job.vis, job.cfg, tok, eng, job.sp,
             torch.Generator(), torch.Generator(), vis_hs=vis_hs)
     return j, eng, vis_hs
 
@@ -55,17 +55,17 @@ def test_image_positions_helper():
     assert image_positions(ids, 99).numel() == 0
 
 
-def test_bundle_requires_vis_hs():
+def test_imgtag_requires_vis_hs():
     with pytest.raises(AssertionError):
-        make_job('visref_bundle', [])
+        make_job('visref_imgtag', [])
     with pytest.raises(AssertionError):
-        make_job('visref_bundle', [], vis_hs=torch.randn(NVIS + 1, len(TOK.vocab)))
+        make_job('visref_imgtag', [], vis_hs=torch.randn(NVIS + 1, len(TOK.vocab)))
     make_job('visref_hs', [])  # other methods do not need it
 
 
-def test_bundle_contexts_closed_step(monkeypatch):
+def test_imgtag_contexts_closed_step(monkeypatch):
     tok = TOK
-    j, eng, vis_hs = bundle_job([(think(tok, 'aaaaaaaa'), 0), (box(tok, '7'), 0.0), (ans(tok, '7'), 0)])
+    j, eng, vis_hs = imgtag_job([(think(tok, 'aaaaaaaa'), 0), (box(tok, '7'), 0.0), (ans(tok, '7'), 0)])
     seen = []
     real = M.select_tokens
 
@@ -98,9 +98,9 @@ def test_bundle_contexts_closed_step(monkeypatch):
     assert j.trace[1] == f'<VISREF_IMG m=3 dpp={n}>'
 
 
-def test_bundle_contexts_continue_step():
+def test_imgtag_contexts_continue_step():
     tok = TOK
-    j, eng, _ = bundle_job([(think(tok, 'aaaaaaaa'), 0), (box(tok, '7'), 0.5)])
+    j, eng, _ = imgtag_job([(think(tok, 'aaaaaaaa'), 0), (box(tok, '7'), 0.5)])
     eng.step(j)
     eng.step(j)
     assert j.phase == 'think' and j.k == 2
@@ -113,11 +113,11 @@ def test_bundle_contexts_continue_step():
     assert ids[10:12] == [NL, 2] and ids[12 + n:] == [3, NL] + tok.encode('Wait')
 
 
-def test_bundle_newline_not_doubled():
+def test_imgtag_newline_not_doubled():
     tok = TOK
     # answering: always ctx_z </think> '\n' <img>, whatever z ends with; continuing: one newline before <img>
     # closed step whose text already ends with '\n'
-    j, eng, _ = bundle_job([(think(tok, 'aaaa\n'), 0), (box(tok, '7'), 0.0)])
+    j, eng, _ = imgtag_job([(think(tok, 'aaaa\n'), 0), (box(tok, '7'), 0.0)])
     eng.step(j)
     n = j.steps[0]['n_inject']
     ids = ids_of(j.answer_ctx)
@@ -125,14 +125,14 @@ def test_bundle_newline_not_doubled():
     ids = ids_of(j.step_ctx)
     assert ids[:7] == tok.encode('Q?aaaa\n') and ids[7] == 2 and ids[8 + n:] == [3, NL] and ids.count(NL) == 2
     # closed step without a trailing newline
-    j, eng, _ = bundle_job([(think(tok, 'aaaa'), 0), (box(tok, '7'), 0.0)])
+    j, eng, _ = imgtag_job([(think(tok, 'aaaa'), 0), (box(tok, '7'), 0.0)])
     eng.step(j)
     ids = ids_of(j.answer_ctx)
     assert ids[:9] == tok.encode('Q?aaaa') + [1, NL, 2] and ids.count(NL) == 2
     ids = ids_of(j.step_ctx)
     assert ids[:8] == tok.encode('Q?aaaa') + [NL, 2] and ids.count(NL) == 2
     # cut step: cut_sep is the newline before <img> when continuing and before </think> when answering
-    j, eng, _ = bundle_job([(box(tok, '7'), 0.0)])
+    j, eng, _ = imgtag_job([(box(tok, '7'), 0.0)])
     j.consume(Result(ids=tok.encode('abc'), finish='cap'))
     n = j.steps[0]['n_inject']
     assert ids_of(j.step_ctx)[:7] == tok.encode('Q?abc') + [NL, 2] and ids_of(j.step_ctx).count(NL) == 2
@@ -143,8 +143,26 @@ def test_bundle_newline_not_doubled():
     assert req.ctx.shape[0] == j.answer_ctx.shape[0] + len(S1) == 2 + 3 + 1 + 1 + 1 + 1 + n + 1 + 1 + len(S1)
     assert torch.equal(req.ctx[:j.answer_ctx.shape[0]], j.answer_ctx)
     # cut step already ending with '\n': no separator added
-    j, eng, _ = bundle_job([])
+    j, eng, _ = imgtag_job([])
     j.consume(Result(ids=tok.encode('ab\n'), finish='cap'))
     assert ids_of(j.step_ctx)[:6] == tok.encode('Q?ab\n') + [2] and ids_of(j.step_ctx).count(NL) == 2
     assert ids_of(j.answer_ctx)[:8] == tok.encode('Q?ab\n') + [1, NL, 2] and ids_of(j.answer_ctx).count(NL) == 3
     assert j.trace[0] == 'ab\n'
+
+
+def test_tsr_answer_prompt_answers_after_the_forced_prompt_and_is_otherwise_tsr():
+    """tsr_answer_prompt (2026-10-15): TSR whose every final answer follows forced_prompt, the control for visref_imgtag."""
+    tok = TOK
+    scripts = lambda: [(think(tok, 'abc'), 0), (box(tok, '7'), 0.0), (ans(tok, ' 7'), 0)]
+    out = {}
+    for m in ('tsr', 'tsr_answer_prompt'):
+        job, eng, _ = make_job(m, scripts())
+        while not job.done:
+            eng.step(job)
+        out[m] = (job, eng.calls)
+    (t, tc), (c, cc) = out['tsr'], out['tsr_answer_prompt']
+    assert [x[0] for x in tc] == [x[0] for x in cc] == ['think', 'probe', 'final']
+    assert tc[:2] == cc[:2] and cc[2][1] == tc[2][1] + len(S1)  # same thinking and probe; answer context + S1
+    assert t.out['final_answer'] == ' 7' and not t.out['final_forced_answer']
+    assert c.out['final_answer'] == S1 + ' 7' and c.out['final_forced_answer']
+    assert t.out['steps'][0]['H'] == c.out['steps'][0]['H'] and 'm' not in c.out['steps'][0]  # no injection

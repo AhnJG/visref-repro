@@ -45,7 +45,7 @@
 | J-21 | LLM 추출 가드 | 채점 텍스트가 빈 행은 보내지 않음, LLM이 뽑은 답은 응답 텍스트에 실제로 있을 때만 인정 | 우리 선택(근거 없음) | — | EF L1235 (작성자 승인) |
 | J-22 | 판정 문구 규칙 | 본 실험은 CI가 0과 논문 값을 포함하는지로 판정, 후속 실험은 각 사전등록 규칙 | 우리 선택(근거 없음) | — | EF L1294, L1277, L1534·L1543, L1666-1669 |
 | J-23 | 멈춘 뒤 생각 이어가기 (후속 실험 `tsr_think`·`visref_think`·`visref_hs_think`) | 방법이 멈추기로 하면(이유 무관) 마지막 단계 문맥 뒤(VisRef는 Ṽ_k 뒤)에 "Wait, think more" + 최대 512토큰 더 생각, 합계 상한과 별도. 답 처리는 본 실험 규칙. 세 방법 모두 본 실험에 저장된 첫 단계에서 출발 | 문구는 논문에 명시(3절 c, 그림 2), 나머지는 우리 선택(근거 없음) | LAY L205-206, L224 | EF L1734, L1752, L1754-1772 (작성자 결정·승인) |
-| J-24 | 이미지 태그 주입 (탐색 변형 `visref_bundle`, 시험 가동 10문항) | 고른 토큰을 `<img>`…`</img>`와 줄바꿈으로 감싸고, 멈출 때는 `</think>` 뒤에, 이어갈 때는 생각 블록 안에 넣음. 커널의 Z와 V 모두 마지막 층 은닉 상태, 주입 벡터는 입력 임베딩. 선택 수는 m 이하(37행과 같음). 이미지 없는 기록용 probe는 결정 probe의 난수 상태를 복사. 최종 답은 모두 `\nFinal Answer:` 뒤에서(10-15 시험 가동 뒤 수정) | 우리 선택: 형식·위치·층·줄바꿈·답 문구 모두 논문에 없음(답 문구는 논문이 인용한 s1 [34] 공식 코드의 것) | LAY L137-138, L178-180, L304-306 | EF 2026-10-15 (작성자 결정) |
+| J-24 | 이미지 태그 주입 (탐색 변형 `visref_imgtag`, 옛 이름 `visref_bundle`; 비교 조건 `tsr_answer_prompt`) | 고른 토큰을 `<img>`…`</img>`와 줄바꿈으로 감싸고, 멈출 때는 `</think>` 뒤에, 이어갈 때는 생각 블록 안에 넣음. 커널의 Z와 V 모두 마지막 층 은닉 상태, 주입 벡터는 입력 임베딩. 선택 수는 m 이하(37행과 같음). 이미지 없는 기록용 probe는 결정 probe의 난수 상태를 복사. 최종 답은 모두 `\nFinal Answer:` 뒤에서(10-15 시험 가동 뒤 수정) | 우리 선택: 형식·위치·층·줄바꿈·답 문구 모두 논문에 없음(답 문구는 논문이 인용한 s1 [34] 공식 코드의 것) | LAY L137-138, L178-180, L304-306 | EF 2026-10-15 (작성자 결정) |
 
 원칙 1 (2026-10-10 작성자 채택): 논문(본문·그림)과 논문이 인용한 문헌·코드가 정하지 않은 부분은 InternVL3.5 공식 자료(모델 카드, InternVL3.5가 평가에 쓴 VLMEvalKit 설정)를 기본값으로 삼는다. 단, 이미 사전등록하고 진행 중인 b_main 설정은 바꾸지 않고, 그 자료와 다른 점은 아래 "InternVL3.5 공식 자료 대조" 표로 관리하며 필요하면 보조 실험으로 확인한다(첫 보조 실험 st_official은 빌드·사전등록 후 보류: b_main 우선, EF 2026-10-10).
 
@@ -80,7 +80,7 @@
 | J-21 | 작성자 승인(L1237) | `llm_extract.py` L104, L131, L163 | `test_decisions`(가드 2, LLM에 보낼 행 고르기) | 일치 |
 | J-22 | 작성자: 본 실험(L1296), fill(L1277), step1_branch(L1534, L1543), `visref_hs`(L1666-1669) | `diag/final_judgment.py` L24, `diag/analyze_step1_branch.py`, `diag/analyze_hs.py` L59. fill 규칙만 코드 없이 사람이 적용(결과 L1452) | `make check`, `test_analyze_step1_branch.py`, `test_analyze_hs.py` | 일치 (fill만 수동 적용) |
 | J-23 | 작성자: 512토큰·문구(L1741), 모든 정지 사유(L1752), 합계 상한과 별도·답 처리·주 비교와 +3.5 기준(L1757) | `visref/methods.py` L67, L71, L368, L378, L393; `run.py` L27, L90, L200; `kaggle/build.py` L100; `diag/make_step1_store.py`; `diag/analyze_think.py` | `test_think.py`, `test_analyze_think.py`, `test_decisions`(think_extra 512, 저장 파일 = 본 실험 ST 행, `b_main_think*` 실행 인자) | 일치 (2026-10-13 작성, 실행 전) |
-| J-24 | 작성자: 묶음 변형과 Z·V 마지막 층, 10문항 시험 가동, 비교 난수 통일(EF 2026-10-15) | `visref/methods.py` L66, L246-279, L146, L318, L355; `visref/engine.py` L103; `visref/model.py` L96, L119; `run.py` L193; `diag/analyze_bundle.py` | `test_bundle.py`, `test_probe_crn.py`, `test_analyze_bundle.py` | 일치 (2026-10-15 작성, 실행 전) |
+| J-24 | 작성자: 묶음 변형과 Z·V 마지막 층, 10문항 시험 가동, 비교 난수 통일(EF 2026-10-15) | `visref/methods.py` L66(IMGTAG, ANSWER_PROMPT), L246-279, L146, L318, L355; `visref/engine.py` L103; `visref/model.py` L96, L119; `run.py` L193; `diag/analyze_imgtag.py` | `test_imgtag.py`, `test_probe_crn.py`, `test_analyze_imgtag.py` | 일치 (2026-10-15 작성, 실행 전) |
 
 `run.py` 기본값(J-10)은 code_version이 바뀌므로 점검 때는 미뤘다가, `visref_hs` 실행이 끝난 뒤 2026-10-13 작성자 지시로 1,024 / 10,240으로 고쳤다(code_version f1376774850d → cf46b2e6222e, EF 2026-10-13). 표에 없는 작성자 결정(대체된 9건 포함)은 독립 검토 기록(비공개)에 있다.
 

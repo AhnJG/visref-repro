@@ -103,7 +103,7 @@ class Engine:
     def hidden_at(self, ctx, idx):
         """Last-layer hidden states (after the final norm, as last_hidden) of one context ctx [L, d] at the positions
         idx (LongTensor or list of ints), returned [len(idx), d] in the order of idx. Same chunked prefill as
-        last_hidden. Used by 'visref_bundle' for V: the prompt's hidden states at the image-token positions."""
+        last_hidden. Used by 'visref_imgtag' for V: the prompt's hidden states at the image-token positions."""
         idx = torch.as_tensor(list(idx) if not torch.is_tensor(idx) else idx, dtype=torch.long, device=ctx.device)
         L = ctx.shape[0]
         if idx.numel() == 0:

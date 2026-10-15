@@ -42,7 +42,7 @@ def test_run_defaults_hold_the_decided_values(key):
 
 def test_probe_sampling_and_method_names():
     assert PROBE_SAMPLING == (1.0, 0, 1.0)  # J-9: T = 1, no top-k/top-p (EF L820)
-    assert 'visref_bundle' in METHODS  # 2026-10-15 exploratory variant; DEFAULTS are pinned by the test above
+    assert {'visref_imgtag', 'tsr_answer_prompt'} <= set(METHODS)  # 2026-10-15 exploratory variant and its control
     assert {'st', 'tsr', 'visref_raw_rank'} <= set(METHODS)  # J-7: main VisRef = visref_raw_rank (EF L976)
     assert THINK == ('tsr_think', 'visref_think', 'visref_hs_think') and set(THINK) <= set(METHODS)  # J-23
     assert budget(1961, 0.3) == 588  # m = floor(0.3 |V|)
