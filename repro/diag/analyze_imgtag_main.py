@@ -39,6 +39,9 @@ differ only in the final answer (the forced prompt), thinking and its random str
 sample with both rows not 'error': the thinking is identical if step count, stop reason, per-step (think_tokens, think_end)
 and the recorded thinking text ('thinking', the most specific per-row record: token ids and per-step text are not stored)
 are equal. Reported overall and per step-1 end type, with up to 5 differing example pids.
+Source clusters (sensitivity check, descriptive, added before the results; output key 'source_cluster'): the main and the
+visref_imgtag - tsr differences with whole MathVista source datasets (metadata.source, 31 in testmini) resampled instead of
+single questions (2,000 resamples, seed 0), leave-one-source-out lowest and highest, per-source discordant counts.
 Strata (descriptive): by how the stored step 1 ended (close / cap / eos): n, accuracy per method, the main difference.
 Mechanism (descriptive, per method): k distribution, stop reasons, injected/m quantiles (visref_imgtag), probe-pair
 disagreement with / without V (steps with probe_noV_crn and both probes valid), second </think> in the final answer,
@@ -53,6 +56,7 @@ import argparse
 import collections
 import glob
 import json
+import random
 import re
 import statistics
 import sys
@@ -76,6 +80,7 @@ SECONDARY_LABEL = 'same rule applied, secondary'
 REF_LABEL = ('reference only: cannot separate causes (main-run TSR rows span several code versions, started from the '
              'generated step 1 with a different sampler state, other settings; different GPU/torch)')
 STRATA = ('close', 'cap', 'eos')
+SOURCE_LABEL = 'sensitivity check, descriptive: whole source datasets resampled; the verdict uses the question-level CI only'
 VERDICT = {1: '이미지 태그 주입이 같은 답 문구의 TSR보다 정확도 향상',
            2: '판단 보류(논문 크기 효과를 배제하지 못함)',
            3: '이미지 태그 주입의 논문 크기(+3.5 pp) 이득은 재현 안 됨'}
@@ -243,6 +248,34 @@ def stop_entropy(rows, pids):
     return out
 
 
+def source_of(q):
+    return (q.get('metadata') or {}).get('source') or 'unknown'
+
+
+def source_cluster(rs, pids, data, a, b, n_boot=2000, seed=0):
+    """Sensitivity check (descriptive, decides nothing): the a - b difference with whole source datasets (MathVista
+    metadata.source) resampled instead of single questions. Ratio estimator: sum of differences / number of questions over
+    the drawn sources; percentile 95% CI. Also leave-one-source-out (the difference with each source left out: lowest and
+    highest, with that source) and per-source counts."""
+    by = collections.defaultdict(list)
+    for p in pids:
+        by[source_of(data[p])].append(int(rs[(p, a)]['correct']) - int(rs[(p, b)]['correct']))
+    srcs = sorted(by)
+    tot_d, tot_n = sum(sum(v) for v in by.values()), len(pids)
+    rng = random.Random(seed)
+    boots = []
+    for _ in range(n_boot):
+        pick = [rng.choice(srcs) for _ in srcs]
+        boots.append(100 * sum(sum(by[s]) for s in pick) / sum(len(by[s]) for s in pick))
+    boots.sort()
+    loo = sorted((round(100 * (tot_d - sum(by[s])) / (tot_n - len(by[s])), 2), s) for s in srcs if tot_n > len(by[s]))
+    return {'n_sources': len(srcs), 'diff_pp': round(100 * tot_d / tot_n, 2),
+            'ci95_pp': [round(boots[int(.025 * n_boot)], 2), round(boots[int(.975 * n_boot)], 2)],
+            'leave_one_source_out': {'lowest': loo[0], 'highest': loo[-1]} if loo else None,
+            'per_source': {s: {'n': len(by[s]), 'a_only': sum(x == 1 for x in by[s]), 'b_only': sum(x == -1 for x in by[s])}
+                           for s in srcs}}
+
+
 def mechanism(rows, pids):
     out = {}
     for m in METHODS:
@@ -337,7 +370,10 @@ def analyze(rows, order, data, llm=None, shards=1, bmain_tsr=None):
                      'secondary': {'visref_imgtag-tsr': dict(vt, rule_code=verdict(*vt['ci95_sum'], n)['code'], label=SECONDARY_LABEL),
                                    'tsr_answer_prompt-tsr': pair(rs, MAIN[1], 'tsr', pids)},
                      'reference_only_tsr_vs_main_run_tsr': reference_tsr_vs_main_run(rs, pids, bmain_tsr, data, name),
-                     'strata_step1_end': strata(rs, pids)}
+                     'strata_step1_end': strata(rs, pids),
+                     'source_cluster': {'label': SOURCE_LABEL,
+                                        'visref_imgtag-tsr_answer_prompt': source_cluster(rs, pids, data, *MAIN),
+                                        'visref_imgtag-tsr': source_cluster(rs, pids, data, MAIN[0], 'tsr')}}
     out['verdict'] = out['main' if llm is not None else 'rules_only']['verdict']
     out['mechanism'] = mechanism(rows_rule, pids)
     out['tsr_pair_same_thinking'] = tsr_pair_same_thinking(rows, pids)

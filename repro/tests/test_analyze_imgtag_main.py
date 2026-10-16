@@ -373,3 +373,30 @@ def test_stop_entropy():
     assert v['first_content_token'] == {'n': 2, 'decision_differs': 1}
     assert v['with_vs_without_image'] == {'n': 2, 'mean_H_minus_H_noV': -0.175, 'decision_differs': 1}
     assert out['tsr']['n_steps'] == 0
+
+
+def test_source_cluster():
+    # 3 sources x 10 questions; M1 wins 5 questions only in source A, ties elsewhere
+    pids = [str(i) for i in range(1, 31)]
+    src = {p: 'ABC'[(int(p) - 1) // 10] for p in pids}
+    rs = {(p, m): {'correct': int(m == M1 and src[p] == 'A' and int(p) <= 5) or int(src[p] != 'A')}
+          for p in pids for m in (M1, M2)}
+    data = {p: {'metadata': {'source': src[p]}} for p in pids}
+    out = am.source_cluster(rs, pids, data, M1, M2)
+    assert out['n_sources'] == 3 and out['diff_pp'] == round(100 * 5 / 30, 2)
+    assert out['per_source']['A'] == {'n': 10, 'a_only': 5, 'b_only': 0}
+    assert out['per_source']['B'] == {'n': 10, 'a_only': 0, 'b_only': 0}
+    assert out['leave_one_source_out']['lowest'] == (0.0, 'A')      # the gain disappears without source A
+    assert out['leave_one_source_out']['highest'][0] == 25.0
+    lo, hi = out['ci95_pp']
+    assert lo == 0.0 and hi == 50.0                                  # drawn sources: none / all of them A
+    assert am.source_cluster(rs, pids, {p: {} for p in pids}, M1, M2)['n_sources'] == 1   # no metadata -> 'unknown'
+
+
+def test_source_cluster_in_analysis():
+    rows, order, data = make(n=40)
+    out = am.analyze(rows, order, data)
+    sc = out['rules_only']['source_cluster']
+    assert sc['label'] == am.SOURCE_LABEL
+    assert sc['visref_imgtag-tsr_answer_prompt']['diff_pp'] == out['rules_only']['primary']['diff_pp']
+    assert out['verdict'] == am.verdict(*out['rules_only']['primary']['ci95_sum'], 40)   # verdict unchanged
