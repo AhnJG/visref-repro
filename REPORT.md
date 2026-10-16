@@ -73,23 +73,21 @@ The raw outputs of every check are in `repro/kaggle/runs/`, except for the 10-an
 
 *Figure 1. The loop of Algorithm 1 as implemented here. Grey boxes are steps the paper specifies, the blue box is the step only VisRef has, and orange notes are settings we could not find in the paper (our choices, listed in the table below).*
 
-Source codes: **P** paper; **C** work or code cited by the paper; **O** official InternVL3.5 material (the official model page on Hugging Face, VLMEvalKit); **U** our own choice.
-
-| Item | Value | Source |
+| Item | Value | Where it comes from |
 |---|---|---|
-| Model, data | `OpenGVLab/InternVL3_5-1B` @ `2f71cf52…`; `AI4Math/MathVista` testmini (1,000 q) @ `2b6ad694…` | P (see Section 1) |
-| Question order, seeds | Order shuffled with seed 0; generation seed 42, derived per question and shared by the three methods; first thinking step shared (forked) | U |
-| Methods | ST; TSR (cue "Wait, think more"); VisRef (greedy MAP DPP over visual tokens) | P; DPP code of Chen et al. 2018 (C) |
-| VisRef values | δ = 0.25, m = ⌊0.3·\|V\|⌋, K_max = 10 | P |
-| DPP selection size | Greedy stops when the residual gain falls below 1e-9 × max L_ii (the cited Chen code stops at an absolute threshold, 1e-10; the relative threshold is our choice), so most steps inject fewer than m tokens. The paper states \|V_k\| = m: **confirmed procedural difference** | C (conflicts with P) |
-| Decoding | R1 thinking system prompt, T 0.6, top-k 50, top-p 0.95, fp16, Kaggle 2×T4 | O. Paper used 4×A10G; T4 has no bf16 |
-| Software | transformers 4.55.0 (as in the paper); torch from the Kaggle image (recorded per session in `env.json`; paper: 2.7.0) | P / U |
-| Token limits | 1,024 per thinking step, 10,240 total thinking, 1,024 answer, 100 for answer forcing | U (1,024 is the model-card example value) |
-| Truncated thinking, capped answers | After truncated thinking: `</think>` + `\nFinal Answer:` (s1-style budget forcing). Answer reaching the cap without EOS: `\n**Final Answer**\n\boxed` + ≤100 tokens ("af", DEER-style) | s1 is cited (C) but applying it here is our interpretation; DEER is not cited by the paper (U) |
-| Stopping statistic H | Sum of token entropies of one answer sampled after `</think>` + `\n\n\boxed` (T = 1, ≤16 tokens) | Definition (entropy of the answer distribution): P. Estimator: U |
-| Reasoning-token representation Z | Input embeddings of the thinking-step tokens | U (no layer found in the paper); last layer: Section 4.5 |
-| Injection format | Selected visual embeddings appended without `<img>` tags directly before `</think>`; order z_k → Ṽ_k → H_k → "Wait, think more"; Ṽ_k ⊆ V | Order and subset: P (Alg. 1, Fig. 2). Tags, separators, `</think>` handling, position ids, answer prompt: not found in the paper, U. The junction `[Ṽ_k] </think>` is our own choice |
-| Visual tokens | Dynamic tiling, max_num = 12 plus thumbnail tile; mean \|V\| = 1,961.5 | O (official model page); see Section 4.4 |
+| Model, data | `OpenGVLab/InternVL3_5-1B` @ `2f71cf52…`; `AI4Math/MathVista` testmini (1,000 questions) @ `2b6ad694…` | The paper (see Section 1) |
+| Question order, seeds | Order shuffled with seed 0; generation seed 42, derived per question and shared by the three methods; first thinking step shared (forked) | Our own choice |
+| Methods | ST; TSR (cue "Wait, think more"); VisRef (greedy MAP DPP over visual tokens) | The paper; the selection follows the DPP code of Chen et al. 2018, which the paper cites |
+| VisRef values | δ = 0.25, m = ⌊0.3·\|V\|⌋, K_max = 10 | The paper |
+| DPP selection size | Greedy stops when the residual gain falls below 1e-9 × max L_ii (the cited Chen code stops at an absolute threshold, 1e-10; the relative threshold is our choice), so most steps inject fewer than m tokens. The paper states \|V_k\| = m: **confirmed procedural difference** | The code the paper cites (Chen et al. 2018); this conflicts with the paper's text |
+| Decoding | R1 thinking system prompt, T 0.6, top-k 50, top-p 0.95, fp16, Kaggle 2×T4 | Official InternVL3.5 material (the official model page on Hugging Face and VLMEvalKit). Hardware: the paper used 4×A10G; T4 has no bf16, so we use fp16 |
+| Software | transformers 4.55.0 (as in the paper); torch from the Kaggle image (recorded per session in `env.json`; paper: 2.7.0) | transformers version: the paper. torch version: our environment (Kaggle image) |
+| Token limits | 1,024 per thinking step, 10,240 total thinking, 1,024 answer, 100 for answer forcing | Our own choice (1,024 is the example value on the official model page) |
+| Truncated thinking, capped answers | After truncated thinking: `</think>` + `\nFinal Answer:` (s1-style budget forcing). Answer reaching the cap without EOS: `\n**Final Answer**\n\boxed` + ≤100 tokens (answer forcing as in DEER) | Truncated thinking: the s1 method, which the paper cites; applying it here is our interpretation. Capped answers: DEER, which the paper does not cite (our own choice) |
+| Stopping statistic H | Sum of token entropies of one answer sampled after `</think>` + `\n\n\boxed` (T = 1, ≤16 tokens) | Definition (entropy of the answer distribution): the paper. How it is estimated: our own choice |
+| Reasoning-token representation Z | Input embeddings of the thinking-step tokens | Our own choice (the paper names no layer); a last-layer variant is in Section 4.5 |
+| Injection format | Selected visual embeddings appended without `<img>` tags directly before `</think>`; order z_k → Ṽ_k → H_k → "Wait, think more"; Ṽ_k ⊆ V | Order and subset: the paper (Algorithm 1, Figure 2). Tags, separators, `</think>` handling, position ids and answer prompt were not found in the paper, so they are our own choice, including the junction `[Ṽ_k] </think>` |
+| Visual tokens | Dynamic tiling, max_num = 12 plus thumbnail tile; mean \|V\| = 1,961.5 | Official InternVL3.5 material (the official model page); see Section 4.4 |
 
 ### 2.2 Scoring
 
@@ -255,8 +253,8 @@ The CI-based classification is the same under every scoring variant. Significanc
 | First thinking step truncated at 1,024 tokens | 641 | 641 | 641 |
 | Further step after: truncated / natural `</think>` / EOS | n/a | 1,103 / 7 / 5 | 1,214 / 32 / 15 |
 | Final answer ended by EOS | 761 | 813 | 775 |
-| Answer hit the cap, af used | 239 | 187 | 225 |
-| af itself ended at its 100-token cap | 164 | 118 | 143 |
+| Answer hit the cap, answer forcing used | 239 | 187 | 225 |
+| Answer forcing itself ended at its 100-token cap | 164 | 118 | 143 |
 | LLM extraction used | 11 | 8 | 11 |
 | Empty response (counted wrong) | 7 | 4 | 2 |
 
