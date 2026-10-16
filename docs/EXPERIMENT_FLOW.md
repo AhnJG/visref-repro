@@ -182,7 +182,7 @@
 | pid | MathVista 문항 번호 |
 | T4, fp16, OOM | Kaggle GPU 종류 / 16비트 계산 / GPU 메모리 부족 |
 | LAY, REF/, SRC/ | 논문 텍스트 파일(`VisRef_layout.txt`) / 다른 논문 텍스트 폴더 / 외부 코드 폴더. 공개 출처로 바꾸는 법은 [SOURCES.md](SOURCES.md) |
-| SPEC_LEDGER | [IMPLEMENTATION_CHOICES.md](IMPLEMENTATION_CHOICES.md)의 옛 이름. J-n, X-n, B-n, C-n은 그 문서의 행 번호 |
+| SPEC_LEDGER, "답 상한 처리(J-12)" | [IMPLEMENTATION_CHOICES.md](IMPLEMENTATION_CHOICES.md)의 옛 이름 / 그 문서의 행 번호(J·A·B·C·X)와 이름. 번호 체계는 그 문서 맨 앞에 풀어 둠 |
 | EF | 이 문서(EXPERIMENT_FLOW.md)를 줄여 부르는 이름 |
 | § | 논문이나 문서의 절 |
 
@@ -609,7 +609,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - 상한(max tokens) 값은 본문·부록 어디에도 없다(SPEC_LEDGER 11·12행 검색 기록과 같음).
 - 있는 것은 평균 사용량과 예산 축이다:
   - "∼1,772 visual tokens vs. ∼615 text tokens" — InternVL3.5-8B, MathVista, 생각 단계당 생성 텍스트 토큰 평균 (`VisRef_plain.txt` L383-385).
-  - Fig. 3 가로축 = 누적 thinking token 예산 B(병렬 사고, Σ|τ(i)| ≤ B, L698-702). ST ★ 위치는 8B에서 약 400–1,000토큰(그림 판독, SPEC_LEDGER A-3). "budget of 14K thinking tokens"는 MMStar 8B 병렬 사고 예산 (L717).
+  - Fig. 3 가로축 = 누적 thinking token 예산 B(병렬 사고, Σ|τ(i)| ≤ B, L698-702). ST ★ 위치는 8B에서 약 400–1,000토큰(그림 판독, SPEC_LEDGER Fig 3 ST 위치(A-3)). "budget of 14K thinking tokens"는 MMStar 8B 병렬 사고 예산 (L717).
   - App. I "same decoding setup and token budget" — 값 없음 (SPEC_LEDGER 12행).
   - 1B의 토큰 사용량은 논문에 없음.
 - 해석: 8B ST가 평균 약 600토큰에서 스스로 끝난다는 것은 상한이 작았다는 증거도, 컸다는 증거도 아니다(8B는 대부분 그 전에 끝남). 1B는 우리 기록상 1,024에서 63%, 4,096에서도 약 절반이 안 끝나므로 상한 값이 결과를 좌우한다. 논문이 이 값을 정하지 않았으므로 원칙 1(A–C 없음 → D)에 따라 공식 65,536이 기본값이고, st_official은 그 기본값에서의 ST를 측정하는 실험으로 타당하다.
@@ -617,7 +617,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 ## 2026-10-10 작성자 결정: st_official 보류, 절대값 차이는 추정으로 기술
 - 결정: st_official_s1은 push하지 않고 보류(빌드·사전등록은 결과 전 상태로 유효). 이유: 본 실험(b_main)이 우선이고, b_main에 문제가 생겨 재실행하면 1,000문항에 약 20시간이 필요하다. b_main 완주 뒤 쿼터가 남으면 재검토한다.
 - 절대값 차이는 검증하지 않은 추정으로 기술한다. 최종 보고서용 문단(초안):
-  > 우리 ST(s1–s4 v3 59.4%)는 InternVL3.5-1B 공식 단일 응답 MathVista 점수 59.3%(SPEC_LEDGER X-1)와 비슷하고, VisRef 논문 ST 46.1%보다 약 13pt 높다. 논문 ST는 8B에서도 공식 수치보다 10pt 이상 낮다(68.1 vs 78.4, X-3). 논문의 평가 설정이 공식과 같은지는 미확인이다. 논문은 생성 토큰 상한, 잘린 생각과 답의 처리, 답 추출 방식을 기술하지 않는다(X-4, X-8, 본 표 45행). 우리가 확인한 것은 하나다: 잘린 생각 뒤 답 재촉 문구(`Final Answer:`)는 차이를 설명하지 못한다(diag_st_plain, −2.0%p, p 0.73). 확인하지 않은 후보는 (1) 생각 토큰 상한의 크기 — 1B는 긴 생각에서 반복 루프가 잦아(4,096 상한에서 잘린 생각의 약 절반) 상한과 처리 방식에 따라 정답률이 크게 달라질 수 있다, (2) 답 추출·채점 방식(규칙+LLM 보조 vs GPT 추출기), (3) 프롬프트 형식, (4) 하드웨어·정밀도(논문 A10G vs 우리 T4 fp16)다. 따라서 논문과의 절대값 차이는 이러한 평가 설정 차이에서 비롯된 것으로 추정하며, 재현 여부는 같은 설정 안에서의 방법 간 상대 이득(VisRef−ST, VisRef−TSR)으로 판단한다.
+  > 우리 ST(s1–s4 v3 59.4%)는 InternVL3.5-1B 공식 단일 응답 MathVista 점수 59.3%(SPEC_LEDGER 공식 1B 점수(X-1))와 비슷하고, VisRef 논문 ST 46.1%보다 약 13pt 높다. 논문 ST는 8B에서도 공식 수치보다 10pt 이상 낮다(68.1 vs 78.4, 공식 8B 대 논문 ST(X-3)). 논문의 평가 설정이 공식과 같은지는 미확인이다. 논문은 생성 토큰 상한, 잘린 생각과 답의 처리, 답 추출 방식을 기술하지 않는다(논문의 최종 답 처리(X-4), 토큰 상한 값(X-8), 본 표 45행). 우리가 확인한 것은 하나다: 잘린 생각 뒤 답 재촉 문구(`Final Answer:`)는 차이를 설명하지 못한다(diag_st_plain, −2.0%p, p 0.73). 확인하지 않은 후보는 (1) 생각 토큰 상한의 크기 — 1B는 긴 생각에서 반복 루프가 잦아(4,096 상한에서 잘린 생각의 약 절반) 상한과 처리 방식에 따라 정답률이 크게 달라질 수 있다, (2) 답 추출·채점 방식(규칙+LLM 보조 vs GPT 추출기), (3) 프롬프트 형식, (4) 하드웨어·정밀도(논문 A10G vs 우리 T4 fp16)다. 따라서 논문과의 절대값 차이는 이러한 평가 설정 차이에서 비롯된 것으로 추정하며, 재현 여부는 같은 설정 안에서의 방법 간 상대 이득(VisRef−ST, VisRef−TSR)으로 판단한다.
 
 ## 2026-10-10 불일치 쌍 감사 (s1–s4, GPU 불필요) — 구조적 문제 없음
 - 대상: VisRef가 ST 또는 TSR과 정오가 다른 50문항 × 3방법 = 150행(`repro/audit/discordant_v3_s1s4.jsonl`). 판정 기준(채점 S / 실패 유형 F / 버그 징후 B)을 먼저 고정하고 독립 검토가 전문을 읽어 판정, 핵심 주장을 원자료로 대조. 결과 `repro/audit/audit_rows_s1s4.csv`, `audit_summary_s1s4.md`(끝에 검증 메모).
@@ -700,7 +700,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - 이어가기가 일어난 문항(어느 방법이든 k>1, 230문항): ST 33.5 / TSR 41.7 / VisRef 38.7. 둘 다 k=1인 529문항은 68.6 / 68.2 / 68.6(사실상 동일).
 - 주입량: 주입 수/m 중앙값 0.21, 주입 수/|V| 중앙값 0.062, m에 도달한 단계 16%. 논문 Fig. 4(b) 최저 조건(m=20%)보다 훨씬 적음.
 - 답 구간에서 생각을 다시 여는 행(답 안 </think>): VisRef 357/759(47%), 정확도 58.3 vs 없는 행 60.7.
-- 해석(가설, 검정 전): 코드 버그 징후는 감사·CRN 점검에서 나오지 않았고, 유력 원인은 (1) 입력 임베딩 Z에서 계수 제한으로 m의 약 1/5만 주입되는 구현 선택(J-7/J-8), (2) 최종 답 직전 주입이 답 구간을 흔드는 현상이다. b_main은 사전등록대로 완주하고, 원인 분리 실험은 완주 후 사전등록해 진행한다(작성자 결정 대기).
+- 해석(가설, 검정 전): 코드 버그 징후는 감사·CRN 점검에서 나오지 않았고, 유력 원인은 (1) 입력 임베딩 Z에서 계수 제한으로 m의 약 1/5만 주입되는 구현 선택(DPP 선택 수(J-7)/Z 표현(J-8)), (2) 최종 답 직전 주입이 답 구간을 흔드는 현상이다. b_main은 사전등록대로 완주하고, 원인 분리 실험은 완주 후 사전등록해 진행한다(작성자 결정 대기).
 
 ## 2026-10-10 주입 경로 독립 검토 (GPU 없음) — 버그 없음
 - 보고서 `repro/audit/injection_review_20261010.md`(+ DPP 수치 점검 스크립트·출력). 결론: 주입 경로에 BUG 없음. 주입 텐서 = 모델이 원본 이미지에서 보는 projector 출력 그대로(같은 객체, fp16, 재스케일 없음), z_k 경계 깨끗, 순서 z_k [\n] V_k 다음 </think>+probe 또는 Wait, 위치·마스크·KV 일관(호출마다 전체 재-prefill), greedy DPP가 Chen 코드·naive log-det greedy와 선택 동일. 표본 4행에서 final_context_len이 토큰 단위로 재현됨. 확인: 표본 행 계산은 보고서 수치로만 확인(미재계산), R1 진단은 아래처럼 전체 자료로 재계산.
@@ -743,7 +743,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 
 ## 2026-10-10 관찰: 이어가기는 거의 전부 상한 절단 뒤에만 일어남 (사후, s1–s7)
 - TSR 단계 전이: 상한 절단 → 이어감 833 / 멈춤 477, 자연 종료 → 이어감 6 / 멈춤 262. VisRef: 921 / 468, 24 / 273.
-- 해석: 우리 구현의 TSR·VisRef 이어가기는 대부분 "잘린 생각의 예산 연장"이며, 자연 종료 뒤 엔트로피가 높아 반성하는 경우(논문이 그리는 메커니즘)는 드물다(TSR 2%). 정지 통계 H(J-9, 등급 F)가 자연 종료 뒤에는 거의 항상 δ 미만. TSR−ST 이득의 출처(반성 vs 예산)는 st_official(상한을 푼 ST)로 일부 판별 가능.
+- 해석: 우리 구현의 TSR·VisRef 이어가기는 대부분 "잘린 생각의 예산 연장"이며, 자연 종료 뒤 엔트로피가 높아 반성하는 경우(논문이 그리는 메커니즘)는 드물다(TSR 2%). 정지 통계 H(정지 통계 H 추정(J-9), 등급 F)가 자연 종료 뒤에는 거의 항상 δ 미만. TSR−ST 이득의 출처(반성 vs 예산)는 st_official(상한을 푼 ST)로 일부 판별 가능.
 
 ## 2026-10-10 b_main_s8 결과와 s9 빌드
 - s8 건전성: error 0, 109문항×3 = 327행, d0095f79e691, T4×2, torch 2.11.0+cu128, s1–s7과 (pid, method) 겹침 0, .partial 없음, 세션 약 5,250s(마지막 행 elapsed 5,144s, 대기열 79 남음).
@@ -770,14 +770,14 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 ## 2026-10-11 검토: 단계 상한 4,096 재실행의 가치 (기존 자료로 판단, 새 실행 없음)
 - main_s0(단계 4,096 / 합계 8,192, 코드 8aaa689c94e9 — b_main과 다른 이전 판, 강제 답 없음, 60문항) 단계 전이: TSR 자연 종료 → 이어감 0 / 멈춤 32, 상한 절단 → 이어감 10 / 멈춤 27. visref_raw 자연 종료 → 0 / 31, 절단 → 7 / 27, EOS → 1 / 1.
 - b_main(1,024)과 같은 양상: 자연 종료 뒤에는 정지 통계 H가 δ 미만이라 거의 항상 멈춘다. 상한을 4,096으로 올리면 자연 종료 비율만 늘고(ST 첫 단계 절단 63–69% → 48–57%) 이어가기는 더 줄어, TSR·VisRef가 ST에 가까워질 뿐 "완결 단계 뒤 반성"은 여전히 생기지 않을 것으로 본다(추정, 60문항·이전 코드).
-- 결론(제안): 4,096 재실행은 논문 메커니즘 검증에 정보가 적고 비용이 크다(main_s0 약 60문항/시간, 1,000문항 약 17h+ 추정). 메커니즘을 가르는 변수는 단계 상한이 아니라 정지 통계 H의 추정 방식(J-9, 등급 F)이다.
+- 결론(제안): 4,096 재실행은 논문 메커니즘 검증에 정보가 적고 비용이 크다(main_s0 약 60문항/시간, 1,000문항 약 17h+ 추정). 메커니즘을 가르는 변수는 단계 상한이 아니라 정지 통계 H의 추정 방식(정지 통계 H 추정(J-9), 등급 F)이다.
 
 ## 2026-10-11 검토: 정지 통계 H의 추정 방식 — 논문에 더 가까운 후보 (구현·실행 없음, 작성자 결정 대기)
 - 원문: 정의는 A — H_k = −E_{y∼πθ(·|x,τ1:k)} log πθ(y|x,τ1:k)(`VisRef_plain.txt` L604-606, Alg. 1 L524). Fig. 2는 단계마다 "Answer: 600"/"Answer: 1000"과 답 분포 막대(`VisRef_plain.txt` L359, L363). 추정법은 없음(SPEC_LEDGER 22행).
-- 인용 문헌 [19] Ghosal(`VisRef_plain.txt` L998; VisRef 제1저자와 같은 사람): "sample multiple answers", "entropy of the distribution over final answers"(대장 X-11). 즉 여러 답을 뽑아 최종 답 값의 분포 엔트로피를 잰다 — 등급 C(+Fig. 2 B). 우리 방식(단일 표본 `\boxed` 토큰 엔트로피 합, T=1)은 F.
-- 논문 쪽 정황: Table 5(8B, H100) ST 7.1s / TSR 7.7s / VisRef 8.2s(`VisRef_layout.txt` L892-895) → TSR이 ST보다 8%만 길어 논문에서도 대부분 k=1에서 멈춘 것으로 읽힘(Fig. 3과는 논문 수치 간 차이, 원인 미확인; C-12). Ghosal의 표준 생각 직후 평균 엔트로피 0.23 / 0.02(X-11)도 δ=0.25 아래.
+- 인용 문헌 [19] Ghosal(`VisRef_plain.txt` L998; VisRef 제1저자와 같은 사람): "sample multiple answers", "entropy of the distribution over final answers"(대장 Ghosal 정지 엔트로피(X-11)). 즉 여러 답을 뽑아 최종 답 값의 분포 엔트로피를 잰다 — 등급 C(+Fig. 2 B). 우리 방식(단일 표본 `\boxed` 토큰 엔트로피 합, T=1)은 F.
+- 논문 쪽 정황: Table 5(8B, H100) ST 7.1s / TSR 7.7s / VisRef 8.2s(`VisRef_layout.txt` L892-895) → TSR이 ST보다 8%만 길어 논문에서도 대부분 k=1에서 멈춘 것으로 읽힘(Fig. 3과는 논문 수치 간 차이, 원인 미확인; 지연 시간 대 이득(C-12)). Ghosal의 표준 생각 직후 평균 엔트로피 0.23 / 0.02(Ghosal 정지 엔트로피(X-11))도 δ=0.25 아래.
 - 예상(추정): Ghosal식(N개 답, 답 값 군집의 엔트로피)으로 바꿔도 자연 종료 뒤에는 거의 같은 답이 나와 멈춘다(우리 자연 종료 probe H 중앙값 0.003–0.007, 2026-10-10 "변형 실험 설계 독립 검토 — 결과 전" 항목). N<20이면 δ=0.25 미만 ⇔ N개 만장일치라, 잘린 단계 뒤에는 오히려 이어가기가 늘 수 있다. 따라서 "완결 단계 뒤 반성"을 만들어 내지는 못할 가능성이 크다.
-- 더 중요한 차이: 논문도 대부분 k=1에서 멈춘다면 VisRef 이득은 k=1(최종 답 직전 주입, J-6)에서 나와야 하는데, 우리는 k=1 정지 543문항에서 VisRef 369 vs ST 369(2026-10-10 "변형 실험 설계 독립 검토 — 결과 전" 항목). 8B와 1B 차이일 수 있음(미확인).
+- 더 중요한 차이: 논문도 대부분 k=1에서 멈춘다면 VisRef 이득은 k=1(최종 답 직전 주입, V_k 주입 위치(J-6))에서 나와야 하는데, 우리는 k=1 정지 543문항에서 VisRef 369 vs ST 369(2026-10-10 "변형 실험 설계 독립 검토 — 결과 전" 항목). 8B와 1B 차이일 수 있음(미확인).
 - 제안: b_main은 그대로(원칙 2). fill 실행에 Ghosal식 H를 그림자 기록(결정에는 쓰지 않음, 별도 난수열)으로 추가해, 정지 결정이 몇 % 바뀌는지 사후 측정. N·온도 값은 원문에 없어 F로 정해야 함.
 
 ## 2026-10-11 정정: Ghosal식 다중 표본 H 그림자 기록 제안 철회
@@ -841,7 +841,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 ## 2026-10-11 외부 피드백 독립 검토 — 판정 라벨·수치 변경 없음
 - 대상: 외부 도구의 피드백(표현 수정 + fill 보류 권고). 검토 보고서 `repro/audit/feedback_review_20261011.md`. 주 세션 재확인: ST 첫 단계 절단 641/1,000, (c) 읽기 VisRef−ST McNemar 94:64 p 0.0208 → Holm 0.0415, 보고서 HTML에 "대기"(LLM 열)·"문항 수가 더 필요"·"VisRef(fill 변형)" 문구 잔존 — 모두 피드백대로 맞음.
 - 채택(표현): (1) "재현됨"은 사전등록 정의상 "CI가 0 제외 + 논문 값 포함 = 논문 수치와 양립"이며 효과 동등성·메커니즘 충실성 입증이 아님을 명시(라벨은 사전등록대로 유지). (2) 논문 값이 CI 밖이라는 것은 두 결과 간 차이 검정이 아님 — 논문 쪽 불일치율 3.5–20% 가정 근사 z: VisRef−TSR 2.1–3.3, VisRef−ST 2.2–3.0(가정 의존). (3) 시점: "759문항 중간 결과 확인 후, 최종 분석 전에 고정". (4) "다른 채점에서도 같다"는 "CI 기반 분류가 같다"로 한정 — 유의성은 (c)에서 Holm 0.067 → 0.042로 다름. (5) 범위: "현재 InternVL3.5-1B 운영 구현에서"; TSR 이득에는 예산 연장이 섞임, VisRef 주입/m 중앙값 0.199(2,261단계 중 1,895단계 m 미만), H 추정·Z 표현은 F.
-- 기각: fill 보류 — 새 근거 없음(시간 불확실성·εI 운영 변형은 이전 검토·사전등록 수정·승인 때 이미 반영, 보호장치 있음). εI가 충실성을 다 해결하지 못한다는 지적 자체는 맞음(fill의 목적은 J-7 원인 분리).
+- 기각: fill 보류 — 새 근거 없음(시간 불확실성·εI 운영 변형은 이전 검토·사전등록 수정·승인 때 이미 반영, 보호장치 있음). εI가 충실성을 다 해결하지 못한다는 지적 자체는 맞음(fill의 목적은 DPP 선택 수(J-7) 원인 분리).
 - 정정: 피드백의 "VisRef 생성 토큰 비중 41.8%"는 fork된 TSR·VisRef 행의 gen_tokens에 1단계 토큰(각 760,920)이 중복 기록된 분모(5,704,996)를 쓴 값. fill 세션은 1단계를 자체 생성하므로 고유 토큰 분모 4,183,156 → 0.570이 맞다(2026-10-11 "visref_fill + 이중 probe 구현, CPU 점검, 세션 빌드" 항목의 57% 유지). 다만 시간 추정 9–9.4h는 여전히 검증되지 않은 추정이다.
 - 반영: `repro/report.py`에 `--judgment`(사전등록 판정 표·Holm·분류 정의·범위·시점·두-결과 비교 한계·읽기별 민감도) 추가, 고정 문구 2개 수정. 보고서 재생성(입력 = `llm/final/merged.jsonl`, LLM 열 채움) → 아티팩트 v13. 앞 항목(2026-10-11 "b_main 최종 판정" 항목)의 "최종판으로 갱신"은 이 재생성으로 대체.
 - 작성자 결정 필요: `AGENTS.md` L30 "All model experiments are stopped by the user…" 와 L53 "20 GPU-hours total" 조항이 현재 상태(b_main 9세션 ≈ 14.9h 실행, fill 승인)와 맞지 않음 — 갱신 여부는 작성자가 정한다(주 세션은 수정하지 않음).
@@ -903,7 +903,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 
 ## 2026-10-11 scorer v4 + st_official 분모 수정 (작성자 지시) — 결과 후 변경, 주 판정 수치 변경 없음
 - 이유: v3는 객관식 추출이 비면 Levenshtein 최근접 선택지로 정규화해 정답이 될 수 있었다(공식 MathVista 기본값 `ignore_empty_extractions=False`와 같은 동작). 외부 피드백 검토에서 지적, 합성 예제로 재현.
-- v4 (`repro/visref/scoring.py`, `SCORER_VERSION='v4_mc_empty_wrong'`): 추출 규칙은 v3와 같고, 빈 객관식 추출 = 예측 없음(오답) = 공식 `--ignore_empty_extractions` 모드(`references/sources/mathvista_official_r4/evaluation/calculate_score.py` L28, L44, L121; 대장 X-25). v3는 `score(..., version=SCORER_V3)`로 재현 가능. 기본값이 v4이므로 run.py·llm_extract.py·report.py 재채점·diag 스크립트가 모두 v4를 쓴다.
+- v4 (`repro/visref/scoring.py`, `SCORER_VERSION='v4_mc_empty_wrong'`): 추출 규칙은 v3와 같고, 빈 객관식 추출 = 예측 없음(오답) = 공식 `--ignore_empty_extractions` 모드(`references/sources/mathvista_official_r4/evaluation/calculate_score.py` L28, L44, L121; 대장 빈 추출 처리(X-25)). v3는 `score(..., version=SCORER_V3)`로 재현 가능. 기본값이 v4이므로 run.py·llm_extract.py·report.py 재채점·diag 스크립트가 모두 v4를 쓴다.
 - 영향(원자료 재계산): 읽기 (a)(기록된 v3+LLM) 변경 행 0/3,000(`diag/final_judgment.json` `v4_changes_in_a`=0) → 주 판정 불변. 읽기 (b)(af 앞 재채점)는 ST pid 122, TSR pid 117이 v3에서 빈 추출→정답이었음 → v4: ST 56.0→55.9, TSR 58.1→58.0, VisRef 58.6 불변; VisRef−TSR +0.5→+0.6(−1.7~+2.9), VisRef−ST +2.6→+2.7(+0.5~+5.0), TSR−ST +2.1(+0.1~+4.1) 불변. v3 값은 `b_af_stripped_v3`로 병기. (c)·rule_only 불변. `diag/st_plain_analysis.json`은 v4로 재실행해도 버전 문자열 외 43개 값 동일(파일은 덮어쓰지 않음).
 - `repro/diag/analyze_st_official.py`: 오류 행을 분모에서 빼던 것(이전 L68) → 완료 접두의 오류 행을 분모에 남기고 오답 처리(run.py L220-221과 같음). 오류 제외 값은 `excluding_errors`로 따로 보고(판정 미사용). steps 없는 오류 행 처리 추가.
 - 백업: `repro/.backup_scorer_v4_20261011/` (scoring.py, test_repro.py, final_judgment.py/json, analyze_st_official.py, EXPERIMENT_FLOW.md, SPEC_LEDGER.md 이전 판).
@@ -912,7 +912,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 
 ## 2026-10-11 논문 부수 수치 대조 (GPU 없음, `repro/diag/paper_fingerprints.py` → `diag/paper_fingerprints.json`) — 판정 수치 변경 없음
 - 목적: 논문에 적힌 부수 수치와 우리 설정의 정합성을 원자료로 확인. 논문 설정을 확정하지는 못하고, 어떤 설정·읽기가 논문 수치와 양립하는지만 보인다.
-- 시각 토큰 수: MathVista 메타데이터의 이미지 크기로 InternVL dynamic_preprocess를 재계산(기록된 b_main n_visual과 1,000/1,000 일치). 평균 |V|: 우리 설정(max_num=12, 썸네일 포함) 1,961.5 = 논문 "∼1,772"(8B, X-6) 대비 +10.7%; max_num=12·썸네일 없음 1,755.6(−0.9%); max_num 6/8/10은 −24~−41%. → 논문의 전처리·V 후보 집합은 명시되지 않음(미확인).
+- 시각 토큰 수: MathVista 메타데이터의 이미지 크기로 InternVL dynamic_preprocess를 재계산(기록된 b_main n_visual과 1,000/1,000 일치). 평균 |V|: 우리 설정(max_num=12, 썸네일 포함) 1,961.5 = 논문 "∼1,772"(8B, 단계당 토큰 평균(X-6)) 대비 +10.7%; max_num=12·썸네일 없음 1,755.6(−0.9%); max_num 6/8/10은 −24~−41%. → 논문의 전처리·V 후보 집합은 명시되지 않음(미확인).
 - 답 처리 읽기 vs Table 6 1B(46.1/48.5/52.0): (a) 57.8/60.1/60.0, (c) af 행 오답 44.4/48.3/47.4, (e) 강제 답 행 오답 25.2/26.4/26.9, (f) 둘 다 오답 24.4/25.3/26.3. 절대 수준은 (c)가 가장 가깝지만 VisRef−TSR은 모든 읽기에서 −0.9~+1.0 → 답 처리·추출만으로는 +3.5를 설명하지 못함.
 - 생각 양: 생성 토큰 비 TSR/ST 1.98, VisRef/ST 2.14 vs 논문 Table 5 지연 비(8B) 1.08/1.15. ST 첫 단계 64.1%가 1,024 상한 절단. 모델 크기가 달라 참고용이지만, 논문 설정에서는 이어가기가 드물었음을 시사.
 - 같은 배치 구성의 결정성: st_official 두 Colab 세션의 같은 pid 14행은 생각(최대 3,630토큰)·답이 바이트 단위로 동일. 반면 배치 구성이 다른 경로(TSR k=1 vs ST, fill 재생성)에서는 차이(16/730, 874/976) → 진단 실험은 배치 구성 고정(또는 batch=1) 필요.
@@ -940,7 +940,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 
 ## 2026-10-11 Fig. 3 재판독과 단계당 토큰 비교 (판정 아님)
 - Fig. 3은 VisRef vs Parallel thinking(+ST 별표) 비교이며 TSR 곡선은 없다. 가로축 = 병렬 trace 합계 thinking token 예산, 점 = trace 수 증가(단계가 아님) (VisRef_plain.txt L700-723, 캡션 L746; page-07 고해상도 확대 판독).
-- (b) InternVL-3.5-8B MathVista 판독(±약 200): ST ≈600; VisRef 점 ≈4,000 / 6,100 / 8,000 / 10,100 / 12,100 / 14,500(간격 ≈2,000 → trace당 ≈2,000토큰 ≈ ST의 3.3배; 첫 점을 C=1로 보면 6.7배 — 장부 A-4의 두 판독과 같은 모호성); Parallel thinking 점 ≈1,900 / 3,150 / 4,450 / 7,550 / 9,250 / 12,750 / 14,500. 시각 토큰 포함 여부 미확인. Table 5(+15% 지연)와의 수치 간 차이 그대로(원인 미확인, C-12).
+- (b) InternVL-3.5-8B MathVista 판독(±약 200): ST ≈600; VisRef 점 ≈4,000 / 6,100 / 8,000 / 10,100 / 12,100 / 14,500(간격 ≈2,000 → trace당 ≈2,000토큰 ≈ ST의 3.3배; 첫 점을 C=1로 보면 6.7배 — 장부 Table 5 지연 시간(A-4)의 두 판독과 같은 모호성); Parallel thinking 점 ≈1,900 / 3,150 / 4,450 / 7,550 / 9,250 / 12,750 / 14,500. 시각 토큰 포함 여부 미확인. Table 5(+15% 지연)와의 수치 간 차이 그대로(원인 미확인, 지연 시간 대 이득(C-12)).
 - 우리 1B: 이어가기 단계(k≥2) 길이 TSR 1,115단계 중 97%, VisRef 1,261단계 중 94%가 1,024 상한 도달(평균 1,011 / 987); 둘 다 이어간 248문항의 2단계 길이 차 중앙값 0 → 단계당 토큰은 같고, 차이는 이어가는 빈도. 생각 토큰 평균 ST 761 / TSR 1,888 / VisRef 2,006(중앙값 모두 1,024).
 - 해석(추론): 논문 VisRef는 trace당 ST의 수 배를 생각 → 주입 뒤 다시 생각하는 경우가 흔했을 가능성. 우리는 71%가 k=1 정지(자연 종료 뒤 H 중앙값 0.003–0.007) → 이미지가 다음 생각을 이끄는 경우가 드묾. 정지 통계(H 추정) 항목의 우선순위를 높일 근거.
 - 보충(같은 날): Fig. 3의 Parallel thinking ≠ TSR — 병렬 thinking = 독립 텍스트 trace 여러 개 + 다수결("samples multiple text-only reasoning trajectories", P:714-716; [19],[46]), TSR = 한 trace를 "Wait, think more"로 연장("text-only reflection without visual refocusing", P:1287; [34]). 논문에 TSR의 토큰 사용량은 없다(Table 5 지연뿐).
@@ -1046,10 +1046,10 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - push: `main` = 8c9be58. 공개 폴더의 README.md·README.ko.md·Makefile·scripts/check_readme_numbers.py를 같은 내용으로 맞춤(sha256 4/4 일치). Makefile은 원격 파일 전송이 막혀(보호 파일) 장치에서 같은 텍스트 치환으로 수정.
 
 ## 2026-10-12 README 문구·구성 수정 (작성자 결정: README 2개 + REPORT 문구 맞춤, H 변경 이유는 기록된 사실만, 효과 해석은 우리 구현에서 원인을 먼저 찾는다, 기여 절은 이름을 바꿔 아래로) — 결과·판정 불변
-- README(영·한): 상태 상자에서 st_official 문장 삭제. "Who did what" → "Contributions and AI use"(인용 절 앞으로, "방법의 일부인 LLM" 줄 추가; 근거 관행은 SPEC_LEDGER X-31). 채점 설명을 쉬운 말로(LLM이 뽑은 답이 응답에 있을 때만 인정, "grounded" 표현 삭제). 요약·분류 정의·시점 문단 정리(Holm 문장은 유지: 미리 정한 보정이라 빼면 유리한 값만 보고하는 셈).
+- README(영·한): 상태 상자에서 st_official 문장 삭제. "Who did what" → "Contributions and AI use"(인용 절 앞으로, "방법의 일부인 LLM" 줄 추가; 근거 관행은 SPEC_LEDGER AI 사용 공개 관행(X-31)). 채점 설명을 쉬운 말로(LLM이 뽑은 답이 응답에 있을 때만 인정, "grounded" 표현 삭제). 요약·분류 정의·시점 문단 정리(Holm 문장은 유지: 미리 정한 보정이라 빼면 유리한 값만 보고하는 셈).
 - 새 절 "정확도가 논문보다 8–12 pp 높은 이유(미해결)": 공식 1B 59.3·8B 78.4 대비 논문 ST가 10 pp 넘게 낮다는 점과 추정 원인 3개(끝나지 않은 답을 오답 처리 = 읽기 (c) ST 44.4 / TSR 48.3 / VisRef 47.4, 결과 후 가설; 모델 세대 InternVL3-1B 45.8; 토큰 상한·추출·프롬프트·하드웨어). 어느 것도 직접 시험하지 않음.
 - 새 절 "VisRef 추가 이득이 없었던 이유": 우리 구현에서 먼저 찾는다는 문장 + 우리 쪽 후보 5개와 확인 여부(주입 수 ≈ m/5 → fill로 일부 확인; 주입 형식 → 미시험, k=1 713문항 중 `</think>` 재출력 VisRef 352 vs ST 67; 상한 절단 뒤 주입 → 4,096 미실행; Z 표현 → 은닉 상태 오프라인 확인 12문항 50–110개; 단일 표본 H → 다중 표본 미실행). "잘못했다"고 단정하지 않음(작성자 결정).
-- "Pre-registered follow-ups" → "Follow-up experiments (decision rules fixed before the results)". 재현 §3에 MathVista 공식 추출 프롬프트 설명(예시 5개 + 새 응답, GPT-4 추출기; X-27, X-28). "Known differences" → "Settings we could not find in the paper": 13행 표(우리 선택·근거·다른 가능성과 상태) + H 문단. "명시하지 않음/leaves open" → "찾지 못함".
+- "Pre-registered follow-ups" → "Follow-up experiments (decision rules fixed before the results)". 재현 §3에 MathVista 공식 추출 프롬프트 설명(예시 5개 + 새 응답, GPT-4 추출기; MathVista 추출기(X-27), 공식 추출 프롬프트(X-28)). "Known differences" → "Settings we could not find in the paper": 13행 표(우리 선택·근거·다른 가능성과 상태) + H 문단. "명시하지 않음/leaves open" → "찾지 못함".
 - H 문단은 기록된 사실만: 이전 다중 표본(단계마다 완결 답 10개)은 8B·개발 3문항·TSR에 GPU 4,703.9초([초기 기록 "R25 수집·채점 완료 — 자동 마무리 기록" 항목](https://github.com/AhnJG/visref-repro/blob/4776f6ab2607957799bef8db70241cc64313feae/docs/EXPERIMENT_FLOW.md?plain=1#L642-L644), 2026-10-11 "정정: Ghosal식 다중 표본 H 그림자 기록 제안 철회" 항목), 이후 단일 표본으로 교체(10-06·10-07 항목). 바꾼 이유가 비용이라는 문장은 기록에 없어 쓰지 않음. REPORT §4.1-5의 "judged too costly"도 같은 사실 서술로 고침(결과 후 문구 변경, 이전 문장은 커밋 adbafc3의 REPORT.md).
 - REPORT: 요약 마지막 문장("We do not conclude…" → 우리 구현에서 원인을 먼저 찾는다), 그림 1 캡션·§2.1 표·§5.2의 "not specified/leaves open" → "could not find in the paper", §6 후보에 모델 세대 추가. st_official(§4.5) 절은 재현 보고서 형식이라 유지(작성자 결정).
 - 그림 `figures/method_overview.svg`: 범례·설명 문구 3곳만 "not found in the paper"로(배치 변화 없음).
@@ -1060,14 +1060,14 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 
 ## 2026-10-12 § 표기 변경, InternVL3-1B 후보 삭제 (작성자 결정) — 결과·판정 불변
 - README(영·한): "REPORT §4.4" → "[REPORT, Section 4.4]" / "[REPORT 4.4절]"로 바꾸고 REPORT 해당 제목으로 가는 링크를 걸었다(각 9개). README 안의 "재현 방법 §3"은 LLM 보조 추출 단계 링크로. REPORT의 § 10개 → "Section".
-- README(영·한): 절대 정확도 차이의 추정 원인에서 "다른 모델 세대(InternVL3-1B)" 항목과 설정 표 모델 행의 대안 칸을 삭제(작성자 결정). REPORT §6 후보 목록에 직전에 넣었던 "the model generation"도 되돌림. REPORT 1절 범위 설명(세대 가정)과 SPEC_LEDGER 행 1·C-8·X-26의 기록은 그대로 둠.
+- README(영·한): 절대 정확도 차이의 추정 원인에서 "다른 모델 세대(InternVL3-1B)" 항목과 설정 표 모델 행의 대안 칸을 삭제(작성자 결정). REPORT §6 후보 목록에 직전에 넣었던 "the model generation"도 되돌림. REPORT 1절 범위 설명(세대 가정)과 SPEC_LEDGER 행 1·1B 정체(C-8)·공식 3-1B 점수(X-26)의 기록은 그대로 둠.
 - 검증: `make check` Python 3.11·3.13 통과. GitHub 렌더링(저장소 API)에서 두 README의 REPORT 링크 9개씩 모두 REPORT 제목 id와 일치, README 내부 링크 일치, 표 6개, § 0개.
 - push: `main` = 7fc9d64. 공개 폴더 README.md·README.ko.md·REPORT.md 같은 내용으로 맞춤.
 
 ## 2026-10-12 REPORT에서 InternVL3-1B 후보 삭제 (작성자 판단) — 결과·판정 불변
 - 판단: 논문은 InternVL3.5-8B 위주이고 1B 행만 3 세대로 보는 것은 논리적으로 맞지 않는다. 원문 대조: 논문이 이름을 밝힌 InternVL 세대는 3.5뿐(LAY에 "InternVL3-" 0회, "InternVL-3.5"/"InternVL3.5" 다수), 모델을 "reasoning (thinking) mode"로 실행(LAY L428-429), 1B·2B·8B를 "under the same decoding setup and token budget"으로 비교(L924-925), 8B 행 68.1/73.9/79.3 = Table 1 InternVL3.5-8B(L396-398). InternVL3 후보의 근거는 1B 수치 근접(45.8 vs 46.1) 하나뿐이었다.
 - REPORT: 1절 범위 설명을 위 근거로 InternVL3.5-1B를 쓴다는 문장으로 교체, 2.1절 표 "generation assumed" 삭제, 5.2절 "어느 InternVL 세대인지" 항목 삭제. README는 직전 커밋에서 이미 삭제.
-- SPEC_LEDGER X-26에 삭제 사유 메모 추가(행 1·C-8의 기록은 그대로).
+- SPEC_LEDGER 공식 3-1B 점수(X-26)에 삭제 사유 메모 추가(행 1·1B 정체(C-8)의 기록은 그대로).
 
 ## 2026-10-12 H 추정 경위 정정, 기여 절 수정 (작성자 정정) — 결과·판정 불변
 - 기록 대조: 10-05 v3 명세는 "1회 추정"(이 파일 2026-10-05 independent_dpp30_entropy_v3 항목), r3은 답 1개의 답 토큰 평균 엔트로피 → 10-05 작성자가 준 [19] Ghosal 근거 검토(`docs/paper_baseline_alignment/ENTROPY_REFERENCE_CLAIM_REVIEW_KO.md`: 여러 완결 응답의 sequence NLL 평균 = Monte-Carlo estimator) → 10-06 S10(단계마다 완결 응답 10개) 구현·8B 실행(R25 GPU 4,703.9초) → 10-06 작성자 지시로 자연 응답 엔트로피(1개)로 전환 → 10-07 짧은 답 1개 토큰 엔트로피 합. README·README.ko의 H 문단과 REPORT 4.1절 5번을 이 순서로 고침(이전 문장 "earlier version sampled 10 … replaced by the one-sample estimator"는 커밋 eae46a1). 바꾼 이유는 여전히 기록에 없어 쓰지 않음.
@@ -1075,9 +1075,9 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - push: `main` = 8b27721. 공개 폴더 README.md·README.ko.md·REPORT.md 같은 내용으로 맞춤.
 
 ## 2026-10-12 README·REPORT 설명 보강, st_official 삭제 (작성자 결정) — 결과·판정 불변
-- H를 답 1개로 되돌린 이유(작성자 진술): 논문 Table 5에서 문항당 시간이 ST 7.1초, TSR 7.7초, VisRef 8.2초(8B, H100 1장)라 단계마다 답을 여러 개 생성했다면 나올 수 없는 수치(SPEC_LEDGER X-32). README·REPORT 4.1절 5번에 반영. README H 문단은 "모델이 그 자리에서 쓴 답(정답 아님), 토큰별 엔트로피를 자연로그로 계산해 합" + 경위(평균 → S10 시도 → 답 1개 → 합)로 풀어 씀.
-- visref_fill 서술 정정: 채운 부분은 관련성과 무관하게 골라졌다(꼬리 순서와 관련성 순위 상관 −0.10, 2026-10-11 fill 결과 항목). 논문 Table 7에서도 무작위 선택은 ST 수준(X-36). README·REPORT에서 "m개를 넣어도 이득 없음"이 아니라 "관련성과 무관한 토큰으로 m개까지 채운 변형은 이득 없음, 관련 토큰 m개는 시험하지 않음"으로 고침. REPORT 4.2절 제목도 "topping up … to m tokens".
-- README 설정 표: 모델 행 삭제(작성자), 사고 모드·샘플링(논문은 사고 모드 실행만 명시, 켜는 법·샘플링 값 없음 X-37), 모델 카드 설명·링크, s1 풀어 쓰기, `Final Answer:` 진단 뜻 풀기, DEER를 쓴 이유(답이 "Wait, wait …"로 끝나지 않아 상한까지 감 — 10-07 결정 항목), 답 추출 문구 정정(MathVista도 아주 단순한 경우만 규칙, 나머지 LLM; VLMEvalKit 규칙 → GPT, X-33·X-34), Z 쉬운 설명, 주입 형식에 InternVL 원래 `<img>` … `</img>` 태그(X-35), 타일링 설명·근거(X-35), nat → "자연로그".
+- H를 답 1개로 되돌린 이유(작성자 진술): 논문 Table 5에서 문항당 시간이 ST 7.1초, TSR 7.7초, VisRef 8.2초(8B, H100 1장)라 단계마다 답을 여러 개 생성했다면 나올 수 없는 수치(SPEC_LEDGER Table 5 문항당 지연(X-32)). README·REPORT 4.1절 5번에 반영. README H 문단은 "모델이 그 자리에서 쓴 답(정답 아님), 토큰별 엔트로피를 자연로그로 계산해 합" + 경위(평균 → S10 시도 → 답 1개 → 합)로 풀어 씀.
+- visref_fill 서술 정정: 채운 부분은 관련성과 무관하게 골라졌다(꼬리 순서와 관련성 순위 상관 −0.10, 2026-10-11 fill 결과 항목). 논문 Table 7에서도 무작위 선택은 ST 수준(Table 7 선택 방식(X-36)). README·REPORT에서 "m개를 넣어도 이득 없음"이 아니라 "관련성과 무관한 토큰으로 m개까지 채운 변형은 이득 없음, 관련 토큰 m개는 시험하지 않음"으로 고침. REPORT 4.2절 제목도 "topping up … to m tokens".
+- README 설정 표: 모델 행 삭제(작성자), 사고 모드·샘플링(논문은 사고 모드 실행만 명시, 켜는 법·샘플링 값 없음 s1과 샘플링 미기재(X-37)), 모델 카드 설명·링크, s1 풀어 쓰기, `Final Answer:` 진단 뜻 풀기, DEER를 쓴 이유(답이 "Wait, wait …"로 끝나지 않아 상한까지 감 — 10-07 결정 항목), 답 추출 문구 정정(MathVista도 아주 단순한 경우만 규칙, 나머지 LLM; VLMEvalKit 규칙 → GPT, 공식 추출 순서(X-33)·VLMEvalKit 추출(X-34)), Z 쉬운 설명, 주입 형식에 InternVL 원래 `<img>` … `</img>` 태그(이미지 입력 형식(X-35)), 타일링 설명·근거(이미지 입력 형식(X-35)), nat → "자연로그".
 - 절대 정확도 차이 원인에서 하드웨어 삭제(같은 GPU fp16 잡음으로 바뀐 답 2.2%, REPORT 4.1절), 사후 가설 문장은 한 구절로 줄임(작성자 결정). README에서 "읽기 (a)/(c)"를 설명형 이름으로(REPORT는 표로 정의된 (a)~(f) 유지).
 - st_official(작성자 결정: 글 + 전용 파일 삭제): REPORT 4.5절과 위치 표 언급 삭제, 공개 저장소에서 `repro/diag/analyze_st_official.py`, `repro/colab/runs/st_official_c1/run_config.json` 삭제. export 스크립트가 다시 복사하지 않도록 수정(이전 판 `scripts/.make_github_export.bak_20261012c`). 이 실험 기록·`repro/audit/`의 검토 기록 안 언급은 이력이라 유지. Colab 빌더 `repro/colab/build_colab.py`는 일반 도구라 유지.
 - push: `main` = 0b508f3.
@@ -1091,7 +1091,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - push: `main` = 6e95c3e.
 
 ## 2026-10-12 후속 실험 3 `visref_hs` 실행 전 계획 (작성자 결정) — 결과 전에 고정
-- 질문: Z(생각 단계 토큰 벡터)를 입력 임베딩 대신 **마지막 층 hidden state(최종 정규화 출력, lm_head 직전)**로 바꾸면 VisRef가 TSR보다 나아지는가. 근거: 논문 "text token embeddings"는 층 미지정(`LAY` L304-305), 논문은 |V_k| = m(X-23)인데 입력 임베딩으로는 서로 다른 단어 수가 상한이라 m의 약 1/5만 주입됨. 2026-10-06 작성자가 last hidden state를 우선 후보로 정했으나 10-07 lean 재작성에서 입력 임베딩으로 구현됨(경위 기록 미확인). hidden state는 위치마다 벡터가 달라 단계가 m보다 길면 m개까지 고를 수 있음(2026-10-08 hidden_rank_check 오프라인 확인).
+- 질문: Z(생각 단계 토큰 벡터)를 입력 임베딩 대신 **마지막 층 hidden state(최종 정규화 출력, lm_head 직전)**로 바꾸면 VisRef가 TSR보다 나아지는가. 근거: 논문 "text token embeddings"는 층 미지정(`LAY` L304-305), 논문은 |V_k| = m(선택 수 강제(X-23))인데 입력 임베딩으로는 서로 다른 단어 수가 상한이라 m의 약 1/5만 주입됨. 2026-10-06 작성자가 last hidden state를 우선 후보로 정했으나 10-07 lean 재작성에서 입력 임베딩으로 구현됨(경위 기록 미확인). hidden state는 위치마다 벡터가 달라 단계가 m보다 길면 m개까지 고를 수 있음(2026-10-08 hidden_rank_check 오프라인 확인).
 - 바꾸는 것은 Z 하나: `visref_hs` = `visref_raw_rank`와 같은 DPP(Chen greedy, 1e-9·max L_ii 정지), V는 그대로 입력 공간 시각 임베딩, 주입 형식·정지 probe·답 처리·토큰 상한(단계 1,024 / 합계 10,240)·시드·문항 순서(seed 0 셔플) 모두 본 실험과 같음. Z는 맥락(지금까지의 문맥 + z_k)을 한 번 더 prefill해 z_k 위치의 last_hidden_state를 취함(`Engine.last_hidden`, causal이라 뒤에 붙는 V_k·구분자 영향 없음). 이중 probe는 끔(판정과 무관한 기록용이라 시간 절약).
 - 코드: `visref/engine.py` `last_hidden`, `visref/dpp.py` `select_tokens(trace=)`·`pick_stats`(선택 결과는 trace 유무와 같음, 테스트), `visref/methods.py` `visref_hs`. CPU 테스트 104 passed(신규 `tests/test_hs.py` 6개: 전체 forward와 일치(분할 prefill 포함), trace가 선택을 바꾸지 않음, 반복 토큰에서도 m 도달, job이 last_hidden으로 Z를 받음).
 - 실행: Kaggle 세션 1개(2×T4), timeout 29,000s(time_limit 26,300s, deadline 28,400s, 여유 약 33분). 1,000문항을 seed 0 셔플 순서로 투입, 끝난 앞부분(complete prefix)만 분석. 예상 약 550–650문항(fill 속도 약 88문항/h 기준 추정, 미검증).
@@ -1125,7 +1125,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - 불일치 1, Z: 10-06 작성자 결정(Z에 입력 임베딩이 아닌 last hidden state가 타당, [초기 기록 "작성자 결정: Z 우선 후보 last hidden state로 동결" 항목](https://github.com/AhnJG/visref-repro/blob/4776f6ab2607957799bef8db70241cc64313feae/docs/EXPERIMENT_FLOW.md?plain=1#L501-L503))이 10-07 재작성에서 빠짐(경위 기록 없음). 이번 점검에서 찾은 빠진 작성자 결정은 이 하나이고, 영향은 실행 중인 `visref_hs` 결과로 확인한다.
 - 불일치 2, 토큰 상한 기본값: `run.py` DEFAULTS가 옛 결정(2026-10-07 "smoke2 결과와 본 실험 결정" 항목)의 단계 4,096 / 합계 8,192로 남아 있음. 결정(2026-10-07 "결정(작성자): s1 + DEER af 폴백, 정지 통계 현행 유지, 파일럿 없이 본 실험 시작" 항목)은 1,024 / 10,240이고 모든 생성 실행(b_main s1–s9, fill, `visref_hs`)이 run_args로 1,024 / 10,240을 넘겨 결과에는 영향 없음(run_config로 확인). 인자 없이 `run.py`를 직접 돌릴 때만 옛 값. 기본값을 바꾸면 code_version이 바뀌므로 고치지 않고 작성자 결정으로 넘김.
 - 찾지 못함 2건: `visref_hs` 실행 설정은 작업 폴더 run_config(`--think-cap 1024 --total-think-cap 10240`, 이중 probe 인자 없음 = 끔, timeout 29,000 / time_limit 26,300 / deadline 28,400, shuffle_seed 0)로 확인해 반영으로 봄. fill 판정 규칙(2026-10-10 "원인 분리 실험 실행 전 계획" 항목)은 코드에 없고 사람이 적용(2026-10-11 "visref_fill 최종" 항목, CI 하한 −2.15 < 0 → 지지 안 됨, 규칙과 맞음).
-- 기록: SPEC_LEDGER "핵심 판단 요약"에 J-19~J-22(문항 순서와 분석 표본, 정지 판정용 답과 최종 답 분리, LLM 추출 가드, 판정 문구 규칙) 추가, J-1~J-22의 결정 주체·코드 위치·테스트를 "결정 대장" 표로 추가, J-14 채점 규칙을 v4로 고침(이전 판 `repro/.backup_decision_check_20261012/SPEC_LEDGER.md`).
+- 기록: SPEC_LEDGER "핵심 판단 요약"에 J-19~J-22(문항 순서와 분석 표본, 정지 판정용 답과 최종 답 분리, LLM 추출 가드, 판정 문구 규칙) 추가, J-1~J-22의 결정 주체·코드 위치·테스트를 "결정 대장" 표로 추가, 답 추출(J-14) 채점 규칙을 v4로 고침(이전 판 `repro/.backup_decision_check_20261012/SPEC_LEDGER.md`).
 - 테스트: 결정된 값이 바뀌면 결과가 달라지는데 기존 테스트(자체 작은 설정 사용)가 값을 고정하지 않아 `repro/tests/test_decisions.py` 추가(27개: run.py 기본값 15개, probe 샘플링·m, 채점 v4, b_main 실행 10개의 상한·순서, LLM 가드 2와 대상 행 고르기). 전체 143 passed(python3.13).
 - 옛 표기 정정(출력 불변): `diag/analyze_fill.py` 설명과 LLM 없을 때의 라벨, `diag/analyze_st_plain.py` 설명의 "v3"를 "작성 당시 v3, 2026-10-11부터 v4"로.
 
@@ -1137,7 +1137,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - 공개 저장소에 `repro/kaggle/runs/b_main_hs/run_config.json` 추가(작업 폴더 원본 그대로, sha256 앞 16자리 17c7ea3740ff01da; 노트북은 다른 실행처럼 제외). 내용: run_args `--methods visref_hs --think-cap 1024 --total-think-cap 10240`, timeout 29,000 / time_limit 26,300 / deadline 28,400, ids 1,000개(b_main_s1·fill과 같은 seed 0 순서, 확인), built_at 2026-10-12T12:12:04 UTC. 묶인 코드 8개 파일의 sha256이 사전등록 커밋 ccac0d9의 `repro/`와 같고 그 뒤 바뀌지 않음(확인). 사전등록 커밋 12:13:12 UTC, Kaggle push 12:16:47 UTC(`push.json`).
 - 공개본 생성 스크립트(작업 폴더 `scripts/make_github_export.py`) RUNS에 `b_main_hs` 추가(이전 판 `scripts/.make_github_export.bak_20261013`). 결과가 나오면 output/results도 같은 규칙으로 들어간다.
 - README·README.ko: 상태 상자("완료, 실험 종료" → 본 실험과 후속 실험 2개 완료, 세 번째 후속 실험 실행 중), 후속 실험 표에 `visref_hs` 행(질문과 사전 판정 규칙), "VisRef 추가 이득이 없던 이유" 표와 "논문에서 찾지 못한 설정" 표의 Z 행, 파일 목록(analyze_hs.py, b_main_hs는 run_config.json만). REPORT: 첫머리 상태 문장, 2.1절 Z 행, 4.1절 4번, 새 4.5절(질문·설계·상태), 6절 "시도 안 한 아이디어"에서 hidden-state Z를 빼고 실행 중으로, 7절 실행 목록과 후속 분석 목록.
-- `tests/test_decisions.py`가 b_main_hs도 검사(생성 실행 11개), SPEC_LEDGER 결정 대장 J-10 테스트 칸과 점검 방법 문장 갱신.
+- `tests/test_decisions.py`가 b_main_hs도 검사(생성 실행 11개), SPEC_LEDGER 결정 대장 토큰 상한(J-10) 테스트 칸과 점검 방법 문장 갱신.
 
 ## 2026-10-13 `visref_hs` 결과 수신, 규칙 채점, LLM 추출 요청 준비
 - 작성자 pull. 실행 상태: 839행(shard 0 411, shard 1 428), 상태 오류 0, code_version f1376774850d(저장소 코드와 같음), 두 shard 시작 로그의 cfg가 상한 1,024 / 10,240, 이중 probe 0. 두 shard 모두 정상 종료(end 이벤트, 경과 27,911s / 27,520s, 대기열에 남은 문항 89 / 72). complete prefix 839문항(300 이상이라 "검출력 부족" 표시 없음), 문항 순서는 fill과 같음. prefix 안 b_main 행 가운데 현재 채점(v4)이 정오를 바꾸는 행 0.
@@ -1150,10 +1150,10 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - 추출: fill 때(2026-10-11 "visref_fill 최종" 항목)처럼 같은 공식 추출 프롬프트로 Claude Haiku가 43건을 추출(정답 미포함, 대조군 표시 없이 id와 prompt만 전달). 사전등록(gemini-3.5-flash-lite)과 다른 추출기 — 이탈로 기록. 규칙 실패 23건의 추출을 응답 끝부분과 하나씩 대조해, 21건은 응답에 있는 답이고 2건(159, 943)은 응답에 최종 답이 없어 빈 값임을 확인. 응답 `repro/llm/hs/responses.jsonl`(model 필드 기록).
 - merge: 규칙 실패 23 중 사용 21, 빈 추출 2(규칙 결과 유지), 근거 없음 거부 0, 대조군 20/20 일치·근거 있음, 정오 변화 fixed 0 / broke 1(pid 722: 규칙은 'yes'를 뽑았으나 응답 끝은 "The correct answer should be B) no"). 결과 `repro/llm/hs/merged.jsonl`.
 - 판정(`diag/analyze_hs.py analyze --llm llm/hs/merged.jsonl`, 839문항, 주 채점): ST 57.57 / TSR 59.71 / VisRef 59.36 / hs 59.95. hs − TSR +0.24 pp (−2.38, +3.10), 68:66, McNemar p 0.931 → 사전등록 ③ "마지막 층 Z로도 논문 크기(+3.5 pp)의 추가 이득은 재현 안 됨". 보조: hs − VisRef +0.60 pp (−1.67, +2.98), 58:53; hs − ST +2.38 pp (−0.24, +5.01), 73:53. 규칙만: hs − TSR +0.36 pp (−2.26, +3.22), 같은 판정. `make analysis` 재실행 결과 `diag/analyze_hs.json`이 바이트 단위로 같음.
-- 반영: `make analysis`에 hs 추가, `scripts/make_results.py`(followups.csv·summary.json에 visref_hs), `scripts/check_readme_numbers.py`(hs 주 비교 숫자 검사), README·README.ko(상태 "완료", 후속 실험 표, Z 관련 두 행, 파일 목록), REPORT(첫머리, 요약, 4.1절 4번, 4.5절 결과·동작·이탈·해석, 6절, 7절), SPEC_LEDGER 결정 대장 J-8·J-14와 J-8 본 행, 반성 기록 1절과 남은 불일치. 이 실험은 결과 후 추가 실험이므로 본 실험 판정은 바꾸지 않음.
+- 반영: `make analysis`에 hs 추가, `scripts/make_results.py`(followups.csv·summary.json에 visref_hs), `scripts/check_readme_numbers.py`(hs 주 비교 숫자 검사), README·README.ko(상태 "완료", 후속 실험 표, Z 관련 두 행, 파일 목록), REPORT(첫머리, 요약, 4.1절 4번, 4.5절 결과·동작·이탈·해석, 6절, 7절), SPEC_LEDGER 결정 대장 Z 표현(J-8)·답 추출(J-14)와 Z 표현(J-8) 본 행, 반성 기록 1절과 남은 불일치. 이 실험은 결과 후 추가 실험이므로 본 실험 판정은 바꾸지 않음.
 
 ## 2026-10-13 `run.py` 생각 상한 기본값 정정 (작성자 결정), 마지막 층 Z에서 m에 못 미친 단계 정리
-- `repro/run.py` DEFAULTS를 think_cap 4,096 → 1,024, total_think_cap 8,192 → 10,240으로(결정 2026-10-07 "결정(작성자): s1 + DEER af 폴백, 정지 통계 현행 유지, 파일럿 없이 본 실험 시작" 항목). 이전 기본값은 10-07 옛 결정(2026-10-07 "smoke2 결과와 본 실험 결정" 항목) 값으로, 모든 생성 실행은 인자로 1,024 / 10,240을 넘겨 결과 영향 없음(10-12 결정 점검). code_version f1376774850d → cf46b2e6222e(`visref_hs` 행 839개는 모두 f1376774850d, 실행이 끝난 뒤 변경). `tests/test_decisions.py` DECIDED에 상한 두 값 추가(기본값 테스트), 실행 설정 테스트는 유지. CPU 테스트 145 passed. SPEC_LEDGER 결정 대장 J-10·점검 문단, 반성 기록(1절, 남은 불일치, 예방법, 적용함/아직 안 함) 갱신.
+- `repro/run.py` DEFAULTS를 think_cap 4,096 → 1,024, total_think_cap 8,192 → 10,240으로(결정 2026-10-07 "결정(작성자): s1 + DEER af 폴백, 정지 통계 현행 유지, 파일럿 없이 본 실험 시작" 항목). 이전 기본값은 10-07 옛 결정(2026-10-07 "smoke2 결과와 본 실험 결정" 항목) 값으로, 모든 생성 실행은 인자로 1,024 / 10,240을 넘겨 결과 영향 없음(10-12 결정 점검). code_version f1376774850d → cf46b2e6222e(`visref_hs` 행 839개는 모두 f1376774850d, 실행이 끝난 뒤 변경). `tests/test_decisions.py` DECIDED에 상한 두 값 추가(기본값 테스트), 실행 설정 테스트는 유지. CPU 테스트 145 passed. SPEC_LEDGER 결정 대장 토큰 상한(J-10)·점검 문단, 반성 기록(1절, 남은 불일치, 예방법, 적용함/아직 안 함) 갱신.
 - `b_main_hs` 출력에서 확인한 m 랭크 부족 현황: 주입이 있는 1,966단계 중 m개를 정확히 넣은 단계 1,130, 못 미친 단계 836. (1) 단계 길이 < m인 288단계(자연 종료 242, EOS 46): DPP가 생각 토큰 수보다 많이 고를 수 없어 284단계가 정확히 생각 토큰 수만큼 주입, 주입/m 사분위 0.137 / 0.3 / 0.534. (2) 단계 길이 ≥ m인데 못 미친 548단계: 모두 가장 큰 이미지(시각 토큰 3,328개, m = 998). 시각 벡터 rank 사분위 1,007 / 1,009 / 1,010으로 m에 가깝고, greedy가 수치 정지 임계값에서 멈춰 주입/m 사분위 0.968 / 0.982 / 0.992(최소 0.746), m과의 차 중앙값 18. m = 998인 722단계 중 m 도달 38. (3) 다양성을 뚜렷이 더한 선택(정규화 잔차 ≥ 0.01)은 m에 도달한 단계에서도 중앙값 71개. REPORT 4.5절 동작 문단에 m에 못 미친 두 경우를 한 문장으로 추가.
 
 ## 2026-10-13 독립 검토와 확인
@@ -1163,7 +1163,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - 아직 고치지 않음: 문서 정정 범위와 표현(특히 중간 2는 작성자 판단 문장, 중간 4는 해석 문제)은 작성자 결정 후 "결과 후 변경"으로 기록하며 진행.
 
 ## 2026-10-13 검토 반영 1차(Table 5 문장), 다음 실험 세 개 계획 공개 (작성자 결정)
-- 원문 확인: `InternVL3.5.txt` 2.4절 Test-Time Scaling(L553-569) — L556-558 TTS는 "reasoning depth (i.e., deep thinking) and breadth (i.e., parallel thinking)"를 함께 뜻함, L558-559 "unless otherwise specified, the experimental results reported in Section 3 are obtained without applying TTS", L562 "Deep Thinking. By activating the Thinking mode …". 59.3은 3.2절(L743) Table 3(L775, 캡션 L827)의 InternVL3.5-1B 행이고, 바로 아래 "w/ Parallel Thinking" 행(69.5)만 따로 표시됨. 문자 그대로 읽으면 59.3은 TTS(사고 모드 포함) 없이 얻은 값. 이전 판단(2026-10-10, 2026-10-10 "정정: InternVL3.5-1B MathVista 59.3 / 69.5의 의미" 항목 "행 이름은 parallel thinking만 언급 → 불명확")보다 원문이 더 분명함. 어느 VLMEvalKit 설정으로 얻었는지는 여전히 미확인(X-1). 문서 정정(검토 중간 4)은 작성자 결정 대기.
+- 원문 확인: `InternVL3.5.txt` 2.4절 Test-Time Scaling(L553-569) — L556-558 TTS는 "reasoning depth (i.e., deep thinking) and breadth (i.e., parallel thinking)"를 함께 뜻함, L558-559 "unless otherwise specified, the experimental results reported in Section 3 are obtained without applying TTS", L562 "Deep Thinking. By activating the Thinking mode …". 59.3은 3.2절(L743) Table 3(L775, 캡션 L827)의 InternVL3.5-1B 행이고, 바로 아래 "w/ Parallel Thinking" 행(69.5)만 따로 표시됨. 문자 그대로 읽으면 59.3은 TTS(사고 모드 포함) 없이 얻은 값. 이전 판단(2026-10-10, 2026-10-10 "정정: InternVL3.5-1B MathVista 59.3 / 69.5의 의미" 항목 "행 이름은 parallel thinking만 언급 → 불명확")보다 원문이 더 분명함. 어느 VLMEvalKit 설정으로 얻었는지는 여전히 미확인(공식 1B 점수(X-1)). 문서 정정(검토 중간 4)은 작성자 결정 대기.
 - 검토 중간 2 반영(결과 후 표현 변경): REPORT 4.1절 5번, README·README.ko H 문단의 Table 5 관련 문장을 "Table 5의 작은 지연 차이로 보아 긴 완결 답을 여러 개 만드는 방식은 아니라고 판단(우리 판단, 논문은 밝히지 않음, 짧은 답 여러 개를 한 번에 생성하는 방식은 배제되지 않음)"으로 바꿈.
 - 다음 실험 세 개(작성자 제안: 중단된 hs 마무리, 이미지 입력 뒤 생각 이어가기, 둘을 섞은 것)를 README·README.ko "다음에 돌릴 실험(계획)" 절과 REPORT 5.4절에 추가(아직 실행·사전등록 안 함). 설계 제안(작성자 확인 전): 생각 이어가기 실험에는 이미지 없이 같은 만큼 더 생각하는 TSR 대조군(`tsr_think`)을 같은 세션에서 돌림(추가 생각만으로 생긴 이득과 구분); 새 실험 두 개는 본 실험에 저장된 첫 단계에서 출발(독립 검토 중간 1); 검출력은 실측 불일치율 16% 기준. 참고: 1단계 한정 같은 시험(step1_branch D − C, 309문항)은 +0.97 pp (−2.27, +4.21). 비용은 `visref_hs` 실측 속도(839문항 약 7.7시간) 기준 추정: 남은 161문항 약 2시간, 새 방법은 1,000문항에 방법당 9시간 이상(실측 아님).
 
@@ -1178,8 +1178,8 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 ## 2026-10-13 독립 검토 정정 반영, 추가 생각 적용 범위 결정
 - 결과 후 표현 변경(판정·수치 변경 없음). README·README.ko·REPORT·SPEC_LEDGER·`diag/analyze_hs.py` 머리말:
   - 첫 단계 재생성 공개(검토 중간 1): REPORT 4.5절 설계("설계상 Z만 바꿨으나 첫 단계는 새로 생성, 텍스트 일치 193/839, 본 실험 TSR·VisRef는 ST와 1,000/1,000 같음"), 실행(사전등록 검출력 기준은 9% 가정; 실제 불일치 134/839 = 16.0%, 80% 검출 최소 효과 약 3.9 pp, +3.5 pp 검출력 약 72%), 보조 비교 단서, 동작 문단(텍스트 일치 193), 4.2절(fill 첫 단계 텍스트 일치 242/994), 6절, README 표 hs 행. 위 2026-10-11 "visref_fill 결과" 항목·2026-10-12 "후속 실험 3 `visref_hs` 실행 전 계획" 항목의 "fp16 배치 잡음 범위에서 같음"은 텍스트 기준으로 틀림(기록은 그대로 두고 여기서 정정).
-  - Table 3·8 인용(중간 3): README "이득이 없던 이유" 표와 REPORT 4.2절 주의 문단에 Table 3 다양성만 77.4(LAY L538)·Table 8 λ = 0 71.2(LAY L984), 두 표가 서로 다름을 추가. SPEC_LEDGER X-36 보강.
-  - 공식 59.3(중간 4): REPORT 1절과 README·README.ko 절대값 절에 "InternVL3.5 보고서는 Section 3 수치를 사고 모드를 포함한 TTS 없이 얻었다고 밝힘 → 사고 모드 없는 값일 가능성이 높음, 평가 설정은 미확인". SPEC_LEDGER X-1 재검토 기록.
+  - Table 3·8 인용(중간 3): README "이득이 없던 이유" 표와 REPORT 4.2절 주의 문단에 Table 3 다양성만 77.4(LAY L538)·Table 8 λ = 0 71.2(LAY L984), 두 표가 서로 다름을 추가. SPEC_LEDGER Table 7 선택 방식(X-36) 보강.
+  - 공식 59.3(중간 4): REPORT 1절과 README·README.ko 절대값 절에 "InternVL3.5 보고서는 Section 3 수치를 사고 모드를 포함한 TTS 없이 얻었다고 밝힘 → 사고 모드 없는 값일 가능성이 높음, 평가 설정은 미확인". SPEC_LEDGER 공식 1B 점수(X-1) 재검토 기록.
   - 추출기 변경 시점(중간 5): REPORT 4.5절에 "규칙만 결과를 계산·기록한 뒤 결정", "비교 상대 행은 Gemini 추출이라 규칙만 읽기가 같은 조건의 비교".
   - 작은 수정: REPORT 2.4절 후속 실험 셋; 4.5절 548단계 = m 998이 544 + m 844가 4, 분모 582 중 38; 순위 상관 부호(음수 = 관련성 큰 것이 먼저, `dpp.py` L107-108)대로 "약하게 관련성 순"과 fill "관련성과 거의 무관한 순서"로; "추가 이득 없음"을 "검출 안 됨"으로; README `make check` 지원 버전(3.11–3.13, 3.10은 숫자 검사만); README 파일 목록과 `make check` 설명의 "pre-registered" 표기; REPORT 5.1절(문구는 Alg. 1이 아니라 3절·그림 2); 2.1절 Chen 정지 기준(절대 1e-10, 우리 상대 기준); 2.5절 후속 실험 코드 버전과 현재 cf46b2e6222e; 4.3절 309문항 밖 불일치 27(14 : 13; 위 2026-10-11 "step1_branch 본 실행 결과" 항목 "309문항뿐"의 정정); 4.2절 층 구분은 사전 지정·EOS 층 해석은 사후; SPEC_LEDGER 11·12행 기본값, 37행 코드 줄 번호; README.ko 번역 기준일.
   - 반성 기록(`docs/AI_USE_REFLECTION.md`): 2절 "같은 시드라 첫 단계는 같다", 3절 지표 부호 오독·59.3 판단, 예방법(직접 비교로 확인, 지표 정의 줄 인용, 후속 실험은 저장된 첫 단계에서 출발), 무엇이 오류를 잡았나에 독립 검토.
@@ -1198,7 +1198,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
   - ① 하한 > 0 → "생각을 이어가면 VisRef가 TSR보다 추가 이득"(상한 < +3.5면 "논문보다 작음"을 덧붙임)
   - ② 0을 포함하고 상한 ≥ +3.5 → 판단 보류(논문 크기 효과를 배제하지 못함)
   - ③ 상한 < +3.5(①이 아닐 때) → "생각을 이어가도 논문 크기(+3.5 pp)의 VisRef 추가 이득은 재현 안 됨"
-  - +3.5는 논문 Table 6 InternVL3.5-1B의 VisRef 52.0 − TSR 48.5(SPEC_LEDGER A-5).
+  - +3.5는 논문 Table 6 InternVL3.5-1B의 VisRef 52.0 − TSR 48.5(SPEC_LEDGER Table 6 모델 크기별(A-5)).
 - 검출력(사전 계산, 정규 근사, 불일치율 q에서 SE = √(q/n)): q는 본 실험 VisRef − TSR 89/1,000 = 8.9%(같은 첫 단계·같은 난수라 가장 비슷한 설계, `llm/final/merged.jsonl`에서 이번에 다시 셈)와 `visref_hs` − TSR 134/839 = 16.0%(첫 단계 재생성, 비관적 경우) 사이로 본다. 1,000문항이면 80% 검출 최소 효과 2.64–3.54 pp, +3.5 pp 검출력 0.96–0.79. +3.5 pp 검출력 0.8에 필요한 문항 수 570–1,023. 300문항이면 +3.5 pp 검출력 0.53–0.33. 판정과 함께 실현된 불일치율·최소 검출 효과·+3.5 pp 검출력을 보고한다.
 - 보조(판정 없음, 기술): `visref_hs_think` − `tsr_think`(같은 규칙을 적용한 결과를 보조로 기록), `visref_hs_think` − `visref_think`, `visref_think` − 본 실험 VisRef, `tsr_think` − 본 실험 TSR(첫 단계만 같고 이후 난수가 다름), 2×2 대비 (`visref_think` − `tsr_think`) − (VisRef − TSR)와 부트스트랩 CI.
 - 동작(기술): 추가 생각이 끝난 방식(닫음 / EOS / 512 도달 / 건너뜀), 길이 사분위, 상한이 512보다 줄어든 행 수, 추가 생각 글에 이미지 단어가 있는 비율(step1_branch와 같은 정규식), 정지 사유, k, 주입/m, 최종 답 안 두 번째 `</think>`, 답 강제 횟수, 저장 첫 단계 재토큰화 일치 수.
@@ -1229,7 +1229,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
   - 이전 기록: smoke2(2026-10-07 "smoke2 결과와 본 실험 결정" 항목, REPORT B2)에서는 태그를 붙인 블록을 `</think>` 앞(생각 블록 안)에 줄바꿈 없이 넣었고(`z_k <img>Ṽ_k</img> </think>`, smoke2 실행 코드에서 확인), 두 번째 `</think>`가 태그 있음 31/63단계, 태그 없음 10/65단계로 태그를 붙인 쪽이 더 많았다. 그래서 태그만 붙이는 것은 형식 손상을 줄이지 않았다.
   - 가설: 손상의 원인은 태그 유무보다 블록이 `</think>` 앞에 있다는 위치다. 블록을 `</think>` 뒤로 옮기고(답할 때) 공식 형식으로 감싸면 형식 손상이 줄고 재주입이 답에 반영될 여지가 생긴다. 이번 시험은 태그 효과가 아니라 위치를 바꾼 묶음의 효과를 본다.
 - 변형 정의(`repro/visref/methods.py` BUNDLE): 논문이 정하지 않은 자유도 네 가지를 한꺼번에 바꾼 탐색 변형. 효과가 보이면 그때 요소별로 나눈다.
-  1. 형식: 고른 토큰을 공식 이미지 입력 형식 `<img>` + 토큰 + `</img>`로 감싼다(InternVL 공식 코드 `modeling_internvl_chat.py` L216-217, L295; 결정 대장 X-35). 주입 벡터는 전처럼 입력 임베딩.
+  1. 형식: 고른 토큰을 공식 이미지 입력 형식 `<img>` + 토큰 + `</img>`로 감싼다(InternVL 공식 코드 `modeling_internvl_chat.py` L216-217, L295; 결정 대장 이미지 입력 형식(X-35)). 주입 벡터는 전처럼 입력 임베딩.
   2. 위치: 멈출 때(정지 probe, 강제 답, 자유 답)는 `z_k </think>\n<img>Ṽ_k</img>\n` 뒤에서 답한다. 이어갈 때는 생각 블록 안 `z_k \n<img>Ṽ_k</img>\n Wait, think more z_{k+1}`. 조건으로 쓰는 정보(x와 모든 (z_i, Ṽ_i))는 알고리즘 1의 4·12·17행과 같고, `</think>` 기준 위치는 알고리즘에 없는 템플릿 수준의 선택이다.
   3. 커널: 텍스트 Z와 이미지 V 모두 마지막 층 은닉 상태(최종 정규화 뒤)로 L = (V Zᵀ)(V Zᵀ)ᵀ를 만든다(`Engine.last_hidden`, 새 `Engine.hidden_at`; V는 프롬프트의 이미지 토큰 위치에서 문항당 한 번 계산). `visref_hs`는 Z만 마지막 층이었다. 논문은 "embeddings"라고만 하고 층을 말하지 않는다(LAY L178-180, L304-306; 결정 대장 29·30행). 참고: `kaggle/runs/hidden_rank_check` 12표본에서 Z가 마지막 층일 때 V도 마지막 층으로 바꾸면 잔차 비율 0.01 이상인 선택 수가 12/12 줄었다(예: pid 755 158 → 37). 커널 모양에 대한 진단이며 정확도 증거는 아니다.
   4. 줄바꿈: 블록 앞뒤 줄바꿈 토큰(공식 프롬프트에서 이미지 블록이 한 줄로 따로 있는 모양을 따름). 멈출 때는 `</img>\n` 뒤에 probe 문구 `\n\n\boxed`가 와서 줄바꿈 3개가 이어진다.
@@ -1262,7 +1262,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 ## 2026-10-15 이미지 태그 주입 수정: 모든 최종 답을 `\nFinal Answer:` 뒤에서 (작성자 결정, 다시 시험 가동 전)
 - 바꾼 것: `visref_bundle`은 생각을 스스로 닫은 단계나 EOS로 끝난 단계에서도 최종 답을 `</think>\n<img>Ṽ_k</img>\n` + `\nFinal Answer:` 뒤에서 생성한다(전에는 잘린 단계만). 채점 텍스트는 잘린 단계와 같이 이 문구 + 답이다. 정지 probe(`\n\n\boxed`)와 다른 방법은 그대로다. 코드 `repro/visref/methods.py` `_start_answer`(줄 수 그대로), 테스트 `tests/test_bundle.py`(닫은 단계의 답 문맥과 채점 텍스트). 전체 테스트 201개 통과. code_version aa11cdaa52a9 → d2ab88b06b24.
 - 이유: 앞 항목의 실행 문제(자유 답이 `Question: …`으로 시작). 같은 시험에서 이 문구 뒤에서 답한 잘린 5문항은 이 현상이 없었다.
-- 출처: 논문은 최종 답 프롬프트를 정하지 않는다(알고리즘 1의 17행 "Sample y ∼ πθ(· | xinput, τ1:k)"; 그림 2의 "Answer:" 상자는 정지 기준 도식). `\nFinal Answer:`는 논문이 인용한 s1 [34] 공식 코드의 문구로, 본 실험에서는 잘린 단계에만 썼다(결정 대장 J-11). 모든 답에 쓰는 것은 우리 선택이다.
+- 출처: 논문은 최종 답 프롬프트를 정하지 않는다(알고리즘 1의 17행 "Sample y ∼ πθ(· | xinput, τ1:k)"; 그림 2의 "Answer:" 상자는 정지 기준 도식). `\nFinal Answer:`는 논문이 인용한 s1 [34] 공식 코드의 문구로, 본 실험에서는 잘린 단계에만 썼다(결정 대장 생각 잘림 시 답(J-11)). 모든 답에 쓰는 것은 우리 선택이다.
 - 비교 범위: 이제 `visref_bundle`은 모든 답이 이 문구 뒤에서 나오고, `visref_raw_rank`와 TSR은 자유 답이다. 시험 가동의 확인 항목(질문 재작성, 빈 답, 즉시 종료)에는 상관없다. 300문항 비교로 간다면 같은 문구를 붙인 TSR 비교 조건이 있어야 이미지 위치 효과와 답 문구 효과를 나눌 수 있다(그때 결정).
 - 다시 시험 가동: 같은 10문항, 같은 두 방법과 실행 인자, 실행 이름 `bundle_pilot2`. 확인할 것은 앞 항목의 실행 문제가 사라지는지 하나다. 해석 규칙은 2026-10-15 실행 전 계획 항목과 같다.
 
@@ -1283,7 +1283,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - 비교 조건 셋, 모두 같은 실행:
   - `tsr`: 본 실험 TSR과 같은 코드.
   - `tsr_answer_prompt`: TSR과 같이 생각하고 멈추되 모든 최종 답을 `\nFinal Answer:` 뒤에서 받는다.
-  - `visref_imgtag`: `tsr_answer_prompt`에 단계마다 태그로 감싼 이미지 블록 재주입을 더함(답할 때는 `</think>` 뒤, 이어갈 때는 생각 안; 고르는 기준은 텍스트·이미지 모두 마지막 층; 주입 벡터는 입력 임베딩). 정의는 2026-10-15 앞 항목들과 결정 대장 J-24.
+  - `visref_imgtag`: `tsr_answer_prompt`에 단계마다 태그로 감싼 이미지 블록 재주입을 더함(답할 때는 `</think>` 뒤, 이어갈 때는 생각 안; 고르는 기준은 텍스트·이미지 모두 마지막 층; 주입 벡터는 입력 임베딩). 정의는 2026-10-15 앞 항목들과 결정 대장 이미지 태그 주입(J-24).
 - 출발점: 세 조건 모두 본 실험에 저장된 첫 단계에서 출발(`repro/diag/step1_store_bmain.json`, sha256 f937478f3b26…). 첫 단계 뒤 난수 상태는 문항마다 하나를 세 조건이 함께 쓴다(`tsr`과 `tsr_answer_prompt`는 최종 답 문구만 달라 생각 단계의 문맥과 난수가 끝까지 같다. `visref_imgtag`는 2단계부터 문맥이 달라 실제로 같은 것은 첫 단계 직후의 probe와 답 난수다).
 - 나머지 설정은 본 실험과 같다: 단계 1,024 / 합계 10,240 / 답 1,024토큰, 멈춤 기준 0.25, 최대 10단계, 주입 수 상한 m = 이미지 토큰의 30%, 샘플링(온도 0.6, top-k 50, top-p 0.95), 시드 42, fp16, 배치 16 / batch_tokens 72,000 / chunk 1,024(재개할 때도 바꾸지 않음). 이미지 없는 기록용 probe는 켬(`--dual-probe 1`, 결정 probe와 같은 난수 상태).
 - 실행 인자(문자 그대로): `--methods visref_imgtag,tsr_answer_prompt,tsr --think-cap 1024 --total-think-cap 10240 --step1-from diag/step1_store_bmain.json --dual-probe 1 --shard 0/1`, 문항 순서 `repro/kaggle/runs/b_main_hs/output/results/ids.json`(본 실험의 seed 0 섞은 순서, sha256 a5ad8da9…, 1,000문항). code_version 6e218887d2b5.
@@ -1296,7 +1296,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
   - ① 하한 > 0 → "이미지 태그 주입 묶음이 같은 답 문구의 TSR보다 이득"(상한 < +3.5면 "논문보다 작음"을 덧붙임)
   - ② 0을 포함하고 상한 ≥ +3.5 → 판단 보류
   - ③ 상한 < +3.5(①이 아닐 때) → "이 묶음으로도 논문 크기(+3.5 pp)의 이득은 재현 안 됨"
-  - +3.5는 논문 Table 6 InternVL3.5-1B의 VisRef − TSR(결정 대장 A-5).
+  - +3.5는 논문 Table 6 InternVL3.5-1B의 VisRef − TSR(결정 대장 Table 6 모델 크기별(A-5)).
 - 보조(판정 없음): `visref_imgtag` − `tsr`(논문과 같은 정의; 같은 규칙의 결과 번호만 기록), `tsr_answer_prompt` − `tsr`(답 문구만의 효과), 이 실행의 `tsr` − 본 실험 TSR(참고만: 본 실험 TSR 1,000행은 코드 버전 3개에 걸치고 생성 중의 첫 단계와 다른 난수에서 이어졌으며 GPU·torch도 달라 차이의 원인을 나눌 수 없다). 첫 단계 끝 유형(닫음 334 / 잘림 641 / EOS 25)별 정답률과 주 차이. 규칙이 뽑은 답이 "Final Answer" 같은 문구인 행 수.
 - 검출력(사전 계산, 정규 근사, 불일치율 8.9~16%): 1,000문항이면 +3.5 pp 검출력 0.96~0.79, 80% 검출 최소 효과 2.6~3.5 pp. 이번 변형은 단계 수와 주입 수를 함께 바꾸므로 불일치율이 16%보다 클 수 있다. 실현된 불일치율·최소 검출 효과·+3.5 pp 검출력을 함께 보고한다. 1,000은 testmini 전체라 늘릴 수 없다.
 - 동작(기술): 조건별 단계 수, 정지 사유, 주입 수/m, 이미지 유무로 멈춤 판단 답이 갈린 비율(같은 난수 상태), 답 안 `</think>` 재출력, 빈 답 수, 답 강제(DEER) 수, 답 길이, 최대 문맥 길이, 저장 첫 단계 재토큰화 일치 수, 오류 행. 점검: `tsr`과 `tsr_answer_prompt`의 생각 단계(단계 수, 정지 사유, 단계별 생각 길이·끝 방식, 생각 텍스트)가 같은 문항 비율. 두 조건은 생각이 같아야 하므로, 다르면 배치 구성에 따른 fp16 계산 차이나 난수 공유 문제를 뜻하며 원인을 기록한다.
