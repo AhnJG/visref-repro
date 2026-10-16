@@ -1,0 +1,139 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1020 476" width="1020" height="476" role="img" aria-labelledby="t d">
+<title id="t">How the main run ran: thinking steps, how steps ended, injected image tokens</title>
+<desc id="d">Left: number of questions by number of thinking steps for ST, TSR and VisRef. Middle: how the thinking steps ended (closed by the model, cut at the token limit, end of sequence). Right: VisRef steps by the number of injected image tokens relative to m.</desc>
+<style>
+  .surface{fill:#fcfcfb} .ink{fill:#0b0b0b} .ink2{fill:#52514e} .muted{fill:#6f6d68}
+  .grid{stroke:#e1e0d9} .base{stroke:#9a9890} .frame{stroke:rgba(11,11,11,0.10);fill:none}
+  .ours{fill:#2a78d6} .ours-l{stroke:#2a78d6} .paper{fill:#eb6834} .ring{stroke:#fcfcfb}
+  @media (prefers-color-scheme: dark){
+    .surface{fill:#1a1a19} .ink{fill:#f0efec} .ink2{fill:#c3c2b7} .muted{fill:#a19f97}
+    .grid{stroke:#2c2c2a} .base{stroke:#6b6a64} .frame{stroke:rgba(255,255,255,0.10)}
+    .ours{fill:#3987e5} .ours-l{stroke:#3987e5} .paper{fill:#d95926} .ring{stroke:#1a1a19}
+  }
+  text{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+  .num{font-variant-numeric:tabular-nums}
+
+  .m-st{fill:#c3c2b7} .m-tsr{fill:#8a887f} .m-vis{fill:#2a78d6}
+  .e-close{fill:#52514e} .e-cut{fill:#9a9890} .e-eos{fill:#e1e0d9}
+  .tick{stroke:#9a9890}
+  @media (prefers-color-scheme: dark){
+    .m-st{fill:#4a4944} .m-tsr{fill:#8d8b83} .m-vis{fill:#3987e5}
+    .e-close{fill:#c3c2b7} .e-cut{fill:#6b6a64} .e-eos{fill:#34342f}
+    .tick{stroke:#6b6a64}
+  }
+  .ink2-l{stroke:#52514e} @media (prefers-color-scheme: dark){.ink2-l{stroke:#c3c2b7}}</style>
+<rect class="surface" x="0" y="0" width="1020" height="476" rx="10"/>
+<rect class="frame" x="0.5" y="0.5" width="1019" height="475" rx="10"/>
+<text x="24" y="34" class="ink" font-size="16" text-anchor="start" font-weight="600">How the main run ran</text>
+<text x="24" y="56" class="ink2" font-size="12" text-anchor="start">InternVL3.5-1B on MathVista testmini, 1,000 questions per method; counts from the recorded rows, no accuracy</text>
+<text x="24" y="106" class="ink" font-size="13" text-anchor="start" font-weight="600">(a) Thinking steps per question</text>
+<text x="24" y="122" class="muted" font-size="11" text-anchor="start">number of questions, by number of steps k</text>
+<text x="62" y="158" class="ink2" font-size="11" text-anchor="end">k = 1</text>
+<rect class="m-st" x="70" y="138" width="200.0" height="11"/>
+<text x="275.0" y="147.5" class="ink2 num" font-size="10" text-anchor="start">1,000</text>
+<rect class="m-tsr" x="70" y="151" width="146.0" height="11"/>
+<text x="221.0" y="160.5" class="ink2 num" font-size="10" text-anchor="start">730</text>
+<rect class="m-vis" x="70" y="164" width="142.6" height="11"/>
+<text x="217.6" y="173.5" class="ink2 num" font-size="10" text-anchor="start">713</text>
+<text x="62" y="206" class="ink2" font-size="11" text-anchor="end">k = 2</text>
+<rect class="m-st" x="70" y="186" width="0.5" height="11"/>
+<text x="75.0" y="195.5" class="ink2 num" font-size="10" text-anchor="start">0</text>
+<rect class="m-tsr" x="70" y="199" width="17.4" height="11"/>
+<text x="92.4" y="208.5" class="ink2 num" font-size="10" text-anchor="start">87</text>
+<rect class="m-vis" x="70" y="212" width="18.6" height="11"/>
+<text x="93.6" y="221.5" class="ink2 num" font-size="10" text-anchor="start">93</text>
+<text x="62" y="254" class="ink2" font-size="11" text-anchor="end">k = 3–4</text>
+<rect class="m-st" x="70" y="234" width="0.5" height="11"/>
+<text x="75.0" y="243.5" class="ink2 num" font-size="10" text-anchor="start">0</text>
+<rect class="m-tsr" x="70" y="247" width="14.6" height="11"/>
+<text x="89.6" y="256.5" class="ink2 num" font-size="10" text-anchor="start">73</text>
+<rect class="m-vis" x="70" y="260" width="11.4" height="11"/>
+<text x="86.4" y="269.5" class="ink2 num" font-size="10" text-anchor="start">57</text>
+<text x="62" y="302" class="ink2" font-size="11" text-anchor="end">k = 5–9</text>
+<rect class="m-st" x="70" y="282" width="0.5" height="11"/>
+<text x="75.0" y="291.5" class="ink2 num" font-size="10" text-anchor="start">0</text>
+<rect class="m-tsr" x="70" y="295" width="8.0" height="11"/>
+<text x="83.0" y="304.5" class="ink2 num" font-size="10" text-anchor="start">40</text>
+<rect class="m-vis" x="70" y="308" width="11.0" height="11"/>
+<text x="86.0" y="317.5" class="ink2 num" font-size="10" text-anchor="start">55</text>
+<text x="62" y="350" class="ink2" font-size="11" text-anchor="end">k = 10</text>
+<rect class="m-st" x="70" y="330" width="0.5" height="11"/>
+<text x="75.0" y="339.5" class="ink2 num" font-size="10" text-anchor="start">0</text>
+<rect class="m-tsr" x="70" y="343" width="14.0" height="11"/>
+<text x="89.0" y="352.5" class="ink2 num" font-size="10" text-anchor="start">70</text>
+<rect class="m-vis" x="70" y="356" width="16.4" height="11"/>
+<text x="91.4" y="365.5" class="ink2 num" font-size="10" text-anchor="start">82</text>
+<line class="base" x1="70" y1="128" x2="70" y2="370" stroke-width="1"/>
+<rect class="m-st" x="70" y="386" width="10" height="10"/>
+<text x="85" y="395" class="ink2" font-size="11" text-anchor="start">ST</text>
+<rect class="m-tsr" x="140" y="386" width="10" height="10"/>
+<text x="155" y="395" class="ink2" font-size="11" text-anchor="start">TSR</text>
+<rect class="m-vis" x="210" y="386" width="10" height="10"/>
+<text x="225" y="395" class="ink2" font-size="11" text-anchor="start">VisRef</text>
+<text x="360" y="106" class="ink" font-size="13" text-anchor="start" font-weight="600">(b) How each thinking step ended</text>
+<text x="360" y="122" class="muted" font-size="11" text-anchor="start">all steps of a method; the bar is 100%</text>
+<text x="360" y="142" class="ink" font-size="12" text-anchor="start" font-weight="600">ST: 1,000 steps</text>
+<rect class="e-close" x="360" y="150" width="100.2" height="26" stroke="#9a9890" stroke-width="0.5"/>
+<rect class="e-cut" x="460.2" y="150" width="192.3" height="26" stroke="#9a9890" stroke-width="0.5"/>
+<rect class="e-eos" x="652.5" y="150" width="7.5" height="26" stroke="#9a9890" stroke-width="0.5"/>
+<text x="360" y="192" class="ink2 num" font-size="10.5" text-anchor="start">closed 334 · cut 641 · end of sequence 25</text>
+<text x="360" y="218" class="ink" font-size="12" text-anchor="start" font-weight="600">TSR: 2,115 steps</text>
+<rect class="e-close" x="360" y="226" width="50.9" height="26" stroke="#9a9890" stroke-width="0.5"/>
+<rect class="e-cut" x="410.9" y="226" width="245.1" height="26" stroke="#9a9890" stroke-width="0.5"/>
+<rect class="e-eos" x="656.0" y="226" width="4.0" height="26" stroke="#9a9890" stroke-width="0.5"/>
+<text x="360" y="268" class="ink2 num" font-size="10.5" text-anchor="start">closed 359 · cut 1,728 · end of sequence 28</text>
+<text x="360" y="294" class="ink" font-size="12" text-anchor="start" font-weight="600">VisRef: 2,261 steps</text>
+<rect class="e-close" x="360" y="302" width="52.8" height="26" stroke="#9a9890" stroke-width="0.5"/>
+<rect class="e-cut" x="412.8" y="302" width="242.4" height="26" stroke="#9a9890" stroke-width="0.5"/>
+<rect class="e-eos" x="655.2" y="302" width="4.8" height="26" stroke="#9a9890" stroke-width="0.5"/>
+<text x="360" y="344" class="ink2 num" font-size="10.5" text-anchor="start">closed 398 · cut 1,827 · end of sequence 36</text>
+<rect class="e-close" x="360" y="360" width="12" height="12" stroke="#9a9890" stroke-width="0.5"/>
+<text x="378" y="370" class="ink2" font-size="11" text-anchor="start">closed by the model</text>
+<rect class="e-cut" x="360" y="378" width="12" height="12" stroke="#9a9890" stroke-width="0.5"/>
+<text x="378" y="388" class="ink2" font-size="11" text-anchor="start">cut at the token limit</text>
+<rect class="e-eos" x="360" y="396" width="12" height="12" stroke="#9a9890" stroke-width="0.5"/>
+<text x="378" y="406" class="ink2" font-size="11" text-anchor="start">end of sequence</text>
+<text x="696" y="106" class="ink" font-size="13" text-anchor="start" font-weight="600">(c) Injected image tokens per VisRef step</text>
+<text x="696" y="122" class="muted" font-size="11" text-anchor="start">number of steps (2,261 in all), injected tokens / m</text>
+<line class="base" x1="730" y1="378.0" x2="996" y2="378.0" stroke-width="1"/>
+<text x="724" y="382.0" class="muted num" font-size="10" text-anchor="end">0</text>
+<line class="grid" x1="730" y1="317.0" x2="996" y2="317.0" stroke-width="1"/>
+<text x="724" y="321.0" class="muted num" font-size="10" text-anchor="end">250</text>
+<line class="grid" x1="730" y1="256.0" x2="996" y2="256.0" stroke-width="1"/>
+<text x="724" y="260.0" class="muted num" font-size="10" text-anchor="end">500</text>
+<line class="grid" x1="730" y1="195.0" x2="996" y2="195.0" stroke-width="1"/>
+<text x="724" y="199.0" class="muted num" font-size="10" text-anchor="end">750</text>
+<line class="grid" x1="730" y1="134.0" x2="996" y2="134.0" stroke-width="1"/>
+<text x="724" y="138.0" class="muted num" font-size="10" text-anchor="end">1,000</text>
+<rect class="m-vis" x="732.0" y="323.1" width="20.2" height="54.9"/>
+<text x="742.0909090909091" y="319.1" class="ink2 num" font-size="9.5" text-anchor="middle">225</text>
+<rect class="m-vis" x="756.2" y="156.7" width="20.2" height="221.3"/>
+<text x="766.2727272727273" y="152.692" class="ink2 num" font-size="9.5" text-anchor="middle">907</text>
+<rect class="m-vis" x="780.4" y="304.8" width="20.2" height="73.2"/>
+<text x="790.4545454545455" y="300.8" class="ink2 num" font-size="9.5" text-anchor="middle">300</text>
+<rect class="m-vis" x="804.5" y="338.7" width="20.2" height="39.3"/>
+<text x="814.6363636363636" y="334.716" class="ink2 num" font-size="9.5" text-anchor="middle">161</text>
+<rect class="m-vis" x="828.7" y="366.0" width="20.2" height="12.0"/>
+<text x="838.8181818181819" y="362.044" class="ink2 num" font-size="9.5" text-anchor="middle">49</text>
+<rect class="m-vis" x="852.9" y="364.6" width="20.2" height="13.4"/>
+<text x="863.0" y="360.58" class="ink2 num" font-size="9.5" text-anchor="middle">55</text>
+<rect class="m-vis" x="877.1" y="357.0" width="20.2" height="21.0"/>
+<text x="887.1818181818182" y="353.016" class="ink2 num" font-size="9.5" text-anchor="middle">86</text>
+<rect class="m-vis" x="901.3" y="363.6" width="20.2" height="14.4"/>
+<text x="911.3636363636364" y="359.604" class="ink2 num" font-size="9.5" text-anchor="middle">59</text>
+<rect class="m-vis" x="925.5" y="368.2" width="20.2" height="9.8"/>
+<text x="935.5454545454546" y="364.24" class="ink2 num" font-size="9.5" text-anchor="middle">40</text>
+<rect class="m-vis" x="949.6" y="374.8" width="20.2" height="3.2"/>
+<text x="959.7272727272727" y="370.828" class="ink2 num" font-size="9.5" text-anchor="middle">13</text>
+<rect class="m-vis" x="973.8" y="288.7" width="20.2" height="89.3"/>
+<text x="983.909090909091" y="284.696" class="ink2 num" font-size="9.5" text-anchor="middle">366</text>
+<text x="730.0" y="394" class="muted num" font-size="10" text-anchor="middle">0</text>
+<text x="850.9090909090909" y="394" class="muted num" font-size="10" text-anchor="middle">0.5</text>
+<text x="971.8181818181819" y="394" class="muted num" font-size="10" text-anchor="middle">1.0</text>
+<text x="983.909090909091" y="408" class="muted" font-size="10" text-anchor="middle">= m</text>
+<line class="ink2-l" x1="778.2" y1="134" x2="778.2" y2="378" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="784.2182546912006" y="144" class="ink2 num" font-size="11" text-anchor="start">median 0.199</text>
+<text x="863.0" y="426" class="muted" font-size="11" text-anchor="middle">injected tokens / m</text>
+<text x="24" y="440" class="muted" font-size="11" text-anchor="start">k = 1: the model answered after the first thinking step; k = 10 is the limit on steps. Each thinking step is limited to 1,024 tokens.</text>
+<text x="24" y="456" class="muted" font-size="11" text-anchor="start">m = 30% of the image tokens of the question. ST has one step per question; TSR and VisRef share the first step.</text>
+</svg>

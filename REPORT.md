@@ -20,12 +20,12 @@ The paper's headline claim is that VisRef improves over both ST and TSR, so C2 a
 
 ### 1.1 Experiments at a glance
 
-The work has two kinds of experiment. **Result experiments** (A1–A6) test the paper's claim or look for the reason it was not reproduced; their decision rules were fixed before their results (for A1 with the caveat of Section 2.4), and the verdicts come from them. **Setting checks** (B1–B7, [Section 2.6](#26-setting-checks-how-the-unstated-settings-were-chosen)) are small runs that chose settings the paper does not state, such as how to compute the stopping signal or how to re-insert the image. They gave no verdicts, but the settings they chose shape every result.
+The work has two kinds of experiment. **Result experiments** (A1–A6) test the paper's claim or look for the reason it was not reproduced; their decision rules were fixed before their results (for A1 with the caveat of Section 2.4), and the verdicts come from them. **Setting checks** (B1–B7, [Section 2.6](#26-setting-checks-how-the-unstated-settings-were-chosen)) are small runs that chose settings the paper does not state, such as how to compute the stopping signal or how to re-insert the image. They gave no verdicts, but the settings they chose shape every result. The follow-ups A2–A6 are exploratory: each has its own rule fixed before its results, but there is no correction across them; a single confirmatory run with the most faithful setting is planned after A6 ([Section 5.4](#54-next-experiments-planned-or-running)).
 
 <!-- check:glance -->
 | | Question | Questions | Result | Paper | Main limitation | Section |
 |---|---|---|---|---|---|---|
-| A1 | Does VisRef beat TSR and ST? | 1,000 | VisRef − TSR: −0.1 pp | +3.5 pp | only about one fifth of the paper's m image tokens were re-inserted | [3.1](#31-main-result-main-scoring-n--1000) |
+| A1 | Does VisRef (rank-limited selection) beat TSR and ST? | 1,000 | VisRef − TSR: −0.1 pp | +3.5 pp | only about one fifth of the paper's m image tokens were re-inserted | [3.1](#31-main-result-main-scoring-n--1000) |
 | A2 | Does topping the re-inserted image tokens up to m help? | 976 | VisRef-fill − TSR: 0.0 pp | – | the added tokens were nearly unrelated to the thinking | [4.2](#42-visref-fill-topping-up-the-injection-to-m-tokens-rule-fixed-before-the-results) |
 | A3 | Does re-inserting the image after step 1 help by itself? | 309 | with − without the image: +1.40 pp (answer at once), +0.97 pp (answer after more thinking) | – | only the questions where a method continued after step 1 | [4.3](#43-step1_branch-re-injection-at-step-1-rule-fixed-before-the-results) |
 | A4 | Does choosing image tokens with the model's last-layer vectors help? | 839 | VisRef-hs − TSR: +0.24 pp | – | the first step was generated anew (193 of 839 match the main run) | [4.5](#45-visref-hs-last-layer-z-rule-fixed-before-the-results) |
@@ -45,7 +45,7 @@ The work has two kinds of experiment. **Result experiments** (A1–A6) test the 
 
 The raw outputs of every check are in `repro/kaggle/runs/`, except for the 10-answer check of B1 (8B model, earlier code) and the official-setting run of B3.
 
-**The setting checks used evaluation questions.** They ran on part of a 100-question development split drawn from MathVista testmini and on the first questions of the main run's order. All of these questions are also among the 1,000 evaluated questions (`docs/EXPERIMENT_FLOW.md`, the opening entry and the entry of 2026-10-07 on the lean code), so the settings may be fitted to them to some degree. Most settings were chosen from stopping rates and broken answer formats, and several checks stated in advance that accuracy would not be used for the decision.
+**The setting checks used evaluation questions.** They ran on part of a 100-question development split drawn from MathVista testmini and on the first questions of the main run's order. All of these questions are also among the 1,000 evaluated questions (`docs/EXPERIMENT_FLOW.md`, the opening entry and the entry of 2026-10-07 on the lean code), so the settings may be fitted to them to some degree. Most settings were chosen from stopping rates and broken answer formats, and several checks stated in advance that accuracy would not be used for the decision. The questions used by the setting-check runs (the run folders named in Section 2.6; 222 distinct questions, counting all 30 planned questions of `smoke2`, 6 of which have no recorded answer) are listed in `results/setting_check_questions.csv`; the earlier development split of the old code is not part of this repository.
 
 ### 1.2 Terms
 
@@ -53,7 +53,7 @@ The raw outputs of every check are in `repro/kaggle/runs/`, except for the 10-an
 |---|---|
 | ST (standard thinking) | The model thinks once and answers. The baseline. |
 | TSR (textual self-reflection) | When a thinking step ends, "Wait, think more" is appended and the model thinks again. The image is not shown again. |
-| VisRef (code `visref_raw_rank`) | Like TSR, but just before each continuation a selected part of the image is inserted again. The paper's method. |
+| VisRef (code `visref_raw_rank`) | Like TSR, but just before each continuation a selected part of the image is inserted again. The paper's method, here with the selection stopping where the kernel rank ends ("rank-limited": usually fewer than m tokens, Section 4.1). |
 | VisRef-fill (`visref_fill`) | VisRef with the selection topped up to m tokens (Section 4.2). |
 | VisRef-hs (`visref_hs`) | VisRef with the model's last-layer vectors for the thinking text (Section 4.5). |
 | VisRef-imgtag (`visref_imgtag`) | VisRef with the selected tokens wrapped in image tags, placed after `</think>` when answering and inside the thinking when continuing, and last-layer vectors for both text and image (B7, A6). |
@@ -272,6 +272,10 @@ Everything in this section is **post-hoc unless marked as having its rule fixed 
 
 We could not pin down a single cause. The items below are observations and candidates.
 
+![How the main run ran: thinking steps per question, how each step ended, injected image tokens relative to m](figures/main_run_steps.svg)
+
+*Figure 3. How the main run ran, counted from the recorded rows of all 1,000 questions per method: the number of thinking steps, how each step ended, and the image tokens VisRef injected relative to m (no accuracy). Drawn by `scripts/make_figures.py`.*
+
 1. **Continuation happens almost only after cap truncation.** After a naturally closed step, the stopping statistic was ≥ δ in only 7 of 359 TSR and 35 of 398 VisRef probes (see the transition counts in Section 3.3). So part of TSR's gain over ST is probably a thinking-budget extension, and VisRef's injection mostly happens at a mid-sentence truncation point. Mean generated tokens per question: ST 1,114, TSR 2,205, VisRef 2,386.
 2. **Questions where VisRef stops at step 1 (k = 1, 713 questions).** VisRef differs from ST only by injecting Ṽ_1 before the final answer: VisRef-only correct 15, ST-only correct 14. The extracted answer changed in 1 of 329 questions whose step closed naturally and in 33 of 366 truncated ones. Caveat: k = 1 is defined by the stopping decision after injection, and the TSR k = 1 noise baseline is a different item set, so this group alone cannot identify the cause. As a noise floor: on the 730 questions where TSR stopped at step 1 it answers from the same context and seed as ST, yet the final texts were identical in only 491 and the extracted answers in 714 (16, or 2.2%, differ), which we attribute to fp16 batch-composition noise.
 3. **Side effect of the injection.** In the same k = 1 group the final answer contains another `</think>` in 352 of 713 VisRef answers versus 67 of 713 for ST.
@@ -346,6 +350,8 @@ We could not pin down a single cause. The items below are observations and candi
 
 *Deviation from the plan fixed before the results.* The 23 rows the rules could not parse were extracted with Claude Haiku, with the same official MathVista prompt and no ground truth, instead of gemini-3.5-flash-lite (as in the VisRef-fill run). 21 extractions were used and 2 were empty (rule result kept); the 20 control rows all agreed with the rules. One row changed from correct to wrong (pid 722, whose response ends with "The correct answer should be B) no"). The change of extractor was decided after the rules-only result had been computed and logged. The compared main-run rows were extracted with gemini-3.5-flash-lite, so the rules-only reading, which scores all four methods the same way, is the like-for-like comparison; it gives the same verdict.
 
+*Vector spaces.* In VisRef-hs, Z comes from the last layer while the image tokens V stay in the input-embedding space, so the kernel multiplies vectors from two different spaces (the paper's Eq. 7 uses one d-dimensional space). A6 (VisRef-imgtag) takes both Z and V from the last layer.
+
 *Reading.* Injecting m tokens chosen with last-layer vectors brought VisRef no detectable gain over TSR in this implementation (CI upper bound +3.10 pp). The other differences on our side (injection format and position, the stopping estimate, token limits; Section 4.1) remain untested.
 
 ## 5. Discussion
@@ -393,6 +399,8 @@ Details that the paper and the works it cites leave open, and that we set oursel
 
 One set of experiments (A5, three runs) is planned; its decision rules are fixed and published before each run. The rules for (2) and (3) were written down on 2026-10-13, before any run (entry of 2026-10-13 in `docs/EXPERIMENT_FLOW.md`; analysis `repro/diag/analyze_think.py`). (1) VisRef-hs on the 161 questions the session did not reach, with the same design, reported next to the recorded 839-question verdict. (2) Thinking after the image (`visref_think`): when the stopping rule fires, the model continues after Ṽ_k with the paper's cue "Wait, think more" and thinks up to 512 more tokens before answering, against TSR with the same extra thinking and no image (`tsr_think`); VisRef stopped at step 1 in 71.3% of questions, so in most questions the re-injected image currently comes right before the answer. (3) Both together (`visref_hs_think`), which completes a 2 × 2 design with the main run and VisRef-hs. Following an independent review on 2026-10-13, (2) and (3) start from the main run's stored first thinking step and run together with their control, because the follow-up runs so far regenerated step 1 (only 193 of 839 VisRef-hs first steps match the main run), which roughly doubled the paired noise. The extra 512 tokens are outside the 10,240-token budget, answers are handled as in the main run, and the main comparison `visref_think` − `tsr_think` uses the three-way rule of VisRef-hs (Section 4.5) against the paper's +3.5 pp. With the measured disagreement rates of 9% (main run VisRef − TSR) and 16% (VisRef-hs − TSR), the power to detect +3.5 pp on 1,000 questions is 0.96 to 0.79. Rough cost from the measured VisRef-hs speed (839 questions in about 7.7 h on 2×T4): about 2 h for the remaining 161 questions and 9 h or more per method for 1,000 questions (an estimate, not measured). Because the existing VisRef-hs run regenerated step 1, its cell of the 2 × 2 design is not like-for-like with the other three.
 
+A single confirmatory run with the most faithful setting is planned after A6: Z and V from the same layer, a tagged image block, m tokens reached, a per-step limit of at least 4,096 tokens, the stored first step shared by all methods, and bf16. Its exact design is fixed after A6, before the run starts. The follow-ups above stay exploratory.
+
 ## 6. Limitations
 
 - One model size (1B), one benchmark (MathVista testmini), one seed and one sample per question; the paper's 2B and 8B rows and other benchmarks were not tested.
@@ -415,8 +423,8 @@ One set of experiments (A5, three runs) is planned; its decision rules are fixed
 | Follow-up analyses | `repro/diag/analyze_fill.json`, `repro/diag/step1_branch_analysis.json` (earlier float version: `step1_branch_analysis_float_py311.json`), `repro/diag/paper_fingerprints.json`, `repro/diag/step1_probe_analysis.json`, `repro/diag/analyze_k1_injection.json`, `repro/diag/st_plain_analysis.json`; `repro/diag/analyze_hs.json` (Section 4.5; the script was written before the results) |
 | Raw generations, run configs and environments per session | `repro/kaggle/runs/<session>/` (`b_main_s1`–`b_main_s9`, `b_main_fill`, `step1_branch_pilot`, `step1_branch_main`, `diag_st_plain`, `b_main_hs`, `bundle_pilot` and `bundle_pilot2` (the two 10-question trials of the image-tag variant, B7); setting checks of Section 2.6: `smoke`, `smoke2`, `smoke3`, `main_s0`, `full_s1`, `b_test`, `hidden_rank_check`) |
 | Final scored rows (rules + LLM fallback) | `repro/llm/final/merged.jsonl` (VisRef-fill run: `repro/llm/fill/`, VisRef-hs: `repro/llm/hs/`) |
-| Final tables (CSV/JSON, built from the `repro/diag/*.json` files by `scripts/make_results.py`) | `results/` |
-| Figures (results figure drawn by `scripts/make_figures.py`; method diagram drawn by hand) | `figures/` |
+| Final tables (CSV/JSON, built from the `repro/diag/*.json` files by `scripts/make_results.py`) | `results/`; the questions used by the setting checks: `results/setting_check_questions.csv` (listed from the run records, not built by `make_results.py`) |
+| Figures (the results figure and the main-run figure drawn by `scripts/make_figures.py`; method diagram drawn by hand) | `figures/` |
 | Descriptive per-method report (rule-based scorer v4 only, no LLM fallback) | `repro/reports/b_main_report.html`, `repro/reports/b_main_report.json` |
 | Code | `repro/run.py`, `repro/visref/` (engine, methods, DPP, scoring), `repro/diag/step1_branch.py`, `repro/diag/analyze_imgtag*.py` (image-tag analyses), `repro/runpod/` (runner for the A6 run on a rented GPU) |
 | Public sources behind the logs' citations (arXiv versions, pages, tables) | `docs/SOURCES.md` |

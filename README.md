@@ -53,9 +53,25 @@ appears in the response.
 | TSR − ST (supplementary) | +2.3 (+0.6, +4.0) | +2.4 | consistent with the paper value |
 <!-- /check -->
 
-- **In short:** TSR's gain over ST matches the paper. We did not confirm VisRef's additional gain over TSR in our
+- **In short:** TSR's gain over ST (+2.3 pp) is compatible with the paper's +2.4, but in our runs part of it probably comes
+  from continuing thinking that was cut at the token limit. We did not confirm VisRef's additional gain over TSR in our
   InternVL3.5-1B implementation. VisRef − ST is smaller than in the paper and not significant after the correction for
   two comparisons fixed in advance (Holm p = 0.067).
+
+> **What this run tested**
+> - The first thinking step hit the 1,024-token limit in 641 of the 1,000 questions, so most extra steps continue a
+>   cut step.
+> - After a step that the model closed itself, the stopping entropy was at or above its threshold (0.25) in only 7 of
+>   359 TSR and 35 of 398 VisRef probes; continuation therefore happened almost only after a cut.
+> - The re-inserted image tokens were a median of about one fifth of m, the number the paper re-inserts per step
+>   (median 0.199).
+> - Among the 713 questions where VisRef stopped after one step, the final answer contains another `</think>` in 352
+>   VisRef answers versus 67 ST answers on the same questions.
+>
+> These limits are why the follow-ups A2–A6 exist. This box will be updated with the A6 result.
+
+![How the main run ran: number of thinking steps per method, how each step ended, injected image tokens relative to m](figures/main_run_steps.svg)
+
 - **Verdict:** *consistent* = our 95% CI contains the paper's difference and excludes 0; *not reproduced* = our 95% CI
   excludes the paper's difference. The rules were fixed after interim looks at 392 and 759 questions, so for the main run they
   were not fixed before all results ([REPORT, Section 2.4](REPORT.md#24-when-the-decision-rules-were-fixed)).
@@ -70,7 +86,7 @@ whether it comes from the paper, a cited work, official InternVL material or our
 <!-- check:glance -->
 | | Question | Questions | Result | Main limitation |
 |---|---|---|---|---|
-| A1 | Does VisRef beat TSR? (paper: +3.5 pp) | 1,000 | VisRef − TSR: −0.1 pp | only about one fifth of the paper's m image tokens were re-inserted |
+| A1 | Does VisRef (rank-limited selection) beat TSR? (paper: +3.5 pp) | 1,000 | VisRef − TSR: −0.1 pp | only about one fifth of the paper's m image tokens were re-inserted |
 | A2 | Does topping the re-inserted image tokens up to m help? | 976 | VisRef-fill − TSR: 0.0 pp | the added tokens were nearly unrelated to the thinking |
 | A3 | Does re-inserting the image after step 1 help by itself? | 309 | with − without the image: +1.40 pp, +0.97 pp | only questions where a method continued after step 1 |
 | A4 | Does choosing image tokens with the model's last-layer vectors help? | 839 | VisRef-hs − TSR: +0.24 pp | the first step was generated anew |
@@ -82,8 +98,9 @@ whether it comes from the paper, a cited work, official InternVL material or our
 
 We look for the cause in our implementation first ([REPORT, Section 4.1](REPORT.md#41-cause-analysis-post-hoc)):
 
-- **Fewer image tokens.** We re-insert about one fifth of the paper's m image tokens per step, because the selection
-  code the paper cites stops early (a confirmed difference; A2 and A4 test two ways around it).
+- **Fewer image tokens.** We re-insert about one fifth of the paper's m image tokens per step: with text token
+  embeddings read as the model's input embeddings (our reading; the paper does not name the layer), the selection kernel
+  has rank below m, and the greedy selection the paper cites stops there. A2, A4 and A6 test ways around it.
 - **Our own settings.** The paper does not give the stopping-entropy estimate, the insertion format, the token limits or
   the answer extraction; we chose them in small checks ([REPORT, Section 2.6](REPORT.md#26-setting-checks-how-the-unstated-settings-were-chosen)).
   Those checks used questions that are also among the 1,000 evaluated ones.

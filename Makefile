@@ -29,7 +29,7 @@ analysis:
 results:
 	$(PY) scripts/make_results.py
 
-# Redraw figures/paired_differences.svg from results/ (figures/method_overview.svg is drawn by hand).
+# Redraw figures/paired_differences.svg from results/ and figures/main_run_steps.svg from the main run records (figures/method_overview.svg is drawn by hand).
 figures: results
 	$(PY) scripts/make_figures.py
 

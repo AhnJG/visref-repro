@@ -66,8 +66,8 @@ appears in the response text, so the LLM cannot solve the question itself, and e
 ```
 REPORT.md                  reproducibility report (MLRC style): scope, method, results, beyond the paper, discussion
 results/                   final tables (CSV + summary.json), built by scripts/make_results.py
-figures/                   paired_differences.svg (drawn from results/ by scripts/make_figures.py), method_overview.svg,
-                           code_map.svg (both drawn by hand)
+figures/                   paired_differences.svg (drawn from results/) and main_run_steps.svg (drawn from the main run
+                           records) by scripts/make_figures.py; method_overview.svg, code_map.svg (both drawn by hand)
 Makefile                   make fetch / check / report / test (CPU only)
 CITATION.cff               how to cite this repository and the original paper
 repro/                     implementation (lean) and analysis
