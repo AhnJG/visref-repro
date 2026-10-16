@@ -13,8 +13,8 @@ InternVL3.5-1B on the 1,000 MathVista *testmini* questions. Three methods are co
 
 ![ST, TSR and VisRef as run in this reproduction; orange notes mark settings we could not find in the paper](figures/method_overview.svg)
 
-> **Status (2026-10-14):** the main run and three follow-up experiments are finished; one set of experiments is
-> pre-registered but not yet run. Full write-up: **[REPORT.md](REPORT.md)**.
+> **Status (2026-10-16):** the main run and three follow-up experiments are finished; the 1,000-question image-tag
+> comparison (A6) is running; one set of experiments (A5) is planned but not yet run. Full write-up: **[REPORT.md](REPORT.md)**.
 
 ## How to read this repository
 
@@ -75,6 +75,7 @@ whether it comes from the paper, a cited work, official InternVL material or our
 | A3 | Does re-inserting the image after step 1 help by itself? | 309 | with − without the image: +1.40 pp, +0.97 pp | only questions where a method continued after step 1 |
 | A4 | Does choosing image tokens with the model's last-layer vectors help? | 839 | hs − TSR: +0.24 pp | the first step was generated anew |
 | A5 | Does thinking more after the re-inserted image help? | planned | not run yet | changes the paper's stopping behaviour |
+| A6 | Does a tagged image block after `</think>` (tokens chosen with last-layer vectors) beat TSR with the same answer prompt? | 1,000 (running) | running, not scored yet | changes four settings the paper does not state at once |
 <!-- /check -->
 
 ## Why our results may differ from the paper

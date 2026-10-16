@@ -1,6 +1,6 @@
 # Reproducibility report: VisRef, Appendix Table 6 row "InternVL-1B" on MathVista testmini
 
-*Unofficial reproduction, MLRC / ReScience style. The main run and three follow-up experiments are finished; the decision rules of the follow-ups were fixed before their results. Three more experiments are planned (Section 5.4).*
+*Unofficial reproduction, MLRC / ReScience style. The main run and three follow-up experiments are finished; the decision rules of the follow-ups were fixed before their results. A fourth follow-up (A6, image-tag injection) is running and three more experiments are planned (Section 5.4).*
 
 **Paper.** Ghosal, Kim, Li, Chaudhry, Xu, Zhang, Zablocki, Xing, Zhang. *VisRef: Visual Refocusing while Thinking Improves Test-Time Scaling in Multi-Modal Large Reasoning Models.* arXiv 2603.00207, CVPR 2026. No official code was released (the CVPR 2026 supplementary material was checked).
 
@@ -20,7 +20,7 @@ The paper's headline claim is that VisRef improves over both ST and TSR, so C2 a
 
 ### 1.1 Experiments at a glance
 
-The work has two kinds of experiment. **Result experiments** (A1–A5) test the paper's claim or look for the reason it was not reproduced; their decision rules were fixed before their results (for A1 with the caveat of Section 2.4), and the verdicts come from them. **Setting checks** (B1–B6, [Section 2.6](#26-setting-checks-how-the-unstated-settings-were-chosen)) are small runs that chose settings the paper does not state, such as how to compute the stopping signal or how to re-insert the image. They gave no verdicts, but the settings they chose shape every result.
+The work has two kinds of experiment. **Result experiments** (A1–A6) test the paper's claim or look for the reason it was not reproduced; their decision rules were fixed before their results (for A1 with the caveat of Section 2.4), and the verdicts come from them. **Setting checks** (B1–B6, [Section 2.6](#26-setting-checks-how-the-unstated-settings-were-chosen)) are small runs that chose settings the paper does not state, such as how to compute the stopping signal or how to re-insert the image. They gave no verdicts, but the settings they chose shape every result.
 
 <!-- check:glance -->
 | | Question | Questions | Result | Paper | Main limitation | Section |
@@ -29,7 +29,8 @@ The work has two kinds of experiment. **Result experiments** (A1–A5) test the 
 | A2 | Does topping the re-inserted image tokens up to m help? | 976 | fill − TSR: 0.0 pp | – | the added tokens were nearly unrelated to the thinking | [4.2](#42-visref_fill-topping-up-the-injection-to-m-tokens-pre-registered) |
 | A3 | Does re-inserting the image after step 1 help by itself? | 309 | with − without the image: +1.40 pp (answer at once), +0.97 pp (answer after more thinking) | – | only the questions where a method continued after step 1 | [4.3](#43-step1_branch-re-injection-at-step-1-pre-registered) |
 | A4 | Does choosing image tokens with the model's last-layer vectors help? | 839 | hs − TSR: +0.24 pp | – | the first step was generated anew (193 of 839 match the main run) | [4.5](#45-visref_hs-last-layer-z-pre-registered) |
-| A5 | Does thinking more after the re-inserted image help? | planned | not run yet | – | changes the paper's stopping behaviour | [5.4](#54-planned-next-experiments-not-yet-run) |
+| A5 | Does thinking more after the re-inserted image help? | planned | not run yet | – | changes the paper's stopping behaviour | [5.4](#54-next-experiments-planned-or-running) |
+| A6 | Does a tagged image block after `</think>` (tokens chosen with last-layer vectors) beat TSR with the same answer prompt? | 1,000 (running) | running, not scored yet | +3.5 pp | changes four unstated settings at once; run on a different GPU, so compared only within the run | [5.4](#54-next-experiments-planned-or-running) |
 <!-- /check -->
 
 | | Setting to decide | What we chose | Evidence | Where the setting comes from |
@@ -379,7 +380,9 @@ Questions we could not answer from the paper or the works it cites:
 9. For 1B: the distribution of the number of steps k and the tokens per trace.
 10. Sampling parameters, number of runs and hardware/precision for Table 6.
 
-### 5.4 Planned next experiments (not yet run)
+### 5.4 Next experiments (planned or running)
+
+> **Card A6.** *Question:* does the image-tag injection bundle (`visref_imgtag`: image tokens chosen with last-layer vectors for both text and image, wrapped in InternVL's image tags, placed after `</think>` when answering and inside the thinking when continuing) beat TSR with the same answer prompt (`tsr_answer_prompt`)? *Status:* plan, verdict rule and analysis fixed before the run (entries of 2026-10-15 and 2026-10-16 in `docs/EXPERIMENT_FLOW.md`); running on all 1,000 questions since 2026-10-16 on one rented GPU (RunPod RTX A5000), together with plain `tsr`, all three from the main run's stored first thinking step. *Limits:* it changes four unstated settings at once (tags, position, layer, line breaks), so a gain would be the bundle's effect, not a reproduction of VisRef or a per-setting effect; the GPU and torch version differ from the main run, so it is compared only within this run. *Files:* `repro/runpod/run_imgtag.py`, `repro/diag/analyze_imgtag_main.py`.
 
 > **Card A5.** *Question:* does thinking more after the re-inserted image help? *Status:* pre-registered, not run. *Limits:* it changes the paper's stopping behaviour, so a gain would support "a variant with thinking after the image", not a reproduction of VisRef; the extra 512 tokens are outside the 10,240-token budget; because `visref_hs` regenerated step 1, the 2 × 2 comparison with it is not like-for-like in that cell. *Files:* `repro/diag/analyze_think.py`.
 
