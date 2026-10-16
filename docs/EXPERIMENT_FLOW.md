@@ -1,7 +1,7 @@
 # VisRef 실험 기록
 
 > 실험을 진행하며 날짜순으로 적은 작업 기록(한국어)입니다. 결론과 판정은 [REPORT.md](../REPORT.md)를 기준으로 합니다. 공개용으로 개인 정보와 작업 환경 메모를 정리했습니다.
-> 2026-10-16 정리: 맨 앞에 읽는 순서, 단계별 요약, 줄임말 풀이를 넣었습니다. 이전 코드로 실행한 초기 기록(2026-10-05 ~ 10-07 오전)은 [EXPERIMENT_FLOW_early.md](EXPERIMENT_FLOW_early.md)로 원문 그대로 옮기고, 여기에는 요약만 남겼습니다. 날짜 항목의 본문은 당시 적은 그대로이고, 이 문서를 가리키던 줄 번호("EF L952" 등)만 날짜 항목 이름으로 바꿨습니다(줄 번호가 공개본과 어긋나 있었음).
+> 2026-10-16 정리: 맨 앞에 읽는 순서, 단계별 요약, 줄임말 풀이를 넣었습니다. 이전 코드로 실행한 초기 기록(2026-10-05 ~ 10-07 오전)은 이 문서에서 빼고 요약만 남겼습니다. 원문은 [정리 전 판(커밋 4776f6a)의 5–749줄](https://github.com/AhnJG/visref-repro/blob/4776f6ab2607957799bef8db70241cc64313feae/docs/EXPERIMENT_FLOW.md?plain=1#L5-L749)에 그대로 있습니다. 날짜 항목의 본문은 당시 적은 그대로이고, 이 문서를 가리키던 줄 번호("EF L952" 등)만 날짜 항목 이름으로 바꿨습니다(줄 번호가 공개본과 어긋나 있었음).
 
 ## 읽는 순서
 
@@ -62,7 +62,7 @@
 
 ## 초기 단계 요약 (2026-10-05 ~ 2026-10-07 오전)
 
-원문: [EXPERIMENT_FLOW_early.md](EXPERIMENT_FLOW_early.md). 당시 글은 영어와 줄임말이 많아 요약만 여기 둡니다.
+원문: [정리 전 판(커밋 4776f6a)의 5–749줄](https://github.com/AhnJG/visref-repro/blob/4776f6ab2607957799bef8db70241cc64313feae/docs/EXPERIMENT_FLOW.md?plain=1#L5-L749). 당시 글은 영어와 줄임말이 많아 요약만 여기 둡니다.
 
 - 처음 목표는 재현이 아니라 후속 연구였습니다. 같은 재주입 절차에서 이미지 토큰을 더 적게 쓰고도 정확도를 지키는 압축 방법을 보려 했습니다.
 - 이전 코드(`src/visref`, 이 저장소에 없음)로 InternVL3.5-1B와 MathVista testmini를 썼고, 문항을 개발 100 / 선택 200 / 잠금 700으로 나눴습니다.
@@ -666,7 +666,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - 제안: b_main은 그대로(원칙 2). fill 실행에 Ghosal식 H를 그림자 기록(결정에는 쓰지 않음, 별도 난수열)으로 추가해, 정지 결정이 몇 % 바뀌는지 사후 측정. N·온도 값은 원문에 없어 F로 정해야 함.
 
 ## 2026-10-11 정정: Ghosal식 다중 표본 H 그림자 기록 제안 철회
-- 다중 표본 추정은 이전에 써 본 뒤 내려놓은 방식이다: 초기 단계에서 단계마다 완결 응답 10개(S10, sequence NLL)를 뽑았고, R25(8B, dev 3문항 TSR) GPU 4,703.9s(초기 기록 "R25 수집·채점 완료 — 자동 마무리 기록" 항목). 이후 작성자 결정으로 자연 응답 엔트로피로 전환하고 S10은 별도 variant로 보존(초기 기록 2026-10-06 "자연 응답 entropy 전환 — 로컬 구현 진행" 항목), "S10 복원 없음"(초기 기록 2026-10-06 "R27 결과 확인" 항목). 전환 이유가 비용이라고 명시된 줄은 찾지 못함(미확인), 비용이 컸던 것은 기록으로 확인.
+- 다중 표본 추정은 이전에 써 본 뒤 내려놓은 방식이다: 초기 단계에서 단계마다 완결 응답 10개(S10, sequence NLL)를 뽑았고, R25(8B, dev 3문항 TSR) GPU 4,703.9s([초기 기록 "R25 수집·채점 완료 — 자동 마무리 기록" 항목](https://github.com/AhnJG/visref-repro/blob/4776f6ab2607957799bef8db70241cc64313feae/docs/EXPERIMENT_FLOW.md?plain=1#L642-L644)). 이후 작성자 결정으로 자연 응답 엔트로피로 전환하고 S10은 별도 variant로 보존([초기 기록 2026-10-06 "자연 응답 entropy 전환 — 로컬 구현 진행" 항목](https://github.com/AhnJG/visref-repro/blob/4776f6ab2607957799bef8db70241cc64313feae/docs/EXPERIMENT_FLOW.md?plain=1#L647-L650)), "S10 복원 없음"([초기 기록 2026-10-06 "R27 결과 확인" 항목](https://github.com/AhnJG/visref-repro/blob/4776f6ab2607957799bef8db70241cc64313feae/docs/EXPERIMENT_FLOW.md?plain=1#L725-L727)). 전환 이유가 비용이라고 명시된 줄은 찾지 못함(미확인), 비용이 컸던 것은 기록으로 확인.
 - 이번 제안(짧은 `\boxed` 답 N개)은 S10보다 생성 토큰은 적지만, 현재 엔진은 generate 호출마다 문맥 전체를 다시 prefill한다(`repro/visref/engine.py` L82-104). N개 표본 = 문맥(최대 약 1만 토큰) prefill N번, KV를 공유하면 행당 KV가 약 0.11MB/토큰(28층·KV 헤드 8·head dim 128·fp16 — 모델 config 기준 추정, 미확인)이라 1만 토큰 × 8행 ≈ 9GB로 T4에 맞지 않는다. 11.5h 안에 1,000문항을 넣어야 하는 fill에 얹기엔 과하다.
 - 결정 제안: fill에 넣지 않는다. 예상 효과(자연 종료 뒤 정지 결정이 거의 안 바뀜)도 작으므로 별도 실행도 하지 않고, 최종 보고서 한계("H 추정 방식은 F, 논문·Ghosal은 다중 표본으로 읽힘")로 처리한다.
 
@@ -935,7 +935,7 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - 새 절 "정확도가 논문보다 8–12 pp 높은 이유(미해결)": 공식 1B 59.3·8B 78.4 대비 논문 ST가 10 pp 넘게 낮다는 점과 추정 원인 3개(끝나지 않은 답을 오답 처리 = 읽기 (c) ST 44.4 / TSR 48.3 / VisRef 47.4, 결과 후 가설; 모델 세대 InternVL3-1B 45.8; 토큰 상한·추출·프롬프트·하드웨어). 어느 것도 직접 시험하지 않음.
 - 새 절 "VisRef 추가 이득이 없었던 이유": 우리 구현에서 먼저 찾는다는 문장 + 우리 쪽 후보 5개와 확인 여부(주입 수 ≈ m/5 → fill로 일부 확인; 주입 형식 → 미시험, k=1 713문항 중 `</think>` 재출력 VisRef 352 vs ST 67; 상한 절단 뒤 주입 → 4,096 미실행; Z 표현 → 은닉 상태 오프라인 확인 12문항 50–110개; 단일 표본 H → 다중 표본 미실행). "잘못했다"고 단정하지 않음(작성자 결정).
 - "Pre-registered follow-ups" → "Follow-up experiments (decision rules fixed before the results)". 재현 §3에 MathVista 공식 추출 프롬프트 설명(예시 5개 + 새 응답, GPT-4 추출기; X-27, X-28). "Known differences" → "Settings we could not find in the paper": 13행 표(우리 선택·근거·다른 가능성과 상태) + H 문단. "명시하지 않음/leaves open" → "찾지 못함".
-- H 문단은 기록된 사실만: 이전 다중 표본(단계마다 완결 답 10개)은 8B·개발 3문항·TSR에 GPU 4,703.9초(초기 기록 "R25 수집·채점 완료 — 자동 마무리 기록" 항목, 2026-10-11 "정정: Ghosal식 다중 표본 H 그림자 기록 제안 철회" 항목), 이후 단일 표본으로 교체(10-06·10-07 항목). 바꾼 이유가 비용이라는 문장은 기록에 없어 쓰지 않음. REPORT §4.1-5의 "judged too costly"도 같은 사실 서술로 고침(결과 후 문구 변경, 이전 문장은 커밋 adbafc3의 REPORT.md).
+- H 문단은 기록된 사실만: 이전 다중 표본(단계마다 완결 답 10개)은 8B·개발 3문항·TSR에 GPU 4,703.9초([초기 기록 "R25 수집·채점 완료 — 자동 마무리 기록" 항목](https://github.com/AhnJG/visref-repro/blob/4776f6ab2607957799bef8db70241cc64313feae/docs/EXPERIMENT_FLOW.md?plain=1#L642-L644), 2026-10-11 "정정: Ghosal식 다중 표본 H 그림자 기록 제안 철회" 항목), 이후 단일 표본으로 교체(10-06·10-07 항목). 바꾼 이유가 비용이라는 문장은 기록에 없어 쓰지 않음. REPORT §4.1-5의 "judged too costly"도 같은 사실 서술로 고침(결과 후 문구 변경, 이전 문장은 커밋 adbafc3의 REPORT.md).
 - REPORT: 요약 마지막 문장("We do not conclude…" → 우리 구현에서 원인을 먼저 찾는다), 그림 1 캡션·§2.1 표·§5.2의 "not specified/leaves open" → "could not find in the paper", §6 후보에 모델 세대 추가. st_official(§4.5) 절은 재현 보고서 형식이라 유지(작성자 결정).
 - 그림 `figures/method_overview.svg`: 범례·설명 문구 3곳만 "not found in the paper"로(배치 변화 없음).
 - 한국어판: 번역 후 숫자·링크·용어 확인, 어색한 문장 4곳 수정(용어: LLM 보조 추출, 답 강제, 후속 실험, 판정 규칙, 논문에서 찾지 못한 설정).
@@ -1006,8 +1006,8 @@ main_s0 = 1,000문항 seed-0 셔플(full_s1과 같은 순서) 앞부분, st/tsr/
 - CPU 테스트 `repro/tests/test_analyze_hs.py` 12개(판정 경계, +3.5 경계의 정수 비교, `summarize.paired`와 같은 재표본, complete prefix, 주 채점이 LLM 행을 쓰는지, LLM 행 누락 시 오류, 재채점이 기록값을 덮어쓰는지). 전체 116 passed(python3.13), `make check` 통과. 실행 중인 번들의 engine/dpp/methods sha256 앞 16자리가 저장소와 같음(3b2fdecbe14c1ff6 / 7ebbe7774ac757cc / 14534e592396621a).
 
 ## 2026-10-12 결정 점검: 작성자 결정 ↔ 코드
-- 방법: 초기 기록 2026-10-06 "자연 응답 entropy 전환 — 로컬 구현 진행" 항목부터 이 문서 끝까지(2026-10-06 이후)과 초기 기록 "작성자 결정: Z 우선 후보 last hidden state로 동결" 항목에서 코드 동작을 정하는 작성자 결정·지시를 뽑아 코드 줄과 맞춰 봄(56건; 반영 43, 뒤 작성자 결정으로 대체 9, 불일치 2, 찾지 못함 2). SPEC_LEDGER 결정 대장에 연결한 EF 줄과 코드 줄을 원문에서 다시 확인. 원본 표는 작업 폴더 `repro/audit/decision_check_20261012/raw.md`(공개 안 함).
-- 불일치 1, Z: 10-06 작성자 결정(Z에 입력 임베딩이 아닌 last hidden state가 타당, 초기 기록 "작성자 결정: Z 우선 후보 last hidden state로 동결" 항목)이 10-07 재작성에서 빠짐(경위 기록 없음). 이번 점검에서 찾은 빠진 작성자 결정은 이 하나이고, 영향은 실행 중인 `visref_hs` 결과로 확인한다.
+- 방법: [초기 기록 2026-10-06 "자연 응답 entropy 전환 — 로컬 구현 진행" 항목](https://github.com/AhnJG/visref-repro/blob/4776f6ab2607957799bef8db70241cc64313feae/docs/EXPERIMENT_FLOW.md?plain=1#L647-L650)부터 이 문서 끝까지(2026-10-06 이후)과 [초기 기록 "작성자 결정: Z 우선 후보 last hidden state로 동결" 항목](https://github.com/AhnJG/visref-repro/blob/4776f6ab2607957799bef8db70241cc64313feae/docs/EXPERIMENT_FLOW.md?plain=1#L501-L503)에서 코드 동작을 정하는 작성자 결정·지시를 뽑아 코드 줄과 맞춰 봄(56건; 반영 43, 뒤 작성자 결정으로 대체 9, 불일치 2, 찾지 못함 2). SPEC_LEDGER 결정 대장에 연결한 EF 줄과 코드 줄을 원문에서 다시 확인. 원본 표는 작업 폴더 `repro/audit/decision_check_20261012/raw.md`(공개 안 함).
+- 불일치 1, Z: 10-06 작성자 결정(Z에 입력 임베딩이 아닌 last hidden state가 타당, [초기 기록 "작성자 결정: Z 우선 후보 last hidden state로 동결" 항목](https://github.com/AhnJG/visref-repro/blob/4776f6ab2607957799bef8db70241cc64313feae/docs/EXPERIMENT_FLOW.md?plain=1#L501-L503))이 10-07 재작성에서 빠짐(경위 기록 없음). 이번 점검에서 찾은 빠진 작성자 결정은 이 하나이고, 영향은 실행 중인 `visref_hs` 결과로 확인한다.
 - 불일치 2, 토큰 상한 기본값: `run.py` DEFAULTS가 옛 결정(2026-10-07 "smoke2 결과와 본 실험 결정" 항목)의 단계 4,096 / 합계 8,192로 남아 있음. 결정(2026-10-07 "결정(작성자): s1 + DEER af 폴백, 정지 통계 현행 유지, 파일럿 없이 본 실험 시작" 항목)은 1,024 / 10,240이고 모든 생성 실행(b_main s1–s9, fill, `visref_hs`)이 run_args로 1,024 / 10,240을 넘겨 결과에는 영향 없음(run_config로 확인). 인자 없이 `run.py`를 직접 돌릴 때만 옛 값. 기본값을 바꾸면 code_version이 바뀌므로 고치지 않고 작성자 결정으로 넘김.
 - 찾지 못함 2건: `visref_hs` 실행 설정은 작업 폴더 run_config(`--think-cap 1024 --total-think-cap 10240`, 이중 probe 인자 없음 = 끔, timeout 29,000 / time_limit 26,300 / deadline 28,400, shuffle_seed 0)로 확인해 반영으로 봄. fill 판정 규칙(2026-10-10 "원인 분리 실험 실행 전 계획" 항목)은 코드에 없고 사람이 적용(2026-10-11 "visref_fill 최종" 항목, CI 하한 −2.15 < 0 → 지지 안 됨, 규칙과 맞음).
 - 기록: SPEC_LEDGER "핵심 판단 요약"에 J-19~J-22(문항 순서와 분석 표본, 정지 판정용 답과 최종 답 분리, LLM 추출 가드, 판정 문구 규칙) 추가, J-1~J-22의 결정 주체·코드 위치·테스트를 "결정 대장" 표로 추가, J-14 채점 규칙을 v4로 고침(이전 판 `repro/.backup_decision_check_20261012/SPEC_LEDGER.md`).

@@ -23,7 +23,7 @@ InternVL3.5-1B on the 1,000 MathVista *testmini* questions. Three methods are co
 | 1 | First: results and main caveats | this README |
 | 2 | What was tested and what was concluded | [REPORT.md](REPORT.md): Summary and Section 1.1 (every experiment in one table), then Sections 3–4 (results, causes) and 6 (limitations) |
 | 3 | How a setting the paper does not state was chosen | REPORT Sections 2.1 and 2.6; the evidence for each decision: [docs/IMPLEMENTATION_CHOICES.md](docs/IMPLEMENTATION_CHOICES.md) (Korean; start with its summary table) |
-| 4 | When and why something was decided | [docs/EXPERIMENT_FLOW.md](docs/EXPERIMENT_FLOW.md) (Korean dated log; start with its stage summary). Work before 2026-10-07 with earlier code: [docs/EXPERIMENT_FLOW_early.md](docs/EXPERIMENT_FLOW_early.md) |
+| 4 | When and why something was decided | [docs/EXPERIMENT_FLOW.md](docs/EXPERIMENT_FLOW.md) (Korean dated log; start with its stage summary) |
 | 5 | Checking a number | [`results/`](results) for the tables, `repro/kaggle/runs/` for the raw outputs, `make check` (see Reproduce) |
 | 6 | Following a citation such as `LAY L900` to the paper | [docs/SOURCES.md](docs/SOURCES.md) |
 | 7 | Running it again or reading the code | [docs/REPRODUCE.md](docs/REPRODUCE.md) and the code map under Reproduce |

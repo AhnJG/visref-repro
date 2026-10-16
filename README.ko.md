@@ -19,7 +19,7 @@ InternVL3.5-1B 모델과 MathVista *testmini* 1,000문항으로 다시 실험했
 | 1 | 처음: 결과와 주요 한계 | 이 README |
 | 2 | 무엇을 시험했고 무엇을 결론 내렸는지 | [REPORT.md](REPORT.md)(영어): 요약과 1.1절(모든 실험을 한 표에), 이어서 3–4절(결과, 원인 분석)과 6절(한계) |
 | 3 | 논문에 적히지 않은 설정을 어떻게 정했는지 | REPORT 2.1절·2.6절. 결정마다의 근거: [docs/IMPLEMENTATION_CHOICES.md](docs/IMPLEMENTATION_CHOICES.md)(맨 앞 요약 표부터) |
-| 4 | 언제, 왜 그렇게 정했는지 | [docs/EXPERIMENT_FLOW.md](docs/EXPERIMENT_FLOW.md)(날짜순 기록, 맨 앞 단계별 요약부터). 2026-10-07 이전 코드로 한 작업: [docs/EXPERIMENT_FLOW_early.md](docs/EXPERIMENT_FLOW_early.md) |
+| 4 | 언제, 왜 그렇게 정했는지 | [docs/EXPERIMENT_FLOW.md](docs/EXPERIMENT_FLOW.md)(날짜순 기록, 맨 앞 단계별 요약부터) |
 | 5 | 숫자를 확인할 때 | 표는 [`results/`](results), 모델 원출력은 `repro/kaggle/runs/`, 다시 계산은 `make check`(아래 "재현") |
 | 6 | `LAY L900` 같은 인용을 논문에서 찾을 때 | [docs/SOURCES.md](docs/SOURCES.md)(영어) |
 | 7 | 다시 실행하거나 코드를 읽을 때 | [docs/REPRODUCE.md](docs/REPRODUCE.md)(영어) |

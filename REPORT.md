@@ -122,7 +122,7 @@ Each table lists the checks in time order; the name in brackets is the run folde
 - *Where the setting comes from.* The stopping rule (entropy of the answer distribution below 0.25) is from the paper. Ghosal et al., whom the paper cites for this criterion, sample several answers. One answer and the `\boxed{…}` format are our choice.
 - *Also recorded.* In the fill run (Section 4.2), H was measured both with and without the re-inserted image tokens: the median difference was 0.0006, and the stop-or-continue decision differed at 151 of 2,231 steps (6.8%). The two measurements used separate random streams for the sampled probe answer, so part of this difference can come from sampling rather than from the re-inserted tokens (later runs replay the same random state for both).
 - *Limits.* The choice rests on 10 to 60 questions each. One sampled answer gives the right entropy on average but is noisy. In this setting TSR and VisRef rarely continued after a step the model had closed itself (7 of 359 and 35 of 398 probes); almost all continuations came after a 1,024-token cut.
-- *Sources.* `docs/EXPERIMENT_FLOW.md`, entries of 2026-10-07 (smoke1, smoke2, smoke3, main_s0); Sections 4.1 (items 1 and 5) and 4.2.
+- *Sources.* `docs/EXPERIMENT_FLOW.md`, entries of 2026-10-07 (smoke1, smoke2, smoke3, main_s0); Sections 4.1 (items 1 and 5) and 4.2; the ten-answer check (earlier code, outputs not published): [log at commit 4776f6a, lines 642–644](https://github.com/AhnJG/visref-repro/blob/4776f6ab2607957799bef8db70241cc64313feae/docs/EXPERIMENT_FLOW.md?plain=1#L642-L644).
 
 **B2. How to re-insert the image tokens.** InternVL reads an image wrapped in `<img>` … `</img>` tags. The paper does not say how the selected image tokens are inserted during thinking.
 
@@ -401,7 +401,7 @@ Three experiments are planned; their decision rules are fixed and published befo
 
 | What | Where (in this repository) |
 |---|---|
-| Chronological log with pre-registrations and decisions (Korean; starts with a stage summary and a list of abbreviations) | `docs/EXPERIMENT_FLOW.md`; work before 2026-10-07 with earlier code, kept as written: `docs/EXPERIMENT_FLOW_early.md` |
+| Chronological log with pre-registrations and decisions (Korean; starts with a stage summary and a list of abbreviations) | `docs/EXPERIMENT_FLOW.md`; the original text of the work before 2026-10-07 with earlier code: [lines 5–749 of the log at commit 4776f6a](https://github.com/AhnJG/visref-repro/blob/4776f6ab2607957799bef8db70241cc64313feae/docs/EXPERIMENT_FLOW.md?plain=1#L5-L749) |
 | Evidence per implementation decision, external-number ledger (Korean) | `docs/IMPLEMENTATION_CHOICES.md` (start with its summary table) |
 | Main verdict script and numbers | `repro/diag/final_judgment.py`, `repro/diag/final_judgment.json` |
 | Follow-up analyses | `repro/diag/analyze_fill.json`, `repro/diag/step1_branch_analysis.json` (earlier float version: `step1_branch_analysis_float_py311.json`), `repro/diag/paper_fingerprints.json`, `repro/diag/step1_probe_analysis.json`, `repro/diag/analyze_k1_injection.json`, `repro/diag/st_plain_analysis.json`; `repro/diag/analyze_hs.json` (Section 4.5; the script was written before the results) |
