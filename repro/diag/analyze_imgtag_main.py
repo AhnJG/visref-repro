@@ -180,6 +180,18 @@ def tsr_pair_same_thinking(rows, pids, n_examples=5):
     return out
 
 
+def reemit_vs_answer_cap(rs):
+    """Descriptive (added 2026-10-16, before the results): does re-emitting </think> in the final answer go with answers
+    that hit the answer cap? Rows split by a second </think> in the final answer (final_y_start > 0); per group the row
+    count, answers that hit the answer cap (final_finish == 'cap') and DEER answer forcing (final_af). No correctness."""
+    out = {}
+    for name, grp in (('reemit', [r for r in rs if (r.get('final_y_start') or 0) > 0]),
+                      ('no_reemit', [r for r in rs if not (r.get('final_y_start') or 0) > 0])):
+        out[name] = {'n': len(grp), 'answer_cap': sum(r.get('final_finish') == 'cap' for r in grp),
+                     'answer_forced_deer': sum(bool(r.get('final_af')) for r in grp)}
+    return out
+
+
 def mechanism(rows, pids):
     out = {}
     for m in METHODS:
@@ -196,7 +208,8 @@ def mechanism(rows, pids):
                  step1_tokens_match=sum(bool(i.get('step1_tokens_match')) for i in s1), n_step1_info=len(s1),
                  inject_over_m_q25_50_75=(quart([s['n_inject'] / s['m'] for s in steps if s.get('m') and s.get('n_inject') is not None])
                                           if m.startswith('visref') else None),
-                 mean_k=round(statistics.mean(r['k'] for r in rs), 2) if rs else None)
+                 mean_k=round(statistics.mean(r['k'] for r in rs), 2) if rs else None,
+                 reemit_vs_answer_cap=reemit_vs_answer_cap(rs))
         out[m] = g
     return out
 

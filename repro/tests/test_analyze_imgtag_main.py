@@ -334,3 +334,13 @@ def test_cli_prints_one_line_for_tsr_pair(tmp_path, capsys):
     am.main(['analyze', '--run-dirs', str(d), '--data', str(dp), '--bmain', str(tmp_path / 'no.jsonl'), '--bmain-dirs', str(tmp_path / 'none')])
     lines = [l for l in capsys.readouterr().out.splitlines() if l.startswith('tsr_pair_same_thinking:')]
     assert len(lines) == 1 and 'same 12/12' in lines[0]
+
+
+def test_reemit_vs_answer_cap():
+    rs = [{'final_y_start': 5, 'final_finish': 'cap', 'final_af': True},
+          {'final_y_start': 3, 'final_finish': 'stop'},
+          {'final_y_start': 0, 'final_finish': 'cap'},
+          {'final_finish': 'stop'}]
+    out = am.reemit_vs_answer_cap(rs)
+    assert out == {'reemit': {'n': 2, 'answer_cap': 1, 'answer_forced_deer': 1},
+                   'no_reemit': {'n': 2, 'answer_cap': 1, 'answer_forced_deer': 0}}
