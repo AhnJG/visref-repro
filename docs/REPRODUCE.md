@@ -77,21 +77,23 @@ repro/                     implementation (lean) and analysis
   colab/build_colab.py     same for one Colab GPU, resumable via Google Drive
   report.py, rescore.py    offline aggregation / re-scoring (no GPU)
   llm_extract.py, gemini_extract.py   LLM fallback answer extraction for rule-failed rows
+  runpod/run_imgtag.py     runner for the image-tag run (A6) on a rented GPU
   diag/                    analyses with fixed decision rules (final_judgment.py: fixed before the final analysis;
-                           analyze_fill.py, step1_branch.py, analyze_step1_branch.py, analyze_hs.py, analyze_think.py:
-                           pre-registered) and post-hoc diagnostics, with their JSON outputs; step1_store_bmain.json is
-                           the main run's stored first step (made by make_step1_store.py) for the thinking experiments
+                           analyze_fill.py, step1_branch.py, analyze_step1_branch.py, analyze_hs.py, analyze_think.py,
+                           analyze_imgtag*.py: rules fixed before the results) and post-hoc diagnostics, with their
+                           JSON outputs; step1_store_bmain.json is the main run's stored first step (made by
+                           make_step1_store.py) for the thinking experiments
   kaggle/runs/<session>/   every session: run_config.json (source sha256, ids, args), env.json, logs, raw outputs
-                           (b_main_s1–s9, b_main_fill, b_main_rescore_v2/v3, diag_st_plain, hidden_rank_check,
-                            step1_branch_pilot, step1_branch_main, b_main_hs; setting checks: smoke, smoke2,
-                            smoke3, main_s0, full_s1, b_test)
+                           (b_main_s1–s9, b_main_fill, diag_st_plain, hidden_rank_check, step1_branch_pilot,
+                            step1_branch_main, b_main_hs; bundle_pilot and bundle_pilot2 = two 10-question trials of
+                            the image-tag variant, B7; setting checks: smoke, smoke2, smoke3, main_s0, full_s1, b_test)
   llm/final, llm/fill, llm/hs   LLM fallback extraction: requests, responses, merged rows (read by diag/*.py)
   reports/                 descriptive per-method report (rule-based scorer v4 only)
 docs/
   REPRODUCE.md             (English) this file
   IMPLEMENTATION_CHOICES.md  every implementation decision with its evidence grade (paper / cited code / official
                            model docs / our choice) — start with its summary table
-  EXPERIMENT_FLOW.md       chronological log: pre-registrations, decisions, results
+  EXPERIMENT_FLOW.md       chronological log: decision rules fixed before results, decisions, results
   SOURCES.md               (English) how the logs' citations map to public sources: arXiv versions, pages, tables
 references/SOURCES.json    third-party files (MathVista data & eval prompt, cited code, VLMEvalKit) with URL + sha256
 scripts/                   fetch_sources.py (downloads and verifies them), make_results.py, make_figures.py,

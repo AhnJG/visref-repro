@@ -6,7 +6,7 @@ import numpy as np
 import torch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / 'diag'))
 from hidden_rank_check import greedy_trace, spectrum_stats, summarize_trace  # noqa: E402
 from visref.dpp import select_tokens  # noqa: E402
 

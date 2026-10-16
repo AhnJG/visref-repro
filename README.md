@@ -14,7 +14,7 @@ InternVL3.5-1B on the 1,000 MathVista *testmini* questions. Three methods are co
 ![ST, TSR and VisRef as run in this reproduction; orange notes mark settings we could not find in the paper](figures/method_overview.svg)
 
 > **Status (2026-10-16):** the main run and three follow-up experiments are finished; the 1,000-question image-tag
-> comparison (A6) is running; one set of experiments (A5) is planned but not yet run. Full write-up: **[REPORT.md](REPORT.md)**.
+> comparison (A6) is running; one set of experiments (A5, three runs) is planned but not yet run. Full write-up: **[REPORT.md](REPORT.md)**.
 
 ## How to read this repository
 
@@ -25,7 +25,7 @@ InternVL3.5-1B on the 1,000 MathVista *testmini* questions. Three methods are co
 | 3 | How a setting the paper does not state was chosen | REPORT Sections 2.1 and 2.6; the evidence for each decision: [docs/IMPLEMENTATION_CHOICES.md](docs/IMPLEMENTATION_CHOICES.md) (Korean; start with its summary table) |
 | 4 | When and why something was decided | [docs/EXPERIMENT_FLOW.md](docs/EXPERIMENT_FLOW.md) (Korean dated log; start with its stage summary) |
 | 5 | Checking a number | [`results/`](results) for the tables, `repro/kaggle/runs/` for the raw outputs, `make check` (see Reproduce) |
-| 6 | Following a citation such as `LAY L900` to the paper | [docs/SOURCES.md](docs/SOURCES.md) |
+| 6 | Checking a quote cited by line number (e.g. `LAY L900` = line 900 of our text copy of the paper) | [docs/SOURCES.md](docs/SOURCES.md) |
 | 7 | Running it again or reading the code | [docs/REPRODUCE.md](docs/REPRODUCE.md) and the code map under Reproduce |
 
 Every file location: [REPORT, Section 7](REPORT.md#7-where-to-find-things).
@@ -57,8 +57,8 @@ appears in the response.
   InternVL3.5-1B implementation. VisRef − ST is smaller than in the paper and not significant after the correction for
   two comparisons fixed in advance (Holm p = 0.067).
 - **Verdict:** *consistent* = our 95% CI contains the paper's difference and excludes 0; *not reproduced* = our 95% CI
-  excludes the paper's difference. The rules were fixed after interim looks at 392 and 759 questions, so the main run
-  is not a strict pre-registration ([REPORT, Section 2.4](REPORT.md#24-timing-of-pre-registration)).
+  excludes the paper's difference. The rules were fixed after interim looks at 392 and 759 questions, so for the main run they
+  were not fixed before all results ([REPORT, Section 2.4](REPORT.md#24-when-the-decision-rules-were-fixed)).
 
 ## Experiments at a glance
 
@@ -71,9 +71,9 @@ whether it comes from the paper, a cited work, official InternVL material or our
 | | Question | Questions | Result | Main limitation |
 |---|---|---|---|---|
 | A1 | Does VisRef beat TSR? (paper: +3.5 pp) | 1,000 | VisRef − TSR: −0.1 pp | only about one fifth of the paper's m image tokens were re-inserted |
-| A2 | Does topping the re-inserted image tokens up to m help? | 976 | fill − TSR: 0.0 pp | the added tokens were nearly unrelated to the thinking |
+| A2 | Does topping the re-inserted image tokens up to m help? | 976 | VisRef-fill − TSR: 0.0 pp | the added tokens were nearly unrelated to the thinking |
 | A3 | Does re-inserting the image after step 1 help by itself? | 309 | with − without the image: +1.40 pp, +0.97 pp | only questions where a method continued after step 1 |
-| A4 | Does choosing image tokens with the model's last-layer vectors help? | 839 | hs − TSR: +0.24 pp | the first step was generated anew |
+| A4 | Does choosing image tokens with the model's last-layer vectors help? | 839 | VisRef-hs − TSR: +0.24 pp | the first step was generated anew |
 | A5 | Does thinking more after the re-inserted image help? | planned | not run yet | changes the paper's stopping behaviour |
 | A6 | Does a tagged image block after `</think>` (tokens chosen with last-layer vectors) beat TSR with the same answer prompt? | 1,000 (running) | running, not scored yet | changes four settings the paper does not state at once |
 <!-- /check -->
