@@ -119,6 +119,7 @@ make check     # re-runs the analyses, rebuilds results/ and the figure, checks 
 
 Regenerating the model outputs on a GPU, the LLM extraction and the full repository layout:
 [docs/REPRODUCE.md](docs/REPRODUCE.md).
+The GPU and the generation time of each experiment are in [`results/compute.csv`](results/compute.csv) (REPORT Table 2.5).
 
 ![How the code runs: run.py loops over questions; model.py builds the input, methods.py runs each question and method with engine.py and dpp.py, scoring.py scores the answer](figures/code_map.svg)
 

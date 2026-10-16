@@ -109,7 +109,19 @@ The main comparisons, the tests (McNemar + Holm) and the scoring variants of Sec
 
 ### 2.5 Code versions and compute
 
-Three code versions produced the 1,000 questions: `79eef648ebd1` (session 1, 74 questions), `f2422d0e72ff` (sessions 2–4, 318) and `d0095f79e691` (sessions 5–9, 608). The follow-ups ran later versions (VisRef-fill `39b3fb1b4121`, VisRef-hs `f1376774850d`); changing `run.py`'s default token caps on 2026-10-13 (every run passed the caps explicitly) made the version `cf46b2e6222e`; the planned thinking-continuation code and its stored-first-step fix (2026-10-13) made it `86a5fc0f3cd9`, and the exploratory VisRef-imgtag method (first named `visref_bundle`) with the shared random state for the logging-only probe (2026-10-15) made `aa11cdaa52a9`, the version of the first image-tag trial; the fixes after the trials made the current version `6e218887d2b5`, which the A6 run uses (the versions in between are listed in the experiment log). The first change removed unused branches (outputs identical on 810 of 810 compared outputs); the second changed only the scorer. All outputs were re-scored with the final scorer and merged. Compute (from the experiment log): the main run took 9 Kaggle sessions on 2×T4 (about 14.9 session-hours); VisRef-fill one session of about 11.3 h; step1_branch about 2,900 s per GPU for 289 questions plus a 20-question pilot.
+Three code versions produced the 1,000 questions: `79eef648ebd1` (session 1, 74 questions), `f2422d0e72ff` (sessions 2–4, 318) and `d0095f79e691` (sessions 5–9, 608). The follow-ups ran later versions (VisRef-fill `39b3fb1b4121`, VisRef-hs `f1376774850d`); changing `run.py`'s default token caps on 2026-10-13 (every run passed the caps explicitly) made the version `cf46b2e6222e`; the planned thinking-continuation code and its stored-first-step fix (2026-10-13) made it `86a5fc0f3cd9`, and the exploratory VisRef-imgtag method (first named `visref_bundle`) with the shared random state for the logging-only probe (2026-10-15) made `aa11cdaa52a9`, the version of the first image-tag trial; the fixes after the trials made the current version `6e218887d2b5`, which the A6 run uses (the versions in between are listed in the experiment log). The first change removed unused branches (outputs identical on 810 of 810 compared outputs); the second changed only the scorer. All outputs were re-scored with the final scorer and merged. Compute: Table 2.5 lists the GPU and the generation time of every experiment (`results/compute.csv`, built from the run records by `scripts/make_compute.py`).
+
+**Table 2.5. GPU and generation time per experiment.** Wall time adds the slowest GPU of each session; GPU-hours add all GPUs. Times cover generation only (not package install or model loading), and the GPUs differ between the Kaggle runs and A6, so times are not comparable across them.
+
+| | What ran | GPU | Wall time (h) | GPU-hours | Rows |
+|---|---|---|---|---|---|
+| A1 | main run: ST, TSR, VisRef (9 sessions) | 2 × T4 | 14.9 | 28.0 | 3074 |
+| A2 | VisRef-fill | 2 × T4 | 11.3 | 22.3 | 994 |
+| A3 | step1_branch (pilot and main) | 2 × T4 | 0.9 | 1.7 | 309 |
+| A4 | VisRef-hs | 2 × T4 | 7.8 | 15.4 | 839 |
+| A6 | VisRef-imgtag, TSR with answer prompt, TSR (check run and main run) | 1 × RTX A5000 (rented) | running | – | – |
+| B1-B6 | setting checks | 2 × T4 | 7.2 | 13.6 | 764 |
+| B7 | two 10-question trials of the image-tag variant | 2 × T4 | 0.3 | 0.4 | 40 |
 
 ### 2.6 Setting checks: how the unstated settings were chosen
 
@@ -423,7 +435,7 @@ A single confirmatory run with the most faithful setting is planned after A6: Z 
 | Follow-up analyses | `repro/diag/analyze_fill.json`, `repro/diag/step1_branch_analysis.json` (earlier float version: `step1_branch_analysis_float_py311.json`), `repro/diag/paper_fingerprints.json`, `repro/diag/step1_probe_analysis.json`, `repro/diag/analyze_k1_injection.json`, `repro/diag/st_plain_analysis.json`; `repro/diag/analyze_hs.json` (Section 4.5; the script was written before the results) |
 | Raw generations, run configs and environments per session | `repro/kaggle/runs/<session>/` (`b_main_s1`–`b_main_s9`, `b_main_fill`, `step1_branch_pilot`, `step1_branch_main`, `diag_st_plain`, `b_main_hs`, `bundle_pilot` and `bundle_pilot2` (the two 10-question trials of the image-tag variant, B7); setting checks of Section 2.6: `smoke`, `smoke2`, `smoke3`, `main_s0`, `full_s1`, `b_test`, `hidden_rank_check`) |
 | Final scored rows (rules + LLM fallback) | `repro/llm/final/merged.jsonl` (VisRef-fill run: `repro/llm/fill/`, VisRef-hs: `repro/llm/hs/`) |
-| Final tables (CSV/JSON, built from the `repro/diag/*.json` files by `scripts/make_results.py`) | `results/`; the questions used by the setting checks: `results/setting_check_questions.csv` (listed from the run records, not built by `make_results.py`) |
+| Final tables (CSV/JSON, built from the `repro/diag/*.json` files by `scripts/make_results.py`) | `results/`; the questions used by the setting checks: `results/setting_check_questions.csv` (listed from the run records, not built by `make_results.py`); GPU and generation time per experiment: `results/compute.csv` (built by `scripts/make_compute.py`) |
 | Figures (the results figure and the main-run figure drawn by `scripts/make_figures.py`; method diagram drawn by hand) | `figures/` |
 | Descriptive per-method report (rule-based scorer v4 only, no LLM fallback) | `repro/reports/b_main_report.html`, `repro/reports/b_main_report.json` |
 | Code | `repro/run.py`, `repro/visref/` (engine, methods, DPP, scoring), `repro/diag/step1_branch.py`, `repro/diag/analyze_imgtag*.py` (image-tag analyses), `repro/runpod/` (runner for the A6 run on a rented GPU) |

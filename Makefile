@@ -28,6 +28,7 @@ analysis:
 # Rebuild the final tables in results/ from repro/diag/*.json.
 results:
 	$(PY) scripts/make_results.py
+	$(PY) scripts/make_compute.py
 
 # Redraw figures/paired_differences.svg from results/ and figures/main_run_steps.svg from the main run records (figures/method_overview.svg is drawn by hand).
 figures: results

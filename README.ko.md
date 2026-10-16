@@ -97,6 +97,7 @@ make check     # 분석을 다시 돌려 results/와 그림을 만들고, README
 ```
 
 GPU로 모델 출력을 다시 만드는 방법, LLM 추출, 저장소 구성: [docs/REPRODUCE.md](docs/REPRODUCE.md) (영어).
+실험마다 쓴 GPU와 생성 시간은 [`results/compute.csv`](results/compute.csv)(REPORT 표 2.5)에 있습니다.
 
 ## 기여와 AI 사용
 
