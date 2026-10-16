@@ -92,6 +92,7 @@ docs/
   IMPLEMENTATION_CHOICES.md  every implementation decision with its evidence grade (paper / cited code / official
                            model docs / our choice) — start with its summary table
   EXPERIMENT_FLOW.md       chronological log: pre-registrations, decisions, results
+  EXPERIMENT_FLOW_early.md log of the work before 2026-10-07 with earlier code, kept as written
   SOURCES.md               (English) how the logs' citations map to public sources: arXiv versions, pages, tables
 references/SOURCES.json    third-party files (MathVista data & eval prompt, cited code, VLMEvalKit) with URL + sha256
 scripts/                   fetch_sources.py (downloads and verifies them), make_results.py, make_figures.py,

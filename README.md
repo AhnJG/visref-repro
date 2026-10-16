@@ -16,6 +16,20 @@ InternVL3.5-1B on the 1,000 MathVista *testmini* questions. Three methods are co
 > **Status (2026-10-14):** the main run and three follow-up experiments are finished; one set of experiments is
 > pre-registered but not yet run. Full write-up: **[REPORT.md](REPORT.md)**.
 
+## How to read this repository
+
+| | When | Read |
+|---|---|---|
+| 1 | First: results and main caveats | this README |
+| 2 | What was tested and what was concluded | [REPORT.md](REPORT.md): Summary and Section 1.1 (every experiment in one table), then Sections 3–4 (results, causes) and 6 (limitations) |
+| 3 | How a setting the paper does not state was chosen | REPORT Sections 2.1 and 2.6; the evidence for each decision: [docs/IMPLEMENTATION_CHOICES.md](docs/IMPLEMENTATION_CHOICES.md) (Korean; start with its summary table) |
+| 4 | When and why something was decided | [docs/EXPERIMENT_FLOW.md](docs/EXPERIMENT_FLOW.md) (Korean dated log; start with its stage summary). Work before 2026-10-07 with earlier code: [docs/EXPERIMENT_FLOW_early.md](docs/EXPERIMENT_FLOW_early.md) |
+| 5 | Checking a number | [`results/`](results) for the tables, `repro/kaggle/runs/` for the raw outputs, `make check` (see Reproduce) |
+| 6 | Following a citation such as `LAY L900` to the paper | [docs/SOURCES.md](docs/SOURCES.md) |
+| 7 | Running it again or reading the code | [docs/REPRODUCE.md](docs/REPRODUCE.md) and the code map under Reproduce |
+
+Every file location: [REPORT, Section 7](REPORT.md#7-where-to-find-things).
+
 ## Results
 
 n = 1,000 questions; each method once per question, with shared seeds and a shared first thinking step. Answers are
@@ -89,13 +103,6 @@ Regenerating the model outputs on a GPU, the LLM extraction and the full reposit
 [docs/REPRODUCE.md](docs/REPRODUCE.md).
 
 ![How the code runs: run.py loops over questions; model.py builds the input, methods.py runs each question and method with engine.py and dpp.py, scoring.py scores the answer](figures/code_map.svg)
-
-| Where | What |
-|---|---|
-| [`REPORT.md`](REPORT.md) | the full report: method, results, setting checks, limitations, questions for the authors |
-| [`results/`](results) | final tables (CSV, JSON) |
-| `repro/` | implementation (`run.py`, `visref/`), analyses (`diag/`), every run's settings and raw outputs (`kaggle/runs/`) |
-| `docs/` | how to reproduce (English); the chronological log and the decision ledger (Korean) |
 
 ## Contributions and AI use
 

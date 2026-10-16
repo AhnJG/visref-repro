@@ -2,7 +2,7 @@
 
 The behaviour tests in test_repro.py use their own small configs, so they do not pin the values that were decided for
 the runs. These tests do: if a decided value changes, the change has to be made here too, on purpose.
-EF = docs/EXPERIMENT_FLOW.md (the working copy has the same line numbers)."""
+"entry <date> <title>" = the dated entry of that title in docs/EXPERIMENT_FLOW.md."""
 import glob
 import hashlib
 import json
@@ -23,14 +23,14 @@ STORE = 'diag/step1_store_bmain.json'
 
 DECIDED = {
     'delta': 0.25, 'kmax': 10, 'vis_frac': 0.3,              # J-4, paper (A)
-    'temperature': 0.6, 'top_k': 50, 'top_p': 0.95,          # J-3, official model page (D); EF L925
+    'temperature': 0.6, 'top_k': 50, 'top_p': 0.95,          # J-3, official model page (D); entry 2026-10-07 "원문 명세표·독립 감사 → b_test를 파일럿으로 재정의"
     'wait_text': 'Wait, think more',                         # J-5
-    'think_cap': 1024, 'total_think_cap': 10240,             # J-10, EF L952-956 (default fixed 2026-10-13)
+    'think_cap': 1024, 'total_think_cap': 10240,             # J-10, entry 2026-10-07 "결정(작성자): s1 + DEER af 폴백, 정지 통계 현행 유지, 파일럿 없이 본 실험 시작" (default fixed 2026-10-13)
     'think_extra': 512,                                      # J-23, think experiments (user decision 2026-10-13)
     'answer_cap': 1024,                                      # J-10
-    'probe_prompt': '\n\n\\boxed', 'probe_cap': 16,          # J-9, EF L827 (user agreed)
-    'forced_prompt': '\nFinal Answer:',                      # J-11, EF L891 -> L912/L922 (s1 string)
-    'af_prompt': '\n**Final Answer**\n\\boxed', 'af_cap': 100,  # J-12, EF L952-954 (user decision)
+    'probe_prompt': '\n\n\\boxed', 'probe_cap': 16,          # J-9, entry 2026-10-07 "smoke3 결과 → probe를 `\boxed` 형식으로 교체" (user agreed)
+    'forced_prompt': '\nFinal Answer:',                      # J-11, entry 2026-10-07 "b_test 재빌드: s1 강제 답변 + ridge DPP" -> entry 2026-10-07 "원문 명세표·독립 감사 → b_test를 파일럿으로 재정의" (s1 string)
+    'af_prompt': '\n**Final Answer**\n\\boxed', 'af_cap': 100,  # J-12, entry 2026-10-07 "결정(작성자): s1 + DEER af 폴백, 정지 통계 현행 유지, 파일럿 없이 본 실험 시작" (user decision)
     'seed': 42, 'max_num': 12, 'dual_probe': 0,
 }
 
@@ -41,15 +41,15 @@ def test_run_defaults_hold_the_decided_values(key):
 
 
 def test_probe_sampling_and_method_names():
-    assert PROBE_SAMPLING == (1.0, 0, 1.0)  # J-9: T = 1, no top-k/top-p (EF L820)
+    assert PROBE_SAMPLING == (1.0, 0, 1.0)  # J-9: T = 1, no top-k/top-p (entry 2026-10-07 "정지 통계 H를 논문 정의 쪽으로 변경")
     assert {'visref_imgtag', 'tsr_answer_prompt'} <= set(METHODS)  # 2026-10-15 exploratory variant and its control
-    assert {'st', 'tsr', 'visref_raw_rank'} <= set(METHODS)  # J-7: main VisRef = visref_raw_rank (EF L976)
+    assert {'st', 'tsr', 'visref_raw_rank'} <= set(METHODS)  # J-7: main VisRef = visref_raw_rank (entry 2026-10-07 "계획 수정(작성자 결정, s2 결과 전): fill 제외, 주 결과 VisRef = visref_raw_rank")
     assert THINK == ('tsr_think', 'visref_think', 'visref_hs_think') and set(THINK) <= set(METHODS)  # J-23
     assert budget(1961, 0.3) == 588  # m = floor(0.3 |V|)
 
 
 def test_scorer_is_v4():
-    assert SCORER_VERSION == 'v4_mc_empty_wrong'  # J-14, EF L1466 (user instruction)
+    assert SCORER_VERSION == 'v4_mc_empty_wrong'  # J-14, entry 2026-10-11 "scorer v4 + st_official 분모 수정" (user instruction)
 
 
 def generation_runs():
@@ -63,7 +63,7 @@ def generation_runs():
 
 def test_generation_runs_were_built_with_the_decided_caps_and_order():
     """Every generation run passed the decided caps 1,024 / 10,240 explicitly (J-10): until 2026-10-13 run.py's own
-    defaults were the older 4,096 / 8,192 (EF L804, replaced by L956). Runs also use the seed-0 question order (J-19)."""
+    defaults were the older 4,096 / 8,192 (entry 2026-10-07 "smoke2 결과와 본 실험 결정", replaced by entry 2026-10-07 "결정(작성자): s1 + DEER af 폴백, 정지 통계 현행 유지, 파일럿 없이 본 실험 시작"). Runs also use the seed-0 question order (J-19)."""
     runs = generation_runs()
     assert len(runs) >= 11  # b_main_s1..s9, b_main_fill, b_main_hs
     for name, c in runs:

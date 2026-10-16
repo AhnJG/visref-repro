@@ -401,7 +401,7 @@ Three experiments are planned; their decision rules are fixed and published befo
 
 | What | Where (in this repository) |
 |---|---|
-| Chronological log with pre-registrations and decisions (Korean) | `docs/EXPERIMENT_FLOW.md` |
+| Chronological log with pre-registrations and decisions (Korean; starts with a stage summary and a list of abbreviations) | `docs/EXPERIMENT_FLOW.md`; work before 2026-10-07 with earlier code, kept as written: `docs/EXPERIMENT_FLOW_early.md` |
 | Evidence per implementation decision, external-number ledger (Korean) | `docs/IMPLEMENTATION_CHOICES.md` (start with its summary table) |
 | Main verdict script and numbers | `repro/diag/final_judgment.py`, `repro/diag/final_judgment.json` |
 | Follow-up analyses | `repro/diag/analyze_fill.json`, `repro/diag/step1_branch_analysis.json` (earlier float version: `step1_branch_analysis_float_py311.json`), `repro/diag/paper_fingerprints.json`, `repro/diag/step1_probe_analysis.json`, `repro/diag/analyze_k1_injection.json`, `repro/diag/st_plain_analysis.json`; `repro/diag/analyze_hs.json` (Section 4.5; the script was written before the results) |
