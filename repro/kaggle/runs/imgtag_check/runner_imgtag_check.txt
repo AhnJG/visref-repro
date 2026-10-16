@@ -1,0 +1,104 @@
+name, memory.total [MiB], driver_version
+NVIDIA RTX A5000, 24564 MiB, 580.178.04
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 399, in http_get
+    import hf_transfer  # type: ignore[no-redef]
+ModuleNotFoundError: No module named 'hf_transfer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/visref-repro/repro/runpod/run_imgtag.py", line 634, in <module>
+    sys.exit(main())
+  File "/workspace/visref-repro/repro/runpod/run_imgtag.py", line 497, in main
+    return run(a, ctx)
+  File "/workspace/visref-repro/repro/runpod/run_imgtag.py", line 552, in run
+    pq, _ = download()
+  File "/workspace/visref-repro/repro/runpod/run_imgtag.py", line 405, in download
+    return pq, snapshot_download(MODEL, revision=MODEL_REV)
+  File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 330, in snapshot_download
+    _inner_hf_hub_download(file)
+  File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 306, in _inner_hf_hub_download
+    return hf_hub_download(
+  File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1014, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+  File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1175, in _hf_hub_download_to_cache_dir
+    _download_to_tmp_and_move(
+  File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1742, in _download_to_tmp_and_move
+    http_get(
+  File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 401, in http_get
+    raise ValueError(
+ValueError: Fast download using 'hf_transfer' is enabled (HF_HUB_ENABLE_HF_TRANSFER=1) but 'hf_transfer' package is not available in your environment. Try `pip install hf_transfer`.
+== resume Thu Oct 15 18:27:18 UTC 2026
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 399, in http_get
+    import hf_transfer  # type: ignore[no-redef]
+ModuleNotFoundError: No module named 'hf_transfer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/workspace/visref-repro/repro/runpod/run_imgtag.py", line 634, in <module>
+    sys.exit(main())
+  File "/workspace/visref-repro/repro/runpod/run_imgtag.py", line 497, in main
+    return run(a, ctx)
+  File "/workspace/visref-repro/repro/runpod/run_imgtag.py", line 552, in run
+    pq, _ = download()
+  File "/workspace/visref-repro/repro/runpod/run_imgtag.py", line 405, in download
+    return pq, snapshot_download(MODEL, revision=MODEL_REV)
+  File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 330, in snapshot_download
+    _inner_hf_hub_download(file)
+  File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/_snapshot_download.py", line 306, in _inner_hf_hub_download
+    return hf_hub_download(
+  File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1014, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+  File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1175, in _hf_hub_download_to_cache_dir
+    _download_to_tmp_and_move(
+  File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 1742, in _download_to_tmp_and_move
+    http_get(
+  File "/usr/local/lib/python3.10/dist-packages/huggingface_hub/file_download.py", line 401, in http_get
+    raise ValueError(
+ValueError: Fast download using 'hf_transfer' is enabled (HF_HUB_ENABLE_HF_TRANSFER=1) but 'hf_transfer' package is not available in your environment. Try `pip install hf_transfer`.
+== runner exit 1 Thu Oct 15 18:27:40 UTC 2026
+name, memory.total [MiB], driver_version
+NVIDIA RTX A5000, 24564 MiB, 580.178.04
+Fetching 20 files:   0%|          | 0/20 [00:00<?, ?it/s]Fetching 20 files:  40%|████      | 8/20 [00:00<00:00, 16.83it/s]Fetching 20 files:  80%|████████  | 16/20 [00:00<00:00, 21.27it/s]Fetching 20 files: 100%|██████████| 20/20 [00:04<00:00,  4.59it/s]
+run.py command: /usr/bin/python3 run.py --parquet /workspace/hf_cache/hub/datasets--AI4Math--MathVista/snapshots/2b6ad69445fbb5695c9b165475e8decdbeb97747/data/testmini-00000-of-00001-725687bf7a18d64b.parquet --model OpenGVLab/InternVL3_5-1B --revision 2f71cf52542334823e48a46ffba0e2bc9add3446 --ids /workspace/runs/imgtag_check/output/results/ids.json --shard 0/1 --out /workspace/runs/imgtag_check/output/results/results_0.jsonl --limit 6 --methods visref_imgtag,tsr_answer_prompt,tsr --think-cap 1024 --total-think-cap 10240 --step1-from diag/step1_store_bmain.json --dual-probe 1
+== interrupt test: SIGTERM at 8 rows Thu Oct 15 18:31:36 UTC 2026
+== resume Thu Oct 15 18:31:36 UTC 2026
+Fetching 20 files:   0%|          | 0/20 [00:00<?, ?it/s]Fetching 20 files: 100%|██████████| 20/20 [00:00<00:00, 522.50it/s]
+run.py command: /usr/bin/python3 run.py --parquet /workspace/hf_cache/hub/datasets--AI4Math--MathVista/snapshots/2b6ad69445fbb5695c9b165475e8decdbeb97747/data/testmini-00000-of-00001-725687bf7a18d64b.parquet --model OpenGVLab/InternVL3_5-1B --revision 2f71cf52542334823e48a46ffba0e2bc9add3446 --ids /workspace/runs/imgtag_check/output/results/ids.json --shard 0/1 --out /workspace/runs/imgtag_check/output/results/results_0.jsonl --limit 6 --methods visref_imgtag,tsr_answer_prompt,tsr --think-cap 1024 --total-think-cap 10240 --step1-from diag/step1_store_bmain.json --dual-probe 1
+[18:33:42 +120s] rows 11: visref_imgtag=3 tsr_answer_prompt=4 tsr=4 | errors 0 | 89.9 rows/h this start
+[18:35:42 +240s] rows 14: visref_imgtag=4 tsr_answer_prompt=5 tsr=5 | errors 0 | 89.9 rows/h this start
+[18:37:42 +360s] rows 14: visref_imgtag=4 tsr_answer_prompt=5 tsr=5 | errors 0 | 59.9 rows/h this start
+[18:39:42 +480s] rows 14: visref_imgtag=4 tsr_answer_prompt=5 tsr=5 | errors 0 | 45.0 rows/h this start
+[18:41:42 +601s] rows 14: visref_imgtag=4 tsr_answer_prompt=5 tsr=5 | errors 0 | 36.0 rows/h this start
+[18:43:42 +721s] rows 16: visref_imgtag=4 tsr_answer_prompt=6 tsr=6 | errors 0 | 40.0 rows/h this start
+[18:45:20 +819s] rows 18: visref_imgtag=6 tsr_answer_prompt=6 tsr=6 | errors 0 | 44.0 rows/h this start
+run.py exit 0 
+ {"event": "round", "elapsed": 542, "active": 4, "groups": [[4, 15508, 4096, 46.6]], "tokens": 4096, "queue": 0, "peak_alloc_gb": 10.06, "peak_reserved_gb": 10.27}
+{"event": "round", "elapsed": 551, "active": 4, "groups": [[4, 17413, 12, 8.7]], "tokens": 12, "queue": 0, "peak_alloc_gb": 10.57, "peak_reserved_gb": 10.72}
+{"event": "round", "elapsed": 595, "active": 4, "groups": [[4, 16536, 2054, 43.6]], "tokens": 2054, "queue": 0, "peak_alloc_gb": 10.62, "peak_reserved_gb": 10.8}
+{"event": "round", "elapsed": 668, "active": 4, "groups": [[3, 11774, 1032, 38.9], [1, 17412, 1024, 34.3]], "tokens": 2056, "queue": 0, "peak_alloc_gb": 10.62, "peak_reserved_gb": 10.8}
+{"event": "round", "elapsed": 673, "active": 2, "groups": [[2, 19311, 6, 5.1]], "tokens": 6, "queue": 0, "peak_alloc_gb": 10.62, "peak_reserved_gb": 10.8}
+{"event": "round", "elapsed": 678, "active": 2, "groups": [[2, 18440, 6, 4.6]], "tokens": 6, "queue": 0, "peak_alloc_gb": 10.62, "peak_reserved_gb": 10.8}
+{"event": "round", "elapsed": 722, "active": 2, "groups": [[2, 19310, 2048, 44.6]], "tokens": 2048, "queue": 0, "peak_alloc_gb": 10.62, "peak_reserved_gb": 10.8}
+{"event": "round", "elapsed": 729, "active": 2, "groups": [[2, 21232, 6, 6.5]], "tokens": 6, "queue": 0, "peak_alloc_gb": 10.62, "peak_reserved_gb": 10.8}
+{"event": "round", "elapsed": 735, "active": 2, "groups": [[2, 20338, 6, 5.9]], "tokens": 6, "queue": 0, "peak_alloc_gb": 10.62, "peak_reserved_gb": 10.8}
+{"event": "round", "elapsed": 777, "active": 2, "groups": [[2, 21233, 1030, 42.5]], "tokens": 1030, "queue": 0, "peak_alloc_gb": 10.62, "peak_reserved_gb": 10.8}
+{"event": "round", "elapsed": 778, "active": 1, "groups": [[1, 11533, 3, 1.0]], "tokens": 3, "queue": 0, "peak_alloc_gb": 10.62, "peak_reserved_gb": 10.8}
+{"event": "round", "elapsed": 779, "active": 1, "groups": [[1, 11453, 3, 1.0]], "tokens": 3, "queue": 0, "peak_alloc_gb": 10.62, "peak_reserved_gb": 10.8}
+{"event": "round", "elapsed": 811, "active": 1, "groups": [[1, 11534, 1024, 31.9]], "tokens": 1024, "queue": 0, "peak_alloc_gb": 10.62, "peak_reserved_gb": 10.8}
+{"event": "round", "elapsed": 815, "active": 1, "groups": [[1, 12565, 100, 4.1]], "tokens": 100, "queue": 0, "peak_alloc_gb": 10.62, "peak_reserved_gb": 10.8}
+{"event": "end", "elapsed": 815, "left_in_queue": 0}
+complete: 18/18 rows
+summary written
+== runner exit 0 Thu Oct 15 18:45:21 UTC 2026

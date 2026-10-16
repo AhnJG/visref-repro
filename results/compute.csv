@@ -3,6 +3,6 @@ A1,"main run: ST, TSR, VisRef (9 sessions)",b_main_s1 b_main_s2 b_main_s3 b_main
 A2,VisRef-fill,b_main_fill,Tesla T4,2,11.3,22.3,994,done
 A3,step1_branch (pilot and main),step1_branch_pilot step1_branch_main,Tesla T4,2,0.9,1.7,309,done
 A4,VisRef-hs,b_main_hs,Tesla T4,2,7.8,15.4,839,done
-A6,"VisRef-imgtag, TSR with answer prompt, TSR (check run and main run)",imgtag_check imgtag_main,,,,,,running
+A6,"VisRef-imgtag, TSR with answer prompt, TSR (check run and main run)",imgtag_check imgtag_main,"NVIDIA RTX A5000, 24564 MiB",1,22.8,22.8,3018,done
 B1-B6,setting checks,smoke smoke2 smoke3 main_s0 full_s1 b_test diag_st_plain,Tesla T4,2,7.2,13.6,764,done
 B7,two 10-question trials of the image-tag variant,bundle_pilot bundle_pilot2,Tesla T4,2,0.3,0.4,40,done

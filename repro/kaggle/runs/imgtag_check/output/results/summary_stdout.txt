@@ -1,0 +1,343 @@
+{
+ "basis": "shuffled-order complete prefix",
+ "n_common": 6,
+ "methods": {
+  "tsr": {
+   "n": 6,
+   "accuracy": 66.67,
+   "accuracy_all_rows": 66.67,
+   "n_all_rows": 6,
+   "n_error": 0,
+   "paper_1b": 48.5,
+   "mean_k": 2.67,
+   "mean_think_tokens": 2407.0,
+   "stop_reason": {
+    "entropy": 5,
+    "kmax": 1
+   },
+   "step_end": {
+    "cap": 13,
+    "close": 3
+   },
+   "final_forced_close": 3,
+   "n_final_forced_answer": 3,
+   "n_final_forced_invalid": 1,
+   "n_stop_at_k1": 4,
+   "extract_rule": {
+    "boxed": 5,
+    "answer_phrase": 1
+   },
+   "dpp_frac_mean": null,
+   "mean_n_visual": 2048.0,
+   "mean_wall_s": 159.9,
+   "probe_H_first_step": [
+    0.0,
+    0.0,
+    0.0,
+    0.001,
+    0.534,
+    0.973
+   ],
+   "probe_finish": {
+    "end": 16
+   },
+   "final_finish": {
+    "eos": 5,
+    "cap": 1
+   },
+   "n_extract_failed": 0,
+   "code_versions": [
+    "6e218887d2b5"
+   ],
+   "n_continued": 2,
+   "k_hist": {
+    "1": 4,
+    "2": 1,
+    "10": 1
+   },
+   "mean_gen_tokens": 2683.8,
+   "n_final_inner_think_end": 1,
+   "n_steps": 16,
+   "n_final_question_text": 0,
+   "n_probes": 16,
+   "probe_H_q10_25_50_75_90": [
+    0.0,
+    0.016,
+    0.682,
+    0.816,
+    0.854
+   ],
+   "n_probe_H_below_delta": 5,
+   "n_entropy_stop_at_k1": 4,
+   "probe_inner_step1": [
+    "3495",
+    "B",
+    "B",
+    "B",
+    "8",
+    "B"
+   ],
+   "median_tokens_k2plus_step": 1024.0,
+   "median_rank_V": null,
+   "median_n_unique_z": null,
+   "median_n_dpp": null,
+   "median_n_inject": null,
+   "median_inject_over_m": null,
+   "by_step1_end": {
+    "close": {
+     "n": 3,
+     "acc": 100.0,
+     "mean_k": 1.0
+    },
+    "cap": {
+     "n": 3,
+     "acc": 33.3,
+     "mean_k": 4.33
+    }
+   },
+   "n_close_probe_H_ge_delta": 0,
+   "n_close_probes": 3,
+   "n_loop_steps": 0,
+   "n_final_forced_valid": 2,
+   "n_final_forced_unusable": 0,
+   "n_final_af": 1,
+   "n_final_af_valid": 1,
+   "median_m": null
+  },
+  "tsr_answer_prompt": {
+   "n": 6,
+   "accuracy": 66.67,
+   "accuracy_all_rows": 66.67,
+   "n_all_rows": 6,
+   "n_error": 0,
+   "paper_1b": null,
+   "mean_k": 2.67,
+   "mean_think_tokens": 2407.0,
+   "stop_reason": {
+    "entropy": 5,
+    "kmax": 1
+   },
+   "step_end": {
+    "cap": 13,
+    "close": 3
+   },
+   "final_forced_close": 3,
+   "n_final_forced_answer": 6,
+   "n_final_forced_invalid": 1,
+   "n_stop_at_k1": 4,
+   "extract_rule": {
+    "boxed": 6
+   },
+   "dpp_frac_mean": null,
+   "mean_n_visual": 2048.0,
+   "mean_wall_s": 159.9,
+   "probe_H_first_step": [
+    0.0,
+    0.0,
+    0.0,
+    0.001,
+    0.534,
+    0.973
+   ],
+   "probe_finish": {
+    "end": 16
+   },
+   "final_finish": {
+    "eos": 5,
+    "cap": 1
+   },
+   "n_extract_failed": 0,
+   "code_versions": [
+    "6e218887d2b5"
+   ],
+   "n_continued": 2,
+   "k_hist": {
+    "1": 4,
+    "2": 1,
+    "10": 1
+   },
+   "mean_gen_tokens": 2626.0,
+   "n_final_inner_think_end": 1,
+   "n_steps": 16,
+   "n_final_question_text": 0,
+   "n_probes": 16,
+   "probe_H_q10_25_50_75_90": [
+    0.0,
+    0.016,
+    0.682,
+    0.816,
+    0.854
+   ],
+   "n_probe_H_below_delta": 5,
+   "n_entropy_stop_at_k1": 4,
+   "probe_inner_step1": [
+    "3495",
+    "B",
+    "B",
+    "B",
+    "8",
+    "B"
+   ],
+   "median_tokens_k2plus_step": 1024.0,
+   "median_rank_V": null,
+   "median_n_unique_z": null,
+   "median_n_dpp": null,
+   "median_n_inject": null,
+   "median_inject_over_m": null,
+   "by_step1_end": {
+    "close": {
+     "n": 3,
+     "acc": 100.0,
+     "mean_k": 1.0
+    },
+    "cap": {
+     "n": 3,
+     "acc": 33.3,
+     "mean_k": 4.33
+    }
+   },
+   "n_close_probe_H_ge_delta": 0,
+   "n_close_probes": 3,
+   "n_loop_steps": 0,
+   "n_final_forced_valid": 5,
+   "n_final_forced_unusable": 0,
+   "n_final_af": 1,
+   "n_final_af_valid": 1,
+   "median_m": null
+  },
+  "visref_imgtag": {
+   "n": 6,
+   "accuracy": 66.67,
+   "accuracy_all_rows": 66.67,
+   "n_all_rows": 6,
+   "n_error": 0,
+   "paper_1b": null,
+   "mean_k": 3.83,
+   "mean_think_tokens": 3601.7,
+   "stop_reason": {
+    "entropy": 5,
+    "kmax": 1
+   },
+   "step_end": {
+    "cap": 20,
+    "close": 3
+   },
+   "final_forced_close": 3,
+   "n_final_forced_answer": 6,
+   "n_final_forced_invalid": 2,
+   "n_stop_at_k1": 4,
+   "extract_rule": {
+    "answer_phrase": 2,
+    "boxed": 4
+   },
+   "dpp_frac_mean": 0.937,
+   "mean_n_visual": 2048.0,
+   "mean_wall_s": 323.9,
+   "probe_H_first_step": [
+    0.0,
+    0.0,
+    0.001,
+    0.008,
+    0.652,
+    1.153
+   ],
+   "probe_finish": {
+    "end": 23
+   },
+   "final_finish": {
+    "eos": 4,
+    "cap": 2
+   },
+   "n_extract_failed": 0,
+   "code_versions": [
+    "6e218887d2b5"
+   ],
+   "n_continued": 2,
+   "k_hist": {
+    "1": 4,
+    "9": 1,
+    "10": 1
+   },
+   "mean_gen_tokens": 3999.5,
+   "n_final_inner_think_end": 1,
+   "n_steps": 23,
+   "n_final_question_text": 0,
+   "n_probes": 23,
+   "probe_H_q10_25_50_75_90": [
+    0.001,
+    0.286,
+    0.626,
+    0.985,
+    1.105
+   ],
+   "n_probe_H_below_delta": 5,
+   "n_entropy_stop_at_k1": 4,
+   "probe_inner_step1": [
+    "3495",
+    "B",
+    "B",
+    "B",
+    "8",
+    "B"
+   ],
+   "median_tokens_k2plus_step": 1024,
+   "median_rank_V": 997,
+   "median_n_unique_z": 64,
+   "median_n_dpp": 100,
+   "median_n_inject": 100,
+   "median_inject_over_m": 1.0,
+   "by_step1_end": {
+    "close": {
+     "n": 3,
+     "acc": 100.0,
+     "mean_k": 1.0
+    },
+    "cap": {
+     "n": 3,
+     "acc": 33.3,
+     "mean_k": 6.67
+    }
+   },
+   "n_close_probe_H_ge_delta": 0,
+   "n_close_probes": 3,
+   "n_loop_steps": 13,
+   "n_final_forced_valid": 4,
+   "n_final_forced_unusable": 0,
+   "n_final_af": 2,
+   "n_final_af_valid": 2,
+   "median_m": 537
+  }
+ },
+ "paired": {
+  "tsr_answer_prompt-tsr": {
+   "a_only": 0,
+   "b_only": 0,
+   "diff_pp": 0.0,
+   "ci95_pp": [
+    0.0,
+    0.0
+   ],
+   "n": 6
+  },
+  "visref_imgtag-tsr": {
+   "a_only": 0,
+   "b_only": 0,
+   "diff_pp": 0.0,
+   "ci95_pp": [
+    0.0,
+    0.0
+   ],
+   "n": 6
+  },
+  "visref_imgtag-tsr_answer_prompt": {
+   "a_only": 0,
+   "b_only": 0,
+   "diff_pp": 0.0,
+   "ci95_pp": [
+    0.0,
+    0.0
+   ],
+   "n": 6
+  }
+ }
+}

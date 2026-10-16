@@ -12,7 +12,7 @@ Tables that carry results are wrapped in markers:
 Two kinds of check (standard library only):
 - Generated tables (accuracy, paired, accuracy_report, paired_report): the table between the markers must equal,
   character for character, the table this script builds from results/*.csv. A swapped or stale value fails.
-- The "experiments at a glance" table (glance): each row A1-A4 must show its own result in the result column
+- The "experiments at a glance" table (glance): each row A1-A4 and A6 must show its own result in the result column
   (header "Result" or "결과"), so a value cannot sit in another row's cell.
 Each document must contain the kinds listed in REQUIRED. Numbers use "+" or the Unicode minus "−".
 """
@@ -114,6 +114,7 @@ def glance_expected():
         'A2': [signed(one('visref_fill', 'VisRef-fill - TSR')['diff_pp'], 1).lstrip('+')],
         'A3': [signed(r['diff_pp'], 2) for r in co],
         'A4': [signed([r for r in fu if r['experiment'].startswith('visref_hs primary')][0]['diff_pp'], 2)],
+        'A6': [signed([r for r in fu if r['experiment'].startswith('visref_imgtag primary')][0]['diff_pp'], 1)],
     }
 
 

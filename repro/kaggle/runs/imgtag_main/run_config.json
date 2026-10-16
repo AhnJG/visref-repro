@@ -1,0 +1,85 @@
+{
+ "run": {
+  "experiment": "EF 2026-10-15 실행 전 계획: 이미지 태그 주입 1,000문항 비교",
+  "methods": "visref_imgtag,tsr_answer_prompt,tsr",
+  "run_args": [
+   "--methods",
+   "visref_imgtag,tsr_answer_prompt,tsr",
+   "--think-cap",
+   "1024",
+   "--total-think-cap",
+   "10240",
+   "--step1-from",
+   "diag/step1_store_bmain.json",
+   "--dual-probe",
+   "1"
+  ],
+  "ids_file": "kaggle/runs/b_main_hs/output/results/ids.json",
+  "ids_sha256": "a5ad8da9d10e7991abad84ca75dd108d60f94b890c40600d9dfa5ae2eb31b030",
+  "n_ids": 1000,
+  "shard": "0/1",
+  "store_file": "diag/step1_store_bmain.json",
+  "store_sha256_prefix": "f937478f3b26",
+  "code_version": "6e218887d2b5",
+  "transformers": "4.55.0",
+  "min_torch": "2.5",
+  "dtype": "float16 (visref.model.load_model default; not passed)",
+  "run_py_defaults": {
+   "batch": 16,
+   "batch_tokens": 72000,
+   "chunk": 1024
+  },
+  "cuda_alloc_conf": "expandable_segments:True",
+  "progress_every_s": 120
+ },
+ "head": "8f5c09eb2bf7f44ed74b1345628683545796a709",
+ "dirty_files": [],
+ "allow_dirty": false,
+ "code_version": "6e218887d2b5",
+ "run_py_defaults_seen": {
+  "batch": 16,
+  "batch_tokens": 72000,
+  "chunk": 1024
+ },
+ "source_sha256": {
+  "run.py": "70df0f5c413d2ca2237ce9597be1ebbac07f57e2999dcd66a152d5ee62be986a",
+  "visref/dpp.py": "7ebbe7774ac757cc48e067709d20b9d92d92912386ab84ebfa65b8be338dd250",
+  "visref/engine.py": "5b370d8b6e8859a8740d70f70ade5c650b5833c560126ba95c467598e5a62858",
+  "visref/fastkv.py": "40d4febdf0f9ae51364cb914ff6947837dbcb3f746b1f63b6aa5c31380974b9f",
+  "visref/methods.py": "c4d72f2266f8e016fe7f24ba8e2c60745f0a896bdcb081848001d0f8fb88cd1a",
+  "visref/model.py": "7feab6eb5c261228cc5d04b3051fd927ef9350d1fa1da4893fe718fc64021b02",
+  "visref/scoring.py": "7921130452a5a405f08776de8130a27fb70434cbf0e1395f09d40d741ec576e8"
+ },
+ "ids_sha256": "a5ad8da9d10e7991abad84ca75dd108d60f94b890c40600d9dfa5ae2eb31b030",
+ "store_sha256": "f937478f3b265f4242fc140a06bff0e6a8d63889d60cbae8c06678f35f71fe60",
+ "versions": {
+  "python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+  "torch": "2.14.1+cu130",
+  "cuda_build": "13.0",
+  "packages": {
+   "torch": "2.14.1",
+   "transformers": "4.55.0",
+   "huggingface_hub": "0.36.2",
+   "pandas": "2.3.3",
+   "pyarrow": "25.0.1",
+   "pillow": "12.3.0",
+   "timm": "1.0.30",
+   "einops": "0.8.2"
+  }
+ },
+ "hf_home": {
+  "path": "/workspace/hf_cache",
+  "source": "env"
+ },
+ "gpu": "NVIDIA RTX A5000, 24564 MiB",
+ "model": "OpenGVLab/InternVL3_5-1B",
+ "model_rev": "2f71cf52542334823e48a46ffba0e2bc9add3446",
+ "data_rev": "2b6ad69445fbb5695c9b165475e8decdbeb97747",
+ "parquet": "data/testmini-00000-of-00001-725687bf7a18d64b.parquet",
+ "started_at": "2026-10-15T18:56:59+0000",
+ "setup_s": 64.9,
+ "limit": 0,
+ "hours": 33.0,
+ "max_errors": 10,
+ "restarts": []
+}

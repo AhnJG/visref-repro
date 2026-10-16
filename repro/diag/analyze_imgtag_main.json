@@ -1,0 +1,1398 @@
+{
+ "n_prefix": 1000,
+ "n_rows": {
+  "visref_imgtag": 1000,
+  "tsr_answer_prompt": 1000,
+  "tsr": 1000
+ },
+ "n_error": {
+  "visref_imgtag": 0,
+  "tsr_answer_prompt": 0,
+  "tsr": 0
+ },
+ "code_version": [
+  "6e218887d2b5"
+ ],
+ "step1_store_sha": [
+  "f937478f3b26"
+ ],
+ "shards": 1,
+ "power_flag": null,
+ "scorer": "v4_mc_empty_wrong",
+ "empty_after_prompt": {
+  "visref_imgtag": 16,
+  "tsr_answer_prompt": 3,
+  "tsr": 2
+ },
+ "empty_after_prompt_all_rows": {
+  "visref_imgtag": 16,
+  "tsr_answer_prompt": 3,
+  "tsr": 2
+ },
+ "llm_used": {
+  "visref_imgtag": 3,
+  "tsr_answer_prompt": 1,
+  "tsr": 5
+ },
+ "main_reading": "main",
+ "main": {
+  "acc": {
+   "visref_imgtag": 60.1,
+   "tsr_answer_prompt": 61.1,
+   "tsr": 60.4
+  },
+  "primary": {
+   "n": 1000,
+   "diff_pp": -1.0,
+   "ci95_pp": [
+    -3.1,
+    1.0
+   ],
+   "ci95_sum": [
+    -31,
+    10
+   ],
+   "a_only": 49,
+   "b_only": 59,
+   "p_mcnemar": 0.3866
+  },
+  "verdict": {
+   "code": 3,
+   "text": "이미지 태그 주입의 논문 크기(+3.5 pp) 이득은 재현 안 됨"
+  },
+  "power": {
+   "discordant": 108,
+   "discordant_rate": 0.108,
+   "se_pp": 1.04,
+   "mde80_pp": 2.91,
+   "power_at_paper": 0.92
+  },
+  "secondary": {
+   "visref_imgtag-tsr": {
+    "n": 1000,
+    "diff_pp": -0.3,
+    "ci95_pp": [
+     -2.4,
+     1.8
+    ],
+    "ci95_sum": [
+     -24,
+     18
+    ],
+    "a_only": 52,
+    "b_only": 55,
+    "p_mcnemar": 0.8468,
+    "rule_code": 3,
+    "label": "same rule applied, secondary"
+   },
+   "tsr_answer_prompt-tsr": {
+    "n": 1000,
+    "diff_pp": 0.7,
+    "ci95_pp": [
+     0.0,
+     1.5
+    ],
+    "ci95_sum": [
+     0,
+     15
+    ],
+    "a_only": 10,
+    "b_only": 3,
+    "p_mcnemar": 0.0923
+   }
+  },
+  "reference_only_tsr_vs_main_run_tsr": {
+   "n": 1000,
+   "diff_pp": 0.3,
+   "ci95_pp": [
+    -1.5,
+    2.0
+   ],
+   "ci95_sum": [
+    -15,
+    20
+   ],
+   "a_only": 42,
+   "b_only": 39,
+   "p_mcnemar": 0.8243,
+   "label": "reference only: cannot separate causes (main-run TSR rows span several code versions, started from the generated step 1 with a different sampler state, other settings; different GPU/torch)",
+   "n_prefix_covered": 1000,
+   "acc": {
+    "tsr": 60.4,
+    "main_run_tsr": 60.1
+   }
+  },
+  "strata_step1_end": {
+   "close": {
+    "n": 334,
+    "acc": {
+     "visref_imgtag": 69.16,
+     "tsr_answer_prompt": 71.86,
+     "tsr": 71.86
+    },
+    "main_diff_pp": -2.69,
+    "a_only": 0,
+    "b_only": 9
+   },
+   "cap": {
+    "n": 641,
+    "acc": {
+     "visref_imgtag": 55.38,
+     "tsr_answer_prompt": 54.91,
+     "tsr": 54.6
+    },
+    "main_diff_pp": 0.47,
+    "a_only": 49,
+    "b_only": 46
+   },
+   "eos": {
+    "n": 25,
+    "acc": {
+     "visref_imgtag": 60.0,
+     "tsr_answer_prompt": 76.0,
+     "tsr": 56.0
+    },
+    "main_diff_pp": -16.0,
+    "a_only": 0,
+    "b_only": 4
+   },
+   "other": 0
+  },
+  "source_cluster": {
+   "label": "sensitivity check, descriptive: whole source datasets resampled; the verdict uses the question-level CI only",
+   "visref_imgtag-tsr_answer_prompt": {
+    "n_sources": 31,
+    "diff_pp": -1.0,
+    "ci95_pp": [
+     -3.03,
+     1.06
+    ],
+    "leave_one_source_out": {
+     "lowest": [
+      -1.6,
+      "CLEVR-Math"
+     ],
+     "highest": [
+      -0.53,
+      "DVQA"
+     ]
+    },
+    "per_source": {
+     "A-OKVQA": {
+      "n": 6,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "AI2D": {
+      "n": 43,
+      "a_only": 0,
+      "b_only": 2
+     },
+     "CLEVR-Math": {
+      "n": 62,
+      "a_only": 10,
+      "b_only": 5
+     },
+     "ChartQA": {
+      "n": 50,
+      "a_only": 2,
+      "b_only": 3
+     },
+     "DVQA": {
+      "n": 62,
+      "a_only": 0,
+      "b_only": 5
+     },
+     "DocVQA": {
+      "n": 12,
+      "a_only": 1,
+      "b_only": 0
+     },
+     "FigureQA": {
+      "n": 62,
+      "a_only": 2,
+      "b_only": 6
+     },
+     "FunctionQA": {
+      "n": 62,
+      "a_only": 1,
+      "b_only": 2
+     },
+     "GEOS": {
+      "n": 22,
+      "a_only": 2,
+      "b_only": 1
+     },
+     "GeoQA+": {
+      "n": 62,
+      "a_only": 5,
+      "b_only": 4
+     },
+     "Geometry3K": {
+      "n": 62,
+      "a_only": 7,
+      "b_only": 6
+     },
+     "IQTest": {
+      "n": 37,
+      "a_only": 4,
+      "b_only": 4
+     },
+     "IconQA": {
+      "n": 62,
+      "a_only": 1,
+      "b_only": 1
+     },
+     "KVQA": {
+      "n": 60,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "MapQA": {
+      "n": 8,
+      "a_only": 0,
+      "b_only": 1
+     },
+     "PMC-VQA": {
+      "n": 1,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "PaperQA": {
+      "n": 19,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "ParsVQA-Caps": {
+      "n": 2,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "PlotQA": {
+      "n": 19,
+      "a_only": 0,
+      "b_only": 3
+     },
+     "SciBench": {
+      "n": 17,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "ScienceQA": {
+      "n": 9,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "Super-CLEVR": {
+      "n": 62,
+      "a_only": 4,
+      "b_only": 7
+     },
+     "TQA": {
+      "n": 16,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "TabMWP": {
+      "n": 62,
+      "a_only": 3,
+      "b_only": 0
+     },
+     "TextVQA": {
+      "n": 6,
+      "a_only": 1,
+      "b_only": 0
+     },
+     "TheoremQA": {
+      "n": 11,
+      "a_only": 0,
+      "b_only": 1
+     },
+     "UniGeo": {
+      "n": 62,
+      "a_only": 6,
+      "b_only": 7
+     },
+     "VQA-AS": {
+      "n": 7,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "VQA-RAD": {
+      "n": 2,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "VQA2.0": {
+      "n": 32,
+      "a_only": 0,
+      "b_only": 1
+     },
+     "VizWiz": {
+      "n": 1,
+      "a_only": 0,
+      "b_only": 0
+     }
+    }
+   },
+   "visref_imgtag-tsr": {
+    "n_sources": 31,
+    "diff_pp": -0.3,
+    "ci95_pp": [
+     -2.3,
+     1.81
+    ],
+    "leave_one_source_out": {
+     "lowest": [
+      -0.96,
+      "CLEVR-Math"
+     ],
+     "highest": [
+      0.21,
+      "DVQA"
+     ]
+    },
+    "per_source": {
+     "A-OKVQA": {
+      "n": 6,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "AI2D": {
+      "n": 43,
+      "a_only": 0,
+      "b_only": 2
+     },
+     "CLEVR-Math": {
+      "n": 62,
+      "a_only": 11,
+      "b_only": 5
+     },
+     "ChartQA": {
+      "n": 50,
+      "a_only": 2,
+      "b_only": 3
+     },
+     "DVQA": {
+      "n": 62,
+      "a_only": 0,
+      "b_only": 5
+     },
+     "DocVQA": {
+      "n": 12,
+      "a_only": 1,
+      "b_only": 0
+     },
+     "FigureQA": {
+      "n": 62,
+      "a_only": 2,
+      "b_only": 6
+     },
+     "FunctionQA": {
+      "n": 62,
+      "a_only": 1,
+      "b_only": 2
+     },
+     "GEOS": {
+      "n": 22,
+      "a_only": 3,
+      "b_only": 1
+     },
+     "GeoQA+": {
+      "n": 62,
+      "a_only": 5,
+      "b_only": 4
+     },
+     "Geometry3K": {
+      "n": 62,
+      "a_only": 5,
+      "b_only": 6
+     },
+     "IQTest": {
+      "n": 37,
+      "a_only": 4,
+      "b_only": 4
+     },
+     "IconQA": {
+      "n": 62,
+      "a_only": 1,
+      "b_only": 1
+     },
+     "KVQA": {
+      "n": 60,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "MapQA": {
+      "n": 8,
+      "a_only": 0,
+      "b_only": 1
+     },
+     "PMC-VQA": {
+      "n": 1,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "PaperQA": {
+      "n": 19,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "ParsVQA-Caps": {
+      "n": 2,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "PlotQA": {
+      "n": 19,
+      "a_only": 2,
+      "b_only": 0
+     },
+     "SciBench": {
+      "n": 17,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "ScienceQA": {
+      "n": 9,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "Super-CLEVR": {
+      "n": 62,
+      "a_only": 4,
+      "b_only": 6
+     },
+     "TQA": {
+      "n": 16,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "TabMWP": {
+      "n": 62,
+      "a_only": 3,
+      "b_only": 0
+     },
+     "TextVQA": {
+      "n": 6,
+      "a_only": 1,
+      "b_only": 0
+     },
+     "TheoremQA": {
+      "n": 11,
+      "a_only": 0,
+      "b_only": 1
+     },
+     "UniGeo": {
+      "n": 62,
+      "a_only": 7,
+      "b_only": 7
+     },
+     "VQA-AS": {
+      "n": 7,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "VQA-RAD": {
+      "n": 2,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "VQA2.0": {
+      "n": 32,
+      "a_only": 0,
+      "b_only": 1
+     },
+     "VizWiz": {
+      "n": 1,
+      "a_only": 0,
+      "b_only": 0
+     }
+    }
+   }
+  }
+ },
+ "rules_only": {
+  "acc": {
+   "visref_imgtag": 60.1,
+   "tsr_answer_prompt": 61.1,
+   "tsr": 60.4
+  },
+  "primary": {
+   "n": 1000,
+   "diff_pp": -1.0,
+   "ci95_pp": [
+    -3.1,
+    1.0
+   ],
+   "ci95_sum": [
+    -31,
+    10
+   ],
+   "a_only": 49,
+   "b_only": 59,
+   "p_mcnemar": 0.3866
+  },
+  "verdict": {
+   "code": 3,
+   "text": "이미지 태그 주입의 논문 크기(+3.5 pp) 이득은 재현 안 됨"
+  },
+  "power": {
+   "discordant": 108,
+   "discordant_rate": 0.108,
+   "se_pp": 1.04,
+   "mde80_pp": 2.91,
+   "power_at_paper": 0.92
+  },
+  "secondary": {
+   "visref_imgtag-tsr": {
+    "n": 1000,
+    "diff_pp": -0.3,
+    "ci95_pp": [
+     -2.4,
+     1.8
+    ],
+    "ci95_sum": [
+     -24,
+     18
+    ],
+    "a_only": 52,
+    "b_only": 55,
+    "p_mcnemar": 0.8468,
+    "rule_code": 3,
+    "label": "same rule applied, secondary"
+   },
+   "tsr_answer_prompt-tsr": {
+    "n": 1000,
+    "diff_pp": 0.7,
+    "ci95_pp": [
+     0.0,
+     1.5
+    ],
+    "ci95_sum": [
+     0,
+     15
+    ],
+    "a_only": 10,
+    "b_only": 3,
+    "p_mcnemar": 0.0923
+   }
+  },
+  "reference_only_tsr_vs_main_run_tsr": {
+   "n": 1000,
+   "diff_pp": 0.4,
+   "ci95_pp": [
+    -1.4,
+    2.1
+   ],
+   "ci95_sum": [
+    -14,
+    21
+   ],
+   "a_only": 43,
+   "b_only": 39,
+   "p_mcnemar": 0.7407,
+   "label": "reference only: cannot separate causes (main-run TSR rows span several code versions, started from the generated step 1 with a different sampler state, other settings; different GPU/torch)",
+   "n_prefix_covered": 1000,
+   "acc": {
+    "tsr": 60.4,
+    "main_run_tsr": 60.0
+   }
+  },
+  "strata_step1_end": {
+   "close": {
+    "n": 334,
+    "acc": {
+     "visref_imgtag": 69.16,
+     "tsr_answer_prompt": 71.86,
+     "tsr": 71.86
+    },
+    "main_diff_pp": -2.69,
+    "a_only": 0,
+    "b_only": 9
+   },
+   "cap": {
+    "n": 641,
+    "acc": {
+     "visref_imgtag": 55.38,
+     "tsr_answer_prompt": 54.91,
+     "tsr": 54.6
+    },
+    "main_diff_pp": 0.47,
+    "a_only": 49,
+    "b_only": 46
+   },
+   "eos": {
+    "n": 25,
+    "acc": {
+     "visref_imgtag": 60.0,
+     "tsr_answer_prompt": 76.0,
+     "tsr": 56.0
+    },
+    "main_diff_pp": -16.0,
+    "a_only": 0,
+    "b_only": 4
+   },
+   "other": 0
+  },
+  "source_cluster": {
+   "label": "sensitivity check, descriptive: whole source datasets resampled; the verdict uses the question-level CI only",
+   "visref_imgtag-tsr_answer_prompt": {
+    "n_sources": 31,
+    "diff_pp": -1.0,
+    "ci95_pp": [
+     -3.03,
+     1.06
+    ],
+    "leave_one_source_out": {
+     "lowest": [
+      -1.6,
+      "CLEVR-Math"
+     ],
+     "highest": [
+      -0.53,
+      "DVQA"
+     ]
+    },
+    "per_source": {
+     "A-OKVQA": {
+      "n": 6,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "AI2D": {
+      "n": 43,
+      "a_only": 0,
+      "b_only": 2
+     },
+     "CLEVR-Math": {
+      "n": 62,
+      "a_only": 10,
+      "b_only": 5
+     },
+     "ChartQA": {
+      "n": 50,
+      "a_only": 2,
+      "b_only": 3
+     },
+     "DVQA": {
+      "n": 62,
+      "a_only": 0,
+      "b_only": 5
+     },
+     "DocVQA": {
+      "n": 12,
+      "a_only": 1,
+      "b_only": 0
+     },
+     "FigureQA": {
+      "n": 62,
+      "a_only": 2,
+      "b_only": 6
+     },
+     "FunctionQA": {
+      "n": 62,
+      "a_only": 1,
+      "b_only": 2
+     },
+     "GEOS": {
+      "n": 22,
+      "a_only": 2,
+      "b_only": 1
+     },
+     "GeoQA+": {
+      "n": 62,
+      "a_only": 5,
+      "b_only": 4
+     },
+     "Geometry3K": {
+      "n": 62,
+      "a_only": 7,
+      "b_only": 6
+     },
+     "IQTest": {
+      "n": 37,
+      "a_only": 4,
+      "b_only": 4
+     },
+     "IconQA": {
+      "n": 62,
+      "a_only": 1,
+      "b_only": 1
+     },
+     "KVQA": {
+      "n": 60,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "MapQA": {
+      "n": 8,
+      "a_only": 0,
+      "b_only": 1
+     },
+     "PMC-VQA": {
+      "n": 1,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "PaperQA": {
+      "n": 19,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "ParsVQA-Caps": {
+      "n": 2,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "PlotQA": {
+      "n": 19,
+      "a_only": 0,
+      "b_only": 3
+     },
+     "SciBench": {
+      "n": 17,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "ScienceQA": {
+      "n": 9,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "Super-CLEVR": {
+      "n": 62,
+      "a_only": 4,
+      "b_only": 7
+     },
+     "TQA": {
+      "n": 16,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "TabMWP": {
+      "n": 62,
+      "a_only": 3,
+      "b_only": 0
+     },
+     "TextVQA": {
+      "n": 6,
+      "a_only": 1,
+      "b_only": 0
+     },
+     "TheoremQA": {
+      "n": 11,
+      "a_only": 0,
+      "b_only": 1
+     },
+     "UniGeo": {
+      "n": 62,
+      "a_only": 6,
+      "b_only": 7
+     },
+     "VQA-AS": {
+      "n": 7,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "VQA-RAD": {
+      "n": 2,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "VQA2.0": {
+      "n": 32,
+      "a_only": 0,
+      "b_only": 1
+     },
+     "VizWiz": {
+      "n": 1,
+      "a_only": 0,
+      "b_only": 0
+     }
+    }
+   },
+   "visref_imgtag-tsr": {
+    "n_sources": 31,
+    "diff_pp": -0.3,
+    "ci95_pp": [
+     -2.3,
+     1.81
+    ],
+    "leave_one_source_out": {
+     "lowest": [
+      -0.96,
+      "CLEVR-Math"
+     ],
+     "highest": [
+      0.21,
+      "DVQA"
+     ]
+    },
+    "per_source": {
+     "A-OKVQA": {
+      "n": 6,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "AI2D": {
+      "n": 43,
+      "a_only": 0,
+      "b_only": 2
+     },
+     "CLEVR-Math": {
+      "n": 62,
+      "a_only": 11,
+      "b_only": 5
+     },
+     "ChartQA": {
+      "n": 50,
+      "a_only": 2,
+      "b_only": 3
+     },
+     "DVQA": {
+      "n": 62,
+      "a_only": 0,
+      "b_only": 5
+     },
+     "DocVQA": {
+      "n": 12,
+      "a_only": 1,
+      "b_only": 0
+     },
+     "FigureQA": {
+      "n": 62,
+      "a_only": 2,
+      "b_only": 6
+     },
+     "FunctionQA": {
+      "n": 62,
+      "a_only": 1,
+      "b_only": 2
+     },
+     "GEOS": {
+      "n": 22,
+      "a_only": 3,
+      "b_only": 1
+     },
+     "GeoQA+": {
+      "n": 62,
+      "a_only": 5,
+      "b_only": 4
+     },
+     "Geometry3K": {
+      "n": 62,
+      "a_only": 5,
+      "b_only": 6
+     },
+     "IQTest": {
+      "n": 37,
+      "a_only": 4,
+      "b_only": 4
+     },
+     "IconQA": {
+      "n": 62,
+      "a_only": 1,
+      "b_only": 1
+     },
+     "KVQA": {
+      "n": 60,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "MapQA": {
+      "n": 8,
+      "a_only": 0,
+      "b_only": 1
+     },
+     "PMC-VQA": {
+      "n": 1,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "PaperQA": {
+      "n": 19,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "ParsVQA-Caps": {
+      "n": 2,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "PlotQA": {
+      "n": 19,
+      "a_only": 2,
+      "b_only": 0
+     },
+     "SciBench": {
+      "n": 17,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "ScienceQA": {
+      "n": 9,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "Super-CLEVR": {
+      "n": 62,
+      "a_only": 4,
+      "b_only": 6
+     },
+     "TQA": {
+      "n": 16,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "TabMWP": {
+      "n": 62,
+      "a_only": 3,
+      "b_only": 0
+     },
+     "TextVQA": {
+      "n": 6,
+      "a_only": 1,
+      "b_only": 0
+     },
+     "TheoremQA": {
+      "n": 11,
+      "a_only": 0,
+      "b_only": 1
+     },
+     "UniGeo": {
+      "n": 62,
+      "a_only": 7,
+      "b_only": 7
+     },
+     "VQA-AS": {
+      "n": 7,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "VQA-RAD": {
+      "n": 2,
+      "a_only": 0,
+      "b_only": 0
+     },
+     "VQA2.0": {
+      "n": 32,
+      "a_only": 0,
+      "b_only": 1
+     },
+     "VizWiz": {
+      "n": 1,
+      "a_only": 0,
+      "b_only": 0
+     }
+    }
+   }
+  }
+ },
+ "verdict": {
+  "code": 3,
+  "text": "이미지 태그 주입의 논문 크기(+3.5 pp) 이득은 재현 안 됨"
+ },
+ "mechanism": {
+  "visref_imgtag": {
+   "n_rows": 1000,
+   "n_steps": 2466,
+   "k_dist": {
+    "1": 666,
+    "2": 111,
+    "3": 42,
+    "4": 28,
+    "5": 15,
+    "6": 14,
+    "7": 11,
+    "8": 8,
+    "9": 10,
+    "10": 95
+   },
+   "stop_reason": {
+    "entropy": 912,
+    "kmax": 88
+   },
+   "status_not_ok": 0,
+   "n_dual_steps": 2466,
+   "n_crn_steps": 2466,
+   "n_pairs_valid": 2446,
+   "n_pairs_differ": 459,
+   "pair_differ_rate": 0.1877,
+   "pairs_not_interpretable": false,
+   "final_y_start_gt0": 249,
+   "final_raw_has_think_end": 249,
+   "n_final_raw": 249,
+   "final_len_q": [
+    4.0,
+    6.0,
+    39.5,
+    119.25,
+    1024.0
+   ],
+   "final_finish_cap": 115,
+   "final_forced_answer": 1000,
+   "empty_final_answer": 16,
+   "steps_n_inject_0": 0,
+   "immediate_close_steps": 0,
+   "inject_frac_q": [
+    0.5121,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+   ],
+   "inject_format": {
+    "img_tag_outside_think": 2466
+   },
+   "step1_source": {
+    "stored": 1000
+   },
+   "step1_tokens_mismatch": 29,
+   "second_think_end_rate": 0.249,
+   "empty_after_prompt": 16,
+   "final_af": 115,
+   "extracted_final_answer_phrase": 0,
+   "final_context_len_max": 23933,
+   "step1_tokens_match": 971,
+   "n_step1_info": 1000,
+   "inject_over_m_q25_50_75": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "mean_k": 2.47,
+   "reemit_vs_answer_cap": {
+    "reemit": {
+     "n": 249,
+     "answer_cap": 14,
+     "answer_forced_deer": 14
+    },
+    "no_reemit": {
+     "n": 751,
+     "answer_cap": 101,
+     "answer_forced_deer": 101
+    }
+   }
+  },
+  "tsr_answer_prompt": {
+   "n_rows": 1000,
+   "n_steps": 2070,
+   "k_dist": {
+    "1": 730,
+    "2": 87,
+    "3": 50,
+    "4": 20,
+    "5": 18,
+    "6": 15,
+    "7": 9,
+    "8": 6,
+    "9": 5,
+    "10": 60
+   },
+   "stop_reason": {
+    "entropy": 942,
+    "kmax": 58
+   },
+   "status_not_ok": 0,
+   "n_dual_steps": 0,
+   "n_crn_steps": 0,
+   "n_pairs_valid": 0,
+   "n_pairs_differ": 0,
+   "pair_differ_rate": null,
+   "pairs_not_interpretable": false,
+   "final_y_start_gt0": 107,
+   "final_raw_has_think_end": 107,
+   "n_final_raw": 107,
+   "final_len_q": [
+    17.0,
+    43.0,
+    80.0,
+    210.25,
+    1024.0
+   ],
+   "final_finish_cap": 159,
+   "final_forced_answer": 1000,
+   "empty_final_answer": 3,
+   "steps_n_inject_0": null,
+   "immediate_close_steps": 0,
+   "inject_frac_q": null,
+   "inject_format": {},
+   "step1_source": {
+    "stored": 1000
+   },
+   "step1_tokens_mismatch": 29,
+   "second_think_end_rate": 0.107,
+   "empty_after_prompt": 3,
+   "final_af": 159,
+   "extracted_final_answer_phrase": 0,
+   "final_context_len_max": 13952,
+   "step1_tokens_match": 971,
+   "n_step1_info": 1000,
+   "inject_over_m_q25_50_75": null,
+   "mean_k": 2.07,
+   "reemit_vs_answer_cap": {
+    "reemit": {
+     "n": 107,
+     "answer_cap": 8,
+     "answer_forced_deer": 8
+    },
+    "no_reemit": {
+     "n": 893,
+     "answer_cap": 151,
+     "answer_forced_deer": 151
+    }
+   }
+  },
+  "tsr": {
+   "n_rows": 1000,
+   "n_steps": 2060,
+   "k_dist": {
+    "1": 730,
+    "2": 87,
+    "3": 52,
+    "4": 20,
+    "5": 18,
+    "6": 14,
+    "7": 9,
+    "8": 6,
+    "9": 5,
+    "10": 59
+   },
+   "stop_reason": {
+    "entropy": 942,
+    "kmax": 58
+   },
+   "status_not_ok": 0,
+   "n_dual_steps": 0,
+   "n_crn_steps": 0,
+   "n_pairs_valid": 0,
+   "n_pairs_differ": 0,
+   "pair_differ_rate": null,
+   "pairs_not_interpretable": false,
+   "final_y_start_gt0": 113,
+   "final_raw_has_think_end": 113,
+   "n_final_raw": 113,
+   "final_len_q": [
+    32.9,
+    54.0,
+    92.0,
+    268.25,
+    1024.0
+   ],
+   "final_finish_cap": 165,
+   "final_forced_answer": 615,
+   "empty_final_answer": 2,
+   "steps_n_inject_0": null,
+   "immediate_close_steps": 0,
+   "inject_frac_q": null,
+   "inject_format": {},
+   "step1_source": {
+    "stored": 1000
+   },
+   "step1_tokens_mismatch": 29,
+   "second_think_end_rate": 0.113,
+   "empty_after_prompt": 2,
+   "final_af": 165,
+   "extracted_final_answer_phrase": 0,
+   "final_context_len_max": 13952,
+   "step1_tokens_match": 971,
+   "n_step1_info": 1000,
+   "inject_over_m_q25_50_75": null,
+   "mean_k": 2.06,
+   "reemit_vs_answer_cap": {
+    "reemit": {
+     "n": 113,
+     "answer_cap": 10,
+     "answer_forced_deer": 10
+    },
+    "no_reemit": {
+     "n": 887,
+     "answer_cap": 155,
+     "answer_forced_deer": 155
+    }
+   }
+  }
+ },
+ "tsr_pair_same_thinking": {
+  "same": 969,
+  "total": 1000,
+  "rate": 0.969,
+  "by_step1_end": {
+   "close": {
+    "same": 334,
+    "total": 334,
+    "rate": 1.0
+   },
+   "cap": {
+    "same": 610,
+    "total": 641,
+    "rate": 0.9516
+   },
+   "eos": {
+    "same": 25,
+    "total": 25,
+    "rate": 1.0
+   },
+   "other": {
+    "same": 0,
+    "total": 0,
+    "rate": null
+   }
+  },
+  "n_skipped_error": 0,
+  "n_pairs_without_thinking_text": 0,
+  "differing_examples": [
+   {
+    "pid": "360",
+    "step": null,
+    "what": "thinking_text",
+    "char": 19269
+   },
+   {
+    "pid": "589",
+    "step": 5,
+    "what": "step_count"
+   },
+   {
+    "pid": "504",
+    "step": 2,
+    "what": "step_tokens_or_end"
+   },
+   {
+    "pid": "251",
+    "step": 5,
+    "what": "step_count"
+   },
+   {
+    "pid": "69",
+    "step": 4,
+    "what": "step_tokens_or_end"
+   }
+  ]
+ },
+ "cost": {
+  "visref_imgtag": {
+   "n": 1000,
+   "gen_tokens_total": 2383087,
+   "gen_tokens_q": [
+    422.5,
+    1069.5,
+    2290.0
+   ],
+   "think_tokens_q": [
+    346.75,
+    1024.0,
+    2048.0
+   ],
+   "final_context_len_q": [
+    2273.5,
+    3913.0,
+    6061.25
+   ],
+   "wall_s_median": 247.4
+  },
+  "tsr_answer_prompt": {
+   "n": 1000,
+   "gen_tokens_total": 2105626,
+   "gen_tokens_q": [
+    405.75,
+    1124.0,
+    2151.0
+   ],
+   "think_tokens_q": [
+    327.0,
+    1024.0,
+    2048.0
+   ],
+   "final_context_len_q": [
+    2067.75,
+    3582.5,
+    4554.0
+   ],
+   "wall_s_median": 172.4
+  },
+  "tsr": {
+   "n": 1000,
+   "gen_tokens_total": 2119000,
+   "gen_tokens_q": [
+    446.75,
+    1125.5,
+    2151.0
+   ],
+   "think_tokens_q": [
+    327.0,
+    1024.0,
+    2048.0
+   ],
+   "final_context_len_q": [
+    2067.75,
+    3582.5,
+    4554.0
+   ],
+   "wall_s_median": 173.2
+  },
+  "visref_imgtag_over_tsr_answer_prompt": {
+   "gen_tokens_total": 1.132,
+   "wall_s_median": 1.435
+  },
+  "visref_imgtag_over_tsr": {
+   "gen_tokens_total": 1.125,
+   "wall_s_median": 1.428
+  }
+ },
+ "stop_entropy": {
+  "visref_imgtag": {
+   "n_steps": 2450,
+   "H_q": [
+    0.048,
+    0.486,
+    0.838
+   ],
+   "below_delta": 912,
+   "near_delta": 257,
+   "first_content_token": {
+    "n": 2450,
+    "decision_differs": 121
+   },
+   "with_vs_without_image": {
+    "n": 2450,
+    "n_nonfinite": 4,
+    "mean_H_minus_H_noV": 0.0817,
+    "decision_differs": 287
+   }
+  },
+  "tsr_answer_prompt": {
+   "n_steps": 2056,
+   "H_q": [
+    0.002,
+    0.369,
+    0.869
+   ],
+   "below_delta": 942,
+   "near_delta": 140,
+   "first_content_token": {
+    "n": 2056,
+    "decision_differs": 93
+   }
+  },
+  "tsr": {
+   "n_steps": 2043,
+   "H_q": [
+    0.002,
+    0.357,
+    0.863
+   ],
+   "below_delta": 942,
+   "near_delta": 136,
+   "first_content_token": {
+    "n": 2043,
+    "decision_differs": 101
+   }
+  }
+ },
+ "run_dirs": [
+  "kaggle/runs/imgtag_main/output/results"
+ ],
+ "bmain_tsr_source": "llm/final/merged.jsonl"
+}

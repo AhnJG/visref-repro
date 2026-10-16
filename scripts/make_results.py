@@ -7,6 +7,7 @@ Inputs (committed; regenerate them with `make analysis`):
   repro/diag/analyze_fill.json          follow-up visref_fill (pre-registered)
   repro/diag/step1_branch_analysis.json follow-up step1_branch (pre-registered)
   repro/diag/analyze_hs.json            follow-up visref_hs, last-layer Z (pre-registered)
+  repro/diag/analyze_imgtag_main.json   follow-up A6, image tags after </think> (rule fixed before the results)
 Outputs: results/accuracy.csv, results/paired_differences.csv, results/sensitivity.csv, results/followups.csv,
 results/summary.json. Paper values: VisRef (arXiv 2603.00207) Appendix Table 6, row InternVL-1B.
 """
@@ -18,7 +19,8 @@ ROOT = Path(__file__).resolve().parent.parent
 DIAG = ROOT / 'repro' / 'diag'
 OUT = ROOT / 'results'
 PAPER = {'st': 46.1, 'tsr': 48.5, 'visref_raw_rank': 52.0}
-NAME = {'st': 'ST', 'tsr': 'TSR', 'visref_raw_rank': 'VisRef', 'visref_fill': 'VisRef-fill', 'visref_hs': 'VisRef-hs'}
+NAME = {'st': 'ST', 'tsr': 'TSR', 'visref_raw_rank': 'VisRef', 'visref_fill': 'VisRef-fill', 'visref_hs': 'VisRef-hs',
+        'visref_imgtag': 'VisRef-imgtag', 'tsr_answer_prompt': 'TSR with answer prompt'}
 LABEL = {'재현됨': 'consistent with the paper value',
          '효과 크기 재현 안 됨': 'effect size not reproduced',
          '효과 크기 재현 안 됨 (방향은 같으나 크기 다름)': 'effect size not reproduced (same direction, different size)'}
@@ -45,6 +47,7 @@ def main():
     fill = json.loads((DIAG / 'analyze_fill.json').read_text())
     sb = json.loads((DIAG / 'step1_branch_analysis.json').read_text())
     hs = json.loads((DIAG / 'analyze_hs.json').read_text())
+    it = json.loads((DIAG / 'analyze_imgtag_main.json').read_text())
     OUT.mkdir(exist_ok=True)
 
     write('accuracy.csv', ['method', 'ours_pct', 'paper_pct', 'ours_minus_paper_pp'],
@@ -74,6 +77,11 @@ def main():
         for k, p in prs.items():
             fol.append([f'visref_hs {role} (pre-registered)', hs['n_prefix'], pair_name(k), p['diff_pp'], *p['ci95_pp'],
                         p['p_mcnemar'], ''])
+    it_pairs = {'visref_imgtag-tsr_answer_prompt': it['main']['primary'], **it['main']['secondary']}
+    for k, p in it_pairs.items():
+        role = 'primary' if k == 'visref_imgtag-tsr_answer_prompt' else 'secondary'
+        fol.append([f'visref_imgtag {role} (rule fixed before the results)', it['n_prefix'], pair_name(k), p['diff_pp'],
+                    *p['ci95_pp'], p['p_mcnemar'], ''])
     write('followups.csv', ['experiment', 'n', 'comparison', 'diff_pp', 'ci95_lo', 'ci95_hi',
                             'p_mcnemar (step1_branch: greedy answers)', 'p_holm'], fol)
     summary = {
@@ -97,8 +105,17 @@ def main():
                                   3: 'rule 3: no paper-size (+3.5 pp) extra gain over TSR with last-layer Z'}[hs['verdict']['code']],
                       'rules_only': {'acc_pct': {NAME[m]: a for m, a in hs['rules_only']['acc'].items()},
                                      'primary': hs['rules_only']['primary']}},
+        'visref_imgtag': {'n': it['n_prefix'], 'acc_pct': {NAME[m]: a for m, a in it['main']['acc'].items()},
+                          'primary': {pair_name('visref_imgtag-tsr_answer_prompt'): it['main']['primary']},
+                          'secondary': {pair_name(k): p for k, p in it['main']['secondary'].items()},
+                          'verdict': {1: 'rule 1: gain over TSR with the same answer prompt',
+                                      2: 'rule 2: undecided (a paper-size effect is not ruled out)',
+                                      3: 'rule 3: no paper-size (+3.5 pp) gain from the image-tag injection'}[it['verdict']['code']],
+                          'rules_only': {'acc_pct': {NAME[m]: a for m, a in it['rules_only']['acc'].items()},
+                                         'primary': it['rules_only']['primary']}},
         'sources': ['repro/diag/final_judgment.json', 'repro/diag/analyze_fill.json',
-                    'repro/diag/step1_branch_analysis.json', 'repro/diag/analyze_hs.json'],
+                    'repro/diag/step1_branch_analysis.json', 'repro/diag/analyze_hs.json',
+                    'repro/diag/analyze_imgtag_main.json'],
     }
     (OUT / 'summary.json').write_text(json.dumps(summary, indent=1, ensure_ascii=False) + '\n')
     print('wrote', sorted(p.name for p in OUT.iterdir()))

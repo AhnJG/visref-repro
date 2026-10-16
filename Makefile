@@ -11,12 +11,13 @@ fetch:
 	$(PY) scripts/fetch_sources.py
 
 # Re-run the pre-registered analyses from the saved outputs (needs `make fetch`).
-# final_judgment / analyze_fill / analyze_hs / analyze_imgtag (two 10-question trials) rewrite repro/diag/*.json in place; step1_branch is written to build/ and compared.
+# final_judgment / analyze_fill / analyze_hs / analyze_imgtag_main (A6) / analyze_imgtag (two 10-question trials) rewrite repro/diag/*.json in place; step1_branch is written to build/ and compared.
 analysis:
 	mkdir -p build
 	cd repro && $(PY) diag/final_judgment.py > /dev/null
 	cd repro && $(PY) diag/analyze_fill.py llm/fill/merged.jsonl > /dev/null
 	cd repro && $(PY) diag/analyze_hs.py analyze --llm llm/hs/merged.jsonl --out diag/analyze_hs.json > /dev/null
+	cd repro && $(PY) diag/analyze_imgtag_main.py analyze --llm llm/imgtag_main/merged.jsonl --out diag/analyze_imgtag_main.json > /dev/null
 	rm -f build/step1_branch_analysis.json
 	cd repro && $(PY) diag/analyze_step1_branch.py $(STEP1) --ids diag/step1_branch_ids.json \
 	  --out ../build/step1_branch_analysis.json > /dev/null

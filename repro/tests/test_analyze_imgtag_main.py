@@ -371,7 +371,7 @@ def test_stop_entropy():
     v = out['visref_imgtag']
     assert v['n_steps'] == 2 and v['below_delta'] == 1 and v['near_delta'] == 1
     assert v['first_content_token'] == {'n': 2, 'decision_differs': 1}
-    assert v['with_vs_without_image'] == {'n': 2, 'mean_H_minus_H_noV': -0.175, 'decision_differs': 1}
+    assert v['with_vs_without_image'] == {'n': 2, 'n_nonfinite': 0, 'mean_H_minus_H_noV': -0.175, 'decision_differs': 1}
     assert out['tsr']['n_steps'] == 0
 
 
@@ -400,3 +400,11 @@ def test_source_cluster_in_analysis():
     assert sc['label'] == am.SOURCE_LABEL
     assert sc['visref_imgtag-tsr_answer_prompt']['diff_pp'] == out['rules_only']['primary']['diff_pp']
     assert out['verdict'] == am.verdict(*out['rules_only']['primary']['ci95_sum'], 40)   # verdict unchanged
+
+
+def test_stop_entropy_infinite_probe_without_image():
+    s1 = {'probe_valid': True, 'H': 0.1, 'probe_ent': [0.0, 0.3], 'probe_noV_crn': True, 'H_noV': 0.4}
+    s2 = {'probe_valid': True, 'H': 0.1, 'probe_ent': [0.0, 0.3], 'probe_noV_crn': True, 'H_noV': float('inf')}
+    rows = {('1', m): _row(m, [s1, s2] if m == M1 else [s1]) for m in am.METHODS}
+    w = am.stop_entropy(rows, ['1'])[M1]['with_vs_without_image']
+    assert w == {'n': 2, 'n_nonfinite': 1, 'mean_H_minus_H_noV': -0.3, 'decision_differs': 2}

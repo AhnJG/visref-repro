@@ -56,6 +56,7 @@ import argparse
 import collections
 import glob
 import json
+import math
 import random
 import re
 import statistics
@@ -241,8 +242,12 @@ def stop_entropy(rows, pids):
         g['first_content_token'] = {'n': len(fc), 'decision_differs': sum(a != b for a, b in fc)}
         if m == 'visref_imgtag':
             pr = [(s['H'], s['H_noV']) for s in st if s.get('probe_noV_crn') and s.get('H_noV') is not None]
+            # H_noV is inf when the probe without the image did not close its answer (it can never stop there): such steps
+            # count for the decision but not for the mean (fixed 2026-10-16 after the results: the mean was -inf)
+            fin = [(a, b) for a, b in pr if math.isfinite(a) and math.isfinite(b)]
             g['with_vs_without_image'] = {
-                'n': len(pr), 'mean_H_minus_H_noV': round(statistics.mean(a - b for a, b in pr), 4) if pr else None,
+                'n': len(pr), 'n_nonfinite': len(pr) - len(fin),
+                'mean_H_minus_H_noV': round(statistics.mean(a - b for a, b in fin), 4) if fin else None,
                 'decision_differs': sum((a < DELTA) != (b < DELTA) for a, b in pr)}
         out[m] = g
     return out

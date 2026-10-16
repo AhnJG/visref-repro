@@ -274,10 +274,93 @@
    }
   }
  },
+ "visref_imgtag": {
+  "n": 1000,
+  "acc_pct": {
+   "VisRef-imgtag": 60.1,
+   "TSR with answer prompt": 61.1,
+   "TSR": 60.4
+  },
+  "primary": {
+   "VisRef-imgtag - TSR with answer prompt": {
+    "n": 1000,
+    "diff_pp": -1.0,
+    "ci95_pp": [
+     -3.1,
+     1.0
+    ],
+    "ci95_sum": [
+     -31,
+     10
+    ],
+    "a_only": 49,
+    "b_only": 59,
+    "p_mcnemar": 0.3866
+   }
+  },
+  "secondary": {
+   "VisRef-imgtag - TSR": {
+    "n": 1000,
+    "diff_pp": -0.3,
+    "ci95_pp": [
+     -2.4,
+     1.8
+    ],
+    "ci95_sum": [
+     -24,
+     18
+    ],
+    "a_only": 52,
+    "b_only": 55,
+    "p_mcnemar": 0.8468,
+    "rule_code": 3,
+    "label": "same rule applied, secondary"
+   },
+   "TSR with answer prompt - TSR": {
+    "n": 1000,
+    "diff_pp": 0.7,
+    "ci95_pp": [
+     0.0,
+     1.5
+    ],
+    "ci95_sum": [
+     0,
+     15
+    ],
+    "a_only": 10,
+    "b_only": 3,
+    "p_mcnemar": 0.0923
+   }
+  },
+  "verdict": "rule 3: no paper-size (+3.5 pp) gain from the image-tag injection",
+  "rules_only": {
+   "acc_pct": {
+    "VisRef-imgtag": 60.1,
+    "TSR with answer prompt": 61.1,
+    "TSR": 60.4
+   },
+   "primary": {
+    "n": 1000,
+    "diff_pp": -1.0,
+    "ci95_pp": [
+     -3.1,
+     1.0
+    ],
+    "ci95_sum": [
+     -31,
+     10
+    ],
+    "a_only": 49,
+    "b_only": 59,
+    "p_mcnemar": 0.3866
+   }
+  }
+ },
  "sources": [
   "repro/diag/final_judgment.json",
   "repro/diag/analyze_fill.json",
   "repro/diag/step1_branch_analysis.json",
-  "repro/diag/analyze_hs.json"
+  "repro/diag/analyze_hs.json",
+  "repro/diag/analyze_imgtag_main.json"
  ]
 }

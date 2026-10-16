@@ -13,8 +13,8 @@ InternVL3.5-1B on the 1,000 MathVista *testmini* questions. Three methods are co
 
 ![ST, TSR and VisRef as run in this reproduction; orange notes mark settings we could not find in the paper](figures/method_overview.svg)
 
-> **Status (2026-10-16):** the main run and three follow-up experiments are finished; the 1,000-question image-tag
-> comparison (A6) is running; one set of experiments (A5, three runs) is planned but not yet run. Full write-up: **[REPORT.md](REPORT.md)**.
+> **Status (2026-10-16):** the main run and four follow-up experiments (A2–A4, A6) are finished; one set of experiments
+> (A5, three runs) and a confirmatory run are planned but not yet run. Full write-up: **[REPORT.md](REPORT.md)**.
 
 ## How to read this repository
 
@@ -68,7 +68,10 @@ appears in the response.
 > - Among the 713 questions where VisRef stopped after one step, the final answer contains another `</think>` in 352
 >   VisRef answers versus 67 ST answers on the same questions.
 >
-> These limits are why the follow-ups A2–A6 exist. This box will be updated with the A6 result.
+> These limits are why the follow-ups A2–A6 exist. A6 addressed the last two together: m tokens chosen with
+> last-layer vectors, wrapped in InternVL's image tags after `</think>`. It gave −1.0 pp (95% CI −3.1 to +1.0) against TSR
+> with the same answer prompt, and another `</think>` still appeared in 249 of 1,000 answers (TSR with the same prompt: 107)
+> ([REPORT, Section 4.6](REPORT.md#46-visref-imgtag-tagged-image-block-after-think-rule-fixed-before-the-results)).
 
 ![How the main run ran: number of thinking steps per method, how each step ended, injected image tokens relative to m](figures/main_run_steps.svg)
 
@@ -91,7 +94,7 @@ whether it comes from the paper, a cited work, official InternVL material or our
 | A3 | Does re-inserting the image after step 1 help by itself? | 309 | with − without the image: +1.40 pp, +0.97 pp | only questions where a method continued after step 1 |
 | A4 | Does choosing image tokens with the model's last-layer vectors help? | 839 | VisRef-hs − TSR: +0.24 pp | the first step was generated anew |
 | A5 | Does thinking more after the re-inserted image help? | planned | not run yet | changes the paper's stopping behaviour |
-| A6 | Does a tagged image block after `</think>` (tokens chosen with last-layer vectors) beat TSR with the same answer prompt? | 1,000 (running) | running, not scored yet | changes four settings the paper does not state at once |
+| A6 | Does a tagged image block after `</think>` (tokens chosen with last-layer vectors) beat TSR with the same answer prompt? | 1,000 | VisRef-imgtag − TSR with answer prompt: −1.0 pp | changes four settings the paper does not state at once |
 <!-- /check -->
 
 ## Why our results may differ from the paper
@@ -100,7 +103,7 @@ We look for the cause in our implementation first ([REPORT, Section 4.1](REPORT.
 
 - **Fewer image tokens.** We re-insert about one fifth of the paper's m image tokens per step: with text token
   embeddings read as the model's input embeddings (our reading; the paper does not name the layer), the selection kernel
-  has rank below m, and the greedy selection the paper cites stops there. A2, A4 and A6 test ways around it.
+  has rank below m, and the greedy selection the paper cites stops there. A2, A4 and A6 tried ways around it; none showed a detectable gain over TSR.
 - **Our own settings.** The paper does not give the stopping-entropy estimate, the insertion format, the token limits or
   the answer extraction; we chose them in small checks ([REPORT, Section 2.6](REPORT.md#26-setting-checks-how-the-unstated-settings-were-chosen)).
   Those checks used questions that are also among the 1,000 evaluated ones.
