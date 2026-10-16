@@ -344,3 +344,32 @@ def test_reemit_vs_answer_cap():
     out = am.reemit_vs_answer_cap(rs)
     assert out == {'reemit': {'n': 2, 'answer_cap': 1, 'answer_forced_deer': 1},
                    'no_reemit': {'n': 2, 'answer_cap': 1, 'answer_forced_deer': 0}}
+
+
+def _row(m, steps, gen=10, wall=1.0, think=5):
+    return {'method': m, 'steps': steps, 'gen_tokens': gen, 'wall_s': wall, 'think_tokens': think, 'final_context_len': 100}
+
+
+def test_cost_ratios():
+    rows = {('1', 'visref_imgtag'): _row('visref_imgtag', [], gen=30, wall=3.0),
+            ('1', 'tsr_answer_prompt'): _row('tsr_answer_prompt', [], gen=20, wall=2.0),
+            ('1', 'tsr'): _row('tsr', [], gen=10, wall=1.0)}
+    out = am.cost(rows, ['1'])
+    assert out['visref_imgtag']['gen_tokens_total'] == 30
+    assert out['visref_imgtag_over_tsr_answer_prompt'] == {'gen_tokens_total': 1.5, 'wall_s_median': 1.5}
+    assert out['visref_imgtag_over_tsr'] == {'gen_tokens_total': 3.0, 'wall_s_median': 3.0}
+
+
+def test_stop_entropy():
+    s1 = {'probe_valid': True, 'H': 0.1, 'probe_ent': [0.0, 0.3], 'probe_noV_crn': True, 'H_noV': 0.4}
+    s2 = {'probe_valid': True, 'H': 0.3, 'probe_ent': [0.0, 0.3], 'probe_noV_crn': True, 'H_noV': 0.35}
+    s3 = {'probe_valid': False, 'H': 9.0}
+    rows = {('1', 'visref_imgtag'): _row('visref_imgtag', [s1, s2, s3]),
+            ('1', 'tsr_answer_prompt'): _row('tsr_answer_prompt', [s1]),
+            ('1', 'tsr'): _row('tsr', [])}
+    out = am.stop_entropy(rows, ['1'])
+    v = out['visref_imgtag']
+    assert v['n_steps'] == 2 and v['below_delta'] == 1 and v['near_delta'] == 1
+    assert v['first_content_token'] == {'n': 2, 'decision_differs': 1}
+    assert v['with_vs_without_image'] == {'n': 2, 'mean_H_minus_H_noV': -0.175, 'decision_differs': 1}
+    assert out['tsr']['n_steps'] == 0

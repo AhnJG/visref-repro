@@ -192,6 +192,57 @@ def reemit_vs_answer_cap(rs):
     return out
 
 
+DELTA = 0.25  # stopping threshold of the run (run.py DEFAULTS delta); used here only to describe the recorded probes
+NEAR = 0.1     # "near the threshold": |H - DELTA| <= NEAR
+
+
+def cost(rows, pids):
+    """Descriptive (added 2026-10-16, before the results), no correctness: generated tokens (gen_tokens, every token the
+    method generated for the question), thinking tokens, final context length and per-row wall time (wall_s; rows run in
+    shared batches, so wall time is noisy and only a reference) per method, and the ratios of visref_imgtag to the two
+    TSR conditions (total generated tokens; median wall time), to set against the paper's Table 5 scale (VisRef / TSR =
+    8.2 s / 7.7 s on InternVL3.5-8B, one H100)."""
+    out = {}
+    for m in METHODS:
+        rs = [rows[(p, m)] for p in pids if rows[(p, m)].get('status') != 'error']
+        g = [r.get('gen_tokens') or 0 for r in rs]
+        ws = [r['wall_s'] for r in rs if r.get('wall_s') is not None]
+        out[m] = {'n': len(rs), 'gen_tokens_total': sum(g), 'gen_tokens_q': quart(g),
+                  'think_tokens_q': quart([r.get('think_tokens') for r in rs]),
+                  'final_context_len_q': quart([r.get('final_context_len') for r in rs]),
+                  'wall_s_median': round(statistics.median(ws), 1) if ws else None}
+    for b in ('tsr_answer_prompt', 'tsr'):
+        a, c = out['visref_imgtag'], out[b]
+        out[f'visref_imgtag_over_{b}'] = {
+            'gen_tokens_total': round(a['gen_tokens_total'] / c['gen_tokens_total'], 3) if c['gen_tokens_total'] else None,
+            'wall_s_median': round(a['wall_s_median'] / c['wall_s_median'], 3) if a['wall_s_median'] and c['wall_s_median'] else None}
+    return out
+
+
+def stop_entropy(rows, pids):
+    """Descriptive (added 2026-10-16, before the results), no correctness: the recorded stopping statistic H of every
+    valid probe step per method: quantiles, share below DELTA, share near DELTA (|H - DELTA| <= NEAR). For visref_imgtag
+    steps whose logging-only probe without the image shares the random state (probe_noV_crn): mean H - H_noV and the
+    number of steps whose stop decision (H < DELTA) differs without the image. A free estimator variant: the entropy of
+    the first token after the opening brace (probe_ent[1], recorded rounded) instead of the sum, and how often its
+    stop decision differs from the recorded one."""
+    out = {}
+    for m in METHODS:
+        st = [s for p in pids for s in (rows[(p, m)].get('steps') or []) if s.get('probe_valid') and s.get('H') is not None]
+        hs = [s['H'] for s in st]
+        g = {'n_steps': len(st), 'H_q': quart(hs),
+             'below_delta': sum(h < DELTA for h in hs), 'near_delta': sum(abs(h - DELTA) <= NEAR for h in hs)}
+        fc = [(s['H'] < DELTA, s['probe_ent'][1] < DELTA) for s in st if len(s.get('probe_ent') or []) >= 2]
+        g['first_content_token'] = {'n': len(fc), 'decision_differs': sum(a != b for a, b in fc)}
+        if m == 'visref_imgtag':
+            pr = [(s['H'], s['H_noV']) for s in st if s.get('probe_noV_crn') and s.get('H_noV') is not None]
+            g['with_vs_without_image'] = {
+                'n': len(pr), 'mean_H_minus_H_noV': round(statistics.mean(a - b for a, b in pr), 4) if pr else None,
+                'decision_differs': sum((a < DELTA) != (b < DELTA) for a, b in pr)}
+        out[m] = g
+    return out
+
+
 def mechanism(rows, pids):
     out = {}
     for m in METHODS:
@@ -290,6 +341,8 @@ def analyze(rows, order, data, llm=None, shards=1, bmain_tsr=None):
     out['verdict'] = out['main' if llm is not None else 'rules_only']['verdict']
     out['mechanism'] = mechanism(rows_rule, pids)
     out['tsr_pair_same_thinking'] = tsr_pair_same_thinking(rows, pids)
+    out['cost'] = cost(rows, pids)
+    out['stop_entropy'] = stop_entropy(rows, pids)
     return out
 
 
