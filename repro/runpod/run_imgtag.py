@@ -14,8 +14,8 @@ chunk (1024); RUN['run_py_defaults'] records them and they are checked against r
 
 Plans (--plan, default imgtag_main): PLANS holds one settings dict per experiment and the chosen one becomes RUN.
 imgtag_main is the A6 run above; its code_version pin is the one of commit 8f5c09e, so it runs only from that commit.
-format_check (EF 2026-10-17 "동작 점검 계획"): methods visref_hs_imgtag_in, visref_hs_imgtag_out, tsr_answer_prompt on the
-100 questions of diag/format_check_ids.json, other settings as imgtag_main; summarize.py is never run (no accuracy).
+format_check (EF 2026-10-17 "동작 점검 계획"): methods visref_hs_imgtag_in and tsr_answer_prompt on the 200 questions of
+diag/format_check_ids.json, other settings as imgtag_main; summarize.py is never run (no accuracy).
 Its main run is named fmtcheck_main; a check run takes another name, e.g. fmtcheck_try --limit 3:
   python3 repro/runpod/run_imgtag.py --plan format_check --name fmtcheck_main --out-root /workspace/runs
 
@@ -118,19 +118,19 @@ RUN = {
     'cuda_alloc_conf': 'expandable_segments:True',
     'progress_every_s': 120,
 }
-# 2026-10-17 format check (EF "동작 점검 계획"): image block inside vs after the thinking block, same selection
-# (Z = last-layer hidden states, kernel V = input image embeddings), with the same-prompt TSR; the first 100 questions of
-# the seed-0 order whose stored step 1 closed itself (diag/format_check_ids.py). No accuracy: summarize.py is not run.
-_FMT_METHODS = 'visref_hs_imgtag_in,visref_hs_imgtag_out,tsr_answer_prompt'
+# 2026-10-17 format check (EF "동작 점검 계획"): image block inside the thinking block also when answering (Z = last-layer
+# hidden states, kernel V = input image embeddings), with the same-prompt TSR; the first 200 questions of the seed-0
+# order (diag/format_check_ids.py). No accuracy: summarize.py is not run.
+_FMT_METHODS = 'visref_hs_imgtag_in,tsr_answer_prompt'
 FORMAT_CHECK = dict(RUN, **{
     'plan': 'format_check',
-    'experiment': 'EF 2026-10-17 동작 점검 계획: 이미지 블록 위치 두 형식(첫 단계를 스스로 닫은 100문항, 정답률 사용 안 함)',
+    'experiment': 'EF 2026-10-17 동작 점검 계획: 답할 때도 이미지 블록을 생각 안에(seed 0 순서 앞 200문항, 정답률 사용 안 함)',
     'methods': _FMT_METHODS,
     'run_args': ['--methods', _FMT_METHODS, '--think-cap', '1024', '--total-think-cap', '10240',
                  '--step1-from', 'diag/step1_store_bmain.json', '--dual-probe', '1'],
     'ids_file': 'diag/format_check_ids.json',
-    'ids_sha256': '386538750286bf25cb5bc7e9c8b09635613d5f1a915c88b7519c56342719b161',
-    'n_ids': 100,
+    'ids_sha256': '0c43242bfc1111ef02d5b2600232696cb6e1c1deb6f3d9ad12e2cdf7320def6b',
+    'n_ids': 200,
     'code_version': '06435ae748c8',
     'main_name': 'fmtcheck_main',
     'check_name': 'fmtcheck_try',

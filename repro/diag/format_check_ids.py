@@ -1,6 +1,6 @@
 """Question list of the 2026-10-17 format check (EF "동작 점검 계획"): the first N questions of the main run's seed-0
-order whose stored step 1 the model closed itself (think_end == 'close'), the group where A6's empty answers occurred.
-Chosen from the order and the stored step 1 only (no correctness).
+order, whatever way their stored step 1 ended (closed, cut or EOS), because A6's extra </think> came mostly after cut
+steps. Chosen from the order only (no correctness).
 
   cd repro && python3 diag/format_check_ids.py            # writes diag/format_check_ids.json
   cd repro && python3 diag/format_check_ids.py --check    # exits 1 if the file differs from a fresh build
@@ -14,13 +14,13 @@ REPRO = Path(__file__).resolve().parent.parent
 ORDER = REPRO / 'kaggle/runs/b_main_hs/output/results/ids.json'
 STORE = REPRO / 'diag/step1_store_bmain.json'
 OUT = REPRO / 'diag/format_check_ids.json'
-N = 100
+N = 200
 
 
 def build(order, store, n=N):
-    """First n pids of order (as strings) whose stored step 1 ended with the model's own </think>."""
-    pids = [str(p) for p in order if store[str(p)]['think_end'] == 'close'][:n]
-    assert len(pids) == n, f'only {len(pids)} closed first steps'
+    """First n pids of order (as strings); every one must have a stored step 1."""
+    pids = [str(p) for p in order][:n]
+    assert len(pids) == n and all(p in store for p in pids), 'order too short or a stored step 1 missing'
     return pids
 
 
