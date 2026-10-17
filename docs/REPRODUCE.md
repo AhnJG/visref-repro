@@ -86,7 +86,8 @@ repro/                     implementation (lean) and analysis
   kaggle/runs/<session>/   every session: run_config.json (source sha256, ids, args), env.json, logs, raw outputs
                            (b_main_s1–s9, b_main_fill, diag_st_plain, hidden_rank_check, step1_branch_pilot,
                             step1_branch_main, b_main_hs; bundle_pilot and bundle_pilot2 = two 10-question trials of
-                            the image-tag variant, B7; setting checks: smoke, smoke2, smoke3, main_s0, full_s1, b_test)
+                            the image-tag variant, B7; imgtag_check and imgtag_main = A6; setting checks: smoke, smoke2, smoke3, main_s0,
+                            full_s1, b_test)
   llm/final, llm/fill, llm/hs   LLM fallback extraction: requests, responses, merged rows (read by diag/*.py)
   reports/                 descriptive per-method report (rule-based scorer v4 only)
 docs/

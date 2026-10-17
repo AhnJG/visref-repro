@@ -76,7 +76,8 @@ appears in the response. Differences are in percentage points (pp) with 95% conf
 ![How the main run ran: number of thinking steps per method, how each step ended, injected image tokens relative to m](figures/main_run_steps.svg)
 
 - **How the conclusion is decided:** *consistent* = our 95% CI contains the paper's difference and excludes 0; *not
-  reproduced* = our 95% CI excludes the paper's difference. These rules were fixed after we had looked at partial results
+  reproduced* = our 95% CI excludes the paper's difference; if the CI contains both 0 and the paper's difference, no
+  conclusion is drawn. These rules were fixed after we had looked at partial results
   (392 and 759 questions), so for the main run they were not fixed before all results ([REPORT, Section 2.4](REPORT.md#24-when-the-decision-rules-were-fixed)).
 
 ## Experiments at a glance
