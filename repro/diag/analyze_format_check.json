@@ -1,0 +1,280 @@
+{
+ "n": 200,
+ "errors": {
+  "visref_hs_imgtag_in": 0,
+  "tsr_answer_prompt": 0
+ },
+ "counts": {
+  "visref_hs_imgtag_in": {
+   "reemit": 48,
+   "empty": 2,
+   "restated": 2
+  },
+  "tsr_answer_prompt": {
+   "reemit": 24,
+   "empty": 1,
+   "restated": 3
+  }
+ },
+ "reemit_excess": 24,
+ "limit": 8,
+ "pass": false,
+ "rule": "reemit(in) - reemit(TSR with answer prompt) <= 8 (half of A6 excess 17)",
+ "a6_reference": {
+  "visref_imgtag": {
+   "reemit": 38,
+   "empty": 2,
+   "restated": 2
+  },
+  "tsr_answer_prompt": {
+   "reemit": 21,
+   "empty": 1,
+   "restated": 1
+  }
+ },
+ "observations": {
+  "scoring": "rules v4 + empty-after-prompt rule, no LLM extraction, both runs alike",
+  "extract_failed": {
+   "new_in": 2,
+   "tsr": 1,
+   "a6_imgtag": 2,
+   "a6_tsr": 1
+  },
+  "hardware": {
+   "n": 200,
+   "same_prediction": 171,
+   "both": 114,
+   "a_only": 7,
+   "b_only": 4,
+   "neither": 75,
+   "acc_a": 60.5,
+   "acc_b": 59.0,
+   "diff_pp": 1.5,
+   "range95_pp": [
+    -1.7,
+    4.7
+   ]
+  },
+  "vs_a6": {
+   "n": 200,
+   "same_prediction": 159,
+   "both": 107,
+   "a_only": 10,
+   "b_only": 14,
+   "neither": 69,
+   "acc_a": 58.5,
+   "acc_b": 60.5,
+   "diff_pp": -2.0,
+   "range95_pp": [
+    -6.8,
+    2.8
+   ]
+  },
+  "within": {
+   "new_in_minus_tsr": {
+    "n": 200,
+    "same_prediction": 157,
+    "both": 107,
+    "a_only": 10,
+    "b_only": 14,
+    "neither": 69,
+    "acc_a": 58.5,
+    "acc_b": 60.5,
+    "diff_pp": -2.0,
+    "range95_pp": [
+     -6.8,
+     2.8
+    ]
+   },
+   "a6_imgtag_minus_tsr": {
+    "n": 200,
+    "same_prediction": 162,
+    "both": 110,
+    "a_only": 11,
+    "b_only": 8,
+    "neither": 71,
+    "acc_a": 60.5,
+    "acc_b": 59.0,
+    "diff_pp": 1.5,
+    "range95_pp": [
+     -2.8,
+     5.8
+    ]
+   }
+  },
+  "reemit": {
+   "new_in": {
+    "reemit": 48,
+    "reemit_correct": 27,
+    "other": 152,
+    "other_correct": 90
+   },
+   "tsr": {
+    "reemit": 24,
+    "reemit_correct": 11,
+    "other": 176,
+    "other_correct": 110
+   },
+   "a6_imgtag": {
+    "reemit": 38,
+    "reemit_correct": 12,
+    "other": 162,
+    "other_correct": 109
+   },
+   "a6_tsr": {
+    "reemit": 21,
+    "reemit_correct": 12,
+    "other": 179,
+    "other_correct": 106
+   }
+  },
+  "by_step1": {
+   "new_in": {
+    "cap": {
+     "n": 131,
+     "reemit": 32,
+     "correct": 68
+    },
+    "close": {
+     "n": 64,
+     "reemit": 16,
+     "correct": 46
+    },
+    "eos": {
+     "n": 5,
+     "reemit": 0,
+     "correct": 3
+    }
+   },
+   "tsr": {
+    "cap": {
+     "n": 131,
+     "reemit": 21,
+     "correct": 71
+    },
+    "close": {
+     "n": 64,
+     "reemit": 3,
+     "correct": 47
+    },
+    "eos": {
+     "n": 5,
+     "reemit": 0,
+     "correct": 3
+    }
+   },
+   "a6_imgtag": {
+    "cap": {
+     "n": 131,
+     "reemit": 34,
+     "correct": 73
+    },
+    "close": {
+     "n": 64,
+     "reemit": 4,
+     "correct": 45
+    },
+    "eos": {
+     "n": 5,
+     "reemit": 0,
+     "correct": 3
+    }
+   },
+   "a6_tsr": {
+    "cap": {
+     "n": 131,
+     "reemit": 17,
+     "correct": 68
+    },
+    "close": {
+     "n": 64,
+     "reemit": 4,
+     "correct": 47
+    },
+    "eos": {
+     "n": 5,
+     "reemit": 0,
+     "correct": 3
+    }
+   }
+  },
+  "behaviour": {
+   "new_in": {
+    "mean_k": 2.64,
+    "stop_reason": {
+     "entropy": 176,
+     "kmax": 24
+    },
+    "gen_tokens": 545049,
+    "H_quartiles": [
+     0.033,
+     0.561,
+     0.853
+    ],
+    "inject_over_m_quartiles": [
+     0.981,
+     1.0,
+     1.0
+    ],
+    "n_meaningful_quartiles": [
+     51,
+     70,
+     90
+    ]
+   },
+   "tsr": {
+    "mean_k": 2.46,
+    "stop_reason": {
+     "entropy": 180,
+     "kmax": 20
+    },
+    "gen_tokens": 502956,
+    "H_quartiles": [
+     0.006,
+     0.547,
+     0.904
+    ],
+    "inject_over_m_quartiles": [],
+    "n_meaningful_quartiles": []
+   },
+   "a6_imgtag": {
+    "mean_k": 2.83,
+    "stop_reason": {
+     "entropy": 174,
+     "kmax": 26
+    },
+    "gen_tokens": 560340,
+    "H_quartiles": [
+     0.08,
+     0.546,
+     0.916
+    ],
+    "inject_over_m_quartiles": [
+     1.0,
+     1.0,
+     1.0
+    ],
+    "n_meaningful_quartiles": [
+     20,
+     25,
+     34
+    ]
+   },
+   "a6_tsr": {
+    "mean_k": 2.37,
+    "stop_reason": {
+     "entropy": 182,
+     "kmax": 18
+    },
+    "gen_tokens": 480312,
+    "H_quartiles": [
+     0.006,
+     0.526,
+     0.934
+    ],
+    "inject_over_m_quartiles": [],
+    "n_meaningful_quartiles": []
+   }
+  }
+ }
+}

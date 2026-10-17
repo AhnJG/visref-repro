@@ -1,0 +1,50 @@
+{
+ "shuffle_seed": 0,
+ "model": "OpenGVLab/InternVL3_5-1B",
+ "model_rev": "2f71cf52542334823e48a46ffba0e2bc9add3446",
+ "data_rev": "2b6ad69445fbb5695c9b165475e8decdbeb97747",
+ "parquet": "data/testmini-00000-of-00001-725687bf7a18d64b.parquet",
+ "ids": [
+  "512",
+  "95",
+  "474",
+  "699",
+  "109",
+  "114"
+ ],
+ "time_limit": 4800,
+ "deadline": 6600,
+ "run_args": [
+  "--methods",
+  "visref_hs_imgtag_in,tsr_answer_prompt",
+  "--think-cap",
+  "1024",
+  "--total-think-cap",
+  "10240",
+  "--step1-from",
+  "diag/step1_store_bmain.json",
+  "--dual-probe",
+  "1"
+ ],
+ "n_skip": 393,
+ "skip_from": [
+  "/tmp/claude-0/-home-claude/221fc211-8949-52ed-8979-f0d2817b694b/scratchpad/fmt_partial/results_0.jsonl"
+ ],
+ "n_ids": 6,
+ "kernel": "arki13/visref-repro-fmtcheck-rest-kg",
+ "accelerator": "NvidiaTeslaT4",
+ "timeout": 7200,
+ "source_sha256": {
+  "run.py": "70df0f5c413d2ca2237ce9597be1ebbac07f57e2999dcd66a152d5ee62be986a",
+  "summarize.py": "edc0816357822f1b804f6effe178000533cbab2038b4696682e0e3cc83c6454f",
+  "visref/dpp.py": "7ebbe7774ac757cc48e067709d20b9d92d92912386ab84ebfa65b8be338dd250",
+  "visref/engine.py": "5b370d8b6e8859a8740d70f70ade5c650b5833c560126ba95c467598e5a62858",
+  "visref/fastkv.py": "40d4febdf0f9ae51364cb914ff6947837dbcb3f746b1f63b6aa5c31380974b9f",
+  "visref/methods.py": "b167e85167350d93de29433d956e10f0f0d4dc2dac6e8019984a1f7319f88230",
+  "visref/model.py": "7feab6eb5c261228cc5d04b3051fd927ef9350d1fa1da4893fe718fc64021b02",
+  "visref/scoring.py": "7921130452a5a405f08776de8130a27fb70434cbf0e1395f09d40d741ec576e8",
+  "diag/step1_store_bmain.json": "f937478f3b265f4242fc140a06bff0e6a8d63889d60cbae8c06678f35f71fe60"
+ },
+ "notebook_sha256": "08bcbcd50855a7be37afc8eefc8ff087e95cdc34efab91d4423033741eac8072",
+ "built_at": "2026-10-17T22:40:12+0000"
+}

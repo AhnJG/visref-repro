@@ -1,0 +1,576 @@
+{"event": "start", "code_version": "06435ae748c8", "shard": "0/1", "todo": 400, "done": 0, "cfg": {"delta": 0.25, "kmax": 10, "vis_frac": 0.3, "think_cap": 1024, "total_think_cap": 10240, "think_extra": 512, "answer_cap": 1024, "max_context": 40960, "min_step_tokens": 256, "probe_cap": 16, "probe_prompt": "\n\n\\boxed", "wait_text": "Wait, think more", "forced_prompt": "\nFinal Answer:", "af_prompt": "\n**Final Answer**\n\\boxed", "af_cap": 100, "cut_sep": "\n", "temperature": 0.6, "top_k": 50, "top_p": 0.95, "seed": 42, "batch": 16, "chunk": 1024, "batch_tokens": 72000, "max_num": 12, "fast_kv": 1, "dual_probe": 1}, "step1_from": "diag/step1_store_bmain.json", "step1_store_sha256": "f937478f3b265f4242fc140a06bff0e6a8d63889d60cbae8c06678f35f71fe60"}
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1792248306.425061    4289 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1792248308.623886    4289 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+FlashAttention2 is not installed.
+{"event": "fast_kv_check", "ok": true, "match_rows": [true, true]}
+{"event": "round", "elapsed": 72, "active": 16, "groups": [[14, 4549, 49, 10.2], [2, 5529, 9, 2.2]], "tokens": 58, "queue": 192, "peak_alloc_gb": 9.89, "peak_reserved_gb": 9.96}
+{"event": "round", "elapsed": 185, "active": 16, "groups": [[13, 4535, 1259, 65.0], [3, 4549, 1084, 47.1]], "tokens": 2343, "queue": 192, "peak_alloc_gb": 10.74, "peak_reserved_gb": 10.86}
+{"event": "row", "pid": "440", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 100, "stop": "entropy", "wall": 140.7, "elapsed": 185}
+{"event": "row", "pid": "622", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 935, "stop": "entropy", "wall": 137.55, "elapsed": 185}
+{"event": "row", "pid": "161", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 134.57, "elapsed": 185}
+{"event": "row", "pid": "550", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 95, "stop": "entropy", "wall": 131.42, "elapsed": 185}
+{"event": "row", "pid": "659", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 76, "stop": "entropy", "wall": 126.05, "elapsed": 185}
+{"event": "row", "pid": "508", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 652, "stop": "entropy", "wall": 124.88, "elapsed": 185}
+{"event": "round", "elapsed": 313, "active": 16, "groups": [[12, 4554, 1177, 61.5], [4, 5578, 1087, 57.7]], "tokens": 2264, "queue": 189, "peak_alloc_gb": 10.74, "peak_reserved_gb": 10.86}
+{"event": "row", "pid": "440", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 100, "stop": "entropy", "wall": 268.83, "elapsed": 313}
+{"event": "row", "pid": "622", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 935, "stop": "entropy", "wall": 265.68, "elapsed": 313}
+{"event": "row", "pid": "161", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 262.7, "elapsed": 313}
+{"event": "row", "pid": "550", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 95, "stop": "entropy", "wall": 259.55, "elapsed": 313}
+{"event": "row", "pid": "659", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 76, "stop": "entropy", "wall": 254.18, "elapsed": 313}
+{"event": "row", "pid": "508", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 652, "stop": "entropy", "wall": 253.01, "elapsed": 313}
+{"event": "round", "elapsed": 435, "active": 16, "groups": [[13, 4554, 1185, 61.1], [3, 7523, 1086, 55.7]], "tokens": 2271, "queue": 186, "peak_alloc_gb": 10.81, "peak_reserved_gb": 10.94}
+{"event": "row", "pid": "125", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 305, "stop": "entropy", "wall": 250.12, "elapsed": 435}
+{"event": "row", "pid": "291", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 164, "stop": "entropy", "wall": 248.22, "elapsed": 435}
+{"event": "row", "pid": "976", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 245.39, "elapsed": 435}
+{"event": "round", "elapsed": 524, "active": 15, "groups": [[12, 3595, 742, 30.9], [3, 6607, 1030, 54.6]], "tokens": 1772, "queue": 185, "peak_alloc_gb": 10.81, "peak_reserved_gb": 10.94}
+{"event": "row", "pid": "125", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 305, "stop": "entropy", "wall": 338.62, "elapsed": 524}
+{"event": "row", "pid": "291", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 164, "stop": "entropy", "wall": 336.71, "elapsed": 524}
+{"event": "row", "pid": "393", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 163, "stop": "entropy", "wall": 210.33, "elapsed": 524}
+{"event": "row", "pid": "232", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 208.29, "elapsed": 524}
+{"event": "row", "pid": "970", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 205.89, "elapsed": 524}
+{"event": "round", "elapsed": 657, "active": 16, "groups": [[12, 4559, 2723, 64.2], [4, 7523, 2151, 61.6]], "tokens": 4874, "queue": 182, "peak_alloc_gb": 10.81, "peak_reserved_gb": 10.94}
+{"event": "row", "pid": "976", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 467.05, "elapsed": 657}
+{"event": "row", "pid": "393", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 163, "stop": "entropy", "wall": 343.49, "elapsed": 657}
+{"event": "row", "pid": "232", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 341.44, "elapsed": 657}
+{"event": "row", "pid": "970", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 339.05, "elapsed": 657}
+{"event": "row", "pid": "355", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 221.03, "elapsed": 657}
+{"event": "round", "elapsed": 727, "active": 15, "groups": [[13, 4568, 2205, 62.2], [2, 9534, 6, 4.9]], "tokens": 2211, "queue": 180, "peak_alloc_gb": 10.88, "peak_reserved_gb": 11.09}
+{"event": "row", "pid": "355", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 291.51, "elapsed": 727}
+{"event": "row", "pid": "658", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 203.25, "elapsed": 727}
+{"event": "round", "elapsed": 851, "active": 15, "groups": [[11, 4568, 2563, 60.4], [4, 8551, 2054, 62.5]], "tokens": 4617, "queue": 179, "peak_alloc_gb": 10.88, "peak_reserved_gb": 11.09}
+{"event": "row", "pid": "658", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 326.47, "elapsed": 851}
+{"event": "row", "pid": "720", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 320.1, "elapsed": 851}
+{"event": "row", "pid": "720", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 320.1, "elapsed": 851}
+{"event": "row", "pid": "110", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 197, "stop": "entropy", "wall": 191.74, "elapsed": 851}
+{"event": "round", "elapsed": 983, "active": 15, "groups": [[10, 3925, 2176, 62.9], [5, 9535, 1080, 63.6]], "tokens": 3256, "queue": 177, "peak_alloc_gb": 10.88, "peak_reserved_gb": 11.09}
+{"event": "row", "pid": "390", "method": "visref_hs_imgtag_in", "correct": 0, "k": 3, "think": 3072, "stop": "entropy", "wall": 927.85, "elapsed": 983}
+{"event": "row", "pid": "110", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 197, "stop": "entropy", "wall": 323.94, "elapsed": 983}
+{"event": "row", "pid": "509", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 116, "stop": "entropy", "wall": 255.34, "elapsed": 983}
+{"event": "round", "elapsed": 1112, "active": 16, "groups": [[11, 4884, 1233, 60.3], [5, 8665, 2059, 63.2]], "tokens": 3292, "queue": 175, "peak_alloc_gb": 10.88, "peak_reserved_gb": 11.09}
+{"event": "row", "pid": "303", "method": "tsr_answer_prompt", "correct": 1, "k": 2, "think": 2048, "stop": "entropy", "wall": 454.37, "elapsed": 1112}
+{"event": "row", "pid": "509", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 116, "stop": "entropy", "wall": 384.08, "elapsed": 1112}
+{"event": "row", "pid": "755", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 727, "stop": "entropy", "wall": 260.11, "elapsed": 1112}
+{"event": "round", "elapsed": 1245, "active": 15, "groups": [[11, 4805, 2645, 64.2], [4, 9694, 2054, 64.9]], "tokens": 4699, "queue": 174, "peak_alloc_gb": 10.88, "peak_reserved_gb": 11.09}
+{"event": "row", "pid": "755", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 727, "stop": "entropy", "wall": 393.1, "elapsed": 1245}
+{"event": "round", "elapsed": 1380, "active": 16, "groups": [[10, 4884, 2175, 63.2], [6, 9694, 3083, 71.3]], "tokens": 5258, "queue": 173, "peak_alloc_gb": 10.88, "peak_reserved_gb": 11.09}
+{"event": "row", "pid": "303", "method": "visref_hs_imgtag_in", "correct": 1, "k": 2, "think": 2048, "stop": "entropy", "wall": 723.25, "elapsed": 1380}
+{"event": "row", "pid": "577", "method": "tsr_answer_prompt", "correct": 0, "k": 2, "think": 2048, "stop": "entropy", "wall": 526.05, "elapsed": 1380}
+{"event": "row", "pid": "244", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 159, "stop": "entropy", "wall": 267.74, "elapsed": 1380}
+{"event": "round", "elapsed": 1515, "active": 15, "groups": [[10, 5992, 2359, 64.7], [5, 10723, 1038, 65.4]], "tokens": 3397, "queue": 172, "peak_alloc_gb": 10.88, "peak_reserved_gb": 11.09}
+{"event": "row", "pid": "7", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 532.37, "elapsed": 1515}
+{"event": "row", "pid": "7", "method": "tsr_answer_prompt", "correct": 0, "k": 2, "think": 1501, "stop": "entropy", "wall": 532.37, "elapsed": 1515}
+{"event": "row", "pid": "244", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 159, "stop": "entropy", "wall": 402.56, "elapsed": 1515}
+{"event": "round", "elapsed": 1664, "active": 16, "groups": [[10, 5913, 1927, 65.2], [6, 10723, 3085, 78.6]], "tokens": 5012, "queue": 170, "peak_alloc_gb": 11.01, "peak_reserved_gb": 11.19}
+{"event": "row", "pid": "577", "method": "visref_hs_imgtag_in", "correct": 0, "k": 2, "think": 2048, "stop": "entropy", "wall": 809.93, "elapsed": 1664}
+{"event": "row", "pid": "711", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 873, "stop": "entropy", "wall": 282.64, "elapsed": 1664}
+{"event": "round", "elapsed": 1815, "active": 16, "groups": [[10, 5992, 4140, 67.8], [6, 11752, 2160, 78.8]], "tokens": 6300, "queue": 169, "peak_alloc_gb": 11.82, "peak_reserved_gb": 11.97}
+{"event": "row", "pid": "833", "method": "tsr_answer_prompt", "correct": 0, "k": 3, "think": 3072, "stop": "entropy", "wall": 830.86, "elapsed": 1815}
+{"event": "row", "pid": "711", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 873, "stop": "entropy", "wall": 433.83, "elapsed": 1815}
+{"event": "round", "elapsed": 2001, "active": 16, "groups": [[10, 5633, 3093, 66.9], [5, 10505, 1046, 65.5], [1, 11752, 1024, 48.5]], "tokens": 5163, "queue": 168, "peak_alloc_gb": 11.82, "peak_reserved_gb": 11.97}
+{"event": "round", "elapsed": 2158, "active": 16, "groups": [[10, 7021, 5194, 79.8], [5, 11384, 2070, 73.7], [1, 12781, 3, 4.1]], "tokens": 7267, "queue": 168, "peak_alloc_gb": 12.21, "peak_reserved_gb": 12.62}
+{"event": "row", "pid": "560", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 193, "stop": "entropy", "wall": 341.53, "elapsed": 2158}
+{"event": "round", "elapsed": 2357, "active": 15, "groups": [[8, 6662, 1128, 62.1], [5, 10733, 3078, 77.2], [2, 13281, 1027, 59.2]], "tokens": 5233, "queue": 168, "peak_alloc_gb": 12.21, "peak_reserved_gb": 12.62}
+{"event": "row", "pid": "560", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 193, "stop": "entropy", "wall": 539.91, "elapsed": 2357}
+{"event": "round", "elapsed": 2508, "active": 16, "groups": [[9, 6662, 4112, 67.9], [5, 11728, 2059, 73.0], [2, 13810, 6, 8.7]], "tokens": 6177, "queue": 167, "peak_alloc_gb": 12.21, "peak_reserved_gb": 12.62}
+{"event": "row", "pid": "400", "method": "tsr_answer_prompt", "correct": 0, "k": 2, "think": 2048, "stop": "entropy", "wall": 842.84, "elapsed": 2508}
+{"event": "round", "elapsed": 2714, "active": 15, "groups": [[8, 7691, 2155, 71.6], [5, 11762, 1038, 69.1], [2, 13811, 1119, 64.7]], "tokens": 4312, "queue": 167, "peak_alloc_gb": 12.21, "peak_reserved_gb": 12.62}
+{"event": "row", "pid": "390", "method": "tsr_answer_prompt", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 2658.88, "elapsed": 2714}
+{"event": "row", "pid": "522", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 356.76, "elapsed": 2714}
+{"event": "round", "elapsed": 2881, "active": 15, "groups": [[8, 7691, 3144, 66.7], [6, 11774, 3178, 90.5], [1, 15179, 3, 5.3]], "tokens": 6325, "queue": 166, "peak_alloc_gb": 12.21, "peak_reserved_gb": 12.62}
+{"event": "row", "pid": "238", "method": "tsr_answer_prompt", "correct": 1, "k": 10, "think": 10240, "stop": "kmax", "wall": 2827.54, "elapsed": 2881}
+{"event": "row", "pid": "522", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 523.88, "elapsed": 2881}
+{"event": "round", "elapsed": 3034, "active": 15, "groups": [[8, 7179, 1084, 65.7], [5, 12791, 1036, 77.2], [2, 14310, 8, 9.6]], "tokens": 2128, "queue": 165, "peak_alloc_gb": 12.21, "peak_reserved_gb": 12.62}
+{"event": "row", "pid": "875", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 319.09, "elapsed": 3034}
+{"event": "round", "elapsed": 3250, "active": 16, "groups": [[8, 6053, 3207, 64.7], [5, 11648, 3078, 74.3], [3, 15179, 2053, 76.5]], "tokens": 8338, "queue": 164, "peak_alloc_gb": 12.21, "peak_reserved_gb": 12.62}
+{"event": "row", "pid": "875", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 535.08, "elapsed": 3250}
+{"event": "round", "elapsed": 3460, "active": 15, "groups": [[8, 8208, 1073, 67.1], [4, 10655, 1130, 65.8], [3, 17083, 1030, 77.5]], "tokens": 3233, "queue": 164, "peak_alloc_gb": 12.21, "peak_reserved_gb": 12.62}
+{"event": "row", "pid": "400", "method": "visref_hs_imgtag_in", "correct": 0, "k": 3, "think": 3072, "stop": "entropy", "wall": 1794.89, "elapsed": 3460}
+{"event": "row", "pid": "592", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 729, "stop": "entropy", "wall": 426.24, "elapsed": 3460}
+{"event": "round", "elapsed": 3673, "active": 15, "groups": [[8, 7082, 2368, 62.8], [4, 11648, 3075, 75.7], [3, 16208, 1032, 69.2]], "tokens": 6475, "queue": 163, "peak_alloc_gb": 12.21, "peak_reserved_gb": 12.62}
+{"event": "row", "pid": "35", "method": "visref_hs_imgtag_in", "correct": 0, "k": 4, "think": 4096, "stop": "entropy", "wall": 2157.48, "elapsed": 3673}
+{"event": "row", "pid": "592", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 729, "stop": "entropy", "wall": 638.59, "elapsed": 3673}
+{"event": "round", "elapsed": 3833, "active": 15, "groups": [[8, 7706, 1082, 66.6], [4, 13666, 12, 18.8], [3, 17083, 1033, 74.0]], "tokens": 2127, "queue": 162, "peak_alloc_gb": 12.21, "peak_reserved_gb": 12.62}
+{"event": "row", "pid": "915", "method": "tsr_answer_prompt", "correct": 1, "k": 10, "think": 10240, "stop": "kmax", "wall": 3305.97, "elapsed": 3833}
+{"event": "row", "pid": "138", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 371.17, "elapsed": 3833}
+{"event": "round", "elapsed": 4064, "active": 15, "groups": [[8, 7706, 4137, 70.4], [5, 12677, 3078, 85.8], [2, 18983, 1027, 73.3]], "tokens": 8242, "queue": 161, "peak_alloc_gb": 12.21, "peak_reserved_gb": 12.62}
+{"event": "row", "pid": "794", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 391.57, "elapsed": 4064}
+{"event": "round", "elapsed": 4179, "active": 16, "groups": [[8, 6541, 184, 14.1], [5, 11807, 15, 18.5], [3, 18112, 1032, 79.2]], "tokens": 1231, "queue": 160, "peak_alloc_gb": 12.21, "peak_reserved_gb": 12.62}
+{"event": "row", "pid": "138", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 717.55, "elapsed": 4179}
+{"event": "row", "pid": "794", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 506.33, "elapsed": 4179}
+{"event": "row", "pid": "350", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 345.91, "elapsed": 4179}
+{"event": "round", "elapsed": 4406, "active": 15, "groups": [[7, 4585, 1132, 50.3], [5, 11807, 4099, 95.0], [3, 18983, 1032, 80.6]], "tokens": 6263, "queue": 159, "peak_alloc_gb": 12.21, "peak_reserved_gb": 12.62}
+{"event": "row", "pid": "350", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 572.79, "elapsed": 4406}
+{"event": "row", "pid": "783", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 341.0, "elapsed": 4406}
+{"event": "round", "elapsed": 4637, "active": 15, "groups": [[7, 5614, 1208, 60.5], [5, 12836, 1036, 74.9], [3, 20893, 1030, 91.1]], "tokens": 3274, "queue": 158, "peak_alloc_gb": 12.21, "peak_reserved_gb": 12.62}
+{"event": "row", "pid": "783", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 572.23, "elapsed": 4637}
+{"event": "row", "pid": "952", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 415, "stop": "entropy", "wall": 457.82, "elapsed": 4637}
+{"event": "round", "elapsed": 4861, "active": 15, "groups": [[7, 5614, 2159, 58.3], [5, 12836, 2250, 77.2], [3, 20012, 1032, 86.7]], "tokens": 5441, "queue": 157, "peak_alloc_gb": 12.21, "peak_reserved_gb": 12.62}
+{"event": "row", "pid": "238", "method": "visref_hs_imgtag_in", "correct": 1, "k": 10, "think": 10240, "stop": "kmax", "wall": 4807.9, "elapsed": 4861}
+{"event": "row", "pid": "360", "method": "tsr_answer_prompt", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 3616.5, "elapsed": 4861}
+{"event": "row", "pid": "952", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 415, "stop": "entropy", "wall": 681.81, "elapsed": 4861}
+{"event": "round", "elapsed": 5069, "active": 16, "groups": [[10, 6643, 708, 40.1], [4, 17716, 1033, 86.6], [2, 20893, 1029, 75.2]], "tokens": 2770, "queue": 155, "peak_alloc_gb": 12.21, "peak_reserved_gb": 12.62}
+{"event": "row", "pid": "990", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 661.4, "elapsed": 5069}
+{"event": "row", "pid": "990", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 661.4, "elapsed": 5069}
+{"event": "row", "pid": "129", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 431.03, "elapsed": 5069}
+{"event": "round", "elapsed": 5243, "active": 15, "groups": [[9, 6643, 2197, 66.2], [4, 16722, 1112, 80.2], [2, 22797, 11, 23.5]], "tokens": 3320, "queue": 154, "peak_alloc_gb": 12.21, "peak_reserved_gb": 12.62}
+{"event": "row", "pid": "833", "method": "visref_hs_imgtag_in", "correct": 0, "k": 8, "think": 8192, "stop": "entropy", "wall": 4258.81, "elapsed": 5243}
+{"event": "row", "pid": "55", "method": "tsr_answer_prompt", "correct": 1, "k": 10, "think": 10240, "stop": "kmax", "wall": 3726.32, "elapsed": 5243}
+{"event": "row", "pid": "129", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 605.74, "elapsed": 5243}
+{"event": "row", "pid": "231", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 223, "stop": "entropy", "wall": 381.25, "elapsed": 5243}
+{"event": "row", "pid": "637", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 378.79, "elapsed": 5243}
+{"event": "round", "elapsed": 5410, "active": 16, "groups": [[11, 6009, 2241, 65.3], [3, 11825, 10, 10.2], [2, 21922, 1027, 80.6]], "tokens": 3278, "queue": 151, "peak_alloc_gb": 12.21, "peak_reserved_gb": 12.73}
+{"event": "row", "pid": "35", "method": "tsr_answer_prompt", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 3894.33, "elapsed": 5410}
+{"event": "row", "pid": "231", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 223, "stop": "entropy", "wall": 547.47, "elapsed": 5410}
+{"event": "round", "elapsed": 5593, "active": 16, "groups": [[12, 5930, 3139, 66.8], [3, 19730, 1100, 77.7], [1, 22798, 633, 38.4]], "tokens": 4872, "queue": 150, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "915", "method": "visref_hs_imgtag_in", "correct": 1, "k": 10, "think": 10240, "stop": "kmax", "wall": 5066.26, "elapsed": 5593}
+{"event": "row", "pid": "360", "method": "visref_hs_imgtag_in", "correct": 0, "k": 8, "think": 8192, "stop": "entropy", "wall": 4348.32, "elapsed": 5593}
+{"event": "row", "pid": "637", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 728.48, "elapsed": 5593}
+{"event": "row", "pid": "895", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 523.13, "elapsed": 5593}
+{"event": "row", "pid": "911", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 106, "stop": "entropy", "wall": 344.78, "elapsed": 5593}
+{"event": "round", "elapsed": 5730, "active": 15, "groups": [[11, 5572, 1409, 65.7], [3, 8701, 1127, 58.7], [1, 18745, 3, 7.4]], "tokens": 2539, "queue": 148, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "895", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 659.69, "elapsed": 5730}
+{"event": "row", "pid": "607", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 485.05, "elapsed": 5730}
+{"event": "row", "pid": "607", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 485.05, "elapsed": 5730}
+{"event": "row", "pid": "911", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 106, "stop": "entropy", "wall": 481.34, "elapsed": 5730}
+{"event": "row", "pid": "909", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 319.94, "elapsed": 5730}
+{"event": "round", "elapsed": 5874, "active": 16, "groups": [[11, 4795, 226, 14.5], [4, 8701, 2054, 59.3], [1, 19730, 1024, 61.9]], "tokens": 3304, "queue": 145, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "909", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 463.94, "elapsed": 5874}
+{"event": "row", "pid": "980", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 113, "stop": "entropy", "wall": 279.91, "elapsed": 5874}
+{"event": "row", "pid": "787", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 277.96, "elapsed": 5874}
+{"event": "round", "elapsed": 5957, "active": 15, "groups": [[10, 4161, 2183, 58.0], [4, 9730, 12, 10.6], [1, 21751, 3, 10.5]], "tokens": 2198, "queue": 144, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "980", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 113, "stop": "entropy", "wall": 363.49, "elapsed": 5957}
+{"event": "row", "pid": "787", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 361.53, "elapsed": 5957}
+{"event": "row", "pid": "500", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 639, "stop": "entropy", "wall": 225.7, "elapsed": 5957}
+{"event": "round", "elapsed": 6107, "active": 16, "groups": [[11, 5586, 2189, 67.1], [4, 9731, 3078, 68.3], [1, 20759, 3, 9.2]], "tokens": 5270, "queue": 142, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "876", "method": "tsr_answer_prompt", "correct": 1, "k": 9, "think": 9216, "stop": "entropy", "wall": 3226.3, "elapsed": 6107}
+{"event": "row", "pid": "500", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 639, "stop": "entropy", "wall": 375.77, "elapsed": 6107}
+{"event": "row", "pid": "518", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 322, "stop": "entropy", "wall": 232.24, "elapsed": 6107}
+{"event": "round", "elapsed": 6245, "active": 15, "groups": [[11, 5136, 2395, 61.6], [3, 9549, 9, 7.3], [1, 21751, 1024, 65.8]], "tokens": 3428, "queue": 141, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "270", "method": "tsr_answer_prompt", "correct": 1, "k": 2, "think": 2048, "stop": "entropy", "wall": 515.17, "elapsed": 6245}
+{"event": "row", "pid": "518", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 322, "stop": "entropy", "wall": 369.86, "elapsed": 6245}
+{"event": "row", "pid": "371", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 286.39, "elapsed": 6245}
+{"event": "round", "elapsed": 6378, "active": 16, "groups": [[11, 5085, 1175, 61.2], [4, 8560, 1446, 58.6], [1, 23768, 3, 11.6]], "tokens": 2624, "queue": 139, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "371", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 419.44, "elapsed": 6378}
+{"event": "row", "pid": "153", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 270.01, "elapsed": 6378}
+{"event": "round", "elapsed": 6523, "active": 16, "groups": [[11, 5086, 1916, 61.0], [4, 9549, 3075, 70.7], [1, 22780, 3, 10.2]], "tokens": 4994, "queue": 138, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "270", "method": "visref_hs_imgtag_in", "correct": 1, "k": 2, "think": 2048, "stop": "entropy", "wall": 792.97, "elapsed": 6523}
+{"event": "row", "pid": "544", "method": "tsr_answer_prompt", "correct": 1, "k": 3, "think": 3072, "stop": "entropy", "wall": 787.01, "elapsed": 6523}
+{"event": "row", "pid": "62", "method": "tsr_answer_prompt", "correct": 1, "k": 2, "think": 2048, "stop": "entropy", "wall": 560.56, "elapsed": 6523}
+{"event": "row", "pid": "153", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 414.76, "elapsed": 6523}
+{"event": "row", "pid": "729", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 199, "stop": "entropy", "wall": 277.72, "elapsed": 6523}
+{"event": "round", "elapsed": 6670, "active": 15, "groups": [[10, 5519, 1227, 62.1], [4, 11571, 1034, 63.9], [1, 23769, 74, 14.6]], "tokens": 2335, "queue": 136, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "55", "method": "visref_hs_imgtag_in", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 5152.57, "elapsed": 6670}
+{"event": "row", "pid": "729", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 199, "stop": "entropy", "wall": 424.66, "elapsed": 6670}
+{"event": "row", "pid": "585", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 291.07, "elapsed": 6670}
+{"event": "round", "elapsed": 6746, "active": 16, "groups": [[12, 4537, 2603, 62.5], [4, 10578, 13, 11.8]], "tokens": 2616, "queue": 134, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "785", "method": "tsr_answer_prompt", "correct": 1, "k": 2, "think": 2048, "stop": "entropy", "wall": 500.69, "elapsed": 6746}
+{"event": "row", "pid": "585", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 367.56, "elapsed": 6746}
+{"event": "row", "pid": "435", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 5, "stop": "entropy", "wall": 218.24, "elapsed": 6746}
+{"event": "round", "elapsed": 6911, "active": 15, "groups": [[11, 5568, 1574, 65.1], [4, 11571, 4096, 95.4]], "tokens": 5670, "queue": 133, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "466", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 387.39, "elapsed": 6911}
+{"event": "row", "pid": "435", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 5, "stop": "entropy", "wall": 383.38, "elapsed": 6911}
+{"event": "row", "pid": "148", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 307, "stop": "entropy", "wall": 241.18, "elapsed": 6911}
+{"event": "row", "pid": "220", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 239.99, "elapsed": 6911}
+{"event": "round", "elapsed": 7000, "active": 15, "groups": [[10, 4535, 1262, 58.6], [5, 13592, 16, 24.8]], "tokens": 1278, "queue": 131, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "785", "method": "visref_hs_imgtag_in", "correct": 1, "k": 2, "think": 2048, "stop": "entropy", "wall": 754.35, "elapsed": 7000}
+{"event": "row", "pid": "148", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 307, "stop": "entropy", "wall": 329.7, "elapsed": 7000}
+{"event": "row", "pid": "553", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 252.43, "elapsed": 7000}
+{"event": "round", "elapsed": 7138, "active": 16, "groups": [[11, 5512, 2314, 65.0], [5, 12600, 1037, 71.5]], "tokens": 3351, "queue": 129, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "220", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 466.94, "elapsed": 7138}
+{"event": "row", "pid": "553", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 390.86, "elapsed": 7138}
+{"event": "row", "pid": "730", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 226.29, "elapsed": 7138}
+{"event": "round", "elapsed": 7326, "active": 15, "groups": [[10, 5536, 2205, 64.7], [4, 11744, 1213, 64.9], [1, 13592, 1024, 54.0]], "tokens": 4442, "queue": 128, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "876", "method": "visref_hs_imgtag_in", "correct": 1, "k": 9, "think": 9216, "stop": "entropy", "wall": 4445.33, "elapsed": 7326}
+{"event": "row", "pid": "544", "method": "visref_hs_imgtag_in", "correct": 1, "k": 4, "think": 4096, "stop": "entropy", "wall": 1590.63, "elapsed": 7326}
+{"event": "row", "pid": "854", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 199, "stop": "entropy", "wall": 325.99, "elapsed": 7326}
+{"event": "row", "pid": "237", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 236, "stop": "entropy", "wall": 324.8, "elapsed": 7326}
+{"event": "round", "elapsed": 7462, "active": 15, "groups": [[12, 4829, 2531, 62.2], [3, 15608, 1031, 69.1]], "tokens": 3562, "queue": 126, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "466", "method": "visref_hs_imgtag_in", "correct": 1, "k": 2, "think": 2048, "stop": "entropy", "wall": 938.48, "elapsed": 7462}
+{"event": "row", "pid": "730", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 550.43, "elapsed": 7462}
+{"event": "row", "pid": "854", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 199, "stop": "entropy", "wall": 462.04, "elapsed": 7462}
+{"event": "row", "pid": "237", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 236, "stop": "entropy", "wall": 460.84, "elapsed": 7462}
+{"event": "round", "elapsed": 7604, "active": 15, "groups": [[11, 4908, 2180, 63.3], [4, 14621, 1033, 74.3]], "tokens": 3213, "queue": 124, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "836", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 132, "stop": "entropy", "wall": 276.69, "elapsed": 7604}
+{"event": "round", "elapsed": 7802, "active": 16, "groups": [[10, 4595, 4306, 63.9], [5, 12773, 2058, 72.6], [1, 15608, 1024, 56.3]], "tokens": 7388, "queue": 123, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "836", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 132, "stop": "entropy", "wall": 474.04, "elapsed": 7802}
+{"event": "row", "pid": "99", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 338.97, "elapsed": 7802}
+{"event": "round", "elapsed": 7902, "active": 16, "groups": [[12, 5937, 4122, 69.0], [4, 17558, 12, 30.7]], "tokens": 4134, "queue": 122, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "round", "elapsed": 8063, "active": 16, "groups": [[11, 5624, 3231, 66.5], [4, 13803, 3186, 88.0], [1, 16637, 3, 6.1]], "tokens": 6420, "queue": 122, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "589", "method": "tsr_answer_prompt", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 2812.68, "elapsed": 8063}
+{"event": "row", "pid": "273", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 598.44, "elapsed": 8063}
+{"event": "row", "pid": "471", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 123, "stop": "entropy", "wall": 260.87, "elapsed": 8063}
+{"event": "round", "elapsed": 8206, "active": 15, "groups": [[10, 6607, 4151, 71.4], [4, 9594, 12, 9.8], [1, 17558, 1024, 59.2]], "tokens": 5187, "queue": 121, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "471", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 123, "stop": "entropy", "wall": 403.76, "elapsed": 8206}
+{"event": "round", "elapsed": 8343, "active": 16, "groups": [[10, 6618, 3252, 65.7], [5, 8593, 1037, 60.9], [1, 19455, 3, 8.3]], "tokens": 4292, "queue": 120, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "704", "method": "tsr_answer_prompt", "correct": 0, "k": 3, "think": 3072, "stop": "entropy", "wall": 1012.93, "elapsed": 8343}
+{"event": "row", "pid": "710", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 479, "stop": "entropy", "wall": 279.93, "elapsed": 8343}
+{"event": "round", "elapsed": 8441, "active": 16, "groups": [[10, 6739, 126, 16.8], [5, 9594, 2188, 70.4], [1, 18587, 3, 7.5]], "tokens": 2317, "queue": 119, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "99", "method": "visref_hs_imgtag_in", "correct": 1, "k": 2, "think": 2048, "stop": "entropy", "wall": 978.1, "elapsed": 8441}
+{"event": "row", "pid": "504", "method": "visref_hs_imgtag_in", "correct": 1, "k": 2, "think": 2048, "stop": "entropy", "wall": 835.29, "elapsed": 8441}
+{"event": "row", "pid": "504", "method": "tsr_answer_prompt", "correct": 1, "k": 3, "think": 3072, "stop": "entropy", "wall": 835.29, "elapsed": 8441}
+{"event": "row", "pid": "710", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 479, "stop": "entropy", "wall": 377.26, "elapsed": 8441}
+{"event": "row", "pid": "261", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 234.46, "elapsed": 8441}
+{"event": "round", "elapsed": 8648, "active": 15, "groups": [[9, 6137, 2214, 64.2], [5, 11622, 2450, 72.6], [1, 19455, 1024, 61.8]], "tokens": 5688, "queue": 117, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "49", "method": "tsr_answer_prompt", "correct": 0, "k": 5, "think": 5120, "stop": "entropy", "wall": 1508.64, "elapsed": 8648}
+{"event": "row", "pid": "261", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 441.77, "elapsed": 8648}
+{"event": "row", "pid": "36", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 750, "stop": "entropy", "wall": 303.97, "elapsed": 8648}
+{"event": "round", "elapsed": 8694, "active": 16, "groups": [[10, 4899, 287, 19.3], [5, 10623, 16, 14.9], [1, 21361, 3, 9.8]], "tokens": 306, "queue": 115, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "36", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 750, "stop": "entropy", "wall": 350.1, "elapsed": 8694}
+{"event": "row", "pid": "765", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 175, "stop": "entropy", "wall": 252.22, "elapsed": 8694}
+{"event": "row", "pid": "515", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 248.23, "elapsed": 8694}
+{"event": "round", "elapsed": 8840, "active": 15, "groups": [[9, 5529, 2330, 63.0], [5, 11623, 2214, 69.2], [1, 20484, 3, 9.1]], "tokens": 4547, "queue": 114, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "62", "method": "visref_hs_imgtag_in", "correct": 0, "k": 7, "think": 7168, "stop": "entropy", "wall": 2877.94, "elapsed": 8840}
+{"event": "row", "pid": "49", "method": "visref_hs_imgtag_in", "correct": 0, "k": 4, "think": 4096, "stop": "entropy", "wall": 1700.65, "elapsed": 8840}
+{"event": "row", "pid": "765", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 175, "stop": "entropy", "wall": 398.11, "elapsed": 8840}
+{"event": "row", "pid": "82", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 191.92, "elapsed": 8840}
+{"event": "round", "elapsed": 9041, "active": 15, "groups": [[10, 5534, 2324, 65.6], [4, 9694, 1034, 62.7], [1, 21361, 1024, 65.1]], "tokens": 4382, "queue": 112, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "82", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 392.85, "elapsed": 9041}
+{"event": "row", "pid": "840", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 210, "stop": "entropy", "wall": 345.47, "elapsed": 9041}
+{"event": "round", "elapsed": 9180, "active": 15, "groups": [[10, 6007, 2251, 63.1], [4, 9958, 2055, 61.9], [1, 23262, 3, 11.2]], "tokens": 4309, "queue": 111, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "840", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 210, "stop": "entropy", "wall": 484.6, "elapsed": 9180}
+{"event": "row", "pid": "487", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 335.96, "elapsed": 9180}
+{"event": "round", "elapsed": 9328, "active": 15, "groups": [[10, 5928, 2184, 67.9], [4, 10723, 1037, 65.2], [1, 22390, 3, 10.3]], "tokens": 3224, "queue": 110, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "954", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 286.56, "elapsed": 9328}
+{"event": "round", "elapsed": 9537, "active": 16, "groups": [[10, 6007, 6156, 78.3], [5, 10723, 3078, 74.1], [1, 23263, 1024, 55.4]], "tokens": 10258, "queue": 109, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "round", "elapsed": 9638, "active": 16, "groups": [[10, 6563, 2073, 66.9], [5, 11752, 16, 18.3], [1, 24294, 100, 16.6]], "tokens": 2189, "queue": 109, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "589", "method": "visref_hs_imgtag_in", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 4388.36, "elapsed": 9638}
+{"event": "row", "pid": "954", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 596.8, "elapsed": 9638}
+{"event": "round", "elapsed": 9838, "active": 16, "groups": [[10, 7036, 4861, 75.8], [5, 10987, 2171, 70.9], [1, 11753, 1024, 47.9]], "tokens": 8056, "queue": 108, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "515", "method": "visref_hs_imgtag_in", "correct": 1, "k": 3, "think": 3072, "stop": "entropy", "wall": 1391.79, "elapsed": 9838}
+{"event": "round", "elapsed": 9984, "active": 15, "groups": [[10, 6596, 2396, 64.8], [5, 12784, 2154, 81.1]], "tokens": 4550, "queue": 108, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "262", "method": "tsr_answer_prompt", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 3068.94, "elapsed": 9984}
+{"event": "row", "pid": "675", "method": "visref_hs_imgtag_in", "correct": 1, "k": 3, "think": 3072, "stop": "entropy", "wall": 1334.62, "elapsed": 9984}
+{"event": "round", "elapsed": 10129, "active": 15, "groups": [[9, 6182, 2097, 62.6], [5, 11282, 3078, 75.8], [1, 12790, 4, 4.2]], "tokens": 5179, "queue": 107, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "797", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 489.38, "elapsed": 10129}
+{"event": "row", "pid": "797", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 489.38, "elapsed": 10129}
+{"event": "round", "elapsed": 10276, "active": 15, "groups": [[9, 7211, 2232, 68.4], [5, 12311, 1036, 73.5], [1, 12403, 4, 4.0]], "tokens": 3272, "queue": 106, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "392", "method": "visref_hs_imgtag_in", "correct": 0, "k": 3, "think": 2797, "stop": "entropy", "wall": 1435.44, "elapsed": 10276}
+{"event": "row", "pid": "503", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 291.89, "elapsed": 10276}
+{"event": "round", "elapsed": 10477, "active": 15, "groups": [[8, 7140, 1147, 57.0], [5, 11427, 3078, 76.6], [2, 12790, 2048, 64.2]], "tokens": 6273, "queue": 105, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "531", "method": "tsr_answer_prompt", "correct": 0, "k": 3, "think": 3072, "stop": "entropy", "wall": 1148.55, "elapsed": 10477}
+{"event": "row", "pid": "503", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 492.59, "elapsed": 10477}
+{"event": "row", "pid": "764", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 484, "stop": "entropy", "wall": 347.38, "elapsed": 10477}
+{"event": "round", "elapsed": 10625, "active": 16, "groups": [[8, 3809, 1087, 55.0], [6, 10597, 1039, 73.5], [2, 14206, 104, 14.0]], "tokens": 2230, "queue": 103, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "273", "method": "tsr_answer_prompt", "correct": 1, "k": 10, "think": 10240, "stop": "kmax", "wall": 3160.96, "elapsed": 10625}
+{"event": "row", "pid": "764", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 484, "stop": "entropy", "wall": 495.82, "elapsed": 10625}
+{"event": "round", "elapsed": 10778, "active": 16, "groups": [[9, 4031, 3131, 62.3], [6, 11518, 3202, 85.8], [1, 13819, 4, 4.6]], "tokens": 6337, "queue": 102, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "251", "method": "tsr_answer_prompt", "correct": 0, "k": 5, "think": 5120, "stop": "entropy", "wall": 1596.84, "elapsed": 10778}
+{"event": "row", "pid": "739", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 144, "stop": "entropy", "wall": 298.32, "elapsed": 10778}
+{"event": "round", "elapsed": 10971, "active": 16, "groups": [[10, 5111, 1207, 61.8], [5, 13276, 1036, 76.0], [1, 14206, 1024, 54.5]], "tokens": 3267, "queue": 101, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "969", "method": "tsr_answer_prompt", "correct": 1, "k": 2, "think": 2048, "stop": "entropy", "wall": 694.59, "elapsed": 10971}
+{"event": "row", "pid": "739", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 144, "stop": "entropy", "wall": 491.5, "elapsed": 10971}
+{"event": "row", "pid": "662", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 199, "stop": "entropy", "wall": 346.01, "elapsed": 10971}
+{"event": "round", "elapsed": 11117, "active": 15, "groups": [[9, 4816, 2149, 58.8], [5, 12456, 1713, 76.8], [1, 15622, 6, 5.6]], "tokens": 3868, "queue": 100, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "392", "method": "tsr_answer_prompt", "correct": 0, "k": 7, "think": 6472, "stop": "entropy", "wall": 2275.92, "elapsed": 11117}
+{"event": "row", "pid": "662", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 199, "stop": "entropy", "wall": 491.27, "elapsed": 11117}
+{"event": "round", "elapsed": 11258, "active": 15, "groups": [[10, 5531, 1424, 63.6], [4, 13276, 1033, 67.8], [1, 15235, 4, 5.2]], "tokens": 2461, "queue": 99, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "969", "method": "visref_hs_imgtag_in", "correct": 1, "k": 2, "think": 2048, "stop": "entropy", "wall": 981.2, "elapsed": 11258}
+{"event": "row", "pid": "321", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 200, "stop": "entropy", "wall": 479.51, "elapsed": 11258}
+{"event": "row", "pid": "321", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 200, "stop": "entropy", "wall": 479.51, "elapsed": 11258}
+{"event": "row", "pid": "416", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 104, "stop": "entropy", "wall": 285.36, "elapsed": 11258}
+{"event": "round", "elapsed": 11416, "active": 15, "groups": [[10, 6003, 2191, 65.7], [4, 15124, 2054, 78.7], [1, 15623, 89, 9.3]], "tokens": 4334, "queue": 97, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "262", "method": "visref_hs_imgtag_in", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 4501.27, "elapsed": 11416}
+{"event": "row", "pid": "416", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 104, "stop": "entropy", "wall": 443.32, "elapsed": 11416}
+{"event": "row", "pid": "126", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 298.07, "elapsed": 11416}
+{"event": "round", "elapsed": 11530, "active": 16, "groups": [[10, 5514, 461, 29.1], [5, 12782, 1235, 75.2], [1, 14305, 3, 4.7]], "tokens": 1699, "queue": 95, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "251", "method": "visref_hs_imgtag_in", "correct": 0, "k": 5, "think": 4724, "stop": "entropy", "wall": 2348.62, "elapsed": 11530}
+{"event": "row", "pid": "276", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 271.9, "elapsed": 11530}
+{"event": "row", "pid": "296", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 270.54, "elapsed": 11530}
+{"event": "round", "elapsed": 11716, "active": 15, "groups": [[10, 5323, 2463, 61.0], [4, 11468, 1108, 65.7], [1, 15124, 1024, 55.4]], "tokens": 4595, "queue": 94, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "675", "method": "tsr_answer_prompt", "correct": 1, "k": 10, "think": 10240, "stop": "kmax", "wall": 3067.08, "elapsed": 11716}
+{"event": "row", "pid": "276", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 458.0, "elapsed": 11716}
+{"event": "row", "pid": "296", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 456.64, "elapsed": 11716}
+{"event": "row", "pid": "202", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 103, "stop": "entropy", "wall": 295.36, "elapsed": 11716}
+{"event": "round", "elapsed": 11872, "active": 15, "groups": [[11, 6352, 2178, 70.7], [4, 16983, 1033, 78.0]], "tokens": 3211, "queue": 92, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "202", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 103, "stop": "entropy", "wall": 451.68, "elapsed": 11872}
+{"event": "row", "pid": "754", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 140, "stop": "entropy", "wall": 341.25, "elapsed": 11872}
+{"event": "round", "elapsed": 12017, "active": 15, "groups": [[10, 6563, 2295, 64.9], [4, 12579, 1130, 68.8], [1, 16153, 3, 5.8]], "tokens": 3428, "queue": 91, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "704", "method": "visref_hs_imgtag_in", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 4686.0, "elapsed": 12017}
+{"event": "row", "pid": "754", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 140, "stop": "entropy", "wall": 485.36, "elapsed": 12017}
+{"event": "row", "pid": "945", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 547, "stop": "entropy", "wall": 299.2, "elapsed": 12017}
+{"event": "row", "pid": "600", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 295.04, "elapsed": 12017}
+{"event": "round", "elapsed": 12157, "active": 15, "groups": [[10, 6543, 211, 18.2], [4, 9363, 1033, 61.8], [1, 16983, 1024, 58.3]], "tokens": 2268, "queue": 89, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "945", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 547, "stop": "entropy", "wall": 439.73, "elapsed": 12157}
+{"event": "row", "pid": "600", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 435.57, "elapsed": 12157}
+{"event": "row", "pid": "478", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 283.43, "elapsed": 12157}
+{"event": "round", "elapsed": 12295, "active": 16, "groups": [[9, 5582, 1057, 58.9], [6, 8477, 3126, 67.7], [1, 18833, 3, 7.5]], "tokens": 4186, "queue": 87, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "69", "method": "visref_hs_imgtag_in", "correct": 0, "k": 2, "think": 2048, "stop": "entropy", "wall": 877.54, "elapsed": 12295}
+{"event": "row", "pid": "478", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 421.12, "elapsed": 12295}
+{"event": "row", "pid": "568", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 201, "stop": "entropy", "wall": 277.95, "elapsed": 12295}
+{"event": "round", "elapsed": 12428, "active": 15, "groups": [[9, 5520, 1083, 61.3], [5, 9363, 1036, 60.7], [1, 18012, 3, 6.9]], "tokens": 2122, "queue": 86, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "568", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 201, "stop": "entropy", "wall": 411.36, "elapsed": 12428}
+{"event": "row", "pid": "26", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 71, "stop": "entropy", "wall": 270.82, "elapsed": 12428}
+{"event": "row", "pid": "988", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 269.7, "elapsed": 12428}
+{"event": "round", "elapsed": 12577, "active": 16, "groups": [[10, 4539, 2170, 58.7], [5, 11274, 2474, 72.5], [1, 18834, 150, 14.1]], "tokens": 4794, "queue": 84, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "487", "method": "visref_hs_imgtag_in", "correct": 0, "k": 8, "think": 8192, "stop": "entropy", "wall": 3732.96, "elapsed": 12577}
+{"event": "row", "pid": "69", "method": "tsr_answer_prompt", "correct": 1, "k": 4, "think": 4096, "stop": "entropy", "wall": 1159.95, "elapsed": 12577}
+{"event": "row", "pid": "26", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 71, "stop": "entropy", "wall": 419.82, "elapsed": 12577}
+{"event": "row", "pid": "988", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 418.69, "elapsed": 12577}
+{"event": "round", "elapsed": 12712, "active": 16, "groups": [[12, 5568, 1338, 65.9], [4, 10392, 1033, 64.0]], "tokens": 2371, "queue": 82, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "145", "method": "tsr_answer_prompt", "correct": 0, "k": 2, "think": 2048, "stop": "entropy", "wall": 694.38, "elapsed": 12712}
+{"event": "row", "pid": "567", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 749, "stop": "entropy", "wall": 283.32, "elapsed": 12712}
+{"event": "row", "pid": "302", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 281.16, "elapsed": 12712}
+{"event": "round", "elapsed": 12851, "active": 15, "groups": [[10, 5568, 2322, 63.8], [5, 11274, 2057, 72.1]], "tokens": 4379, "queue": 81, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "567", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 749, "stop": "entropy", "wall": 422.04, "elapsed": 12851}
+{"event": "row", "pid": "302", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 419.89, "elapsed": 12851}
+{"event": "row", "pid": "46", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 525, "stop": "entropy", "wall": 272.39, "elapsed": 12851}
+{"event": "row", "pid": "540", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 116, "stop": "entropy", "wall": 268.75, "elapsed": 12851}
+{"event": "round", "elapsed": 12992, "active": 15, "groups": [[10, 6549, 1149, 62.6], [5, 13183, 1036, 75.5]], "tokens": 2185, "queue": 79, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "46", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 525, "stop": "entropy", "wall": 413.74, "elapsed": 12992}
+{"event": "row", "pid": "540", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 116, "stop": "entropy", "wall": 410.11, "elapsed": 12992}
+{"event": "round", "elapsed": 13132, "active": 15, "groups": [[9, 4493, 1257, 59.5], [5, 10468, 3105, 75.5], [1, 12303, 3, 4.0]], "tokens": 4365, "queue": 78, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "763", "method": "tsr_answer_prompt", "correct": 1, "k": 3, "think": 3072, "stop": "entropy", "wall": 835.77, "elapsed": 13132}
+{"event": "row", "pid": "563", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 419.02, "elapsed": 13132}
+{"event": "row", "pid": "340", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 129, "stop": "entropy", "wall": 280.0, "elapsed": 13132}
+{"event": "row", "pid": "596", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 278.13, "elapsed": 13132}
+{"event": "round", "elapsed": 13266, "active": 15, "groups": [[10, 5116, 2280, 60.5], [5, 13183, 1036, 71.1]], "tokens": 3316, "queue": 76, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "145", "method": "visref_hs_imgtag_in", "correct": 0, "k": 3, "think": 3072, "stop": "entropy", "wall": 1248.73, "elapsed": 13266}
+{"event": "row", "pid": "340", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 129, "stop": "entropy", "wall": 414.73, "elapsed": 13266}
+{"event": "round", "elapsed": 13406, "active": 15, "groups": [[10, 5614, 1359, 61.7], [4, 11498, 1180, 67.8], [1, 15099, 3, 5.1]], "tokens": 2542, "queue": 75, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "872", "method": "tsr_answer_prompt", "correct": 1, "k": 10, "think": 10240, "stop": "kmax", "wall": 2928.22, "elapsed": 13406}
+{"event": "row", "pid": "596", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 551.92, "elapsed": 13406}
+{"event": "row", "pid": "539", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 271.72, "elapsed": 13406}
+{"event": "round", "elapsed": 13568, "active": 16, "groups": [[11, 4614, 2137, 60.1], [5, 14212, 3078, 98.6]], "tokens": 5215, "queue": 73, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "539", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 433.89, "elapsed": 13568}
+{"event": "row", "pid": "322", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 300.02, "elapsed": 13568}
+{"event": "round", "elapsed": 13708, "active": 16, "groups": [[10, 4597, 1197, 57.3], [5, 11919, 75, 22.6], [1, 15099, 1024, 55.2]], "tokens": 2296, "queue": 72, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "563", "method": "visref_hs_imgtag_in", "correct": 0, "k": 2, "think": 2048, "stop": "entropy", "wall": 994.86, "elapsed": 13708}
+{"event": "row", "pid": "169", "method": "tsr_answer_prompt", "correct": 1, "k": 2, "think": 213, "stop": "entropy", "wall": 575.19, "elapsed": 13708}
+{"event": "row", "pid": "322", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 439.89, "elapsed": 13708}
+{"event": "row", "pid": "986", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 300.8, "elapsed": 13708}
+{"event": "round", "elapsed": 13857, "active": 16, "groups": [[12, 4894, 3132, 65.3], [4, 17020, 1033, 77.6]], "tokens": 4165, "queue": 70, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "986", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 450.52, "elapsed": 13857}
+{"event": "row", "pid": "331", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 539, "stop": "entropy", "wall": 288.35, "elapsed": 13857}
+{"event": "round", "elapsed": 14016, "active": 16, "groups": [[12, 5478, 2414, 64.4], [4, 16128, 2055, 89.7]], "tokens": 4469, "queue": 69, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "531", "method": "visref_hs_imgtag_in", "correct": 1, "k": 10, "think": 10240, "stop": "kmax", "wall": 4687.82, "elapsed": 14016}
+{"event": "row", "pid": "331", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 539, "stop": "entropy", "wall": 447.24, "elapsed": 14016}
+{"event": "row", "pid": "624", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 4, "stop": "entropy", "wall": 303.27, "elapsed": 14016}
+{"event": "round", "elapsed": 14160, "active": 15, "groups": [[12, 5557, 2243, 66.9], [3, 17020, 1030, 72.4]], "tokens": 3273, "queue": 68, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "624", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 4, "stop": "entropy", "wall": 447.24, "elapsed": 14160}
+{"event": "row", "pid": "70", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 301.45, "elapsed": 14160}
+{"event": "round", "elapsed": 14254, "active": 15, "groups": [[11, 5571, 5174, 70.6], [3, 12948, 9, 12.7], [1, 18930, 3, 7.8]], "tokens": 5186, "queue": 67, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "70", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 395.34, "elapsed": 14254}
+{"event": "round", "elapsed": 14409, "active": 16, "groups": [[12, 5923, 2406, 70.5], [3, 13494, 2051, 74.6], [1, 18049, 3, 7.2]], "tokens": 4460, "queue": 66, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "946", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 248.42, "elapsed": 14409}
+{"event": "round", "elapsed": 14611, "active": 15, "groups": [[10, 6600, 3206, 65.2], [4, 15389, 1033, 75.5], [1, 18930, 1024, 61.0]], "tokens": 5263, "queue": 66, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "946", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 450.15, "elapsed": 14611}
+{"event": "row", "pid": "770", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 356.26, "elapsed": 14611}
+{"event": "round", "elapsed": 14711, "active": 15, "groups": [[10, 6614, 3165, 70.5], [4, 14523, 12, 20.1], [1, 20865, 3, 9.4]], "tokens": 3180, "queue": 65, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "770", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 456.61, "elapsed": 14711}
+{"event": "round", "elapsed": 14924, "active": 16, "groups": [[9, 6614, 2318, 65.3], [4, 7799, 2054, 60.4], [3, 19959, 1115, 85.2]], "tokens": 5487, "queue": 64, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "872", "method": "visref_hs_imgtag_in", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 4446.25, "elapsed": 14924}
+{"event": "row", "pid": "731", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 200, "stop": "entropy", "wall": 312.55, "elapsed": 14924}
+{"event": "round", "elapsed": 15126, "active": 16, "groups": [[9, 6679, 1061, 62.0], [5, 9617, 1080, 66.1], [2, 20865, 1027, 74.2]], "tokens": 3168, "queue": 63, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "782", "method": "tsr_answer_prompt", "correct": 0, "k": 7, "think": 7168, "stop": "entropy", "wall": 2133.84, "elapsed": 15126}
+{"event": "row", "pid": "731", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 200, "stop": "entropy", "wall": 515.11, "elapsed": 15126}
+{"event": "round", "elapsed": 15290, "active": 16, "groups": [[9, 5966, 3158, 68.4], [5, 10522, 3078, 68.2], [2, 22792, 6, 22.4]], "tokens": 6242, "queue": 62, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "886", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 333, "stop": "entropy", "wall": 366.06, "elapsed": 15290}
+{"event": "round", "elapsed": 15503, "active": 15, "groups": [[9, 7708, 2362, 70.6], [4, 9675, 1033, 63.9], [2, 21894, 1028, 79.0]], "tokens": 4423, "queue": 62, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "886", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 333, "stop": "entropy", "wall": 579.54, "elapsed": 15503}
+{"event": "round", "elapsed": 15728, "active": 16, "groups": [[9, 6995, 1145, 63.9], [5, 11647, 4099, 93.3], [2, 22793, 1027, 66.9]], "tokens": 6271, "queue": 61, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "480", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 600.3, "elapsed": 15728}
+{"event": "round", "elapsed": 15853, "active": 15, "groups": [[8, 7074, 4112, 71.8], [5, 12398, 112, 25.3], [2, 23824, 103, 28.7]], "tokens": 4327, "queue": 61, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "126", "method": "visref_hs_imgtag_in", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 4735.46, "elapsed": 15853}
+{"event": "row", "pid": "514", "method": "tsr_answer_prompt", "correct": 1, "k": 6, "think": 6144, "stop": "entropy", "wall": 2144.85, "elapsed": 15853}
+{"event": "row", "pid": "480", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 726.05, "elapsed": 15853}
+{"event": "row", "pid": "176", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 578, "stop": "entropy", "wall": 350.15, "elapsed": 15853}
+{"event": "round", "elapsed": 15976, "active": 15, "groups": [[9, 7153, 263, 28.1], [5, 11647, 3078, 79.5], [1, 19218, 70, 10.8]], "tokens": 3411, "queue": 59, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "763", "method": "visref_hs_imgtag_in", "correct": 0, "k": 8, "think": 8192, "stop": "entropy", "wall": 3680.14, "elapsed": 15976}
+{"event": "row", "pid": "176", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 578, "stop": "entropy", "wall": 472.86, "elapsed": 15976}
+{"event": "round", "elapsed": 16123, "active": 15, "groups": [[10, 7074, 2178, 66.2], [5, 13677, 1036, 77.8]], "tokens": 3214, "queue": 58, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "805", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 267.53, "elapsed": 16123}
+{"event": "round", "elapsed": 16299, "active": 16, "groups": [[10, 6121, 2187, 67.4], [5, 12676, 4099, 101.6], [1, 14274, 3, 4.9]], "tokens": 6289, "queue": 57, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "805", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 443.39, "elapsed": 16299}
+{"event": "row", "pid": "140", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 322.1, "elapsed": 16299}
+{"event": "round", "elapsed": 16443, "active": 16, "groups": [[10, 6121, 2531, 66.0], [5, 13427, 15, 22.9], [1, 13677, 1024, 54.0]], "tokens": 3570, "queue": 56, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "140", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 465.78, "elapsed": 16443}
+{"event": "row", "pid": "357", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 220, "stop": "entropy", "wall": 318.91, "elapsed": 16443}
+{"event": "round", "elapsed": 16642, "active": 16, "groups": [[10, 7150, 1128, 65.9], [4, 11759, 1557, 62.9], [2, 15707, 1027, 66.4]], "tokens": 3712, "queue": 55, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "931", "method": "tsr_answer_prompt", "correct": 1, "k": 10, "think": 10240, "stop": "kmax", "wall": 3236.73, "elapsed": 16642}
+{"event": "row", "pid": "357", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 220, "stop": "entropy", "wall": 518.72, "elapsed": 16642}
+{"event": "round", "elapsed": 16812, "active": 16, "groups": [[10, 6024, 5138, 72.4], [4, 12788, 3075, 83.2], [2, 16150, 6, 12.1]], "tokens": 8219, "queue": 54, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "round", "elapsed": 17005, "active": 16, "groups": [[9, 5569, 2357, 65.3], [5, 12788, 1036, 65.9], [2, 15707, 1027, 61.6]], "tokens": 4420, "queue": 54, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "56", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 233, "stop": "entropy", "wall": 361.91, "elapsed": 17005}
+{"event": "round", "elapsed": 17209, "active": 15, "groups": [[9, 7523, 2203, 66.2], [4, 13817, 1033, 67.9], [2, 17737, 1027, 70.3]], "tokens": 4263, "queue": 54, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "56", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 233, "stop": "entropy", "wall": 566.39, "elapsed": 17209}
+{"event": "round", "elapsed": 17400, "active": 16, "groups": [[9, 6598, 2098, 68.0], [4, 10398, 3075, 74.5], [3, 18026, 426, 43.2]], "tokens": 5599, "queue": 53, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "816", "method": "tsr_answer_prompt", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 3382.24, "elapsed": 17400}
+{"event": "row", "pid": "30", "method": "tsr_answer_prompt", "correct": 1, "k": 3, "think": 3072, "stop": "entropy", "wall": 1100.7, "elapsed": 17400}
+{"event": "round", "elapsed": 17600, "active": 16, "groups": [[9, 6599, 2716, 65.8], [5, 11506, 1756, 68.8], [2, 17737, 1027, 65.7]], "tokens": 5499, "queue": 52, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "996", "method": "visref_hs_imgtag_in", "correct": 1, "k": 2, "think": 2048, "stop": "entropy", "wall": 1156.43, "elapsed": 17600}
+{"event": "row", "pid": "669", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 389.78, "elapsed": 17600}
+{"event": "round", "elapsed": 17738, "active": 16, "groups": [[9, 7184, 502, 34.6], [5, 11427, 105, 22.4], [2, 19767, 1027, 76.1]], "tokens": 1634, "queue": 51, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "996", "method": "tsr_answer_prompt", "correct": 1, "k": 3, "think": 3072, "stop": "entropy", "wall": 1294.27, "elapsed": 17738}
+{"event": "row", "pid": "669", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 527.62, "elapsed": 17738}
+{"event": "row", "pid": "399", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 116, "stop": "entropy", "wall": 338.28, "elapsed": 17738}
+{"event": "round", "elapsed": 17910, "active": 15, "groups": [[8, 6058, 1180, 56.4], [5, 11507, 4160, 96.2], [2, 19902, 6, 18.7]], "tokens": 5346, "queue": 50, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "782", "method": "visref_hs_imgtag_in", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 4917.34, "elapsed": 17910}
+{"event": "row", "pid": "30", "method": "visref_hs_imgtag_in", "correct": 1, "k": 3, "think": 3072, "stop": "entropy", "wall": 1610.67, "elapsed": 17910}
+{"event": "row", "pid": "399", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 116, "stop": "entropy", "wall": 509.9, "elapsed": 17910}
+{"event": "row", "pid": "856", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 308.23, "elapsed": 17910}
+{"event": "round", "elapsed": 18069, "active": 15, "groups": [[9, 7320, 1071, 64.5], [4, 11585, 12, 14.9], [2, 19767, 1027, 72.2]], "tokens": 2110, "queue": 48, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "169", "method": "visref_hs_imgtag_in", "correct": 1, "k": 10, "think": 2112, "stop": "kmax", "wall": 4936.45, "elapsed": 18069}
+{"event": "row", "pid": "629", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 120, "stop": "entropy", "wall": 330.74, "elapsed": 18069}
+{"event": "round", "elapsed": 18283, "active": 15, "groups": [[9, 7087, 2169, 64.8], [4, 11506, 2054, 64.7], [2, 21794, 1027, 80.7]], "tokens": 5250, "queue": 47, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "856", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 682.04, "elapsed": 18283}
+{"event": "row", "pid": "629", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 120, "stop": "entropy", "wall": 545.34, "elapsed": 18283}
+{"event": "round", "elapsed": 18458, "active": 15, "groups": [[8, 5605, 2261, 62.2], [5, 12298, 3079, 84.8], [2, 21778, 6, 23.1]], "tokens": 5346, "queue": 46, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "744", "method": "tsr_answer_prompt", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 3746.35, "elapsed": 18458}
+{"event": "row", "pid": "423", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 547.64, "elapsed": 18458}
+{"event": "row", "pid": "124", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 838, "stop": "entropy", "wall": 388.06, "elapsed": 18458}
+{"event": "round", "elapsed": 18670, "active": 16, "groups": [[9, 5605, 2167, 60.5], [5, 12617, 1037, 71.6], [2, 21794, 1027, 76.5]], "tokens": 4231, "queue": 44, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "931", "method": "visref_hs_imgtag_in", "correct": 1, "k": 10, "think": 10240, "stop": "kmax", "wall": 5264.53, "elapsed": 18670}
+{"event": "row", "pid": "423", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 759.87, "elapsed": 18670}
+{"event": "row", "pid": "124", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 838, "stop": "entropy", "wall": 600.29, "elapsed": 18670}
+{"event": "round", "elapsed": 18827, "active": 15, "groups": [[10, 6634, 2085, 67.3], [3, 10839, 9, 9.3], [2, 23821, 1027, 75.3]], "tokens": 3121, "queue": 43, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "851", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 5, "stop": "entropy", "wall": 365.59, "elapsed": 18827}
+{"event": "round", "elapsed": 19030, "active": 16, "groups": [[9, 6519, 3110, 67.0], [5, 11072, 5120, 107.2], [2, 22823, 7, 24.0]], "tokens": 8237, "queue": 42, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "514", "method": "visref_hs_imgtag_in", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 5321.0, "elapsed": 19030}
+{"event": "row", "pid": "851", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 5, "stop": "entropy", "wall": 568.45, "elapsed": 19030}
+{"event": "round", "elapsed": 19144, "active": 16, "groups": [[10, 6006, 2620, 66.6], [5, 12334, 15, 20.0], [1, 23822, 312, 24.7]], "tokens": 2947, "queue": 41, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "816", "method": "visref_hs_imgtag_in", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 5126.33, "elapsed": 19144}
+{"event": "row", "pid": "271", "method": "tsr_answer_prompt", "correct": 1, "k": 2, "think": 2048, "stop": "entropy", "wall": 685.19, "elapsed": 19144}
+{"event": "round", "elapsed": 19313, "active": 16, "groups": [[9, 6006, 3775, 62.8], [5, 9610, 2057, 65.6], [2, 12101, 607, 36.3]], "tokens": 6439, "queue": 40, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "485", "method": "tsr_answer_prompt", "correct": 1, "k": 10, "think": 10240, "stop": "kmax", "wall": 3459.49, "elapsed": 19313}
+{"event": "row", "pid": "654", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 485.23, "elapsed": 19313}
+{"event": "round", "elapsed": 19511, "active": 16, "groups": [[10, 6563, 3191, 70.5], [5, 9843, 1977, 70.9], [1, 12334, 1024, 52.1]], "tokens": 6192, "queue": 39, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "654", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 683.36, "elapsed": 19511}
+{"event": "round", "elapsed": 19652, "active": 15, "groups": [[8, 6686, 2664, 62.4], [6, 11641, 2136, 73.8], [1, 13596, 3, 4.5]], "tokens": 4803, "queue": 39, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "330", "method": "visref_hs_imgtag_in", "correct": 0, "k": 2, "think": 2048, "stop": "entropy", "wall": 980.68, "elapsed": 19652}
+{"event": "row", "pid": "330", "method": "tsr_answer_prompt", "correct": 1, "k": 3, "think": 2637, "stop": "entropy", "wall": 980.68, "elapsed": 19652}
+{"event": "row", "pid": "117", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 507.08, "elapsed": 19652}
+{"event": "row", "pid": "958", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 337.62, "elapsed": 19652}
+{"event": "round", "elapsed": 19800, "active": 15, "groups": [[9, 6593, 1147, 65.2], [5, 10786, 1038, 69.3], [1, 13363, 3, 4.2]], "tokens": 2188, "queue": 37, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "117", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 654.87, "elapsed": 19800}
+{"event": "round", "elapsed": 20008, "active": 16, "groups": [[9, 6687, 5042, 72.3], [5, 11020, 2062, 67.3], [2, 13597, 1935, 64.2]], "tokens": 9039, "queue": 36, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "744", "method": "visref_hs_imgtag_in", "correct": 1, "k": 10, "think": 10240, "stop": "kmax", "wall": 5296.63, "elapsed": 20008}
+{"event": "row", "pid": "485", "method": "visref_hs_imgtag_in", "correct": 0, "k": 8, "think": 8107, "stop": "entropy", "wall": 4154.51, "elapsed": 20008}
+{"event": "row", "pid": "271", "method": "visref_hs_imgtag_in", "correct": 1, "k": 3, "think": 3072, "stop": "entropy", "wall": 1549.64, "elapsed": 20008}
+{"event": "round", "elapsed": 20099, "active": 15, "groups": [[10, 6592, 2230, 66.6], [5, 13662, 20, 23.7]], "tokens": 2250, "queue": 35, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "45", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 445.85, "elapsed": 20099}
+{"event": "row", "pid": "639", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 298.06, "elapsed": 20099}
+{"event": "round", "elapsed": 20256, "active": 15, "groups": [[9, 6600, 2586, 63.2], [5, 10750, 4099, 88.4], [1, 12670, 3, 4.1]], "tokens": 6688, "queue": 34, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "88", "method": "tsr_answer_prompt", "correct": 1, "k": 4, "think": 4096, "stop": "entropy", "wall": 1226.03, "elapsed": 20256}
+{"event": "row", "pid": "45", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 602.94, "elapsed": 20256}
+{"event": "row", "pid": "639", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 455.15, "elapsed": 20256}
+{"event": "round", "elapsed": 20457, "active": 16, "groups": [[9, 6656, 1276, 63.1], [6, 11919, 1043, 77.5], [1, 13662, 1024, 54.2]], "tokens": 3343, "queue": 32, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "635", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 357.74, "elapsed": 20457}
+{"event": "round", "elapsed": 20644, "active": 15, "groups": [[8, 6687, 1267, 55.3], [5, 11148, 2060, 71.2], [2, 15686, 1027, 60.3]], "tokens": 4354, "queue": 32, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "919", "method": "tsr_answer_prompt", "correct": 0, "k": 2, "think": 2048, "stop": "entropy", "wall": 635.76, "elapsed": 20644}
+{"event": "row", "pid": "635", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 544.63, "elapsed": 20644}
+{"event": "row", "pid": "115", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 386.55, "elapsed": 20644}
+{"event": "row", "pid": "472", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 558, "stop": "entropy", "wall": 382.71, "elapsed": 20644}
+{"event": "round", "elapsed": 20753, "active": 15, "groups": [[9, 7716, 143, 20.5], [5, 12808, 2059, 78.9], [1, 14691, 3, 5.0]], "tokens": 2205, "queue": 30, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "115", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 495.93, "elapsed": 20753}
+{"event": "row", "pid": "472", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 558, "stop": "entropy", "wall": 492.09, "elapsed": 20753}
+{"event": "round", "elapsed": 20970, "active": 15, "groups": [[8, 7716, 3125, 67.6], [5, 12808, 3079, 86.6], [2, 15686, 1029, 61.9]], "tokens": 7233, "queue": 29, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "958", "method": "visref_hs_imgtag_in", "correct": 1, "k": 3, "think": 3072, "stop": "entropy", "wall": 1655.33, "elapsed": 20970}
+{"event": "row", "pid": "978", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 330, "stop": "entropy", "wall": 323.92, "elapsed": 20970}
+{"event": "round", "elapsed": 21126, "active": 15, "groups": [[8, 5501, 1096, 59.5], [5, 12948, 1041, 78.9], [2, 17703, 6, 13.5]], "tokens": 2143, "queue": 28, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "978", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 330, "stop": "entropy", "wall": 480.45, "elapsed": 21126}
+{"event": "row", "pid": "284", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 84, "stop": "entropy", "wall": 372.81, "elapsed": 21126}
+{"event": "round", "elapsed": 21328, "active": 15, "groups": [[8, 4540, 2088, 56.6], [4, 12180, 2055, 66.1], [3, 16715, 1572, 77.9]], "tokens": 5715, "queue": 27, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "274", "method": "tsr_answer_prompt", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 3413.95, "elapsed": 21328}
+{"event": "row", "pid": "284", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 84, "stop": "entropy", "wall": 574.2, "elapsed": 21328}
+{"event": "round", "elapsed": 21534, "active": 15, "groups": [[9, 5569, 2122, 65.6], [4, 13209, 1036, 70.0], [2, 17703, 1029, 66.3]], "tokens": 4187, "queue": 26, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "799", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 190, "stop": "entropy", "wall": 407.79, "elapsed": 21534}
+{"event": "round", "elapsed": 21703, "active": 16, "groups": [[9, 5569, 3319, 63.7], [5, 13210, 2775, 85.4], [2, 19728, 8, 17.8]], "tokens": 6102, "queue": 25, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "353", "method": "tsr_answer_prompt", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 3418.43, "elapsed": 21703}
+{"event": "row", "pid": "799", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 190, "stop": "entropy", "wall": 576.25, "elapsed": 21703}
+{"event": "row", "pid": "218", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 373.9, "elapsed": 21703}
+{"event": "round", "elapsed": 21850, "active": 15, "groups": [[10, 6598, 1219, 63.5], [4, 15519, 1034, 76.3], [1, 18732, 3, 7.4]], "tokens": 2256, "queue": 24, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "218", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 521.35, "elapsed": 21850}
+{"event": "round", "elapsed": 22080, "active": 16, "groups": [[9, 5539, 3119, 65.2], [5, 12743, 3142, 87.6], [2, 19728, 1031, 72.3]], "tokens": 7292, "queue": 23, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "1000", "method": "visref_hs_imgtag_in", "correct": 0, "k": 2, "think": 2048, "stop": "entropy", "wall": 1109.06, "elapsed": 22080}
+{"event": "row", "pid": "934", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 153, "stop": "entropy", "wall": 377.14, "elapsed": 22080}
+{"event": "round", "elapsed": 22240, "active": 16, "groups": [[10, 5976, 2244, 65.8], [4, 13744, 1034, 68.4], [2, 21752, 10, 22.5]], "tokens": 3288, "queue": 22, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "934", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 153, "stop": "entropy", "wall": 536.72, "elapsed": 22240}
+{"event": "row", "pid": "369", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 388.15, "elapsed": 22240}
+{"event": "round", "elapsed": 22460, "active": 16, "groups": [[10, 5897, 3102, 63.7], [4, 15774, 1078, 75.1], [2, 20757, 1027, 77.0]], "tokens": 5207, "queue": 21, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "1000", "method": "tsr_answer_prompt", "correct": 0, "k": 4, "think": 4096, "stop": "entropy", "wall": 1489.05, "elapsed": 22460}
+{"event": "round", "elapsed": 22655, "active": 15, "groups": [[10, 6678, 4262, 74.8], [3, 14773, 542, 41.6], [2, 21752, 1029, 78.2]], "tokens": 5833, "queue": 21, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "88", "method": "visref_hs_imgtag_in", "correct": 1, "k": 7, "think": 7168, "stop": "entropy", "wall": 3624.43, "elapsed": 22655}
+{"event": "row", "pid": "369", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 803.13, "elapsed": 22655}
+{"event": "row", "pid": "53", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 413.75, "elapsed": 22655}
+{"event": "round", "elapsed": 22851, "active": 16, "groups": [[10, 5476, 1610, 63.4], [4, 15774, 3075, 103.4], [2, 23779, 10, 24.9]], "tokens": 4695, "queue": 19, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "53", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 610.46, "elapsed": 22851}
+{"event": "round", "elapsed": 23021, "active": 15, "groups": [[10, 7005, 1199, 65.7], [3, 17803, 9, 22.4], [2, 22781, 1027, 82.1]], "tokens": 2235, "queue": 19, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "661", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 271, "stop": "entropy", "wall": 365.59, "elapsed": 23021}
+{"event": "row", "pid": "438", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 362.42, "elapsed": 23021}
+{"event": "round", "elapsed": 23249, "active": 15, "groups": [[9, 6253, 1431, 65.0], [4, 16803, 2163, 87.5], [2, 23780, 1032, 69.9]], "tokens": 4626, "queue": 18, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "373", "method": "tsr_answer_prompt", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 3590.63, "elapsed": 23249}
+{"event": "row", "pid": "304", "method": "visref_hs_imgtag_in", "correct": 1, "k": 2, "think": 2048, "stop": "entropy", "wall": 1167.85, "elapsed": 23249}
+{"event": "row", "pid": "304", "method": "tsr_answer_prompt", "correct": 1, "k": 3, "think": 2545, "stop": "entropy", "wall": 1167.85, "elapsed": 23249}
+{"event": "row", "pid": "661", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 271, "stop": "entropy", "wall": 592.62, "elapsed": 23249}
+{"event": "row", "pid": "438", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 589.44, "elapsed": 23249}
+{"event": "round", "elapsed": 23417, "active": 16, "groups": [[10, 6156, 1161, 65.3], [3, 8736, 1031, 56.6], [2, 20148, 51, 19.5], [1, 24811, 4, 13.1]], "tokens": 2247, "queue": 15, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "274", "method": "visref_hs_imgtag_in", "correct": 1, "k": 10, "think": 10240, "stop": "kmax", "wall": 5503.18, "elapsed": 23417}
+{"event": "row", "pid": "373", "method": "visref_hs_imgtag_in", "correct": 1, "k": 7, "think": 7168, "stop": "entropy", "wall": 3759.03, "elapsed": 23417}
+{"event": "row", "pid": "403", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 394.39, "elapsed": 23417}
+{"event": "round", "elapsed": 23588, "active": 15, "groups": [[10, 5923, 2347, 62.7], [4, 8736, 1037, 51.6], [1, 20920, 1024, 53.6]], "tokens": 4408, "queue": 14, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "403", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 565.24, "elapsed": 23588}
+{"event": "row", "pid": "740", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 328.77, "elapsed": 23588}
+{"event": "round", "elapsed": 23739, "active": 15, "groups": [[10, 6156, 4242, 70.3], [4, 9765, 2054, 64.0], [1, 21951, 100, 13.9]], "tokens": 6396, "queue": 13, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "353", "method": "visref_hs_imgtag_in", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 5454.7, "elapsed": 23739}
+{"event": "row", "pid": "451", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 484.68, "elapsed": 23739}
+{"event": "row", "pid": "647", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 321.46, "elapsed": 23739}
+{"event": "round", "elapsed": 23880, "active": 16, "groups": [[10, 6582, 2218, 64.5], [6, 9765, 2066, 69.2]], "tokens": 4284, "queue": 11, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "451", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 625.85, "elapsed": 23880}
+{"event": "row", "pid": "740", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 621.25, "elapsed": 23880}
+{"event": "row", "pid": "647", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 462.64, "elapsed": 23880}
+{"event": "round", "elapsed": 24018, "active": 15, "groups": [[10, 6609, 3190, 68.1], [5, 10793, 1039, 64.9]], "tokens": 4229, "queue": 10, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "699", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 429.01, "elapsed": 24018}
+{"event": "round", "elapsed": 24173, "active": 16, "groups": [[9, 5620, 2165, 66.1], [6, 9340, 4106, 81.0], [1, 10794, 6, 3.5]], "tokens": 6277, "queue": 9, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "391", "method": "tsr_answer_prompt", "correct": 1, "k": 10, "think": 10240, "stop": "entropy", "wall": 3528.79, "elapsed": 24173}
+{"event": "row", "pid": "672", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 291.61, "elapsed": 24173}
+{"event": "round", "elapsed": 24311, "active": 16, "groups": [[9, 5620, 3224, 61.3], [6, 9340, 2065, 69.0], [1, 10408, 3, 3.2]], "tokens": 5292, "queue": 8, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "827", "method": "visref_hs_imgtag_in", "correct": 0, "k": 2, "think": 2048, "stop": "entropy", "wall": 1060.87, "elapsed": 24311}
+{"event": "row", "pid": "672", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 1024, "stop": "entropy", "wall": 429.36, "elapsed": 24311}
+{"event": "round", "elapsed": 24450, "active": 16, "groups": [[10, 6620, 2126, 69.8], [6, 10369, 1047, 67.7]], "tokens": 3173, "queue": 7, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "264", "method": "tsr_answer_prompt", "correct": 0, "k": 1, "think": 137, "stop": "entropy", "wall": 275.98, "elapsed": 24450}
+{"event": "round", "elapsed": 24615, "active": 15, "groups": [[9, 7586, 4203, 72.3], [6, 10408, 4102, 92.9]], "tokens": 8305, "queue": 7, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "264", "method": "visref_hs_imgtag_in", "correct": 0, "k": 1, "think": 137, "stop": "entropy", "wall": 441.2, "elapsed": 24615}
+{"event": "row", "pid": "22", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 268, "stop": "entropy", "wall": 304.18, "elapsed": 24615}
+{"event": "round", "elapsed": 24715, "active": 15, "groups": [[9, 7678, 61, 18.1], [6, 11516, 2068, 76.7]], "tokens": 2129, "queue": 6, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "22", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 268, "stop": "entropy", "wall": 403.79, "elapsed": 24715}
+{"event": "round", "elapsed": 24891, "active": 16, "groups": [[8, 6682, 4108, 65.6], [6, 10476, 2064, 72.9], [2, 11437, 638, 37.2]], "tokens": 6810, "queue": 5, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "862", "method": "tsr_answer_prompt", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 3356.36, "elapsed": 24891}
+{"event": "round", "elapsed": 25046, "active": 15, "groups": [[8, 8251, 2129, 69.3], [6, 10397, 3081, 79.7], [1, 11517, 51, 5.6]], "tokens": 5261, "queue": 5, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "919", "method": "visref_hs_imgtag_in", "correct": 1, "k": 10, "think": 10240, "stop": "kmax", "wall": 5037.43, "elapsed": 25046}
+{"event": "row", "pid": "91", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 428.97, "elapsed": 25046}
+{"event": "row", "pid": "746", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 210, "stop": "entropy", "wall": 330.55, "elapsed": 25046}
+{"event": "round", "elapsed": 25202, "active": 16, "groups": [[9, 7711, 2151, 67.8], [6, 11204, 2063, 75.4], [1, 11660, 3, 3.6]], "tokens": 4217, "queue": 3, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "91", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 585.28, "elapsed": 25202}
+{"event": "row", "pid": "746", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 210, "stop": "entropy", "wall": 486.86, "elapsed": 25202}
+{"event": "round", "elapsed": 25359, "active": 16, "groups": [[8, 8143, 2071, 67.4], [6, 10724, 2399, 78.3], [2, 11583, 10, 6.8]], "tokens": 4480, "queue": 2, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "round", "elapsed": 25579, "active": 16, "groups": [[7, 8143, 3206, 70.6], [5, 11069, 3078, 74.9], [4, 11660, 2054, 74.0]], "tokens": 8338, "queue": 2, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "707", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 375.54, "elapsed": 25579}
+{"event": "round", "elapsed": 25766, "active": 15, "groups": [[7, 9280, 2391, 69.0], [5, 11070, 1036, 60.4], [3, 13682, 935, 57.8]], "tokens": 4362, "queue": 2, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.3}
+{"event": "row", "pid": "391", "method": "visref_hs_imgtag_in", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 5121.88, "elapsed": 25766}
+{"event": "row", "pid": "707", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 1024, "stop": "entropy", "wall": 562.77, "elapsed": 25766}
+{"event": "round", "elapsed": 25937, "active": 15, "groups": [[7, 9172, 1048, 60.8], [5, 11627, 4099, 97.4], [3, 12689, 14, 12.3]], "tokens": 5161, "queue": 1, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.35}
+{"event": "row", "pid": "827", "method": "tsr_answer_prompt", "correct": 0, "k": 8, "think": 7509, "stop": "entropy", "wall": 2686.93, "elapsed": 25937}
+{"event": "round", "elapsed": 26159, "active": 16, "groups": [[8, 7596, 3295, 71.7], [5, 11794, 1038, 71.9], [3, 13682, 2051, 74.5]], "tokens": 6384, "queue": 0, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.35}
+{"event": "row", "pid": "512", "method": "tsr_answer_prompt", "correct": 0, "k": 3, "think": 3072, "stop": "entropy", "wall": 1111.67, "elapsed": 26159}
+{"event": "row", "pid": "305", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 57, "stop": "entropy", "wall": 392.58, "elapsed": 26159}
+{"event": "round", "elapsed": 26271, "active": 14, "groups": [[6, 9626, 60, 17.3], [5, 11795, 3078, 76.4], [3, 15704, 13, 18.7]], "tokens": 3151, "queue": 0, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.35}
+{"event": "row", "pid": "305", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 57, "stop": "entropy", "wall": 504.96, "elapsed": 26271}
+{"event": "row", "pid": "784", "method": "tsr_answer_prompt", "correct": 1, "k": 1, "think": 2, "stop": "entropy", "wall": 333.08, "elapsed": 26271}
+{"event": "round", "elapsed": 26478, "active": 12, "groups": [[6, 11230, 1141, 70.0], [4, 13495, 1134, 71.8], [2, 14711, 1027, 64.9]], "tokens": 3302, "queue": 0, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.35}
+{"event": "row", "pid": "95", "method": "tsr_answer_prompt", "correct": 0, "k": 8, "think": 8192, "stop": "entropy", "wall": 2734.55, "elapsed": 26478}
+{"event": "row", "pid": "784", "method": "visref_hs_imgtag_in", "correct": 1, "k": 1, "think": 2, "stop": "entropy", "wall": 539.79, "elapsed": 26478}
+{"event": "round", "elapsed": 26690, "active": 10, "groups": [[5, 11383, 4099, 99.5], [4, 15675, 1035, 57.1], [1, 15704, 1024, 55.9]], "tokens": 6158, "queue": 0, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.35}
+{"event": "row", "pid": "862", "method": "visref_hs_imgtag_in", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 5155.63, "elapsed": 26690}
+{"event": "row", "pid": "114", "method": "tsr_answer_prompt", "correct": 0, "k": 8, "think": 8192, "stop": "entropy", "wall": 2671.24, "elapsed": 26690}
+{"event": "round", "elapsed": 26783, "active": 8, "groups": [[5, 12418, 1040, 71.0], [3, 17721, 14, 21.9]], "tokens": 1054, "queue": 0, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.35}
+{"event": "round", "elapsed": 26896, "active": 8, "groups": [[5, 12412, 110, 25.4], [3, 16733, 2051, 87.4]], "tokens": 2161, "queue": 0, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.35}
+{"event": "row", "pid": "474", "method": "tsr_answer_prompt", "correct": 0, "k": 10, "think": 10240, "stop": "kmax", "wall": 3156.31, "elapsed": 26896}
+{"event": "round", "elapsed": 27080, "active": 7, "groups": [[4, 12952, 4096, 109.3], [3, 17721, 1030, 74.5]], "tokens": 5126, "queue": 0, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.35}
+{"event": "round", "elapsed": 27128, "active": 7, "groups": [[4, 13987, 15, 20.1], [3, 19742, 11, 28.0]], "tokens": 26, "queue": 0, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.35}
+{"event": "round", "elapsed": 27296, "active": 7, "groups": [[4, 13981, 1038, 69.6], [3, 18750, 2051, 98.1]], "tokens": 3089, "queue": 0, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.35}
+{"event": "round", "elapsed": 27472, "active": 7, "groups": [[4, 14521, 3075, 105.0], [3, 19742, 764, 70.9]], "tokens": 3839, "queue": 0, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.35}
+{"event": "round", "elapsed": 27582, "active": 7, "groups": [[4, 15716, 1038, 76.4], [3, 21263, 9, 34.3]], "tokens": 1047, "queue": 0, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.35}
+{"event": "round", "elapsed": 27719, "active": 7, "groups": [[4, 15550, 15, 25.6], [3, 20503, 2051, 110.9]], "tokens": 2066, "queue": 0, "peak_alloc_gb": 12.63, "peak_reserved_gb": 13.35}
