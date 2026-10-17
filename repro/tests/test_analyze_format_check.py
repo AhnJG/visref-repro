@@ -67,3 +67,54 @@ def test_main_writes_json(tmp_path):
     assert A.main(['--rows', str(f), '--out', str(tmp_path / 'o.json')]) == 0
     out = json.loads((tmp_path / 'o.json').read_text())
     assert out['n'] == 200 and out['pass'] and out['errors'] == {m: 0 for m in A.METHODS}
+
+
+# ---- additional observations (never used for the decision) -----------------------------------------------------------
+def test_pair_counts_and_range():
+    a = {str(i): {'correct': int(i < 6), 'prediction': 'x' if i < 8 else 'y'} for i in range(10)}
+    b = {str(i): {'correct': int(2 <= i < 9), 'prediction': 'x'} for i in range(10)}
+    r = A._pair(a, b, [str(i) for i in range(10)])
+    assert (r['both'], r['a_only'], r['b_only'], r['neither']) == (4, 2, 3, 1) and r['same_prediction'] == 8
+    assert r['acc_a'] == 60.0 and r['acc_b'] == 70.0 and r['diff_pp'] == -10.0
+    assert r['range95_pp'][0] < -10.0 < r['range95_pp'][1]
+
+
+def _as_new_run(a6, pids):
+    """A6 rows renamed as if they came from the new run (visref_imgtag -> the new method, TSR unchanged)."""
+    out = []
+    for r in a6:
+        if str(r['pid']) in pids and r['method'] in A.A6:
+            out.append(dict(r, method=A.IN if r['method'] == A.A6[0] else A.TSR))
+    return out
+
+
+def test_observe_on_identical_runs_shows_no_difference():
+    pids = json.loads(A.IDS.read_text())
+    a6 = A.load(REPRO / 'kaggle/runs/imgtag_main/output/results/results_0.jsonl')
+    fake = lambda r: dict(r, correct=int(r['pid']) % 2, prediction=str(r['pid']), extract_failed=False)  # noqa: E731
+    o = A.observe(_as_new_run(a6, set(pids)), a6, pids, fake)
+    for k in ('hardware', 'vs_a6'):
+        assert o[k]['same_prediction'] == 200 and o[k]['diff_pp'] == 0.0 and o[k]['a_only'] == o[k]['b_only'] == 0
+    assert o['reemit']['new_in']['reemit'] == o['reemit']['a6_imgtag']['reemit'] == 38
+    assert o['reemit']['tsr']['reemit'] == 21
+    by = o['by_step1']['a6_imgtag']
+    assert {e: v['n'] for e, v in by.items()} == {'cap': 131, 'close': 64, 'eos': 5}
+    assert o['behaviour']['new_in'] == o['behaviour']['a6_imgtag'] and o['extract_failed']['new_in'] == 0
+
+
+def test_main_observe_with_the_rule_scorer(tmp_path):
+    pids = json.loads(A.IDS.read_text())
+    a6p = REPRO / 'kaggle/runs/imgtag_main/output/results/results_0.jsonl'
+    rows = _as_new_run(A.load(a6p), set(pids))
+    f0, f1 = tmp_path / 'results_0.jsonl', tmp_path / 'results_1.jsonl'  # one file per GPU, as on Kaggle
+    f0.write_text(''.join(json.dumps(r) + '\n' for r in rows[::2]))
+    f1.write_text(''.join(json.dumps(r) + '\n' for r in rows[1::2]))
+    (tmp_path / 'results_0.jsonl.partial').write_text('not json\n')  # unfinished jobs are not read
+    out = tmp_path / 'o.json'
+    assert A.main(['--rows', str(tmp_path / 'results_*.jsonl'), '--a6', str(a6p), '--observe',
+                   '--data', str(REPRO.parent / 'data/raw/mathvista_testmini.json'), '--out', str(out)]) == 0
+    res = json.loads(out.read_text())
+    assert res['reemit_excess'] == 17 and not res['pass']  # A6 itself fails the rule
+    ob = res['observations']
+    assert ob['hardware']['diff_pp'] == 0.0 and ob['hardware']['same_prediction'] == 200
+    assert ob['within']['new_in_minus_tsr'] == ob['within']['a6_imgtag_minus_tsr']

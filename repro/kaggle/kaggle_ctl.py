@@ -39,8 +39,9 @@ def main():
         r = k.kernels_push(str(run), timeout=str(rc['timeout']), acc=rc['accelerator'])
         log.write_text(json.dumps({'pushed_at': time.time(), 'response': d(r)}, indent=1, default=str))
         print(d(r))
-    elif action == 'status':
-        s = d(k.kernels_status(rc['kernel']))
+    elif action == 'status':  # the response object has no usable to_dict(); read its fields
+        r = k.kernels_status(rc['kernel'])
+        s = {'status': str(getattr(r, 'status', None)), 'failure_message': getattr(r, 'failure_message', None) or ''}
         (run / 'status.json').write_text(json.dumps(s, indent=1, default=str))
         print(s)
     elif action == 'pull':
