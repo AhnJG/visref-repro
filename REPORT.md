@@ -141,7 +141,7 @@ Each table lists the checks in time order; the name in brackets is the run folde
 - *Where the setting comes from.* The stopping rule (entropy of the answer distribution below 0.25) is from the paper. Ghosal et al., whom the paper cites for this criterion, sample several answers. One answer and the `\boxed{…}` format are our choice.
 - *Also recorded.* In the VisRef-fill run (Section 4.2), H was measured both with and without the re-inserted image tokens: the median difference was 0.0006, and the stop-or-continue decision differed at 151 of 2,231 steps (6.8%). The two measurements used separate random streams for the sampled answer, so part of this difference can come from sampling rather than from the re-inserted tokens (later runs replay the same random state for both).
 - *Limits.* The choice rests on 10 to 60 questions each. One sampled answer gives the right entropy on average but is noisy. In this setting TSR and VisRef rarely continued after a step the model had closed itself (7 of 359 and 35 of 398 sampled answers); almost all continuations came after a 1,024-token cut.
-- *Sources.* `docs/EXPERIMENT_FLOW.md`, entries of 2026-10-07 (the first, second and third small checks, `main_s0`); Sections 4.1 (items 1 and 5) and 4.2; the ten-answer check (earlier code, outputs not published): [log at commit 4776f6a, lines 642–644](https://github.com/AhnJG/visref-repro/blob/4776f6ab2607957799bef8db70241cc64313feae/docs/EXPERIMENT_FLOW.md?plain=1#L642-L644).
+- *Sources.* `docs/EXPERIMENT_FLOW.md`, entries of 2026-10-07 (the first, second and third small checks, `main_s0`); Sections 4.1 (items 1 and 5) and 4.2; the ten-answer check (earlier code, outputs not published): [log at commit 4776f6a, lines 642–644](https://github.com/AhnJG/visref-repro/blob/4776f6ab2607957799bef8db70241cc64313feae/docs/EXPERIMENT_FLOW.md?plain=1#L642-L644). Every check on how H is measured, including the earlier code, is collected in Korean in [`docs/STOPPING_ENTROPY.md`](docs/STOPPING_ENTROPY.md).
 
 **B2. How to re-insert the image tokens.** InternVL reads an image wrapped in `<img>` … `</img>` tags. The paper does not say how the selected image tokens are inserted during thinking.
 
@@ -455,6 +455,7 @@ A single confirmatory run with the setting closest to the paper's is planned nex
 | Descriptive per-method report (rule-based scorer v4 only, no LLM fallback) | `repro/reports/b_main_report.html`, `repro/reports/b_main_report.json` |
 | Code | `repro/run.py`, `repro/visref/` (engine, methods, DPP, scoring), `repro/diag/step1_branch.py`, `repro/diag/analyze_imgtag*.py` (image-tag analyses), `repro/runpod/` (runner for the A6 run on a rented GPU) |
 | Public sources behind the logs' citations (arXiv versions, pages, tables) | `docs/SOURCES.md` |
+| Every check on how the stopping entropy is measured (Korean) | `docs/STOPPING_ENTROPY.md` |
 | Reproduction commands and repository layout | `docs/REPRODUCE.md` |
 
 ## 8. Contributions and AI use
