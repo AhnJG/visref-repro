@@ -99,7 +99,7 @@ whether it comes from the paper, a cited work, official InternVL material or our
 
 ## Why our results may differ from the paper
 
-We look for the cause in our implementation first ([REPORT, Section 4.1](REPORT.md#41-cause-analysis-post-hoc)):
+We look for the cause in our implementation first ([REPORT, Section 4.1](REPORT.md#41-cause-analysis-after-the-results)):
 
 - **Fewer image tokens.** We re-insert about one fifth of the paper's m image tokens per step: with text token
   embeddings read as the model's input embeddings (our reading; the paper does not name the layer), the selection kernel
@@ -108,7 +108,7 @@ We look for the cause in our implementation first ([REPORT, Section 4.1](REPORT.
   the token limits or how answers are extracted; we chose these in small checks ([REPORT, Section 2.6](REPORT.md#26-setting-checks-how-the-unstated-settings-were-chosen)).
   Those checks used questions that are also among the 1,000 evaluated ones.
 - **Higher accuracies.** Our accuracies are 8–12 pp above the paper's, close to the official InternVL3.5-1B score;
-  we have not found the reason ([REPORT, Section 4.4](REPORT.md#44-comparison-with-other-numbers-in-the-paper-post-hoc)).
+  we have not found the reason ([REPORT, Section 4.4](REPORT.md#44-comparison-with-other-numbers-in-the-paper-after-the-results)).
 - **One setting.** One model size, one benchmark, one seed.
 
 ## Reproduce
