@@ -1,0 +1,553 @@
+{
+ "note": "descriptive, decided after probe correctness by step-1 end type was already seen on 2026-10-11; no decision rule",
+ "scorer_version": "v4_mc_empty_wrong",
+ "probe_scoring": "score('\\\\boxed' + probe_answer, data[pid])['correct'] (visref.scoring.score, as in diag/analyze_step1_probe.py); invalid probe = wrong",
+ "st_final_correctness": "'correct' of the ST row in llm/final/merged.jsonl (main-run judgement, as analyze_step1_probe.py uses)",
+ "source_files": [
+  "kaggle/runs/b_main_s1/output/results/results_0.jsonl",
+  "kaggle/runs/b_main_s1/output/results/results_1.jsonl",
+  "kaggle/runs/b_main_s2/output/results/results_0.jsonl",
+  "kaggle/runs/b_main_s2/output/results/results_1.jsonl",
+  "kaggle/runs/b_main_s3/output/results/results_0.jsonl",
+  "kaggle/runs/b_main_s3/output/results/results_1.jsonl",
+  "kaggle/runs/b_main_s4/output/results/results_0.jsonl",
+  "kaggle/runs/b_main_s4/output/results/results_1.jsonl",
+  "kaggle/runs/b_main_s5/output/results/results_0.jsonl",
+  "kaggle/runs/b_main_s5/output/results/results_1.jsonl",
+  "kaggle/runs/b_main_s6/output/results/results_0.jsonl",
+  "kaggle/runs/b_main_s6/output/results/results_1.jsonl",
+  "kaggle/runs/b_main_s7/output/results/results_0.jsonl",
+  "kaggle/runs/b_main_s7/output/results/results_1.jsonl",
+  "kaggle/runs/b_main_s8/output/results/results_0.jsonl",
+  "kaggle/runs/b_main_s8/output/results/results_1.jsonl",
+  "kaggle/runs/b_main_s9/output/results/results_0.jsonl",
+  "kaggle/runs/b_main_s9/output/results/results_1.jsonl"
+ ],
+ "stratified_by": "ST row steps[0]['think_end']; stopped at step 1 = row 'k' == 1",
+ "max_gain_pp_def": "questions stopped at step 1 and wrong (tsr: probe-wrong and ST-final-wrong; visref_raw_rank: probe-wrong) / 1000 * 100",
+ "auroc_def": "AUROC of steps[0]['H'] for 'probe wrong' (higher H -> wrong), ties 0.5, inf > finite; 95% CI = 2000 question-bootstrap resamples, seed 0 (resamples with an empty class skipped)",
+ "strata": {
+  "cap": {
+   "n_questions": 641,
+   "methods": {
+    "tsr": {
+     "all": {
+      "n": 641,
+      "n_stopped_k1": 380,
+      "base_rate_k1": 0.5928,
+      "probe_2x2": {
+       "stopped_correct": 240,
+       "stopped_wrong": 140,
+       "continued_correct": 75,
+       "continued_wrong": 186
+      },
+      "st_final_2x2": {
+       "stopped_correct": 238,
+       "stopped_wrong": 142,
+       "continued_correct": 88,
+       "continued_wrong": 173
+      },
+      "n_k1_probe_wrong": 140,
+      "n_k1_probe_wrong_and_st_wrong": 132,
+      "max_gain_pp": 13.2,
+      "auroc_H_predicts_probe_wrong": {
+       "n_inf": 3,
+       "n_wrong": 326,
+       "n_right": 315,
+       "auroc": 0.7429,
+       "ci95": [
+        0.7051,
+        0.7781
+       ],
+       "n_boot_used": 2000
+      }
+     },
+     "multi_choice": {
+      "n": 392,
+      "n_stopped_k1": 241,
+      "base_rate_k1": 0.6148,
+      "probe_2x2": {
+       "stopped_correct": 179,
+       "stopped_wrong": 62,
+       "continued_correct": 56,
+       "continued_wrong": 95
+      },
+      "st_final_2x2": {
+       "stopped_correct": 181,
+       "stopped_wrong": 60,
+       "continued_correct": 68,
+       "continued_wrong": 83
+      },
+      "n_k1_probe_wrong": 62,
+      "n_k1_probe_wrong_and_st_wrong": 55,
+      "max_gain_pp": 5.5,
+      "auroc_H_predicts_probe_wrong": {
+       "n_inf": 0,
+       "n_wrong": 157,
+       "n_right": 235,
+       "auroc": 0.7386,
+       "ci95": [
+        0.6871,
+        0.7907
+       ],
+       "n_boot_used": 2000
+      }
+     },
+     "free_form": {
+      "n": 249,
+      "n_stopped_k1": 139,
+      "base_rate_k1": 0.5582,
+      "probe_2x2": {
+       "stopped_correct": 61,
+       "stopped_wrong": 78,
+       "continued_correct": 19,
+       "continued_wrong": 91
+      },
+      "st_final_2x2": {
+       "stopped_correct": 57,
+       "stopped_wrong": 82,
+       "continued_correct": 20,
+       "continued_wrong": 90
+      },
+      "n_k1_probe_wrong": 78,
+      "n_k1_probe_wrong_and_st_wrong": 77,
+      "max_gain_pp": 7.7,
+      "auroc_H_predicts_probe_wrong": {
+       "n_inf": 3,
+       "n_wrong": 169,
+       "n_right": 80,
+       "auroc": 0.744,
+       "ci95": [
+        0.6762,
+        0.8052
+       ],
+       "n_boot_used": 2000
+      }
+     }
+    },
+    "visref_raw_rank": {
+     "all": {
+      "n": 641,
+      "n_stopped_k1": 366,
+      "base_rate_k1": 0.571,
+      "probe_2x2": {
+       "stopped_correct": 236,
+       "stopped_wrong": 130,
+       "continued_correct": 95,
+       "continued_wrong": 180
+      },
+      "n_k1_probe_wrong": 130,
+      "max_gain_pp": 13.0,
+      "auroc_H_predicts_probe_wrong": {
+       "n_inf": 3,
+       "n_wrong": 310,
+       "n_right": 331,
+       "auroc": 0.7156,
+       "ci95": [
+        0.6762,
+        0.7539
+       ],
+       "n_boot_used": 2000
+      }
+     },
+     "multi_choice": {
+      "n": 392,
+      "n_stopped_k1": 232,
+      "base_rate_k1": 0.5918,
+      "probe_2x2": {
+       "stopped_correct": 173,
+       "stopped_wrong": 59,
+       "continued_correct": 71,
+       "continued_wrong": 89
+      },
+      "n_k1_probe_wrong": 59,
+      "max_gain_pp": 5.9,
+      "auroc_H_predicts_probe_wrong": {
+       "n_inf": 0,
+       "n_wrong": 148,
+       "n_right": 244,
+       "auroc": 0.7144,
+       "ci95": [
+        0.6601,
+        0.7668
+       ],
+       "n_boot_used": 2000
+      }
+     },
+     "free_form": {
+      "n": 249,
+      "n_stopped_k1": 134,
+      "base_rate_k1": 0.5382,
+      "probe_2x2": {
+       "stopped_correct": 63,
+       "stopped_wrong": 71,
+       "continued_correct": 24,
+       "continued_wrong": 91
+      },
+      "n_k1_probe_wrong": 71,
+      "max_gain_pp": 7.1,
+      "auroc_H_predicts_probe_wrong": {
+       "n_inf": 3,
+       "n_wrong": 162,
+       "n_right": 87,
+       "auroc": 0.6977,
+       "ci95": [
+        0.6288,
+        0.7625
+       ],
+       "n_boot_used": 2000
+      }
+     }
+    }
+   }
+  },
+  "close": {
+   "n_questions": 334,
+   "methods": {
+    "tsr": {
+     "all": {
+      "n": 334,
+      "n_stopped_k1": 330,
+      "base_rate_k1": 0.988,
+      "probe_2x2": {
+       "stopped_correct": 238,
+       "stopped_wrong": 92,
+       "continued_correct": 2,
+       "continued_wrong": 2
+      },
+      "st_final_2x2": {
+       "stopped_correct": 237,
+       "stopped_wrong": 93,
+       "continued_correct": 1,
+       "continued_wrong": 3
+      },
+      "n_k1_probe_wrong": 92,
+      "n_k1_probe_wrong_and_st_wrong": 92,
+      "max_gain_pp": 9.2,
+      "auroc_H_predicts_probe_wrong": {
+       "n_inf": 0,
+       "n_wrong": 94,
+       "n_right": 240,
+       "auroc": 0.6641,
+       "ci95": [
+        0.6009,
+        0.7287
+       ],
+       "n_boot_used": 2000
+      }
+     },
+     "multi_choice": {
+      "n": 143,
+      "n_stopped_k1": 143,
+      "base_rate_k1": 1.0,
+      "probe_2x2": {
+       "stopped_correct": 111,
+       "stopped_wrong": 32,
+       "continued_correct": 0,
+       "continued_wrong": 0
+      },
+      "st_final_2x2": {
+       "stopped_correct": 111,
+       "stopped_wrong": 32,
+       "continued_correct": 0,
+       "continued_wrong": 0
+      },
+      "n_k1_probe_wrong": 32,
+      "n_k1_probe_wrong_and_st_wrong": 32,
+      "max_gain_pp": 3.2,
+      "auroc_H_predicts_probe_wrong": {
+       "n_inf": 0,
+       "n_wrong": 32,
+       "n_right": 111,
+       "auroc": 0.4448,
+       "ci95": [
+        0.3458,
+        0.5473
+       ],
+       "n_boot_used": 2000
+      }
+     },
+     "free_form": {
+      "n": 191,
+      "n_stopped_k1": 187,
+      "base_rate_k1": 0.9791,
+      "probe_2x2": {
+       "stopped_correct": 127,
+       "stopped_wrong": 60,
+       "continued_correct": 2,
+       "continued_wrong": 2
+      },
+      "st_final_2x2": {
+       "stopped_correct": 126,
+       "stopped_wrong": 61,
+       "continued_correct": 1,
+       "continued_wrong": 3
+      },
+      "n_k1_probe_wrong": 60,
+      "n_k1_probe_wrong_and_st_wrong": 60,
+      "max_gain_pp": 6.0,
+      "auroc_H_predicts_probe_wrong": {
+       "n_inf": 0,
+       "n_wrong": 62,
+       "n_right": 129,
+       "auroc": 0.7394,
+       "ci95": [
+        0.6589,
+        0.8142
+       ],
+       "n_boot_used": 2000
+      }
+     }
+    },
+    "visref_raw_rank": {
+     "all": {
+      "n": 334,
+      "n_stopped_k1": 329,
+      "base_rate_k1": 0.985,
+      "probe_2x2": {
+       "stopped_correct": 238,
+       "stopped_wrong": 91,
+       "continued_correct": 2,
+       "continued_wrong": 3
+      },
+      "n_k1_probe_wrong": 91,
+      "max_gain_pp": 9.1,
+      "auroc_H_predicts_probe_wrong": {
+       "n_inf": 0,
+       "n_wrong": 94,
+       "n_right": 240,
+       "auroc": 0.6991,
+       "ci95": [
+        0.6379,
+        0.7616
+       ],
+       "n_boot_used": 2000
+      }
+     },
+     "multi_choice": {
+      "n": 143,
+      "n_stopped_k1": 143,
+      "base_rate_k1": 1.0,
+      "probe_2x2": {
+       "stopped_correct": 111,
+       "stopped_wrong": 32,
+       "continued_correct": 0,
+       "continued_wrong": 0
+      },
+      "n_k1_probe_wrong": 32,
+      "max_gain_pp": 3.2,
+      "auroc_H_predicts_probe_wrong": {
+       "n_inf": 0,
+       "n_wrong": 32,
+       "n_right": 111,
+       "auroc": 0.5445,
+       "ci95": [
+        0.4391,
+        0.6574
+       ],
+       "n_boot_used": 2000
+      }
+     },
+     "free_form": {
+      "n": 191,
+      "n_stopped_k1": 186,
+      "base_rate_k1": 0.9738,
+      "probe_2x2": {
+       "stopped_correct": 127,
+       "stopped_wrong": 59,
+       "continued_correct": 2,
+       "continued_wrong": 3
+      },
+      "n_k1_probe_wrong": 59,
+      "max_gain_pp": 5.9,
+      "auroc_H_predicts_probe_wrong": {
+       "n_inf": 0,
+       "n_wrong": 62,
+       "n_right": 129,
+       "auroc": 0.7516,
+       "ci95": [
+        0.6762,
+        0.8239
+       ],
+       "n_boot_used": 2000
+      }
+     }
+    }
+   }
+  },
+  "eos": {
+   "n_questions": 25,
+   "methods": {
+    "tsr": {
+     "all": {
+      "n": 25,
+      "n_stopped_k1": 20,
+      "base_rate_k1": 0.8,
+      "probe_2x2": {
+       "stopped_correct": 13,
+       "stopped_wrong": 7,
+       "continued_correct": 4,
+       "continued_wrong": 1
+      },
+      "st_final_2x2": {
+       "stopped_correct": 12,
+       "stopped_wrong": 8,
+       "continued_correct": 2,
+       "continued_wrong": 3
+      },
+      "n_k1_probe_wrong": 7,
+      "n_k1_probe_wrong_and_st_wrong": 6,
+      "max_gain_pp": 0.6,
+      "auroc_H_predicts_probe_wrong": {
+       "n_inf": 0,
+       "n_wrong": 8,
+       "n_right": 17,
+       "auroc": 0.4559,
+       "ci95": [
+        0.2121,
+        0.7208
+       ],
+       "n_boot_used": 2000
+      }
+     },
+     "multi_choice": {
+      "n": 5,
+      "n_stopped_k1": 3,
+      "base_rate_k1": 0.6,
+      "probe_2x2": {
+       "stopped_correct": 1,
+       "stopped_wrong": 2,
+       "continued_correct": 1,
+       "continued_wrong": 1
+      },
+      "st_final_2x2": {
+       "stopped_correct": 1,
+       "stopped_wrong": 2,
+       "continued_correct": 1,
+       "continued_wrong": 1
+      },
+      "n_k1_probe_wrong": 2,
+      "n_k1_probe_wrong_and_st_wrong": 2,
+      "max_gain_pp": 0.2,
+      "auroc_H_predicts_probe_wrong": {
+       "n_inf": 0,
+       "n_wrong": 3,
+       "n_right": 2,
+       "auroc": 0.5,
+       "ci95": [
+        0.0,
+        1.0
+       ],
+       "n_boot_used": 1821
+      }
+     },
+     "free_form": {
+      "n": 20,
+      "n_stopped_k1": 17,
+      "base_rate_k1": 0.85,
+      "probe_2x2": {
+       "stopped_correct": 12,
+       "stopped_wrong": 5,
+       "continued_correct": 3,
+       "continued_wrong": 0
+      },
+      "st_final_2x2": {
+       "stopped_correct": 11,
+       "stopped_wrong": 6,
+       "continued_correct": 1,
+       "continued_wrong": 2
+      },
+      "n_k1_probe_wrong": 5,
+      "n_k1_probe_wrong_and_st_wrong": 4,
+      "max_gain_pp": 0.4,
+      "auroc_H_predicts_probe_wrong": {
+       "n_inf": 0,
+       "n_wrong": 5,
+       "n_right": 15,
+       "auroc": 0.3733,
+       "ci95": [
+        0.1053,
+        0.6667
+       ],
+       "n_boot_used": 1992
+      }
+     }
+    },
+    "visref_raw_rank": {
+     "all": {
+      "n": 25,
+      "n_stopped_k1": 18,
+      "base_rate_k1": 0.72,
+      "probe_2x2": {
+       "stopped_correct": 12,
+       "stopped_wrong": 6,
+       "continued_correct": 6,
+       "continued_wrong": 1
+      },
+      "n_k1_probe_wrong": 6,
+      "max_gain_pp": 0.6,
+      "auroc_H_predicts_probe_wrong": {
+       "n_inf": 0,
+       "n_wrong": 7,
+       "n_right": 18,
+       "auroc": 0.3413,
+       "ci95": [
+        0.13,
+        0.5933
+       ],
+       "n_boot_used": 1997
+      }
+     },
+     "multi_choice": {
+      "n": 5,
+      "n_stopped_k1": 2,
+      "base_rate_k1": 0.4,
+      "probe_2x2": {
+       "stopped_correct": 1,
+       "stopped_wrong": 1,
+       "continued_correct": 2,
+       "continued_wrong": 1
+      },
+      "n_k1_probe_wrong": 1,
+      "max_gain_pp": 0.1,
+      "auroc_H_predicts_probe_wrong": {
+       "n_inf": 0,
+       "n_wrong": 2,
+       "n_right": 3,
+       "auroc": 0.3333,
+       "ci95": [
+        0.0,
+        1.0
+       ],
+       "n_boot_used": 1827
+      }
+     },
+     "free_form": {
+      "n": 20,
+      "n_stopped_k1": 16,
+      "base_rate_k1": 0.8,
+      "probe_2x2": {
+       "stopped_correct": 11,
+       "stopped_wrong": 5,
+       "continued_correct": 4,
+       "continued_wrong": 0
+      },
+      "n_k1_probe_wrong": 5,
+      "max_gain_pp": 0.5,
+      "auroc_H_predicts_probe_wrong": {
+       "n_inf": 0,
+       "n_wrong": 5,
+       "n_right": 15,
+       "auroc": 0.2533,
+       "ci95": [
+        0.0556,
+        0.4896
+       ],
+       "n_boot_used": 1992
+      }
+     }
+    }
+   }
+  }
+ }
+}
