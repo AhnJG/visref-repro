@@ -1,6 +1,6 @@
 """Build a Google Colab notebook that runs repro/run.py on one Colab GPU, resumable across sessions.
 
-  python3 repro/colab/build_colab.py NAME --ids-first N --run-args="--methods st ..."
+  python3 repro/colab/build_colab.py NAME --ids-first N --run-args="--methods st ..." [--data diag/step1_store_bmain.json]
 
 The notebook embeds the same source bundle as kaggle/build.py (sha256 checked inside the notebook) and keeps
 results on Google Drive (MyDrive/VisRef_colab/NAME). run.py skips (pid, method) rows already in its output file,
@@ -115,11 +115,12 @@ def main():
     ap.add_argument('--shuffle-seed', type=int, default=0)
     ap.add_argument('--run-args', default='')
     ap.add_argument('--overwrite', action='store_true', help='rebuild an existing, not yet started run folder')
+    ap.add_argument('--data', nargs='*', default=[], help='extra files to bundle, relative to repro/ (as kaggle/build.py)')
     a = ap.parse_args()
     ids = [str(i) for i in range(1, 1001)]
     random.Random(a.shuffle_seed).shuffle(ids)
     ids = ids[: a.ids_first]
-    data, hashes = kb.bundle()
+    data, hashes = kb.bundle(a.data)
     cfg = {'model': kb.MODEL, 'model_rev': kb.MODEL_REV, 'data_rev': kb.DATA_REV, 'parquet': kb.PARQUET, 'ids': ids,
            'run_args': a.run_args.split(), 'source_sha256': hashes, 'code_version': code_version(),
            'built_at': time.strftime('%Y-%m-%dT%H:%M:%S%z')}
