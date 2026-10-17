@@ -15,6 +15,16 @@ _spec.loader.exec_module(ri)
 sys.path.insert(0, str(REPRO))
 import run  # noqa: E402
 
+MAIN_PIN = ri.RUN['code_version']  # A6's pin (commit 8f5c09e), read before the fixture below changes it
+
+
+@pytest.fixture(autouse=True)
+def _current_code_version(monkeypatch):
+    """The flow tests exercise the runner on the current code: the imgtag_main pin is set to the current code_version
+    for each test (restored afterwards), and RUN is restored after main() selected another plan."""
+    monkeypatch.setattr(ri, 'RUN', ri.RUN)
+    monkeypatch.setitem(ri.PLANS['imgtag_main'], 'code_version', run.code_version())
+
 
 def test_run_dict_values():
     R = ri.RUN
@@ -45,7 +55,8 @@ def test_ids_file_and_store_sha():
 
 
 def test_pinned_code_version_and_defaults_match_run_py():
-    assert ri.RUN['code_version'] == run.code_version() == '6e218887d2b5'
+    assert MAIN_PIN == '6e218887d2b5'  # A6, commit 8f5c09e: that plan runs only from that commit
+    assert ri.FORMAT_CHECK['code_version'] == run.code_version()  # the format check runs on the current code
     for k, v in ri.RUN['run_py_defaults'].items():
         assert run.DEFAULTS[k] == v
     assert run.DEFAULTS['dual_probe'] == 0  # the runner must pass --dual-probe 1 itself
@@ -102,7 +113,7 @@ def test_dry_run_prints_command_without_side_effects(tmp_path, capsys, monkeypat
     rc = ri.main(['--name', 'imgtag_check', '--out-root', str(tmp_path), '--dry-run', '--limit', '7'])
     out = capsys.readouterr().out
     assert rc == 0 and 'run.py --parquet' in out and '--dual-probe 1' in out and '--limit 7' in out
-    assert '"code_version": "6e218887d2b5"' in out
+    assert f'"code_version": "{run.code_version()}"' in out
     assert list(tmp_path.iterdir()) == [] and f'HF_HOME={tmp_path.resolve()}/hf_cache' in out
 
 
@@ -425,3 +436,60 @@ def test_new_flags_defaults_and_help(capsys):
     assert '--max-errors' in h and '--redo-errors' in h and '--stop-pod' in h
     with pytest.raises(AssertionError):
         ri.parse_args(['--name', 'n', '--out-root', 'o', '--max-errors', '-1'])
+
+
+# ---- format check plan (2026-10-17) ----------------------------------------------------------------------------------
+def test_format_check_plan_values():
+    F, R = ri.FORMAT_CHECK, ri.PLANS['imgtag_main']
+    assert ri.PLANS['format_check'] is F and F['plan'] == 'format_check' and R['plan'] == 'imgtag_main'
+    assert F['methods'] == 'visref_hs_imgtag_in,visref_hs_imgtag_out,tsr_answer_prompt'
+    assert F['run_args'] == ['--methods', F['methods']] + R['run_args'][2:]  # other run.py arguments as A6
+    assert F['n_ids'] == 100 and F['summarize'] is False and F['main_name'] == 'fmtcheck_main' and F['check_name'] == 'fmtcheck_try'
+    same = ('store_file', 'store_sha256_prefix', 'shard', 'transformers', 'min_torch', 'run_py_defaults', 'cuda_alloc_conf')
+    assert all(F[k] == R[k] for k in same)
+    for m in F['methods'].split(','):
+        assert m in __import__('visref.methods', fromlist=['METHODS']).METHODS
+
+
+def test_format_check_ids_file():
+    sys.path.insert(0, str(REPRO / 'diag'))
+    import format_check_ids as fci
+    F = ri.FORMAT_CHECK
+    path = REPRO / F['ids_file']
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == F['ids_sha256']
+    order = json.loads((REPRO / ri.RUN['ids_file']).read_text())
+    store = json.loads((REPRO / F['store_file']).read_text())['pids']
+    ids = json.loads(path.read_text())
+    assert ids == fci.build(order, store) and len(ids) == len(set(ids)) == 100
+    assert all(store[p]['think_end'] == 'close' for p in ids)
+    pos = [[str(p) for p in order].index(p) for p in ids]
+    assert pos == sorted(pos)  # in the seed-0 order
+    closed_before = [str(p) for p in order[:pos[-1] + 1] if store[str(p)]['think_end'] == 'close']
+    assert closed_before == ids  # no closed question skipped
+    assert fci.main(['--check']) == 0
+    ri.select_plan('format_check')
+    assert ri.check_inputs()[0] == ids
+
+
+def test_format_check_build_cmd_and_names():
+    ri.select_plan('format_check')
+    cmd = ri.build_cmd('p', 'i', 'o', python='python3')
+    assert cmd[cmd.index('--methods') + 1] == 'visref_hs_imgtag_in,visref_hs_imgtag_out,tsr_answer_prompt'
+    assert ri.expected_rows(0) == 300 and ri.expected_rows(3) == 9
+    with pytest.raises(SystemExit):
+        ri.check_name('fmtcheck_main', 3)
+    ri.check_name('fmtcheck_try', 3)
+    ri.check_name('imgtag_main', 3)  # only the plan's own main name is refused
+
+
+def test_format_check_complete_run_writes_no_summary(tmp_path, capsys, monkeypatch):
+    rows = [(p, m, 'ok') for p in ('440', '622') for m in ri.FORMAT_CHECK['methods'].split(',')]
+    _flow_setup(monkeypatch, _stub_rows_code(rows))
+    argv = ['--plan', 'format_check', '--name', 'fmtcheck_try', '--out-root', str(tmp_path), '--allow-dirty', '--limit', '2']
+    assert ri.main(argv) == 0
+    out = capsys.readouterr().out
+    res = tmp_path / 'fmtcheck_try' / 'output' / 'results'
+    assert 'complete: 6/6 rows' in out and 'this plan does not use accuracy: summary not written' in out
+    assert not (res / 'summary.json').exists() and not (res / 'summary_stdout.txt').exists()
+    cfg = json.loads((tmp_path / 'fmtcheck_try' / 'run_config.json').read_text())
+    assert cfg['run']['plan'] == 'format_check' and json.loads((res / 'ids.json').read_text())[:2] == ['440', '622']

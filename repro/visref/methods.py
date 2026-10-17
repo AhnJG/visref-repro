@@ -12,6 +12,13 @@ tokens are wrapped in the official image tags, <img> + V + </img> + '\\n', and p
 model answers (z_k </think> \\n <img>V</img> \\n: probe, forced and free answers all start from there, whatever z_k
 ends with) but inside the thinking block when it goes on (z_k [\\n unless z_k / cut_sep ends with one] <img>V</img> \\n
 Wait, think more)); every final answer of visref_imgtag, and of 'tsr_answer_prompt' (TSR otherwise), starts after forced_prompt.
+'visref_hs_imgtag_in' and 'visref_hs_imgtag_out' (2026-10-17 format check, decided by the user): the selection of visref_hs
+(Z = last-layer hidden states of z_k, kernel V = the input image embeddings vis) and the image tags of visref_imgtag, every
+final answer after forced_prompt. '_out' places the block as visref_imgtag does (after '</think>\n' when answering);
+'_in' keeps it inside the thinking block also when answering: z_k [\n] <img>V</img> \n </think> -- probe, forced and
+free answers -- so the stopping-decision and answer context is the continuation context + </think> (Algorithm 1 lines
+10, 12, 17 use the same tau_1:k). Their steps also record the picked indices (sel) and the step's token ids (z_ids),
+and their rows the final answer's token ids (final_ids), for analyses after the run.
 
 Thinking after the last step ('tsr_think', 'visref_think', 'visref_hs_think'; EF 2026-10-13, decided by the user): the
 same loop as 'tsr' / 'visref_raw_rank' / 'visref_hs', but when the method stops (any reason: entropy, Kmax or budget),
@@ -60,10 +67,14 @@ from .dpp import budget, pick_stats, select_tokens, select_tokens_fill
 from .engine import Request
 
 METHODS = ('st', 'tsr', 'visref_raw_rank', 'visref_fill', 'visref_hs', 'tsr_think', 'visref_think', 'visref_hs_think',
-           'visref_imgtag', 'tsr_answer_prompt')
-VISREF = ('visref_raw_rank', 'visref_fill', 'visref_hs', 'visref_think', 'visref_hs_think', 'visref_imgtag')
-HS = ('visref_hs', 'visref_hs_think')  # Z = last-layer hidden states
-IMGTAG = ('visref_imgtag',); ANSWER_PROMPT = IMGTAG + ('tsr_answer_prompt',)  # every final answer after forced_prompt
+           'visref_imgtag', 'tsr_answer_prompt', 'visref_hs_imgtag_in', 'visref_hs_imgtag_out')
+VISREF = ('visref_raw_rank', 'visref_fill', 'visref_hs', 'visref_think', 'visref_hs_think', 'visref_imgtag',
+          'visref_hs_imgtag_in', 'visref_hs_imgtag_out')
+TAG_IN = ('visref_hs_imgtag_in',)  # image block inside the thinking block also when answering
+HS = ('visref_hs', 'visref_hs_think', 'visref_hs_imgtag_out') + TAG_IN  # Z = last-layer hidden states, kernel V = vis
+IMGTAG = ('visref_imgtag',)  # kernel V = last-layer hidden states at the image positions (needs vis_hs)
+TAG = IMGTAG + ('visref_hs_imgtag_out',) + TAG_IN  # picked tokens wrapped in <img> ... </img> '\n'
+ANSWER_PROMPT = TAG + ('tsr_answer_prompt',)  # every final answer after forced_prompt
 THINK = ('tsr_think', 'visref_think', 'visref_hs_think')  # extra thinking after the stop decision
 PROBE_SAMPLING = (1.0, 0, 1.0)  # T=1, no top-k/top-p: sampled from the distribution whose entropy is summed
 
@@ -130,7 +141,7 @@ class Job:
         if self.method not in VISREF:
             return 0
         # + 2: margin (kept so caps match earlier runs); image tags: + 4 for the two image tags and two newlines
-        return budget(self.vis.shape[0], self.cfg['vis_frac']) + 2 + (4 if self.method in IMGTAG else 0)
+        return budget(self.vis.shape[0], self.cfg['vis_frac']) + 2 + (4 if self.method in TAG else 0)
 
     def _start_think(self):
         cap = self._think_cap(self.ctx.shape[0])
@@ -250,7 +261,7 @@ class Job:
                 step.update(pick_stats(tr))
             else:
                 sel = select_tokens(self.vis, self.eng.embed(z), m)
-            if self.method in IMGTAG:  # <img> + V + </img> + '\n'; placed below
+            if self.method in TAG:  # <img> + V + </img> + '\n'; placed below
                 nl = self.tok.encode('\n', add_special_tokens=False)
                 pre = [] if (zt + sep).endswith('\n') else nl  # continuing: exactly one newline before <img>
                 img = torch.cat([self.eng.embed([sp['img_start']]), self.vis[sel],
@@ -265,15 +276,21 @@ class Job:
                 except Exception:
                     self.rank_V = -1
             step.update(m=m, n_dpp=len(sel), n_inject=len(sel), rank_V=self.rank_V, n_unique_z=len(set(z)))
-            if self.method in IMGTAG:
-                step.update(inject_format='img_tag_outside_think', v_space='last_hidden')
+            if self.method in TAG:
+                step.update(inject_format='img_tag_inside_think' if self.method in TAG_IN else 'img_tag_outside_think',
+                            v_space='last_hidden' if self.method in IMGTAG else 'input_embed')
+                if self.method not in IMGTAG:  # format check: kept for analyses after the run
+                    step.update(sel=[int(i) for i in sel], z_ids=[int(t) for t in z])
                 self.trace.append(f'<VISREF_IMG m={m} dpp={len(sel)}>')
             else:
                 self.trace.append(f'<VISREF m={m} dpp={len(sel)}>')
         self.steps.append(step)
-        if img is not None:  # next step continues inside the thinking block; the answer starts after </think> '\n' + block
+        if img is not None:  # next step continues inside the thinking block
             self.step_ctx = torch.cat([ctx, self.eng.embed(pre), img], 0)
-            self.answer_ctx = torch.cat([ctx, self.eng.embed([sp['think_end']] + nl), img], 0)
+            if self.method in TAG_IN:  # answer from the same context: block, then </think>
+                self.answer_ctx = torch.cat([self.step_ctx, self.eng.embed([sp['think_end']])], 0)
+            else:  # the answer starts after </think> '\n' + block
+                self.answer_ctx = torch.cat([ctx, self.eng.embed([sp['think_end']] + nl), img], 0)
         else:
             self.step_ctx = ctx
             self.answer_ctx = torch.cat([ctx, self.eng.embed([sp['think_end']])], 0)
@@ -290,6 +307,7 @@ class Job:
             extra = dict(extra, final_af=True, final_af_len=len(self.partial),
                          final_af_finish='eos' if finish == 'stop' else 'cap',
                          final_af_valid=close is not None and any(ch.isalnum() for ch in inner))
+            self.final_af_ids = list(self.partial)  # format check: the DEER continuation's tokens
             self.partial = self.partial_answer
             self._finish(text, raw, y0, finish0, **extra)
             return
@@ -416,6 +434,10 @@ class Job:
             self.out['gen_tokens_noV'] = self.gen_tokens_noV
         if self.extra is not None:
             self.out.update(self.extra)
+        if self.method in TAG and self.method not in IMGTAG:  # format check: generated answer tokens (DEER apart)
+            self.out['final_ids'] = [int(t) for t in self.partial]
+            if hasattr(self, 'final_af_ids'):
+                self.out['final_af_ids'] = [int(t) for t in self.final_af_ids]
         self.out.update(extra)
 
     def fail(self, why):

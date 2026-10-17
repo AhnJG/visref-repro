@@ -12,6 +12,13 @@ truth); nothing about the experiment is taken from the command line except the n
 --hours. Not passed on purpose, so run.py / model.py defaults hold: dtype (fp16), batch (16), batch_tokens (72000),
 chunk (1024); RUN['run_py_defaults'] records them and they are checked against run.py at start.
 
+Plans (--plan, default imgtag_main): PLANS holds one settings dict per experiment and the chosen one becomes RUN.
+imgtag_main is the A6 run above; its code_version pin is the one of commit 8f5c09e, so it runs only from that commit.
+format_check (EF 2026-10-17 "동작 점검 계획"): methods visref_hs_imgtag_in, visref_hs_imgtag_out, tsr_answer_prompt on the
+100 questions of diag/format_check_ids.json, other settings as imgtag_main; summarize.py is never run (no accuracy).
+Its main run is named fmtcheck_main; a check run takes another name, e.g. fmtcheck_try --limit 3:
+  python3 repro/runpod/run_imgtag.py --plan format_check --name fmtcheck_main --out-root /workspace/runs
+
 Results land in <out-root>/<name>/output/results/ (the layout of the Kaggle runs): run_config.json is one level up at
 <out-root>/<name>/run_config.json; results/ holds env.json, ids.json, results_0.jsonl, log_0.txt, summary.json.
 
@@ -88,6 +95,7 @@ MODEL, MODEL_REV, DATA_REV, PARQUET = build.MODEL, build.MODEL_REV, build.DATA_R
 
 _METHODS = 'visref_imgtag,tsr_answer_prompt,tsr'
 RUN = {
+    'plan': 'imgtag_main',
     'experiment': 'EF 2026-10-15 실행 전 계획: 이미지 태그 주입 1,000문항 비교',
     'methods': _METHODS,
     # run.py arguments after the fixed ones (--parquet --model --revision --ids --shard --out [--time-limit --deadline --limit])
@@ -99,7 +107,10 @@ RUN = {
     'shard': '0/1',
     'store_file': 'diag/step1_store_bmain.json',  # relative to repro/ (run.py's cwd)
     'store_sha256_prefix': 'f937478f3b26',
-    'code_version': '6e218887d2b5',  # run.code_version(): sha256 over run.py and visref/*.py
+    'code_version': '6e218887d2b5',  # run.code_version(): sha256 over run.py and visref/*.py (A6: commit 8f5c09e)
+    'main_name': 'imgtag_main',  # analysis collects <main_name>*; --limit is refused with such a name
+    'check_name': 'imgtag_check',  # example name of a short check run
+    'summarize': True,
     'transformers': '4.55.0',
     'min_torch': '2.5',  # run.py uses torch.OutOfMemoryError
     'dtype': 'float16 (visref.model.load_model default; not passed)',
@@ -107,6 +118,25 @@ RUN = {
     'cuda_alloc_conf': 'expandable_segments:True',
     'progress_every_s': 120,
 }
+# 2026-10-17 format check (EF "동작 점검 계획"): image block inside vs after the thinking block, same selection
+# (Z = last-layer hidden states, kernel V = input image embeddings), with the same-prompt TSR; the first 100 questions of
+# the seed-0 order whose stored step 1 closed itself (diag/format_check_ids.py). No accuracy: summarize.py is not run.
+_FMT_METHODS = 'visref_hs_imgtag_in,visref_hs_imgtag_out,tsr_answer_prompt'
+FORMAT_CHECK = dict(RUN, **{
+    'plan': 'format_check',
+    'experiment': 'EF 2026-10-17 동작 점검 계획: 이미지 블록 위치 두 형식(첫 단계를 스스로 닫은 100문항, 정답률 사용 안 함)',
+    'methods': _FMT_METHODS,
+    'run_args': ['--methods', _FMT_METHODS, '--think-cap', '1024', '--total-think-cap', '10240',
+                 '--step1-from', 'diag/step1_store_bmain.json', '--dual-probe', '1'],
+    'ids_file': 'diag/format_check_ids.json',
+    'ids_sha256': '386538750286bf25cb5bc7e9c8b09635613d5f1a915c88b7519c56342719b161',
+    'n_ids': 100,
+    'code_version': '06435ae748c8',
+    'main_name': 'fmtcheck_main',
+    'check_name': 'fmtcheck_try',
+    'summarize': False,
+})
+PLANS = {'imgtag_main': RUN, 'format_check': FORMAT_CHECK}
 REQUIREMENTS = ROOT / 'requirements.txt'
 SIGNALS = (signal.SIGTERM, signal.SIGINT, signal.SIGHUP)
 POLL_S = 5  # how often the progress loop looks at the new rows (the progress line itself: RUN['progress_every_s'])
@@ -257,9 +287,17 @@ def check_out_root(out_root):
     return r
 
 
+def select_plan(plan):
+    """Make PLANS[plan] the module-level RUN that every function reads."""
+    global RUN
+    RUN = PLANS[plan]
+    return RUN
+
+
 def check_name(name, limit):
-    if limit and name.startswith('imgtag_main'):
-        sys.exit(f'refusing --limit with --name {name}: the analysis collects imgtag_main*; use a check name such as imgtag_check')
+    mn = RUN['main_name']
+    if limit and name.startswith(mn):
+        sys.exit(f'refusing --limit with --name {name}: the analysis collects {mn}*; use a check name such as {RUN["check_name"]}')
 
 
 def acquire_lock(path):
@@ -473,9 +511,11 @@ def same_experiment(old, new):
 
 def parse_args(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
+    ap.add_argument('--plan', choices=sorted(PLANS), default='imgtag_main', help='which settings dict to run (default imgtag_main)')
     ap.add_argument('--name', required=True, help='run folder name, e.g. imgtag_main (a short check run: imgtag_check)')
     ap.add_argument('--out-root', required=True, help='parent folder of <name>, outside the git clone (e.g. /workspace/runs)')
-    ap.add_argument('--limit', type=int, default=0, help='only the first N questions of the order (check run; not with imgtag_main*)')
+    ap.add_argument('--limit', type=int, default=0, help="only the first N questions of the order (check run; not with a name "
+                    "starting with the plan's main_name)")
     ap.add_argument('--hours', type=float, default=0, help='stop admitting jobs / dump in-flight jobs before this many hours')
     ap.add_argument('--allow-dirty', action='store_true', help='run on a tree with uncommitted changes (recorded)')
     ap.add_argument('--dry-run', action='store_true', help='print the run.py command and run_config; download and run nothing')
@@ -502,6 +542,7 @@ def main(argv=None):
 
 def run(a, ctx):
     t0 = time.time()
+    select_plan(a.plan)
     check_name(a.name, a.limit)
     out_root = check_out_root(a.out_root)
     warn = workspace_warning(out_root)
@@ -622,7 +663,9 @@ def run(a, ctx):
         return EXIT_MAX_ERRORS
     ready, msg = summary_decision(counter.n_pairs(), a.limit)
     print(msg, flush=True)
-    if ready and out_jsonl.exists() and out_jsonl.stat().st_size:
+    if ready and not RUN['summarize']:
+        print('this plan does not use accuracy: summary not written', flush=True)
+    elif ready and out_jsonl.exists() and out_jsonl.stat().st_size:
         with open(res / 'summary_stdout.txt', 'w') as so:  # summarize prints accuracies: keep them off the screen
             r = subprocess.run([sys.executable, 'summarize.py', str(out_jsonl), '--out', str(res / 'summary.json'),
                                 '--order', str(res / 'ids.json'), '--shards', '1'], cwd=REPRO, stdout=so, stderr=subprocess.STDOUT)

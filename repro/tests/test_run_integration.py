@@ -100,3 +100,51 @@ def test_pack_respects_padded_budget():
     assert sorted(i for g in groups for i in g) == list(range(5))
     for g in groups:
         assert len(g) == 1 or len(g) * max(reqs[i].ctx.shape[0] + 10 for i in g) <= 100
+
+
+def test_run_end_to_end_format_check_methods(tmp_path, monkeypatch):
+    """2026-10-17 format check: the two image-tag formats and the same-prompt TSR through run.main on a tiny LM; the
+    encoder stub takes no with_positions argument, so a call for last-layer image states (visref_imgtag only) would fail."""
+    from transformers import Qwen3Config, Qwen3ForCausalLM
+    tok = CharTok()
+    torch.manual_seed(1)
+    lm = Qwen3ForCausalLM(Qwen3Config(vocab_size=len(tok.vocab), hidden_size=32, intermediate_size=64,
+                                      num_hidden_layers=2, num_attention_heads=4, num_key_value_heads=2,
+                                      head_dim=8, max_position_embeddings=4096)).eval()
+    rows = {str(p): {'pid': str(p), 'query': 'q', 'answer': '5', 'question_type': 'free_form', 'answer_type': 'integer',
+                     'choices': None, 'precision': None, 'unit': None, 'image': lambda: None} for p in range(1, 4)}
+
+    def enc(model_, tok_, image, q, max_num):
+        g = torch.Generator().manual_seed(len(q))
+        return lm.get_input_embeddings()(torch.randint(5, 90, (12,), generator=g)).detach(), torch.randn(20, 32, generator=g)
+
+    monkeypatch.setattr(run, 'load_mathvista', lambda p: rows)
+    monkeypatch.setattr(run, 'load_model', lambda m, r: (types.SimpleNamespace(language_model=lm), tok))
+    monkeypatch.setattr(run, 'encode_sample', enc)
+    monkeypatch.setattr(run, 'special_ids', lambda t, w, p=None: {'think_end': 1, 'eos': 0, 'img_start': 2, 'img_end': 3,
+                                                                  'wait': tok.encode(w), 'probe_prompt': tok.encode(p),
+                                                                  **brace_ids(tok.vocab)})
+    out = tmp_path / 'r.jsonl'
+    ms = ('visref_hs_imgtag_in', 'visref_hs_imgtag_out', 'tsr_answer_prompt')
+    monkeypatch.setattr(sys, 'argv', ['run.py', '--parquet', 'x', '--out', str(out), '--think-cap', '20',
+                                      '--total-think-cap', '45', '--answer-cap', '8', '--kmax', '3', '--chunk', '7',
+                                      '--min-step-tokens', '5', '--batch-tokens', '400', '--methods', ','.join(ms),
+                                      '--limit', '3', '--dual-probe', '1'])
+    run.main()
+    recs = [json.loads(l) for l in out.read_text().splitlines()]
+    assert sorted((r['pid'], r['method']) for r in recs) == sorted((p, m) for p in '123' for m in ms)
+    for r in recs:
+        assert r['status'] == 'ok' and r['final_forced_answer']
+        assert r['final_answer'].startswith('\nFinal Answer:') or r['final_y_start'] > 0  # scored after a generated </think>
+        if r['method'] == 'tsr_answer_prompt':
+            assert 'final_ids' not in r
+            continue
+        assert isinstance(r['final_ids'], list) and len(r['final_ids']) == r['final_len']
+        fmt = 'img_tag_inside_think' if r['method'].endswith('_in') else 'img_tag_outside_think'
+        for s in r['steps']:
+            if s['think_tokens']:
+                assert s['inject_format'] == fmt and s['v_space'] == 'input_embed' and len(s['sel']) == s['n_inject']
+                assert len(s['z_ids']) == s['think_tokens'] and all(0 <= i < 20 for i in s['sel'])
+    for p in '123':  # shared step 1 within a pid
+        z = {r['method']: r['steps'][0]['think_tokens'] for r in recs if r['pid'] == p}
+        assert len(set(z.values())) == 1
