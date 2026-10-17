@@ -14,13 +14,13 @@ InternVL3.5-1B on the 1,000 MathVista *testmini* questions. Three methods are co
 ![ST, TSR and VisRef as run in this reproduction; orange notes mark settings we could not find in the paper](figures/method_overview.svg)
 
 > **Status (2026-10-16):** the main run and four follow-up experiments (A2–A4, A6) are finished; one set of experiments
-> (A5, three runs) and a confirmatory run are planned but not yet run. Full write-up: **[REPORT.md](REPORT.md)**.
+> (A5, three runs) and one final run to confirm the result are planned but not yet run. Full report: **[REPORT.md](REPORT.md)**.
 
 ## How to read this repository
 
 | | When | Read |
 |---|---|---|
-| 1 | First: results and main caveats | this README |
+| 1 | First: results and main limitations | this README |
 | 2 | What was tested and what was concluded | [REPORT.md](REPORT.md): Summary and Section 1.1 (every experiment in one table), then Sections 3–4 (results, causes) and 6 (limitations) |
 | 3 | How a setting the paper does not state was chosen | REPORT Sections 2.1 and 2.6; the evidence for each decision: [docs/IMPLEMENTATION_CHOICES.md](docs/IMPLEMENTATION_CHOICES.md) (Korean; start with its summary table) |
 | 4 | When and why something was decided | [docs/EXPERIMENT_FLOW.md](docs/EXPERIMENT_FLOW.md) (Korean dated log; start with its stage summary) |
@@ -34,7 +34,7 @@ Every file location: [REPORT, Section 7](REPORT.md#7-where-to-find-things).
 
 n = 1,000 questions; each method once per question, with shared seeds and a shared first thinking step. Answers are
 extracted by rules, and by an LLM only where the rules fail (36 of 3,000 rows); the LLM's answer counts only if it
-appears in the response.
+appears in the response. Differences are in percentage points (pp) with 95% confidence intervals (CI).
 
 ![Paired accuracy differences with 95% CIs next to the paper's differences](figures/paired_differences.svg)
 
@@ -46,7 +46,7 @@ appears in the response.
 <!-- /check -->
 
 <!-- check:paired -->
-| comparison | ours, pp (95% CI) | paper, pp | verdict |
+| comparison | ours, pp (95% CI) | paper, pp | conclusion |
 |---|---|---|---|
 | VisRef − ST (main) | +2.2 (+0.3, +4.1) | +5.9 | effect size not reproduced (same direction, different size) |
 | VisRef − TSR (main) | −0.1 (−2.0, +1.7) | +3.5 | effect size not reproduced |
@@ -62,7 +62,7 @@ appears in the response.
 > - The first thinking step hit the 1,024-token limit in 641 of the 1,000 questions, so most extra steps continue a
 >   cut step.
 > - After a step that the model closed itself, the stopping entropy was at or above its threshold (0.25) in only 7 of
->   359 TSR and 35 of 398 VisRef probes; continuation therefore happened almost only after a cut.
+>   359 TSR checks and 35 of 398 VisRef checks, so the model went on thinking almost only after a cut.
 > - The re-inserted image tokens were a median of about one fifth of m, the number the paper re-inserts per step
 >   (median 0.199).
 > - Among the 713 questions where VisRef stopped after one step, the final answer contains another `</think>` in 352
@@ -75,9 +75,9 @@ appears in the response.
 
 ![How the main run ran: number of thinking steps per method, how each step ended, injected image tokens relative to m](figures/main_run_steps.svg)
 
-- **Verdict:** *consistent* = our 95% CI contains the paper's difference and excludes 0; *not reproduced* = our 95% CI
-  excludes the paper's difference. The rules were fixed after interim looks at 392 and 759 questions, so for the main run they
-  were not fixed before all results ([REPORT, Section 2.4](REPORT.md#24-when-the-decision-rules-were-fixed)).
+- **How the conclusion is decided:** *consistent* = our 95% CI contains the paper's difference and excludes 0; *not
+  reproduced* = our 95% CI excludes the paper's difference. These rules were fixed after we had looked at partial results
+  (392 and 759 questions), so for the main run they were not fixed before all results ([REPORT, Section 2.4](REPORT.md#24-when-the-decision-rules-were-fixed)).
 
 ## Experiments at a glance
 
@@ -89,10 +89,10 @@ whether it comes from the paper, a cited work, official InternVL material or our
 <!-- check:glance -->
 | | Question | Questions | Result | Main limitation |
 |---|---|---|---|---|
-| A1 | Does VisRef (rank-limited selection) beat TSR? (paper: +3.5 pp) | 1,000 | VisRef − TSR: −0.1 pp | only about one fifth of the paper's m image tokens were re-inserted |
-| A2 | Does topping the re-inserted image tokens up to m help? | 976 | VisRef-fill − TSR: 0.0 pp | the added tokens were nearly unrelated to the thinking |
+| A1 | Does VisRef (selection that stops early at the rank limit) beat TSR? (paper: +3.5 pp) | 1,000 | VisRef − TSR: −0.1 pp | only about one fifth of the paper's m image tokens were re-inserted |
+| A2 | Does filling the re-inserted image tokens up to m help? | 976 | VisRef-fill − TSR: 0.0 pp | the added tokens were nearly unrelated to the thinking |
 | A3 | Does re-inserting the image after step 1 help by itself? | 309 | with − without the image: +1.40 pp, +0.97 pp | only questions where a method continued after step 1 |
-| A4 | Does choosing image tokens with the model's last-layer vectors help? | 839 | VisRef-hs − TSR: +0.24 pp | the first step was generated anew |
+| A4 | Does choosing image tokens with the model's last-layer vectors help? | 839 | VisRef-hs − TSR: +0.24 pp | the first step was generated again, so it differs from the main run |
 | A5 | Does thinking more after the re-inserted image help? | planned | not run yet | changes the paper's stopping behaviour |
 | A6 | Does a tagged image block after `</think>` (tokens chosen with last-layer vectors) beat TSR with the same answer prompt? | 1,000 | VisRef-imgtag − TSR with answer prompt: −1.0 pp | changes four settings the paper does not state at once |
 <!-- /check -->
@@ -104,11 +104,11 @@ We look for the cause in our implementation first ([REPORT, Section 4.1](REPORT.
 - **Fewer image tokens.** We re-insert about one fifth of the paper's m image tokens per step: with text token
   embeddings read as the model's input embeddings (our reading; the paper does not name the layer), the selection kernel
   has rank below m, and the greedy selection the paper cites stops there. A2, A4 and A6 tried ways around it; none showed a detectable gain over TSR.
-- **Our own settings.** The paper does not give the stopping-entropy estimate, the insertion format, the token limits or
-  the answer extraction; we chose them in small checks ([REPORT, Section 2.6](REPORT.md#26-setting-checks-how-the-unstated-settings-were-chosen)).
+- **Our own settings.** The paper does not state how the stopping entropy is estimated, how the image is inserted,
+  the token limits or how answers are extracted; we chose these in small checks ([REPORT, Section 2.6](REPORT.md#26-setting-checks-how-the-unstated-settings-were-chosen)).
   Those checks used questions that are also among the 1,000 evaluated ones.
 - **Higher accuracies.** Our accuracies are 8–12 pp above the paper's, close to the official InternVL3.5-1B score;
-  the reason is not resolved ([REPORT, Section 4.4](REPORT.md#44-comparison-with-other-numbers-in-the-paper-post-hoc)).
+  we have not found the reason ([REPORT, Section 4.4](REPORT.md#44-comparison-with-other-numbers-in-the-paper-post-hoc)).
 - **One setting.** One model size, one benchmark, one seed.
 
 ## Reproduce
@@ -116,11 +116,11 @@ We look for the cause in our implementation first ([REPORT, Section 4.1](REPORT.
 Rebuild every table and figure from the saved outputs (CPU only, Python 3.10 or newer, standard library):
 
 ```bash
-make fetch     # MathVista testmini.json, official extraction prompt and cited code, sha256-checked
+make fetch     # MathVista testmini.json, official extraction prompt and cited code, checked against stored hashes
 make check     # re-runs the analyses, rebuilds results/ and the figure, checks the tables in the READMEs and REPORT
 ```
 
-Regenerating the model outputs on a GPU, the LLM extraction and the full repository layout:
+Regenerating the model outputs on a GPU, the LLM extraction and where every file is:
 [docs/REPRODUCE.md](docs/REPRODUCE.md).
 The GPU and the generation time of each experiment are in [`results/compute.csv`](results/compute.csv) (REPORT Table 2.5).
 

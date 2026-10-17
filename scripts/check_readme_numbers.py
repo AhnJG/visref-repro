@@ -33,7 +33,7 @@ NAMES = {'VisRef - ST': 'VisRef − ST', 'VisRef - TSR': 'VisRef − TSR', 'TSR 
 VERDICT_KO = {
     'effect size not reproduced (same direction, different size)': '방향은 같으나 효과 크기 재현 안 됨',
     'effect size not reproduced': '논문 크기의 효과 재현 안 됨',
-    'consistent with the paper value': '논문 수치와 양립',
+    'consistent with the paper value': '논문 값과 어긋나지 않음',
 }
 
 
@@ -71,7 +71,7 @@ def render(kind, ko):
             ['**우리**' if ko else '**ours**', *(f"**{plain(acc[m]['ours_pct'], 1)}**" for m in methods)]])
     if kind == 'paired':
         head = (['비교', '우리, %p (95% 신뢰구간)', '논문, %p', '판정'] if ko
-                else ['comparison', 'ours, pp (95% CI)', 'paper, pp', 'verdict'])
+                else ['comparison', 'ours, pp (95% CI)', 'paper, pp', 'conclusion'])
         body = []
         for r in pairs:
             verdict = VERDICT_KO[r['classification']] if ko else r['classification']
