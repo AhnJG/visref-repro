@@ -88,14 +88,14 @@ whether it comes from the paper, a cited work, official InternVL material or our
 [REPORT, Section 2.6](REPORT.md#26-setting-checks-how-the-unstated-settings-were-chosen).
 
 <!-- check:glance -->
-| | Question | Questions | Result | Main limitation |
-|---|---|---|---|---|
-| A1 | Does VisRef (selection that stops early at the rank limit) beat TSR? (paper: +3.5 pp) | 1,000 | VisRef − TSR: −0.1 pp | only about one fifth of the paper's m image tokens were re-inserted |
-| A2 | Does filling the re-inserted image tokens up to m help? | 976 | VisRef-fill − TSR: 0.0 pp | the added tokens were nearly unrelated to the thinking |
-| A3 | Does re-inserting the image after step 1 help by itself? | 309 | with − without the image: +1.40 pp, +0.97 pp | only questions where a method continued after step 1 |
-| A4 | Does choosing image tokens with the model's last-layer vectors help? | 839 | VisRef-hs − TSR: +0.24 pp | the first step was generated again, so it differs from the main run |
-| A5 | Does thinking more after the re-inserted image help? | planned | not run yet | changes the paper's stopping behaviour |
-| A6 | Does a tagged image block after `</think>` (tokens chosen with last-layer vectors) beat TSR with the same answer prompt? | 1,000 | VisRef-imgtag − TSR with answer prompt: −1.0 pp | changes four settings the paper does not state at once |
+| | Question | Changed from the main run (A1) | Questions | Result | Main limitation |
+|---|---|---|---|---|---|
+| A1 | Does VisRef (selection that stops early at the rank limit) beat TSR? (paper: +3.5 pp) | — (main run; settings in Section 2) | 1,000 | VisRef − TSR: −0.1 pp | only about one fifth of the paper's m image tokens were re-inserted |
+| A2 | Does filling the re-inserted image tokens up to m help? | after the selection stops, the injection is filled up to m tokens | 976 | VisRef-fill − TSR: 0.0 pp | the added tokens were nearly unrelated to the thinking |
+| A3 | Does re-inserting the image after step 1 help by itself? | after the shared first step only: the answer (at once, or after up to 512 more thinking tokens) comes with or without the selected image tokens | 309 | with − without the image: +1.40 pp, +0.97 pp | only questions where a method continued after step 1 |
+| A4 | Does choosing image tokens with the model's last-layer vectors help? | thinking vectors Z for the selection taken from the last layer (A1: input embeddings) | 839 | VisRef-hs − TSR: +0.24 pp | the first step was generated again, so it differs from the main run |
+| A5 | Does thinking more after the re-inserted image help? | after the stop decision, up to 512 more thinking tokens after the injected image, then the answer | planned | not run yet | changes the paper's stopping behaviour |
+| A6 | Does a tagged image block after `</think>` (tokens chosen with last-layer vectors) beat TSR with the same answer prompt? | four at once: (1) `<img>` … `</img>` tags with line breaks; (2) block after `</think>` when answering (A1: before it); (3) image vectors V for the selection also from the last layer (Z as in A4); (4) every answer starts after `\nFinal Answer:` | 1,000 | VisRef-imgtag − TSR with answer prompt: −1.0 pp | the four changes are tested only together |
 <!-- /check -->
 
 ## Why our results may differ from the paper
