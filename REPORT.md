@@ -1,6 +1,6 @@
 # Reproducibility report: VisRef, Appendix Table 6 row "InternVL-1B" on MathVista testmini
 
-*Unofficial reproduction, MLRC / ReScience style. The main run and five follow-up experiments are finished; the decision rules of the follow-ups were fixed before their results. No run is scheduled at the moment, and further experiments are being considered; the experiments planned so far and not run, and why, are listed in Section 5.4.*
+*Unofficial reproduction, MLRC / ReScience style. The main run and five follow-up experiments are finished; the decision rules of the follow-ups were fixed before their results. A small diagnostic (does a re-inserted image move the answer probabilities at all? no new thinking is generated, only answer probabilities and short answers of at most 16 tokens) is planned, with its reading rules fixed in the experiment log (entry of 2026-10-18); no result run is scheduled. The experiments planned so far and not run, and why, are listed in Section 5.4.*
 
 **Paper.** Ghosal, Kim, Li, Chaudhry, Xu, Zhang, Zablocki, Xing, Zhang. *VisRef: Visual Refocusing while Thinking Improves Test-Time Scaling in Multi-Modal Large Reasoning Models.* arXiv 2603.00207, CVPR 2026. No official code was released (the CVPR 2026 supplementary material was checked).
 

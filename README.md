@@ -13,8 +13,10 @@ InternVL3.5-1B on the 1,000 MathVista *testmini* questions. Three methods are co
 
 ![ST, TSR and VisRef as run in this reproduction; orange notes mark settings we could not find in the paper](figures/method_overview.svg)
 
-> **Status (2026-10-18):** the main run and five follow-up experiments (A2–A4, A6, A7) are finished. No run is scheduled
-> at the moment, and further experiments are being considered; what has not been run so far, and why, is in
+> **Status (2026-10-18):** the main run and five follow-up experiments (A2–A4, A6, A7) are finished. A small diagnostic
+> (does a re-inserted image move the answer probabilities at all? no new thinking is generated, only answer probabilities
+> and short answers of at most 16 tokens) is planned, with its reading rules in
+> the experiment log; no result run is scheduled. What has not been run so far, and why, is in
 > [REPORT, Section 5.4](REPORT.md#54-experiments-not-run).
 > Full report: **[REPORT.md](REPORT.md)**.
 
