@@ -1,0 +1,26 @@
+{
+ "label": "a look after the results, descriptive",
+ "n": 200,
+ "reemit": {
+  "visref_raw_rank": 91,
+  "tsr": 25
+ },
+ "acc_pct": {
+  "visref_raw_rank": 60.5,
+  "tsr": 58.5
+ },
+ "diff_pp": 2.0,
+ "range95_pp": [
+  -1.5,
+  5.5
+ ],
+ "a_only": 8,
+ "b_only": 4,
+ "b8_minus_a6_excess": {
+  "diff": 7,
+  "range95": [
+   -9,
+   22
+  ]
+ }
+}

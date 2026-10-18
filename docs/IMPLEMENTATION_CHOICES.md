@@ -133,6 +133,8 @@ VisRef가 인용한 InternVL3.5[45]는 평가에 VLMEvalKit을 썼다(`REF/Inter
 
 열: # | 결정 사항 | 논문 근거 (verbatim ≤25단어 + 위치 + LAY 줄) | 인용 문헌·공식 코드 근거 | 상태 | 현재 구현 (file:line + 값) | 일치 여부 | 대안 | 영향도
 
+코드 줄 번호는 대부분 작성 당시(2026-10-07) 코드 기준이라 지금 코드와 맞지 않을 수 있다. 9·11–15행은 2026-10-18 현재 코드(`run.py`, `visref/methods.py`)에 맞췄다. 나머지 행은 줄 번호 대신 적힌 함수·변수 이름으로 찾는다.
+
 ### 1-1. 모델과 입력
 
 | # | 결정 사항 | 논문 근거 | 인용 문헌·공식 코드 근거 | 상태 | 현재 구현 | 일치 여부 | 대안 | 영향도 |
@@ -145,18 +147,18 @@ VisRef가 인용한 InternVL3.5[45]는 평가에 VLMEvalKit을 썼다(`REF/Inter
 | 6 | 이미지 전처리: dynamic tiling | 없음 (tile·resolution·patch·preprocess 검색 결과에는 무관한 참고문헌 1건뿐). "∼1,772 visual tokens" (LAY L263)이 간접 제약 | 모델 카드 `load_image(…, max_num=12)`, `dynamic_preprocess(image, image_size=input_size, use_thumbnail=True, max_num=max_num)` (`SRC/internvl_README.md` L468, L506-509). InternVL3.5: "compressed into 256 tokens via a pixel shuffle module" (REF/InternVL3.5.txt L337) | 인용 구현에서 확인 | `model.py:L21-78` 공식 코드와 동일 (max_num=12, 448px, thumbnail). `encode_sample` `L121-132` | 일치 (간접 검산: 평균 \|V\|≈1,790 ← README:L24 "m≈537". 원자료 미확인. 시각 토큰 수(A-1)) | max_num 축소 | 중 |
 | 7 | 데이터·split·문항 수 | "MathVista [33] (testmini, 1,000 problems)" (§5, LAY L425-426). "we use the testmini split containing 1, 000 problems." (App. D, L827-828) | 해당 없음 | 명시 | `kaggle/build.py:L19-20, L89` (HF `AI4Math/MathVista` testmini parquet, rev `2b6ad694…`, 기본 1..1000). `model.py:L135-149` | 일치 | 없음 | 하 |
 | 8 | 프롬프트 필드·채팅 템플릿 | 없음 (MathVista 프롬프트 형식에 대한 언급 없음) | MathVista: "baselines generate responses given the input query, which incorporates the task description, the question, the choices, and the metadata" (`REF/MathVista.txt` L463-465). `internvl2_5` 템플릿: `sep_style=MPT, sep='<\|im_end\|>\n'` (`SRC/internvl_conversation.py` L382-391). 이미지 토큰: `IMG_START_TOKEN + IMG_CONTEXT_TOKEN * self.num_image_token * num_patches + IMG_END_TOKEN` (`SRC/internvl_modeling_internvl_chat.py` L295) | 인용 구현에서 확인 | `model.py:L143-144` `row['query']`. `build_prompt` `L114-118`: `<img><IMG_CONTEXT>*N</img>\n{question}` | 일치(추정) (HF `query` 열이 MathVista 템플릿에서 나온 것이라는 점은 로컬 소스로 미검증) | VLMEvalKit 프롬프트 | 하 |
-| 9 | 문항당 trace 수와 답 개수 | "the model generates a single reasoning trace without additional intervention" (App. C, LAY L798-800). 다수결은 Fig 3 병렬 사고에만 (L420-423) | 해당 없음 | 명시 | (pid, method)당 1 trace, 최종 답 1회 (`run.py:L113`, `methods.py:L21-23`) | 일치 | 없음 | 하 |
+| 9 | 문항당 trace 수와 답 개수 | "the model generates a single reasoning trace without additional intervention" (App. C, LAY L798-800). 다수결은 Fig 3 병렬 사고에만 (L420-423) | 해당 없음 | 명시 | (pid, method)당 1 trace, 최종 답 1회 (`run.py:L122` 작업 목록, `visref/methods.py:L166` 최종 답 문맥·상한) | 일치 | 없음 | 하 |
 
 ### 1-2. 생성
 
 | # | 결정 사항 | 논문 근거 | 인용 문헌·공식 코드 근거 | 상태 | 현재 구현 | 일치 여부 | 대안 | 영향도 |
 |---|---|---|---|---|---|---|---|---|
 | 10 | 추론 단계 z_k의 정의와 종료 = 모델이 낸 `</think>`까지 (그 토큰은 z에서 제외) | "Rather than producing the final answer immediately, the model is prompted to continue reasoning using special instruction tokens" (§3, LAY L203-206). 한 step 길이: "∼615 text tokens" (L261-263)가 Fig 3(b) ST ★ x≈600과 같은 크기이므로 한 step ≈ ST 전체 trace (유도) | Ghosal: "whenever the model attempts to generate the end-of-thinking delimiter (</think>), we suppress it, append the token “Wait” to the thinking trace" (`REF/Ghosal…txt` L159-161). s1은 stop 토큰을 제거하고 이어간다 (`s1/vllm_causallms.py` L361, L367) | 인용 구현에서 확인 | `methods.py:L93-97` (stop={`</think>`, EOS}), `L191-200` (z=ids[:-1]) | 일치 | 문단(`\n\n`) 단위 step, "Wait" 토큰 기준 step | 상 |
-| 11 | 단계당 최대 생성 토큰 | 없음 (max_new·token limit·max token 검색 결과 L411의 Kmax뿐) [검색 S-B] | 모델 카드 HF 예: `max_new_tokens=1024` (`SRC/internvl_README.md` L527). lmdeploy 예: `max_new_tokens=8192` (L767). s1: `max_tokens_thinking` 인자 (`s1/eval/commands.sh`) | 가정(미명시) | CLI `--think-cap 1024` (기본값은 `run.py:L20` 1024, 2026-10-13 정정 전 4096). 적용 `methods.py:L79-84` `min(think_cap, total−used, room)` | 판정 불가(구현용 값). Fig 3 ST ★ x≈400-1,000(근사)과 충돌은 없다 (Fig 3 ST 위치(A-3)) | 4096 / 8192 | 상 |
-| 12 | thinking 총 토큰 상한 | 없음. Fig 3 가로축은 병렬 사고 예산(≈14.5K)이지 trace당 상한이 아니다 (L437 "budget of 14K thinking tokens"). "under the same decoding setup and token budget" (App. I, L925)도 값이 없다 [검색 S-B] | s1: `max_tokens_thinking=auto` 등 (`s1/eval/commands.sh`) | 가정(미명시) | CLI `--total-think-cap 10240` (= Kmax×1024). 기본 10240 (`run.py:L20`, 2026-10-13 정정 전 8192) | 판정 불가(구현용 값) | 8192, 무제한(context 한도만) | 중 |
-| 13 | Kmax | "maximum reasoning steps Kmax =10" (§5, LAY L433-435). App. C L808-812에 같은 값 | 해당 없음 | 명시 | `run.py:L20` kmax=10. 종료 판정 `methods.py:L273-274` | 일치 | 없음 | 중 |
-| 14 | 최종 답 최대 토큰 | 없음 [검색 S-B] | 모델 카드 `max_new_tokens=1024` (`SRC/internvl_README.md` L527) | 가정(미명시) | `run.py:L20` answer_cap=1024. 적용 `methods.py:L119-121` | 판정 불가(구현용 값) | 512 / 8192 | 하 |
-| 15 | 최대 context 길이 | 없음 (context length·window 검색 결과 L259는 지연 시간 문맥) [검색 S-B] | 로컬 config 없음 → 미검증 | 가정(미명시) | `run.py:L20` max_context=40960. `methods.py:L83` room 계산 | 판정 불가(미명시) | 해당 없음 | 하 |
+| 11 | 단계당 최대 생성 토큰 | 없음 (max_new·token limit·max token 검색 결과 L411의 Kmax뿐) [검색 S-B] | 모델 카드 HF 예: `max_new_tokens=1024` (`SRC/internvl_README.md` L527). lmdeploy 예: `max_new_tokens=8192` (L767). s1: `max_tokens_thinking` 인자 (`s1/eval/commands.sh`) | 가정(미명시) | CLI `--think-cap 1024` (기본값은 `run.py:L27` 1024, 2026-10-13 정정 전 4096). 적용 `visref/methods.py:L136-138` `min(think_cap, total−used, room)` | 판정 불가(구현용 값). Fig 3 ST ★ x≈400-1,000(근사)과 충돌은 없다 (Fig 3 ST 위치(A-3)) | 4096 / 8192 | 상 |
+| 12 | thinking 총 토큰 상한 | 없음. Fig 3 가로축은 병렬 사고 예산(≈14.5K)이지 trace당 상한이 아니다 (L437 "budget of 14K thinking tokens"). "under the same decoding setup and token budget" (App. I, L925)도 값이 없다 [검색 S-B] | s1: `max_tokens_thinking=auto` 등 (`s1/eval/commands.sh`) | 가정(미명시) | CLI `--total-think-cap 10240` (= Kmax×1024). 기본 10240 (`run.py:L27`, 2026-10-13 정정 전 8192) | 판정 불가(구현용 값) | 8192, 무제한(context 한도만) | 중 |
+| 13 | Kmax | "maximum reasoning steps Kmax =10" (§5, LAY L433-435). App. C L808-812에 같은 값 | 해당 없음 | 명시 | `run.py:L27` kmax=10. 종료 판정 `visref/methods.py:L383-384` | 일치 | 없음 | 중 |
+| 14 | 최종 답 최대 토큰 | 없음 [검색 S-B] | 모델 카드 `max_new_tokens=1024` (`SRC/internvl_README.md` L527) | 가정(미명시) | `run.py:L27` answer_cap=1024. 적용 `visref/methods.py:L164-166` | 판정 불가(구현용 값) | 512 / 8192 | 하 |
+| 15 | 최대 context 길이 | 없음 (context length·window 검색 결과 L259는 지연 시간 문맥) [검색 S-B] | 로컬 config 없음 → 미검증 | 가정(미명시) | `run.py:L28` max_context=40960. `visref/methods.py:L137` room 계산 | 판정 불가(미명시) | 해당 없음 | 하 |
 
 ### 1-3. TSR와 이어가기
 

@@ -1,0 +1,530 @@
+{
+ "label": "sensitivity check decided after the results, descriptive: whole source datasets resampled; the verdict uses the question-level CI only",
+ "rows": "llm/final/merged.jsonl",
+ "n_questions": 1000,
+ "visref_raw_rank-st": {
+  "n_sources": 31,
+  "diff_pp": 2.2,
+  "ci95_pp": [
+   0.55,
+   4.1
+  ],
+  "leave_one_source_out": {
+   "lowest": [
+    1.71,
+    "CLEVR-Math"
+   ],
+   "highest": [
+    2.56,
+    "Super-CLEVR"
+   ]
+  },
+  "per_source": {
+   "A-OKVQA": {
+    "n": 6,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "AI2D": {
+    "n": 43,
+    "a_only": 1,
+    "b_only": 0
+   },
+   "CLEVR-Math": {
+    "n": 62,
+    "a_only": 10,
+    "b_only": 4
+   },
+   "ChartQA": {
+    "n": 50,
+    "a_only": 2,
+    "b_only": 1
+   },
+   "DVQA": {
+    "n": 62,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "DocVQA": {
+    "n": 12,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "FigureQA": {
+    "n": 62,
+    "a_only": 4,
+    "b_only": 4
+   },
+   "FunctionQA": {
+    "n": 62,
+    "a_only": 3,
+    "b_only": 0
+   },
+   "GEOS": {
+    "n": 22,
+    "a_only": 4,
+    "b_only": 0
+   },
+   "GeoQA+": {
+    "n": 62,
+    "a_only": 5,
+    "b_only": 4
+   },
+   "Geometry3K": {
+    "n": 62,
+    "a_only": 6,
+    "b_only": 7
+   },
+   "IQTest": {
+    "n": 37,
+    "a_only": 3,
+    "b_only": 5
+   },
+   "IconQA": {
+    "n": 62,
+    "a_only": 1,
+    "b_only": 1
+   },
+   "KVQA": {
+    "n": 60,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "MapQA": {
+    "n": 8,
+    "a_only": 2,
+    "b_only": 0
+   },
+   "PMC-VQA": {
+    "n": 1,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "PaperQA": {
+    "n": 19,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "ParsVQA-Caps": {
+    "n": 2,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "PlotQA": {
+    "n": 19,
+    "a_only": 3,
+    "b_only": 1
+   },
+   "SciBench": {
+    "n": 17,
+    "a_only": 1,
+    "b_only": 0
+   },
+   "ScienceQA": {
+    "n": 9,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "Super-CLEVR": {
+    "n": 62,
+    "a_only": 2,
+    "b_only": 4
+   },
+   "TQA": {
+    "n": 16,
+    "a_only": 1,
+    "b_only": 0
+   },
+   "TabMWP": {
+    "n": 62,
+    "a_only": 2,
+    "b_only": 2
+   },
+   "TextVQA": {
+    "n": 6,
+    "a_only": 1,
+    "b_only": 0
+   },
+   "TheoremQA": {
+    "n": 11,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "UniGeo": {
+    "n": 62,
+    "a_only": 9,
+    "b_only": 5
+   },
+   "VQA-AS": {
+    "n": 7,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "VQA-RAD": {
+    "n": 2,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "VQA2.0": {
+    "n": 32,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "VizWiz": {
+    "n": 1,
+    "a_only": 0,
+    "b_only": 0
+   }
+  }
+ },
+ "visref_raw_rank-tsr": {
+  "n_sources": 31,
+  "diff_pp": -0.1,
+  "ci95_pp": [
+   -1.81,
+   1.68
+  ],
+  "leave_one_source_out": {
+   "lowest": [
+    -0.53,
+    "UniGeo"
+   ],
+   "highest": [
+    0.21,
+    "Super-CLEVR"
+   ]
+  },
+  "per_source": {
+   "A-OKVQA": {
+    "n": 6,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "AI2D": {
+    "n": 43,
+    "a_only": 1,
+    "b_only": 0
+   },
+   "CLEVR-Math": {
+    "n": 62,
+    "a_only": 7,
+    "b_only": 5
+   },
+   "ChartQA": {
+    "n": 50,
+    "a_only": 0,
+    "b_only": 3
+   },
+   "DVQA": {
+    "n": 62,
+    "a_only": 1,
+    "b_only": 0
+   },
+   "DocVQA": {
+    "n": 12,
+    "a_only": 1,
+    "b_only": 0
+   },
+   "FigureQA": {
+    "n": 62,
+    "a_only": 2,
+    "b_only": 4
+   },
+   "FunctionQA": {
+    "n": 62,
+    "a_only": 3,
+    "b_only": 0
+   },
+   "GEOS": {
+    "n": 22,
+    "a_only": 1,
+    "b_only": 0
+   },
+   "GeoQA+": {
+    "n": 62,
+    "a_only": 4,
+    "b_only": 6
+   },
+   "Geometry3K": {
+    "n": 62,
+    "a_only": 6,
+    "b_only": 9
+   },
+   "IQTest": {
+    "n": 37,
+    "a_only": 1,
+    "b_only": 4
+   },
+   "IconQA": {
+    "n": 62,
+    "a_only": 1,
+    "b_only": 2
+   },
+   "KVQA": {
+    "n": 60,
+    "a_only": 1,
+    "b_only": 0
+   },
+   "MapQA": {
+    "n": 8,
+    "a_only": 1,
+    "b_only": 0
+   },
+   "PMC-VQA": {
+    "n": 1,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "PaperQA": {
+    "n": 19,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "ParsVQA-Caps": {
+    "n": 2,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "PlotQA": {
+    "n": 19,
+    "a_only": 1,
+    "b_only": 1
+   },
+   "SciBench": {
+    "n": 17,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "ScienceQA": {
+    "n": 9,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "Super-CLEVR": {
+    "n": 62,
+    "a_only": 2,
+    "b_only": 5
+   },
+   "TQA": {
+    "n": 16,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "TabMWP": {
+    "n": 62,
+    "a_only": 2,
+    "b_only": 2
+   },
+   "TextVQA": {
+    "n": 6,
+    "a_only": 1,
+    "b_only": 0
+   },
+   "TheoremQA": {
+    "n": 11,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "UniGeo": {
+    "n": 62,
+    "a_only": 8,
+    "b_only": 4
+   },
+   "VQA-AS": {
+    "n": 7,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "VQA-RAD": {
+    "n": 2,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "VQA2.0": {
+    "n": 32,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "VizWiz": {
+    "n": 1,
+    "a_only": 0,
+    "b_only": 0
+   }
+  }
+ },
+ "tsr-st": {
+  "n_sources": 31,
+  "diff_pp": 2.3,
+  "ci95_pp": [
+   1.02,
+   3.81
+  ],
+  "leave_one_source_out": {
+   "lowest": [
+    2.0,
+    "ChartQA"
+   ],
+   "highest": [
+    2.56,
+    "DVQA"
+   ]
+  },
+  "per_source": {
+   "A-OKVQA": {
+    "n": 6,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "AI2D": {
+    "n": 43,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "CLEVR-Math": {
+    "n": 62,
+    "a_only": 8,
+    "b_only": 4
+   },
+   "ChartQA": {
+    "n": 50,
+    "a_only": 4,
+    "b_only": 0
+   },
+   "DVQA": {
+    "n": 62,
+    "a_only": 0,
+    "b_only": 1
+   },
+   "DocVQA": {
+    "n": 12,
+    "a_only": 0,
+    "b_only": 1
+   },
+   "FigureQA": {
+    "n": 62,
+    "a_only": 2,
+    "b_only": 0
+   },
+   "FunctionQA": {
+    "n": 62,
+    "a_only": 1,
+    "b_only": 1
+   },
+   "GEOS": {
+    "n": 22,
+    "a_only": 3,
+    "b_only": 0
+   },
+   "GeoQA+": {
+    "n": 62,
+    "a_only": 6,
+    "b_only": 3
+   },
+   "Geometry3K": {
+    "n": 62,
+    "a_only": 7,
+    "b_only": 5
+   },
+   "IQTest": {
+    "n": 37,
+    "a_only": 2,
+    "b_only": 1
+   },
+   "IconQA": {
+    "n": 62,
+    "a_only": 1,
+    "b_only": 0
+   },
+   "KVQA": {
+    "n": 60,
+    "a_only": 0,
+    "b_only": 1
+   },
+   "MapQA": {
+    "n": 8,
+    "a_only": 1,
+    "b_only": 0
+   },
+   "PMC-VQA": {
+    "n": 1,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "PaperQA": {
+    "n": 19,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "ParsVQA-Caps": {
+    "n": 2,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "PlotQA": {
+    "n": 19,
+    "a_only": 2,
+    "b_only": 0
+   },
+   "SciBench": {
+    "n": 17,
+    "a_only": 1,
+    "b_only": 0
+   },
+   "ScienceQA": {
+    "n": 9,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "Super-CLEVR": {
+    "n": 62,
+    "a_only": 5,
+    "b_only": 4
+   },
+   "TQA": {
+    "n": 16,
+    "a_only": 1,
+    "b_only": 0
+   },
+   "TabMWP": {
+    "n": 62,
+    "a_only": 1,
+    "b_only": 1
+   },
+   "TextVQA": {
+    "n": 6,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "TheoremQA": {
+    "n": 11,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "UniGeo": {
+    "n": 62,
+    "a_only": 6,
+    "b_only": 6
+   },
+   "VQA-AS": {
+    "n": 7,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "VQA-RAD": {
+    "n": 2,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "VQA2.0": {
+    "n": 32,
+    "a_only": 0,
+    "b_only": 0
+   },
+   "VizWiz": {
+    "n": 1,
+    "a_only": 0,
+    "b_only": 0
+   }
+  }
+ }
+}

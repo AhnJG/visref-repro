@@ -13,8 +13,10 @@ InternVL3.5-1B on the 1,000 MathVista *testmini* questions. Three methods are co
 
 ![ST, TSR and VisRef as run in this reproduction; orange notes mark settings we could not find in the paper](figures/method_overview.svg)
 
-> **Status (2026-10-16):** the main run and four follow-up experiments (A2–A4, A6) are finished; one set of experiments
-> (A5, three runs) and one final run to confirm the result are planned but not yet run. Full report: **[REPORT.md](REPORT.md)**.
+> **Status (2026-10-18):** the main run and five follow-up experiments (A2–A4, A6, A7) are finished. No run is scheduled
+> at the moment, and further experiments are being considered; what has not been run so far, and why, is in
+> [REPORT, Section 5.4](REPORT.md#54-experiments-not-run).
+> Full report: **[REPORT.md](REPORT.md)**.
 
 ## How to read this repository
 
@@ -68,10 +70,15 @@ appears in the response. Differences are in percentage points (pp) with 95% conf
 > - Among the 713 questions where VisRef stopped after one step, the final answer contains another `</think>` in 352
 >   VisRef answers versus 67 ST answers on the same questions.
 >
-> These limits are why the follow-ups A2–A6 exist. A6 addressed the last two together: m tokens chosen with
+> These limits are why the follow-ups A2–A7 exist. A6 addressed the last two together: m tokens chosen with
 > last-layer vectors, wrapped in InternVL's image tags after `</think>`. It gave −1.0 pp (95% CI −3.1 to +1.0) against TSR
 > with the same answer prompt, and another `</think>` still appeared in 249 of 1,000 answers (TSR with the same prompt: 107)
 > ([REPORT, Section 4.6](REPORT.md#46-visref-imgtag-tagged-image-block-after-think-rule-fixed-before-the-results)).
+> A7 made the model think up to 512 more tokens, with or without the selected image, on the 691 questions where both
+> methods had stopped after step 1: image − no image was 0.0 pp and −1.74 pp in the two groups tested, so no gain
+> ([REPORT, Section 4.7](REPORT.md#47-step1_think-more-thinking-where-both-methods-stopped-rule-fixed-before-the-results)).
+> Splitting three paired runs into 16 fixed groups of questions found no group where VisRef was consistently better
+> ([REPORT, Section 4.9](REPORT.md#49-subgroup-reanalysis-of-the-three-paired-runs-grouping-fixed-before-it-was-computed)).
 
 ![How the main run ran: number of thinking steps per method, how each step ended, injected image tokens relative to m](figures/main_run_steps.svg)
 
@@ -79,6 +86,9 @@ appears in the response. Differences are in percentage points (pp) with 95% conf
   reproduced* = our 95% CI excludes the paper's difference; if the CI contains both 0 and the paper's difference, no
   conclusion is drawn. These rules were fixed after we had looked at partial results
   (392 and 759 questions), so for the main run they were not fixed before all results ([REPORT, Section 2.4](REPORT.md#24-when-the-decision-rules-were-fixed)).
+- **What 1,000 questions can show:** a paired difference of about 2.6 pp or more (80% power), so a gain of the paper's
+  size (+3.5 pp) would have been visible; gains of 1–2 pp cannot be ruled out. Running the same condition again moved
+  accuracy by about 0.3–0.5 pp ([REPORT, Section 3.4](REPORT.md#34-what-these-samples-can-detect)).
 
 ## Experiments at a glance
 
@@ -94,8 +104,9 @@ whether it comes from the paper, a cited work, official InternVL material or our
 | A2 | Does filling the re-inserted image tokens up to m help? | after the selection stops, the injection is filled up to m tokens | 976 | VisRef-fill − TSR: 0.0 pp | the added tokens were nearly unrelated to the thinking |
 | A3 | Does re-inserting the image after step 1 help by itself? | after the shared first step only: the answer (at once, or after up to 512 more thinking tokens) comes with or without the selected image tokens | 309 | with − without the image: +1.40 pp, +0.97 pp | only questions where a method continued after step 1 |
 | A4 | Does choosing image tokens with the model's last-layer vectors help? | thinking vectors Z for the selection taken from the last layer (A1: input embeddings) | 839 | VisRef-hs − TSR: +0.24 pp | the first step was generated again, so it differs from the main run |
-| A5 | Does thinking more after the re-inserted image help? | after the stop decision, up to 512 more thinking tokens after the injected image, then the answer | planned | not run yet | changes the paper's stopping behaviour |
+| A5 | Does thinking more after the re-inserted image help? | after the stop decision, up to 512 more thinking tokens after the injected image, then the answer | – | not run (by the rule fixed before A7) | the same question was tested on a subset in A7 |
 | A6 | Does a tagged image block after `</think>` (tokens chosen with last-layer vectors) beat TSR with the same answer prompt? | four at once: (1) `<img>` … `</img>` tags with line breaks; (2) block after `</think>` when answering (A1: before it); (3) image vectors V for the selection also from the last layer (Z as in A4); (4) every answer starts after `\nFinal Answer:` | 1,000 | VisRef-imgtag − TSR with answer prompt: −1.0 pp | the four changes are tested only together |
+| A7 | Where both methods stopped after step 1, does thinking more with the selected image help? | from the stored first step, up to 512 more thinking tokens with no image, the selected image tokens or as many random image tokens, then a short answer | 691 | image − no image: 0.0 pp (step 1 closed by the model), −1.74 pp (step 1 cut) | only questions where both methods had stopped |
 <!-- /check -->
 
 ## Why our results may differ from the paper
@@ -108,7 +119,7 @@ We look for the cause in our implementation first ([REPORT, Section 4.1](REPORT.
 - **Our own settings.** The paper does not state how the stopping entropy is estimated, how the image is inserted,
   the token limits or how answers are extracted; we chose these in small checks ([REPORT, Section 2.6](REPORT.md#26-setting-checks-how-the-unstated-settings-were-chosen)).
   Those checks used questions that are also among the 1,000 evaluated ones.
-- **Higher accuracies.** Our accuracies are 8–12 pp above the paper's, close to the official InternVL3.5-1B score;
+- **Higher accuracies.** Our accuracies are 8–12 pp above the paper's (57.8 / 60.1 / 60.0 % against 46.1 / 48.5 / 52.0 %), close to the official InternVL3.5-1B score;
   we have not found the reason ([REPORT, Section 4.4](REPORT.md#44-comparison-with-other-numbers-in-the-paper-after-the-results)).
 - **One setting.** One model size, one benchmark, one seed.
 

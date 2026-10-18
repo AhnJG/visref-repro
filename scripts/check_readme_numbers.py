@@ -80,7 +80,7 @@ def render(kind, ko):
                          signed(r['paper_pp'], 1), verdict])
         return table(head, body)
     if kind == 'accuracy_report':
-        return table(['Method', 'Ours %', 'Paper %', 'Ours − paper'], [
+        return table(['Method', 'Ours %', 'Paper %', 'Ours − paper (pp)'], [
             [m, plain(acc[m]['ours_pct'], 1), plain(acc[m]['paper_pct'], 1), signed(acc[m]['ours_minus_paper_pp'], 1)]
             for m in methods])
     if kind == 'paired_report':

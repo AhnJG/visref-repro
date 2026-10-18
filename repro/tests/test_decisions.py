@@ -1,4 +1,4 @@
-"""Decision tests (2026-10-12 decision check, docs/IMPLEMENTATION_CHOICES.md (formerly SPEC_LEDGER) "핵심 판단 요약" J table, column "테스트").
+"""Decision tests (2026-10-12 decision check; docs/IMPLEMENTATION_CHOICES.md, J rows of "핵심 판단 요약" and the "테스트" column of "결정 대장").
 
 The behaviour tests in test_repro.py use their own small configs, so they do not pin the values that were decided for
 the runs. These tests do: if a decided value changes, the change has to be made here too, on purpose.
@@ -26,11 +26,11 @@ DECIDED = {
     'temperature': 0.6, 'top_k': 50, 'top_p': 0.95,          # J-3, official model page (D); entry 2026-10-07 "원문 명세표·독립 감사 → b_test를 파일럿으로 재정의"
     'wait_text': 'Wait, think more',                         # J-5
     'think_cap': 1024, 'total_think_cap': 10240,             # J-10, entry 2026-10-07 "결정(작성자): s1 + DEER af 폴백, 정지 통계 현행 유지, 파일럿 없이 본 실험 시작" (default fixed 2026-10-13)
-    'think_extra': 512,                                      # J-23, think experiments (user decision 2026-10-13)
+    'think_extra': 512,                                      # J-23, think experiments (author's decision 2026-10-13)
     'answer_cap': 1024,                                      # J-10
-    'probe_prompt': '\n\n\\boxed', 'probe_cap': 16,          # J-9, entry 2026-10-07 "smoke3 결과 → probe를 `\boxed` 형식으로 교체" (user agreed)
+    'probe_prompt': '\n\n\\boxed', 'probe_cap': 16,          # J-9, entry 2026-10-07 "smoke3 결과 → probe를 `\boxed` 형식으로 교체" (author's decision)
     'forced_prompt': '\nFinal Answer:',                      # J-11, entry 2026-10-07 "b_test 재빌드: s1 강제 답변 + ridge DPP" -> entry 2026-10-07 "원문 명세표·독립 감사 → b_test를 파일럿으로 재정의" (s1 string)
-    'af_prompt': '\n**Final Answer**\n\\boxed', 'af_cap': 100,  # J-12, entry 2026-10-07 "결정(작성자): s1 + DEER af 폴백, 정지 통계 현행 유지, 파일럿 없이 본 실험 시작" (user decision)
+    'af_prompt': '\n**Final Answer**\n\\boxed', 'af_cap': 100,  # J-12, entry 2026-10-07 "결정(작성자): s1 + DEER af 폴백, 정지 통계 현행 유지, 파일럿 없이 본 실험 시작" (author's decision)
     'seed': 42, 'max_num': 12, 'dual_probe': 0,
 }
 
@@ -49,7 +49,7 @@ def test_probe_sampling_and_method_names():
 
 
 def test_scorer_is_v4():
-    assert SCORER_VERSION == 'v4_mc_empty_wrong'  # J-14, entry 2026-10-11 "scorer v4 + st_official 분모 수정" (user instruction)
+    assert SCORER_VERSION == 'v4_mc_empty_wrong'  # J-14, entry 2026-10-11 "scorer v4 + st_official 분모 수정" (author's decision)
 
 
 def generation_runs():
