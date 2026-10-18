@@ -20,6 +20,7 @@ analysis:
 	cd repro && $(PY) diag/analyze_imgtag_main.py analyze --llm llm/imgtag_main/merged.jsonl --out diag/analyze_imgtag_main.json > /dev/null
 	cd repro && $(PY) diag/source_cluster_main.py > /dev/null
 	cd repro && $(PY) diag/format_compare_200.py > /dev/null
+	cd repro && $(PY) diag/tsr_wrong_pooled.py > /dev/null
 	rm -f build/step1_branch_analysis.json
 	cd repro && $(PY) diag/analyze_step1_branch.py $(STEP1) --ids diag/step1_branch_ids.json \
 	  --out ../build/step1_branch_analysis.json > /dev/null
