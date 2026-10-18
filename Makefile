@@ -21,6 +21,8 @@ analysis:
 	cd repro && $(PY) diag/source_cluster_main.py > /dev/null
 	cd repro && $(PY) diag/format_compare_200.py > /dev/null
 	cd repro && $(PY) diag/tsr_wrong_pooled.py > /dev/null
+	cd repro && $(PY) diag/analyze_inject_sensitivity.py kaggle/runs/inject_sens_main/output/results/inject_sensitivity_0.jsonl \
+	  kaggle/runs/inject_sens_main/output/results/inject_sensitivity_1.jsonl --out diag/inject_sensitivity_analysis.json > /dev/null
 	rm -f build/step1_branch_analysis.json
 	cd repro && $(PY) diag/analyze_step1_branch.py $(STEP1) --ids diag/step1_branch_ids.json \
 	  --out ../build/step1_branch_analysis.json > /dev/null
