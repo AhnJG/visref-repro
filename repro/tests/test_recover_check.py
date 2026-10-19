@@ -1,5 +1,5 @@
 """CPU tests for diag/recover_check_ids.py, diag/recover_check.py, diag/analyze_recover_check.py and
-kaggle/build_recover_check.py (tiny random model, plan /home/claude/plan_recover.md section 6)."""
+kaggle/build_recover_check.py (tiny random model, plan docs/EXPERIMENT_FLOW.md 2026-10-19 "실행 전 계획: 회복 시험")."""
 import json
 import math
 import sys

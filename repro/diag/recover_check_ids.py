@@ -1,4 +1,4 @@
-"""Question lists of the recovery check `recover_check` (plan /home/claude/plan_recover.md, "회복 시험", written before any
+"""Question lists of the recovery check `recover_check` (plan docs/EXPERIMENT_FLOW.md 2026-10-19 "실행 전 계획: 회복 시험", written before any
 result). Chosen from the main run's seed-0 order and the image-token counts only (no correctness).
 
   main     inject_sensitivity_ids.json 'part1' (the first 200 questions of the order, same order) minus the questions that

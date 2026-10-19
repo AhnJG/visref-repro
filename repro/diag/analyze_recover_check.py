@@ -1,4 +1,4 @@
-"""Analysis of the recovery check `recover_check` (plan /home/claude/plan_recover.md section 5; written before any result).
+"""Analysis of the recovery check `recover_check` (plan docs/EXPERIMENT_FLOW.md 2026-10-19 "실행 전 계획: 회복 시험"; written before any result).
 Implements the plan's decision steps exactly; the Korean verdict sentences are the plan's, copied as constants.
 
 Data: rows of diag/recover_check.py (status 'ok', 14 conditions). Left out and counted: trial rows (pid in the ids file's
@@ -224,7 +224,7 @@ def select(rows, ids=None):
 
 def analyze(rows, ids=None):
     used, counts = select(rows, ids)
-    res = {'label': 'pre-registered recovery check; rules fixed before the results (plan_recover.md section 5)',
+    res = {'label': 'pre-registered recovery check; rules fixed before the results (docs/EXPERIMENT_FLOW.md 2026-10-19 "실행 전 계획: 회복 시험", 판정)',
            'code_versions': sorted({r['code_version'] for r in rows if 'code_version' in r}), 'counts': counts,
            'bootstrap': {'resamples': B, 'seed': SEED, 'level': 0.95}}
     if not used:

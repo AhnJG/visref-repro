@@ -1,9 +1,9 @@
-"""Pack the recovery check `recover_check` (plan /home/claude/plan_recover.md "회복 시험") into a single-cell Kaggle GPU
+"""Pack the recovery check `recover_check` (plan docs/EXPERIMENT_FLOW.md 2026-10-19 "실행 전 계획: 회복 시험") into a single-cell Kaggle GPU
 notebook. Adapted from build_inject_sensitivity.py (same pins, same notebook shape).
 
 usage: python3 repro/kaggle/build_recover_check.py NAME [--mode trial|main] [--limit N] [--timeout 10800]
-  trial  the 6 questions outside the 200 (ids file 'trial'): per GPU first `recover_check.py --check` (numeric check, plan
-         section 7), then the 14 conditions on the same questions (rows are excluded by the analysis)
+  trial  the 6 questions outside the 200 (ids file 'trial'): per GPU first `recover_check.py --check` (numeric check,
+         plan: "계산 점검"), then the 14 conditions on the same questions (rows are excluded by the analysis)
   main   the 199 questions of the ids file 'main', the 14 conditions
 One diag/recover_check.py process per visible GPU (questions sharded by index); no new group of questions starts after
 timeout - 900 s. Refuses to overwrite an existing run folder (build.new_run_dir). Push / pull with kaggle_ctl.py.

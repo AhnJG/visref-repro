@@ -1,4 +1,4 @@
-"""recover_check -- pre-registered, generation-free diagnostic (plan /home/claude/plan_recover.md "회복 시험", written
+"""recover_check -- pre-registered, generation-free diagnostic (plan docs/EXPERIMENT_FLOW.md 2026-10-19 "실행 전 계획: 회복 시험", written
 before any result; this file is code only).
 
 Question: does a re-inserted image block hand information to the model, i.e. when the image slots of the prompt hold no
@@ -29,7 +29,7 @@ The answer tokens continue from the last context position + 1 (not from the cont
 
   python3 diag/recover_check.py --parquet PQ --out results/recover_check_0.jsonl [--set main|trial] [--limit N]
       [--shard 0/2] [--time-limit SECONDS] [--check]
-  --check (plan section 7, on the trial questions by default): numeric comparison 1 (chunked last_hidden_pos vs a one-shot
+  --check (plan: "계산 점검", on the trial questions by default): numeric comparison 1 (chunked last_hidden_pos vs a one-shot
   forward with an explicit all-ones attention mask and the same position ids, contexts Cb and Co; pass = |d logp_gt| < 0.1
   and KL at the first answer position < 0.01 nats) and the descriptive comparison 2 (Engine.generate batched with a shorter
   dummy row, max_new 1, fastkv on and off, entropy vs one-shot); writes 'check' rows, runs no condition.
@@ -207,7 +207,7 @@ def gold_ids(tok, row):
     return brace + tok.encode(gt_text(row) + '}', add_special_tokens=False)
 
 
-# ---- numeric check (plan section 7) -------------------------------------------------------------------------------------
+# ---- numeric check (plan: "계산 점검") -------------------------------------------------------------------------------------
 @torch.no_grad()
 def oneshot_logp(eng, ctx, ids, pos_ctx):
     """One forward of the whole sequence without a cache but with an explicit all-ones 2-D attention mask (so that the
@@ -284,7 +284,7 @@ def main():
     ap.add_argument('--limit', type=int, default=0)
     ap.add_argument('--shard', default='0/1')
     ap.add_argument('--time-limit', type=float, default=0, help='no new group of questions starts after this many seconds')
-    ap.add_argument('--check', action='store_true', help='numeric check (plan section 7) instead of the conditions')
+    ap.add_argument('--check', action='store_true', help='numeric check (plan: "계산 점검") instead of the conditions')
     for k, v in DEFAULTS.items():
         ap.add_argument('--' + k.replace('_', '-'), type=type(v), default=v)
     a = ap.parse_args()
