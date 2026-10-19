@@ -13,10 +13,10 @@ InternVL3.5-1B on the 1,000 MathVista *testmini* questions. Three methods are co
 
 ![ST, TSR and VisRef as run in this reproduction; orange notes mark settings we could not find in the paper](figures/method_overview.svg)
 
-> **Status (2026-10-18):** the main run and five follow-up experiments (A2–A4, A6, A7) are finished. A small descriptive
+> **Status (2026-10-19):** the main run and six follow-up experiments (A2–A4, A6–A8) are finished. A small descriptive
 > diagnostic (does a re-inserted image move the answer probabilities at all? no new thinking is generated) found that the
 > image re-inserted before the answer is read only weakly and that the DPP selection does not move the answer more than
-> random tokens ([REPORT, Section 4.11](REPORT.md#411-image-sensitivity-check-does-the-model-read-re-inserted-image-tokens-reading-rules-fixed-before-the-results)); no result run is scheduled. What has not been run so far, and why, is in
+> random tokens ([REPORT, Section 4.11](REPORT.md#411-image-sensitivity-check-does-the-model-read-re-inserted-image-tokens-reading-rules-fixed-before-the-results)). The newest follow-up, A8, did not confirm a gain from re-inserting the whole image before up to 2,048 more thinking tokens on the 297 questions where step 1 was cut and a method continued ([REPORT, Section 4.12](REPORT.md#412-full_think-the-whole-image-and-longer-thinking-after-a-cut-step-1-rule-fixed-before-the-results)); no result run is scheduled. What has not been run so far, and why, is in
 > [REPORT, Section 5.4](REPORT.md#54-experiments-not-run).
 > Full report: **[REPORT.md](REPORT.md)**.
 
@@ -72,13 +72,16 @@ appears in the response. Differences are in percentage points (pp) with 95% conf
 > - Among the 713 questions where VisRef stopped after one step, the final answer contains another `</think>` in 352
 >   VisRef answers versus 67 ST answers on the same questions.
 >
-> These limits are why the follow-ups A2–A7 exist. A6 addressed the last two together: m tokens chosen with
+> These limits are why the follow-ups A2–A8 exist. A6 addressed the last two together: m tokens chosen with
 > last-layer vectors, wrapped in InternVL's image tags after `</think>`. It gave −1.0 pp (95% CI −3.1 to +1.0) against TSR
 > with the same answer prompt, and another `</think>` still appeared in 249 of 1,000 answers (TSR with the same prompt: 107)
 > ([REPORT, Section 4.6](REPORT.md#46-visref-imgtag-tagged-image-block-after-think-rule-fixed-before-the-results)).
 > A7 made the model think up to 512 more tokens, with or without the selected image, on the 691 questions where both
 > methods had stopped after step 1: image − no image was 0.0 pp and −1.74 pp in the two groups tested, so no gain
 > ([REPORT, Section 4.7](REPORT.md#47-step1_think-more-thinking-where-both-methods-stopped-rule-fixed-before-the-results)).
+> A8 gave the model all image tokens of the question, or none, together with up to 2,048 more thinking tokens on the 297 questions where step 1 was cut and a
+> method continued: whole image − no image was −1.80 pp (95% CI −5.95 to +2.36; 31 questions better, 45 worse), so no gain was confirmed
+> ([REPORT, Section 4.12](REPORT.md#412-full_think-the-whole-image-and-longer-thinking-after-a-cut-step-1-rule-fixed-before-the-results)).
 > Splitting three paired runs into 16 fixed groups of questions found no group where VisRef was consistently better
 > ([REPORT, Section 4.9](REPORT.md#49-subgroup-reanalysis-of-the-three-paired-runs-grouping-fixed-before-it-was-computed)).
 
@@ -109,6 +112,7 @@ whether it comes from the paper, a cited work, official InternVL material or our
 | A5 | Does thinking more after the re-inserted image help? | after the stop decision, up to 512 more thinking tokens after the injected image, then the answer | – | not run (by the rule fixed before A7) | the same question was tested on a subset in A7 |
 | A6 | Does a tagged image block after `</think>` (tokens chosen with last-layer vectors) beat TSR with the same answer prompt? | four at once: (1) `<img>` … `</img>` tags with line breaks; (2) block after `</think>` when answering (A1: before it); (3) image vectors V for the selection also from the last layer (Z as in A4); (4) every answer starts after `\nFinal Answer:` | 1,000 | VisRef-imgtag − TSR with answer prompt: −1.0 pp | the four changes are tested only together |
 | A7 | Where both methods stopped after step 1, does thinking more with the selected image help? | from the stored first step, up to 512 more thinking tokens with no image, the selected image tokens or as many random image tokens, then a short answer | 691 | image − no image: 0.0 pp (step 1 closed by the model), −1.74 pp (step 1 cut) | only questions where both methods had stopped |
+| A8 | Where step 1 was cut and a method continued, does the whole image with up to 2,048 more thinking tokens help? | from the stored first step: the answer at once, up to 2,048 more thinking tokens with no image, or all image tokens of the question and then up to 2,048 more thinking tokens; then a short answer | 297 | whole image − no image: −1.80 pp | only questions whose step 1 was cut and where a method continued; more thinking was forced, no stop decision |
 <!-- /check -->
 
 ## Why our results may differ from the paper

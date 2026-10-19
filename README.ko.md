@@ -10,7 +10,7 @@ InternVL3.5-1B 모델과 MathVista *testmini* 1,000문항으로 다시 실험했
 - **TSR** (텍스트 자기 성찰): 생각이 끝날 때마다 "Wait, think more"를 붙여, 답이 충분히 확실해질 때까지 다시 생각하게 합니다.
 - **VisRef**: TSR과 같지만, 다시 생각하기 전에 이미지의 일부를 골라 다시 넣어 줍니다. 논문이 제안한 방법입니다.
 
-> **상태 (2026-10-18):** 본 실험과 후속 실험 5개(A2–A4, A6, A7)가 끝났습니다. 작은 진단(다시 넣은 이미지가 답 확률을 조금이라도 움직이는지; 새 생각은 만들지 않음)에서는 답 바로 앞에 다시 넣은 이미지를 모델이 약하게만 읽고, DPP로 고른 토큰이 같은 수의 무작위 토큰보다 답을 더 움직이지 않았습니다([REPORT 4.11절](REPORT.md#411-image-sensitivity-check-does-the-model-read-re-inserted-image-tokens-reading-rules-fixed-before-the-results)). 결과를 내는 실행은 예정이 없습니다. 지금까지 하지 않은 실험과 그 이유는 [REPORT 5.4절](REPORT.md#54-experiments-not-run)에 있습니다.
+> **상태 (2026-10-19):** 본 실험과 후속 실험 6개(A2–A4, A6–A8)가 끝났습니다. 작은 진단(다시 넣은 이미지가 답 확률을 조금이라도 움직이는지; 새 생각은 만들지 않음)에서는 답 바로 앞에 다시 넣은 이미지를 모델이 약하게만 읽고, DPP로 고른 토큰이 같은 수의 무작위 토큰보다 답을 더 움직이지 않았습니다([REPORT 4.11절](REPORT.md#411-image-sensitivity-check-does-the-model-read-re-inserted-image-tokens-reading-rules-fixed-before-the-results)). 가장 나중에 끝난 A8에서는, 첫 단계가 잘리고 TSR이나 VisRef가 이어 생각한 297문항에서 이미지 토큰을 전부 다시 넣고 최대 2,048토큰 더 생각하게 해도 정답률이 오른다는 것을 확인하지 못했습니다([REPORT 4.12절](REPORT.md#412-full_think-the-whole-image-and-longer-thinking-after-a-cut-step-1-rule-fixed-before-the-results)). 결과를 내는 실행은 예정이 없습니다. 지금까지 하지 않은 실험과 그 이유는 [REPORT 5.4절](REPORT.md#54-experiments-not-run)에 있습니다.
 
 ## 읽는 순서
 
@@ -57,12 +57,14 @@ InternVL3.5-1B 모델과 MathVista *testmini* 1,000문항으로 다시 실험했
 > - 다시 넣은 이미지 토큰은 논문이 단계마다 넣는 수(m)의 중앙값 약 1/5입니다(중앙값 0.199).
 > - VisRef가 한 단계 만에 멈춘 713문항에서, 최종 답에 `</think>`가 또 들어 있는 경우가 VisRef 352건, 같은 문항의 ST는 67건입니다.
 >
-> 이 한계 때문에 후속 실험 A2–A7이 있습니다. A6는 마지막 두 가지를 함께 다뤘습니다. 마지막 층 값으로 고른 이미지 토큰 m개를
+> 이 한계 때문에 후속 실험 A2–A8이 있습니다. A6는 마지막 두 가지를 함께 다뤘습니다. 마지막 층 값으로 고른 이미지 토큰 m개를
 > InternVL의 이미지 태그로 감싸 `</think>` 뒤에 넣었고, 같은 답 문구의 TSR보다 −1.0%p(95% 신뢰구간 −3.1 ~ +1.0)였습니다.
 > 최종 답의 `</think>` 재출력은 1,000문항 중 249건으로 여전히 남았습니다(같은 답 문구의 TSR은 107건)
 > ([REPORT 4.6절](REPORT.md#46-visref-imgtag-tagged-image-block-after-think-rule-fixed-before-the-results)).
 > A7에서는 두 방법이 모두 첫 단계에서 멈춘 691문항에서, 고른 이미지를 넣거나 넣지 않고 최대 512토큰 더 생각하게 했습니다.
 > 이미지 있음 − 없음은 두 묶음에서 0.0%p, −1.74%p로 이득이 없었습니다([REPORT 4.7절](REPORT.md#47-step1_think-more-thinking-where-both-methods-stopped-rule-fixed-before-the-results)).
+> A8에서는 첫 단계가 잘리고 한 방법이 이어 생각한 297문항에서, 이 문제의 이미지 토큰을 전부 넣거나 넣지 않고 최대 2,048토큰 더 생각하게 했습니다.
+> 이미지 전체 − 이미지 없음은 −1.80%p(95% 신뢰구간 −5.95 ~ +2.36, 좋아진 문항 31개, 나빠진 문항 45개)로, 이득을 확인하지 못했습니다([REPORT 4.12절](REPORT.md#412-full_think-the-whole-image-and-longer-thinking-after-a-cut-step-1-rule-fixed-before-the-results)).
 > 짝지은 실행 세 개를 미리 정한 16개 문항 묶음으로 나눠 봐도, VisRef가 TSR보다 일관되게 나은 묶음은 없었습니다([REPORT 4.9절](REPORT.md#49-subgroup-reanalysis-of-the-three-paired-runs-grouping-fixed-before-it-was-computed)).
 
 - **판정 기준:** 95% 신뢰구간이 0을 빼고 논문 값을 포함하면 "어긋나지 않음", 논문 값을 빼면 "재현 안 됨", 0과 논문 값을 모두 포함하면 판단하지 않습니다. 판정 규칙은 중간
@@ -86,6 +88,7 @@ InternVL3.5-1B 모델과 MathVista *testmini* 1,000문항으로 다시 실험했
 | A5 | 이미지를 넣은 뒤 더 생각하게 하면? | 멈춘다고 판단한 뒤, 넣은 이미지 다음에 최대 512토큰 더 생각하고 답함 | – | 하지 않음(A7 전에 정한 규칙대로) | 같은 질문을 A7에서 일부 문항으로 시험함 |
 | A6 | 고른 이미지 토큰을 태그로 감싸 `</think>` 뒤에 넣으면(마지막 층 값으로 고름) 같은 답 문구의 TSR보다 나은가? | 네 가지를 한꺼번에: (1) `<img>` … `</img>` 태그와 줄바꿈, (2) 답할 때 이미지 블록을 `</think>` 뒤에(A1: 앞에), (3) 고를 때 이미지 벡터 V도 마지막 층 값(Z는 A4와 같음), (4) 모든 답을 `\nFinal Answer:` 뒤에서 시작 | 1,000 | VisRef-imgtag − 답 문구 있는 TSR: −1.0%p | 네 가지를 함께만 시험해 어느 것의 효과인지 모름 |
 | A7 | 두 방법이 모두 첫 단계에서 멈춘 문항에서, 고른 이미지를 넣고 더 생각하게 하면? | 저장된 첫 단계에서 출발해 이미지 없이 / 고른 이미지 토큰을 넣고 / 같은 수의 무작위 이미지 토큰을 넣고 최대 512토큰 더 생각한 뒤 짧게 답함 | 691 | 이미지 있음 − 없음: 0.0%p(첫 단계를 모델이 스스로 닫음), −1.74%p(첫 단계가 잘림) | 두 방법이 이미 멈춘 문항만 대상 |
+| A8 | 첫 단계가 잘리고 한 방법이 이어 생각한 문항에서, 이미지 전체를 넣고 더 길게 생각하게 하면? | 저장된 첫 단계에서 출발해 바로 답함 / 이미지 없이 최대 2,048토큰 더 생각 / 이 문제의 이미지 토큰을 전부 넣고 최대 2,048토큰 더 생각한 뒤 짧게 답함 | 297 | 이미지 전체 − 이미지 없음: −1.80%p | 잘린 뒤 이어 생각한 문항만 대상; 더 생각하는 것을 강제해 멈춤 판단은 시험하지 못함 |
 <!-- /check -->
 
 ## 논문과 결과가 다를 수 있는 이유
