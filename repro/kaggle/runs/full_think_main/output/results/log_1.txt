@@ -1,0 +1,41 @@
+{"event": "start", "code_version": "b129ba377bfe", "set": "cap_continued", "conds": ["A0", "C", "F"], "todo": 148, "done": 0, "cfg": {"probe_prompt": "\n\n\\boxed", "wait_text": "Wait, think more", "probe_cap": 16, "n_t1": 3, "temperature": 0.6, "top_k": 50, "top_p": 0.95, "seed": 42, "cut_sep": "\n", "batch_tokens": 72000, "max_num": 12, "think_extra": 2048, "cut": 512, "chunk": 2048, "group": 4}}
+FlashAttention2 is not installed.
+{"event": "fast_kv_check", "ok": true, "match_rows": [true, true]}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 270.7, "elapsed": 309, "left": 144, "peak_alloc_gb": 10.85, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 383.3, "elapsed": 693, "left": 140, "peak_alloc_gb": 10.92, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 191.5, "elapsed": 884, "left": 136, "peak_alloc_gb": 10.75, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 301.0, "elapsed": 1185, "left": 132, "peak_alloc_gb": 10.81, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 393.3, "elapsed": 1578, "left": 128, "peak_alloc_gb": 10.75, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 365.1, "elapsed": 1944, "left": 124, "peak_alloc_gb": 10.79, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 371.7, "elapsed": 2315, "left": 120, "peak_alloc_gb": 10.83, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 407.8, "elapsed": 2723, "left": 116, "peak_alloc_gb": 10.99, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 253.4, "elapsed": 2976, "left": 112, "peak_alloc_gb": 10.83, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 288.6, "elapsed": 3265, "left": 108, "peak_alloc_gb": 10.55, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 305.6, "elapsed": 3571, "left": 104, "peak_alloc_gb": 10.86, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 285.2, "elapsed": 3856, "left": 100, "peak_alloc_gb": 10.62, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 382.3, "elapsed": 4238, "left": 96, "peak_alloc_gb": 10.95, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 387.0, "elapsed": 4625, "left": 92, "peak_alloc_gb": 10.94, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 346.7, "elapsed": 4972, "left": 88, "peak_alloc_gb": 10.72, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 370.6, "elapsed": 5342, "left": 84, "peak_alloc_gb": 10.85, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 219.3, "elapsed": 5562, "left": 80, "peak_alloc_gb": 10.77, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 414.0, "elapsed": 5976, "left": 76, "peak_alloc_gb": 11.05, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 361.9, "elapsed": 6338, "left": 72, "peak_alloc_gb": 10.93, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 194.6, "elapsed": 6532, "left": 68, "peak_alloc_gb": 10.75, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 259.2, "elapsed": 6791, "left": 64, "peak_alloc_gb": 10.82, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 315.4, "elapsed": 7107, "left": 60, "peak_alloc_gb": 10.71, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 384.3, "elapsed": 7491, "left": 56, "peak_alloc_gb": 10.73, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 398.1, "elapsed": 7889, "left": 52, "peak_alloc_gb": 10.94, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 280.9, "elapsed": 8170, "left": 48, "peak_alloc_gb": 10.67, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 277.7, "elapsed": 8448, "left": 44, "peak_alloc_gb": 10.82, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 404.5, "elapsed": 8852, "left": 40, "peak_alloc_gb": 10.85, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 351.6, "elapsed": 9204, "left": 36, "peak_alloc_gb": 10.91, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 356.3, "elapsed": 9560, "left": 32, "peak_alloc_gb": 10.92, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 383.1, "elapsed": 9943, "left": 28, "peak_alloc_gb": 10.93, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 236.8, "elapsed": 10180, "left": 24, "peak_alloc_gb": 10.6, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 378.9, "elapsed": 10559, "left": 20, "peak_alloc_gb": 10.75, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 359.2, "elapsed": 10918, "left": 16, "peak_alloc_gb": 10.94, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 399.0, "elapsed": 11317, "left": 12, "peak_alloc_gb": 11.11, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 197.1, "elapsed": 11514, "left": 8, "peak_alloc_gb": 10.72, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 339.7, "elapsed": 11854, "left": 4, "peak_alloc_gb": 10.79, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 411.8, "elapsed": 12266, "left": 0, "peak_alloc_gb": 11.08, "max_rss_gb": 5.91}
+{"event": "end", "elapsed": 12266, "n_error": 0, "peak_alloc_gb": 11.11, "max_rss_gb": 5.91}
