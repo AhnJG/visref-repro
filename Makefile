@@ -23,6 +23,10 @@ analysis:
 	cd repro && $(PY) diag/tsr_wrong_pooled.py > /dev/null
 	cd repro && $(PY) diag/analyze_inject_sensitivity.py kaggle/runs/inject_sens_main/output/results/inject_sensitivity_0.jsonl \
 	  kaggle/runs/inject_sens_main/output/results/inject_sensitivity_1.jsonl --out diag/inject_sensitivity_analysis.json > /dev/null
+	rm -f build/full_think_analysis_main.json
+	cd repro && $(PY) diag/analyze_full_think.py 'kaggle/runs/full_think_main/output/results/full_think_*.jsonl' \
+	  --ids diag/full_think_ids.json --set cap_continued --out ../build/full_think_analysis_main.json > /dev/null
+	cmp build/full_think_analysis_main.json repro/diag/full_think_analysis_main.json
 	rm -f build/step1_branch_analysis.json
 	cd repro && $(PY) diag/analyze_step1_branch.py $(STEP1) --ids diag/step1_branch_ids.json \
 	  --out ../build/step1_branch_analysis.json > /dev/null
