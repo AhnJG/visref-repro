@@ -1,0 +1,602 @@
+{
+ "date": "2026-10-19",
+ "descriptive_only": true,
+ "merged": "llm/final/merged.jsonl",
+ "n_rows_file": 3000,
+ "graded_field": "llm_prediction if llm_used else prediction (visref/scoring.py L161 grades `prediction`)",
+ "question_metadata": "data/raw/mathvista_testmini.json via llm_extract.problems()",
+ "methods": {
+  "tsr": {
+   "rows_method": 1000,
+   "rows_entropy_stop": 934,
+   "rows_with_probe_steps": 1000,
+   "excluded": {
+    "extract_failed": 4,
+    "missing_field": 0,
+    "probe_invalid_empty": 0,
+    "final_empty": 0
+   },
+   "n_excluded": 4,
+   "n_used": 930,
+   "counts": {
+    "exact": 420,
+    "numeric_equal": 5,
+    "mc_mapped": 456,
+    "different": 46,
+    "undecidable": 3
+   },
+   "n_same_1to3": 881,
+   "by_question_type": {
+    "free_form": {
+     "exact": 405,
+     "numeric_equal": 5,
+     "mc_mapped": 0,
+     "different": 19,
+     "undecidable": 0
+    },
+    "multi_choice": {
+     "exact": 15,
+     "numeric_equal": 0,
+     "mc_mapped": 456,
+     "different": 27,
+     "undecidable": 3
+    }
+   },
+   "table_2x2_probe_vs_final_correct": {
+    "probe_wrong__final_wrong": 324,
+    "probe_right__final_right": 570,
+    "probe_right__final_wrong": 22,
+    "probe_wrong__final_right": 14
+   },
+   "table_2x2_split_by_same": {
+    "same(1-3)": {
+     "probe_wrong__final_wrong": 311,
+     "probe_right__final_right": 570
+    },
+    "not_same(4-5)": {
+     "probe_right__final_wrong": 22,
+     "probe_wrong__final_right": 14,
+     "probe_wrong__final_wrong": 13
+    }
+   },
+   "examples": {
+    "different": [
+     {
+      "pid": "515",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "herring",
+       "kril",
+       "anchovy",
+       "phytoplankton"
+      ],
+      "answer_gt": "kril",
+      "probe_inner": "A",
+      "final": "kril",
+      "probe_norm": "a",
+      "final_norm": "kril",
+      "probe_correct": 0,
+      "final_correct": 1
+     },
+     {
+      "pid": "586",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "32°",
+       "45°",
+       "13°",
+       "30°"
+      ],
+      "answer_gt": "13°",
+      "probe_inner": "C",
+      "final": "32°",
+      "probe_norm": "c",
+      "final_norm": "32°",
+      "probe_correct": 1,
+      "final_correct": 0
+     },
+     {
+      "pid": "63",
+      "question_type": "free_form",
+      "answer_type": "integer",
+      "choices": null,
+      "answer_gt": "7",
+      "probe_inner": "7",
+      "final": "6",
+      "probe_norm": "7",
+      "final_norm": "6",
+      "probe_correct": 1,
+      "final_correct": 0
+     },
+     {
+      "pid": "356",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "Yes",
+       "No"
+      ],
+      "answer_gt": "No",
+      "probe_inner": "B",
+      "final": "Yes",
+      "probe_norm": "b",
+      "final_norm": "yes",
+      "probe_correct": 1,
+      "final_correct": 0
+     },
+     {
+      "pid": "665",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "4.62",
+       "5.66",
+       "6.93",
+       "8"
+      ],
+      "answer_gt": "8",
+      "probe_inner": "C",
+      "final": "4.62",
+      "probe_norm": "c",
+      "final_norm": "4.62",
+      "probe_correct": 0,
+      "final_correct": 0
+     },
+     {
+      "pid": "663",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "half",
+       "quarter",
+       "o'clock",
+       "quarter to",
+       "quarter past"
+      ],
+      "answer_gt": "quarter",
+      "probe_inner": "C",
+      "final": "quarter past",
+      "probe_norm": "c",
+      "final_norm": "quarterpast",
+      "probe_correct": 0,
+      "final_correct": 0
+     },
+     {
+      "pid": "556",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "Yes",
+       "No"
+      ],
+      "answer_gt": "Yes",
+      "probe_inner": "B",
+      "final": "Yes",
+      "probe_norm": "b",
+      "final_norm": "yes",
+      "probe_correct": 0,
+      "final_correct": 1
+     },
+     {
+      "pid": "419",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "half",
+       "quarter",
+       "o'clock",
+       "quarter to",
+       "quarter past"
+      ],
+      "answer_gt": "quarter",
+      "probe_inner": "C",
+      "final": "quarter",
+      "probe_norm": "c",
+      "final_norm": "quarter",
+      "probe_correct": 0,
+      "final_correct": 1
+     },
+     {
+      "pid": "637",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "100°",
+       "110°",
+       "120°",
+       "130°"
+      ],
+      "answer_gt": "120°",
+      "probe_inner": "C",
+      "final": "130°",
+      "probe_norm": "c",
+      "final_norm": "130°",
+      "probe_correct": 1,
+      "final_correct": 0
+     },
+     {
+      "pid": "442",
+      "question_type": "free_form",
+      "answer_type": "integer",
+      "choices": null,
+      "answer_gt": "3",
+      "probe_inner": "3",
+      "final": "5",
+      "probe_norm": "3",
+      "final_norm": "5",
+      "probe_correct": 1,
+      "final_correct": 0
+     }
+    ],
+    "undecidable": [
+     {
+      "pid": "849",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "(c)",
+       "(d)",
+       "(a)",
+       "(b)",
+       "(e)"
+      ],
+      "answer_gt": "(b)",
+      "probe_inner": "B",
+      "final": "(d)",
+      "probe_norm": "b",
+      "final_norm": "(d)",
+      "probe_correct": 0,
+      "final_correct": 0
+     },
+     {
+      "pid": "168",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "(c)",
+       "(a)",
+       "(e)",
+       "(d)",
+       "(b)"
+      ],
+      "answer_gt": "(b)",
+      "probe_inner": "B",
+      "final": "(a)",
+      "probe_norm": "b",
+      "final_norm": "(a)",
+      "probe_correct": 0,
+      "final_correct": 0
+     },
+     {
+      "pid": "587",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "20海里",
+       "20√{2}海里",
+       "15海里",
+       "20海里"
+      ],
+      "answer_gt": "20√{2}海里",
+      "probe_inner": "D",
+      "final": "20海里",
+      "probe_norm": "d",
+      "final_norm": "20海里",
+      "probe_correct": 0,
+      "final_correct": 0
+     }
+    ]
+   },
+   "examples_note": "seeded random sample (random.Random(0)), up to 10 per category"
+  },
+  "visref_raw_rank": {
+   "rows_method": 1000,
+   "rows_entropy_stop": 922,
+   "rows_with_probe_steps": 1000,
+   "excluded": {
+    "extract_failed": 2,
+    "missing_field": 0,
+    "probe_invalid_empty": 0,
+    "final_empty": 0
+   },
+   "n_excluded": 2,
+   "n_used": 920,
+   "counts": {
+    "exact": 411,
+    "numeric_equal": 3,
+    "mc_mapped": 462,
+    "different": 41,
+    "undecidable": 3
+   },
+   "n_same_1to3": 876,
+   "by_question_type": {
+    "free_form": {
+     "exact": 401,
+     "numeric_equal": 3,
+     "mc_mapped": 0,
+     "different": 16,
+     "undecidable": 0
+    },
+    "multi_choice": {
+     "exact": 10,
+     "numeric_equal": 0,
+     "mc_mapped": 462,
+     "different": 25,
+     "undecidable": 3
+    }
+   },
+   "table_2x2_probe_vs_final_correct": {
+    "probe_wrong__final_wrong": 321,
+    "probe_wrong__final_right": 11,
+    "probe_right__final_right": 568,
+    "probe_right__final_wrong": 20
+   },
+   "table_2x2_split_by_same": {
+    "not_same(4-5)": {
+     "probe_wrong__final_wrong": 13,
+     "probe_wrong__final_right": 11,
+     "probe_right__final_wrong": 20
+    },
+    "same(1-3)": {
+     "probe_right__final_right": 568,
+     "probe_wrong__final_wrong": 308
+    }
+   },
+   "examples": {
+    "different": [
+     {
+      "pid": "432",
+      "question_type": "free_form",
+      "answer_type": "integer",
+      "choices": null,
+      "answer_gt": "4",
+      "probe_inner": "4",
+      "final": "3",
+      "probe_norm": "4",
+      "final_norm": "3",
+      "probe_correct": 1,
+      "final_correct": 0
+     },
+     {
+      "pid": "155",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "yes",
+       "no"
+      ],
+      "answer_gt": "yes",
+      "probe_inner": "A",
+      "final": "no",
+      "probe_norm": "a",
+      "final_norm": "no",
+      "probe_correct": 1,
+      "final_correct": 0
+     },
+     {
+      "pid": "81",
+      "question_type": "free_form",
+      "answer_type": "integer",
+      "choices": null,
+      "answer_gt": "-1",
+      "probe_inner": "0.2",
+      "final": "0",
+      "probe_norm": "0.2",
+      "final_norm": "0",
+      "probe_correct": 0,
+      "final_correct": 0
+     },
+     {
+      "pid": "413",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "25°",
+       "35°",
+       "40°",
+       "45°"
+      ],
+      "answer_gt": "40°",
+      "probe_inner": "D",
+      "final": "40°",
+      "probe_norm": "d",
+      "final_norm": "40°",
+      "probe_correct": 0,
+      "final_correct": 1
+     },
+     {
+      "pid": "748",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "65°",
+       "60°",
+       "55°",
+       "50°"
+      ],
+      "answer_gt": "65°",
+      "probe_inner": "A",
+      "final": "50°",
+      "probe_norm": "a",
+      "final_norm": "50°",
+      "probe_correct": 1,
+      "final_correct": 0
+     },
+     {
+      "pid": "164",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "55°",
+       "35°",
+       "25°",
+       "30°"
+      ],
+      "answer_gt": "35°",
+      "probe_inner": "A",
+      "final": "35°",
+      "probe_norm": "a",
+      "final_norm": "35°",
+      "probe_correct": 0,
+      "final_correct": 1
+     },
+     {
+      "pid": "446",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "4",
+       "5",
+       "8",
+       "16"
+      ],
+      "answer_gt": "8",
+      "probe_inner": "B",
+      "final": "4",
+      "probe_norm": "b",
+      "final_norm": "4",
+      "probe_correct": 0,
+      "final_correct": 0
+     },
+     {
+      "pid": "869",
+      "question_type": "free_form",
+      "answer_type": "integer",
+      "choices": null,
+      "answer_gt": "2",
+      "probe_inner": "3",
+      "final": "2",
+      "probe_norm": "3",
+      "final_norm": "2",
+      "probe_correct": 0,
+      "final_correct": 1
+     },
+     {
+      "pid": "66",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "A",
+       "B",
+       "C",
+       "D",
+       "E",
+       "F"
+      ],
+      "answer_gt": "A",
+      "probe_inner": "A",
+      "final": "C",
+      "probe_norm": "a",
+      "final_norm": "c",
+      "probe_correct": 1,
+      "final_correct": 0
+     },
+     {
+      "pid": "471",
+      "question_type": "free_form",
+      "answer_type": "integer",
+      "choices": null,
+      "answer_gt": "8",
+      "probe_inner": "8",
+      "final": "18",
+      "probe_norm": "8",
+      "final_norm": "18",
+      "probe_correct": 1,
+      "final_correct": 0
+     }
+    ],
+    "undecidable": [
+     {
+      "pid": "587",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "20海里",
+       "20√{2}海里",
+       "15海里",
+       "20海里"
+      ],
+      "answer_gt": "20√{2}海里",
+      "probe_inner": "D",
+      "final": "20海里",
+      "probe_norm": "d",
+      "final_norm": "20海里",
+      "probe_correct": 0,
+      "final_correct": 0
+     },
+     {
+      "pid": "168",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "(c)",
+       "(a)",
+       "(e)",
+       "(d)",
+       "(b)"
+      ],
+      "answer_gt": "(b)",
+      "probe_inner": "B",
+      "final": "(a)",
+      "probe_norm": "b",
+      "final_norm": "(a)",
+      "probe_correct": 0,
+      "final_correct": 0
+     },
+     {
+      "pid": "849",
+      "question_type": "multi_choice",
+      "answer_type": "text",
+      "choices": [
+       "(c)",
+       "(d)",
+       "(a)",
+       "(b)",
+       "(e)"
+      ],
+      "answer_gt": "(b)",
+      "probe_inner": "B",
+      "final": "(d)",
+      "probe_norm": "b",
+      "final_norm": "(d)",
+      "probe_correct": 0,
+      "final_correct": 0
+     }
+    ]
+   },
+   "examples_note": "seeded random sample (random.Random(0)), up to 10 per category"
+  },
+  "st": {
+   "rows_method": 1000,
+   "rows_entropy_stop": 0,
+   "rows_with_probe_steps": 0,
+   "excluded": {
+    "extract_failed": 0,
+    "missing_field": 0,
+    "probe_invalid_empty": 0,
+    "final_empty": 0
+   },
+   "n_excluded": 0,
+   "n_used": 0,
+   "counts": {
+    "exact": 0,
+    "numeric_equal": 0,
+    "mc_mapped": 0,
+    "different": 0,
+    "undecidable": 0
+   },
+   "n_same_1to3": 0,
+   "by_question_type": {},
+   "table_2x2_probe_vs_final_correct": {},
+   "table_2x2_split_by_same": {},
+   "examples": {
+    "different": [],
+    "undecidable": []
+   },
+   "examples_note": "seeded random sample (random.Random(0)), up to 10 per category"
+  }
+ },
+ "graded_final_vs_correct_mismatch_rows": 0
+}
