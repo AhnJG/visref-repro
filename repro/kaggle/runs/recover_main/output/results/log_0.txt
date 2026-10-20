@@ -1,0 +1,30 @@
+{"event": "start", "code_version": "a10cab174bb5", "set": "main", "check": false, "todo": 100, "done": 0, "cfg": {"probe_prompt": "\n\n\\boxed", "wait_text": "Wait, think more", "temperature": 0.6, "top_k": 50, "top_p": 0.95, "seed": 42, "max_num": 12, "group": 4}}
+FlashAttention2 is not installed.
+{"event": "fast_kv_check", "ok": true, "match_rows": [true, true]}
+{"event": "fixed", "fixed_ids": [151667, 198, 10061, 752, 1401, 518, 279, 2168, 1549, 624], "fixed_text": "<think>\nLet me look at the image again.\n", "tail_ids": [151668, 271, 59, 79075]}
+{"event": "group", "n": 4, "group_s": 97.8, "elapsed": 142, "left": 96, "peak_alloc_gb": 4.7}
+{"event": "group", "n": 4, "group_s": 109.7, "elapsed": 252, "left": 92, "peak_alloc_gb": 4.75}
+{"event": "group", "n": 4, "group_s": 66.6, "elapsed": 318, "left": 88, "peak_alloc_gb": 4.75}
+{"event": "group", "n": 4, "group_s": 90.7, "elapsed": 409, "left": 84, "peak_alloc_gb": 4.75}
+{"event": "group", "n": 4, "group_s": 74.1, "elapsed": 483, "left": 80, "peak_alloc_gb": 4.75}
+{"event": "group", "n": 4, "group_s": 86.2, "elapsed": 569, "left": 76, "peak_alloc_gb": 4.79}
+{"event": "group", "n": 4, "group_s": 94.3, "elapsed": 664, "left": 72, "peak_alloc_gb": 4.79}
+{"event": "group", "n": 4, "group_s": 113.9, "elapsed": 777, "left": 68, "peak_alloc_gb": 4.79}
+{"event": "group", "n": 4, "group_s": 73.0, "elapsed": 850, "left": 64, "peak_alloc_gb": 4.79}
+{"event": "group", "n": 4, "group_s": 114.8, "elapsed": 965, "left": 60, "peak_alloc_gb": 4.79}
+{"event": "group", "n": 4, "group_s": 100.6, "elapsed": 1066, "left": 56, "peak_alloc_gb": 4.79}
+{"event": "group", "n": 4, "group_s": 80.2, "elapsed": 1146, "left": 52, "peak_alloc_gb": 4.79}
+{"event": "group", "n": 4, "group_s": 119.9, "elapsed": 1266, "left": 48, "peak_alloc_gb": 4.79}
+{"event": "group", "n": 4, "group_s": 89.5, "elapsed": 1356, "left": 44, "peak_alloc_gb": 4.79}
+{"event": "group", "n": 4, "group_s": 118.3, "elapsed": 1474, "left": 40, "peak_alloc_gb": 4.79}
+{"event": "group", "n": 4, "group_s": 94.3, "elapsed": 1568, "left": 36, "peak_alloc_gb": 4.79}
+{"event": "group", "n": 4, "group_s": 107.0, "elapsed": 1675, "left": 32, "peak_alloc_gb": 4.85}
+{"event": "group", "n": 4, "group_s": 55.8, "elapsed": 1731, "left": 28, "peak_alloc_gb": 4.85}
+{"event": "group", "n": 4, "group_s": 145.3, "elapsed": 1876, "left": 24, "peak_alloc_gb": 4.9}
+{"event": "group", "n": 4, "group_s": 126.2, "elapsed": 2002, "left": 20, "peak_alloc_gb": 4.9}
+{"event": "group", "n": 4, "group_s": 99.1, "elapsed": 2102, "left": 16, "peak_alloc_gb": 4.9}
+{"event": "group", "n": 4, "group_s": 123.5, "elapsed": 2225, "left": 12, "peak_alloc_gb": 4.9}
+{"event": "group", "n": 4, "group_s": 144.8, "elapsed": 2370, "left": 8, "peak_alloc_gb": 4.9}
+{"event": "group", "n": 4, "group_s": 131.5, "elapsed": 2501, "left": 4, "peak_alloc_gb": 4.9}
+{"event": "group", "n": 4, "group_s": 162.7, "elapsed": 2664, "left": 0, "peak_alloc_gb": 4.9}
+{"event": "end", "elapsed": 2664}

@@ -1,0 +1,15 @@
+{"event": "start", "code_version": "a10cab174bb5", "set": "trial", "check": true, "todo": 3, "done": 0, "cfg": {"probe_prompt": "\n\n\\boxed", "wait_text": "Wait, think more", "temperature": 0.6, "top_k": 50, "top_p": 0.95, "seed": 42, "max_num": 12, "group": 4}}
+FlashAttention2 is not installed.
+{"event": "fast_kv_check", "ok": true, "match_rows": [true, true]}
+{"event": "fixed", "fixed_ids": [151667, 198, 10061, 752, 1401, 518, 279, 2168, 1549, 624], "fixed_text": "<think>\nLet me look at the image again.\n", "tail_ids": [151668, 271, 59, 79075]}
+{"event": "check", "pid": "141", "cmp1_pass": true, "cmp1": {"Cb": {"logp_chunked": -0.5775, "logp_oneshot": -0.5775, "abs_dlogp": 0.0, "kl_first": 0.0, "ctx_len": 3863, "pass": true}, "Co": {"logp_chunked": -0.5023, "logp_oneshot": -0.5023, "abs_dlogp": 0.0, "kl_first": 0.0, "ctx_len": 2608, "pass": true}}, "cmp2": {"fastkv_on": {"entropy_generate": 0.00276, "entropy_oneshot": 0.00276, "abs_dentropy": 0.0, "top1_same": true}, "fastkv_off": {"entropy_generate": 0.00276, "entropy_oneshot": 0.00276, "abs_dentropy": 0.0, "top1_same": true}}}
+{"event": "check", "pid": "215", "cmp1_pass": true, "cmp1": {"Cb": {"logp_chunked": -0.1208, "logp_oneshot": -0.1056, "abs_dlogp": 0.01518, "kl_first": 0.000984, "ctx_len": 6862, "pass": true}, "Co": {"logp_chunked": -0.2996, "logp_oneshot": -0.3039, "abs_dlogp": 0.00435, "kl_first": 2.9e-05, "ctx_len": 4532, "pass": true}}, "cmp2": {"fastkv_on": {"entropy_generate": 1e-05, "entropy_oneshot": 1e-05, "abs_dentropy": 0.0, "top1_same": true}, "fastkv_off": {"entropy_generate": 1e-05, "entropy_oneshot": 1e-05, "abs_dentropy": 0.0, "top1_same": true}}}
+{"event": "check", "pid": "212", "cmp1_pass": true, "cmp1": {"Cb": {"logp_chunked": -0.3305, "logp_oneshot": -0.3305, "abs_dlogp": 0.0, "kl_first": 0.0, "ctx_len": 702, "pass": true}, "Co": {"logp_chunked": -2.0449, "logp_oneshot": -2.0449, "abs_dlogp": 0.0, "kl_first": 0.0, "ctx_len": 522, "pass": true}}, "cmp2": {"fastkv_on": {"entropy_generate": 0.00092, "entropy_oneshot": 0.00094, "abs_dentropy": 3e-05, "top1_same": true}, "fastkv_off": {"entropy_generate": 0.00092, "entropy_oneshot": 0.00094, "abs_dentropy": 3e-05, "top1_same": true}}}
+{"event": "group", "n": 3, "group_s": 47.8, "elapsed": 94, "left": 0, "peak_alloc_gb": 9.06}
+{"event": "end", "elapsed": 94}
+{"event": "start", "code_version": "a10cab174bb5", "set": "trial", "check": false, "todo": 3, "done": 0, "cfg": {"probe_prompt": "\n\n\\boxed", "wait_text": "Wait, think more", "temperature": 0.6, "top_k": 50, "top_p": 0.95, "seed": 42, "max_num": 12, "group": 4}}
+FlashAttention2 is not installed.
+{"event": "fast_kv_check", "ok": true, "match_rows": [true, true]}
+{"event": "fixed", "fixed_ids": [151667, 198, 10061, 752, 1401, 518, 279, 2168, 1549, 624], "fixed_text": "<think>\nLet me look at the image again.\n", "tail_ids": [151668, 271, 59, 79075]}
+{"event": "group", "n": 3, "group_s": 65.5, "elapsed": 89, "left": 0, "peak_alloc_gb": 4.79}
+{"event": "end", "elapsed": 89}

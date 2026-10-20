@@ -1,0 +1,34 @@
+{
+ "model": "OpenGVLab/InternVL3_5-1B",
+ "model_rev": "2f71cf52542334823e48a46ffba0e2bc9add3446",
+ "data_rev": "2b6ad69445fbb5695c9b165475e8decdbeb97747",
+ "parquet": "data/testmini-00000-of-00001-725687bf7a18d64b.parquet",
+ "run_args": [
+  "--group",
+  "4"
+ ],
+ "mode": "trial",
+ "set": "trial",
+ "time_limit": 4500,
+ "limit": 0,
+ "group": 4,
+ "kernel": "arki13/visref-recover-trial",
+ "accelerator": "NvidiaTeslaT4",
+ "timeout": 5400,
+ "source_sha256": {
+  "diag/inject_sensitivity.py": "ed596efe0ad4ec171d85642966d2dfe7b170014b6f7ed740bc001f8e583e66bf",
+  "diag/recover_check.py": "cc94162cc9359445a6c0632782d605ef57a4197e6e7371260306affa41d80c30",
+  "diag/recover_check_ids.json": "84eada2b9095e13602c843559a066edb6accec983701291b208155d2345fe101",
+  "diag/recover_check_ids.py": "b176d5edf84132a57b47f76ac76c117cb9ac0bf4ff5d385cd4e19b8d6debc4c5",
+  "diag/step1_think.py": "46091fa5c7626b97295cac226f4072462d0210206bb8947c7dd44fde23e5f70e",
+  "run.py": "70df0f5c413d2ca2237ce9597be1ebbac07f57e2999dcd66a152d5ee62be986a",
+  "visref/dpp.py": "7ebbe7774ac757cc48e067709d20b9d92d92912386ab84ebfa65b8be338dd250",
+  "visref/engine.py": "5b370d8b6e8859a8740d70f70ade5c650b5833c560126ba95c467598e5a62858",
+  "visref/fastkv.py": "40d4febdf0f9ae51364cb914ff6947837dbcb3f746b1f63b6aa5c31380974b9f",
+  "visref/methods.py": "b167e85167350d93de29433d956e10f0f0d4dc2dac6e8019984a1f7319f88230",
+  "visref/model.py": "7feab6eb5c261228cc5d04b3051fd927ef9350d1fa1da4893fe718fc64021b02",
+  "visref/scoring.py": "7921130452a5a405f08776de8130a27fb70434cbf0e1395f09d40d741ec576e8"
+ },
+ "notebook_sha256": "97940a2fdfce370e2c4b4293d6580d79c4ff0076d6e837b17d87ef78a41b9fb8",
+ "built_at": "2026-10-19T11:42:33+0000"
+}
