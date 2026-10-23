@@ -1,0 +1,155 @@
+{
+ "files": [
+  "kaggle/runs/cap_pair_main/output/results/results_1024_0.jsonl",
+  "kaggle/runs/cap_pair_main/output/results/results_1024_1.jsonl",
+  "kaggle/runs/cap_pair_main/output/results/results_4096_0.jsonl",
+  "kaggle/runs/cap_pair_main/output/results/results_4096_1.jsonl"
+ ],
+ "n_ids": 42,
+ "n_rows": 252,
+ "missing": [],
+ "errors": [],
+ "code_versions": [
+  "06435ae748c8"
+ ],
+ "st_4096_minus_1024": {
+  "n": 42,
+  "mean_pp": 0.0,
+  "ci95_pp": [
+   -11.9048,
+   14.2857
+  ],
+  "up": 4,
+  "down": 4,
+  "same": 34,
+  "p_sign": 1.0
+ },
+ "sentence": "42문항으로는 상한에 따른 ST 정답률 변화를 확인하지 못했다. (95% 범위 -11.9 ~ +14.3 pp, 좋아짐 4 : 나빠짐 4)",
+ "visref_tsr_change": {
+  "mean_pp": 2.380952380952381,
+  "ci95_pp": [
+   0.0,
+   7.142857142857143
+  ],
+  "n_pos": 1,
+  "n_neg": 0
+ },
+ "descriptive": {
+  "1024": {
+   "st": {
+    "acc_pct": 61.9,
+    "first_step_cut": 28,
+    "mean_k": 1,
+    "forced_answer": 28,
+    "mean_think_tokens": 802.3,
+    "stop_reason": {
+     "st": 42
+    }
+   },
+   "tsr": {
+    "acc_pct": 64.29,
+    "first_step_cut": 28,
+    "mean_k": 2.167,
+    "forced_answer": 28,
+    "mean_think_tokens": 1996.9,
+    "stop_reason": {
+     "entropy": 37,
+     "kmax": 5
+    }
+   },
+   "visref_raw_rank": {
+    "acc_pct": 64.29,
+    "first_step_cut": 28,
+    "mean_k": 2.238,
+    "forced_answer": 28,
+    "mean_think_tokens": 2070.1,
+    "stop_reason": {
+     "entropy": 38,
+     "kmax": 4
+    }
+   },
+   "tsr-st": {
+    "n": 42,
+    "mean_pp": 2.381,
+    "ci95_pp": [
+     0.0,
+     7.1429
+    ],
+    "up": 1,
+    "down": 0,
+    "same": 41,
+    "p_sign": 1.0
+   },
+   "visref-tsr": {
+    "n": 42,
+    "mean_pp": 0.0,
+    "ci95_pp": [
+     0.0,
+     0.0
+    ],
+    "up": 0,
+    "down": 0,
+    "same": 42,
+    "p_sign": 1.0
+   }
+  },
+  "4096": {
+   "st": {
+    "acc_pct": 61.9,
+    "first_step_cut": 18,
+    "mean_k": 1,
+    "forced_answer": 18,
+    "mean_think_tokens": 2289.2,
+    "stop_reason": {
+     "st": 42
+    }
+   },
+   "tsr": {
+    "acc_pct": 61.9,
+    "first_step_cut": 18,
+    "mean_k": 1.238,
+    "forced_answer": 18,
+    "mean_think_tokens": 3020.7,
+    "stop_reason": {
+     "budget": 5,
+     "entropy": 37
+    }
+   },
+   "visref_raw_rank": {
+    "acc_pct": 64.29,
+    "first_step_cut": 18,
+    "mean_k": 1.238,
+    "forced_answer": 18,
+    "mean_think_tokens": 3069.4,
+    "stop_reason": {
+     "budget": 4,
+     "entropy": 38
+    }
+   },
+   "tsr-st": {
+    "n": 42,
+    "mean_pp": 0.0,
+    "ci95_pp": [
+     -7.1429,
+     7.1429
+    ],
+    "up": 1,
+    "down": 1,
+    "same": 40,
+    "p_sign": 1.0
+   },
+   "visref-tsr": {
+    "n": 42,
+    "mean_pp": 2.381,
+    "ci95_pp": [
+     0.0,
+     7.1429
+    ],
+    "up": 1,
+    "down": 0,
+    "same": 41,
+    "p_sign": 1.0
+   }
+  }
+ }
+}
