@@ -1,0 +1,18 @@
+{"event": "start", "code_version": "a51398ee1d43", "set": "main", "pids_part": "1", "todo": 54, "done": 0, "cfg": {"vis_frac": 0.3, "think_cap": 1024, "probe_prompt": "\n\n\\boxed", "wait_text": "Wait, think more", "probe_cap": 16, "n_t1": 3, "temperature": 0.6, "top_k": 50, "top_p": 0.95, "seed": 42, "cut_sep": "\n", "chunk": 1024, "batch_tokens": 72000, "group": 4, "max_num": 12, "memcheck_tokens": 12000}}
+FlashAttention2 is not installed.
+{"event": "fast_kv_check", "ok": true, "match_rows": [true, true]}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 2.9, "steps_s": 194.9, "probes_s": 16.7, "answers_s": 41.3, "group_s": 255.7, "elapsed": 301, "left": 50, "peak_alloc_gb": 10.55, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 3.4, "steps_s": 204.3, "probes_s": 20.7, "answers_s": 51.9, "group_s": 280.2, "elapsed": 581, "left": 46, "peak_alloc_gb": 10.7, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 2.7, "steps_s": 192.1, "probes_s": 19.0, "answers_s": 37.5, "group_s": 251.2, "elapsed": 832, "left": 42, "peak_alloc_gb": 10.71, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 3.1, "steps_s": 199.4, "probes_s": 22.1, "answers_s": 57.1, "group_s": 281.8, "elapsed": 1114, "left": 38, "peak_alloc_gb": 10.59, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 2.4, "steps_s": 65.1, "probes_s": 14.5, "answers_s": 34.4, "group_s": 116.4, "elapsed": 1230, "left": 34, "peak_alloc_gb": 10.45, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 2.2, "steps_s": 83.3, "probes_s": 18.4, "answers_s": 35.2, "group_s": 139.1, "elapsed": 1369, "left": 30, "peak_alloc_gb": 10.33, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 4.1, "steps_s": 212.3, "probes_s": 25.1, "answers_s": 65.4, "group_s": 306.9, "elapsed": 1676, "left": 26, "peak_alloc_gb": 10.79, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 1.4, "steps_s": 96.3, "probes_s": 8.3, "answers_s": 23.5, "group_s": 129.5, "elapsed": 1806, "left": 22, "peak_alloc_gb": 10.62, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 2.1, "steps_s": 105.7, "probes_s": 14.2, "answers_s": 39.4, "group_s": 161.4, "elapsed": 1967, "left": 18, "peak_alloc_gb": 10.61, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 3.3, "steps_s": 190.9, "probes_s": 15.2, "answers_s": 43.5, "group_s": 252.9, "elapsed": 2220, "left": 14, "peak_alloc_gb": 10.72, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 3.9, "steps_s": 94.7, "probes_s": 16.3, "answers_s": 45.7, "group_s": 160.6, "elapsed": 2381, "left": 10, "peak_alloc_gb": 10.77, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 4.1, "steps_s": 94.9, "probes_s": 21.8, "answers_s": 49.0, "group_s": 169.8, "elapsed": 2551, "left": 6, "peak_alloc_gb": 10.41, "max_rss_gb": 5.91}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 3.8, "steps_s": 121.2, "probes_s": 21.1, "answers_s": 49.9, "group_s": 196.0, "elapsed": 2747, "left": 2, "peak_alloc_gb": 10.69, "max_rss_gb": 5.91}
+{"event": "group", "n": 2, "n_error": 0, "encode_s": 2.7, "steps_s": 54.8, "probes_s": 9.0, "answers_s": 29.6, "group_s": 96.0, "elapsed": 2843, "left": 0, "peak_alloc_gb": 10.37, "max_rss_gb": 5.91}
+{"event": "end", "elapsed": 2843, "n_error": 0, "peak_alloc_gb": 10.79, "max_rss_gb": 5.91}

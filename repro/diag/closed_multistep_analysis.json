@@ -1,0 +1,748 @@
+{
+ "experiment": "closed_multistep",
+ "files": [
+  "kaggle/runs/closed_multistep_main1/output/results/closed_multistep_0.jsonl",
+  "kaggle/runs/closed_multistep_main1/output/results/closed_multistep_1.jsonl",
+  "kaggle/runs/closed_multistep_trial/output/results/closed_multistep_0.jsonl",
+  "kaggle/runs/closed_multistep_trial/output/results/closed_multistep_1.jsonl"
+ ],
+ "ids_file": "diag/closed_multistep_ids.json",
+ "counts": {
+  "n_rows": 112,
+  "n_main_expected": 112,
+  "n_used": 112,
+  "n_trial_rows_in_main": 5,
+  "rows_outside_main_list": [],
+  "missing": [],
+  "n_error": 0,
+  "error_pids": [],
+  "error_messages": [],
+  "rows_lacking_answers": [],
+  "code_versions": [
+   "a51398ee1d43"
+  ],
+  "scorer_versions": [
+   "v4_mc_empty_wrong"
+  ],
+  "n_missing": 0
+ },
+ "n_analysed": 112,
+ "n_t1": 3,
+ "bootstrap": {
+  "B": 20000,
+  "seed": 0
+ },
+ "flags": [],
+ "verdict": {
+  "id": 3,
+  "sentence": "이 운영점(4단계까지)에서도 VisRef의 이득을 확인하지 못했다. (바뀐 문항 좋아짐 : 나빠짐 — V−T 0 : 0, V−S 0 : 0) 중간 멈춤 규칙으로 112문항에서 멈춤.",
+  "V-T_pass": false,
+  "V-S_pass": false,
+  "flags": [
+   "scale_sentence_omitted: not 334 questions"
+  ],
+  "conditions_below_95pct_valid": []
+ },
+ "accuracy_pp": {
+  "S": 75.0,
+  "T": 75.0,
+  "V": 75.0,
+  "V−": 75.0
+ },
+ "primary": {
+  "V-T": {
+   "n": 112,
+   "mean_pp": 0.0,
+   "ci95_pp": [
+    0.0,
+    0.0
+   ],
+   "up": 0,
+   "down": 0,
+   "same": 112,
+   "p_sign": 1.0
+  },
+  "V-S": {
+   "n": 112,
+   "mean_pp": 0.0,
+   "ci95_pp": [
+    0.0,
+    0.0
+   ],
+   "up": 0,
+   "down": 0,
+   "same": 112,
+   "p_sign": 1.0
+  }
+ },
+ "secondary": {
+  "T-S": {
+   "n": 112,
+   "mean_pp": 0.0,
+   "ci95_pp": [
+    0.0,
+    0.0
+   ],
+   "up": 0,
+   "down": 0,
+   "same": 112,
+   "p_sign": 1.0
+  },
+  "V-Vminus": {
+   "n": 112,
+   "mean_pp": 0.0,
+   "ci95_pp": [
+    0.0,
+    0.0
+   ],
+   "up": 0,
+   "down": 0,
+   "same": 112,
+   "p_sign": 1.0
+  }
+ },
+ "validity": {
+  "S": {
+   "valid_rate": 1.0,
+   "valid_rate_sampled": 1.0,
+   "valid_rate_greedy": 1.0,
+   "n_answers": 448
+  },
+  "T": {
+   "valid_rate": 1.0,
+   "valid_rate_sampled": 1.0,
+   "valid_rate_greedy": 1.0,
+   "n_answers": 448
+  },
+  "V": {
+   "valid_rate": 1.0,
+   "valid_rate_sampled": 1.0,
+   "valid_rate_greedy": 1.0,
+   "n_answers": 448
+  },
+  "V−": {
+   "valid_rate": 1.0,
+   "valid_rate_sampled": 1.0,
+   "valid_rate_greedy": 1.0,
+   "n_answers": 448
+  }
+ },
+ "descriptive": {
+  "greedy": {
+   "V-T": {
+    "n": 112,
+    "mean_pp": 0.0,
+    "ci95_pp": [
+     0.0,
+     0.0
+    ],
+    "up": 0,
+    "down": 0,
+    "same": 112,
+    "p_sign": 1.0
+   },
+   "V-S": {
+    "n": 112,
+    "mean_pp": 0.0,
+    "ci95_pp": [
+     0.0,
+     0.0
+    ],
+    "up": 0,
+    "down": 0,
+    "same": 112,
+    "p_sign": 1.0
+   },
+   "T-S": {
+    "n": 112,
+    "mean_pp": 0.0,
+    "ci95_pp": [
+     0.0,
+     0.0
+    ],
+    "up": 0,
+    "down": 0,
+    "same": 112,
+    "p_sign": 1.0
+   },
+   "V-Vminus": {
+    "n": 112,
+    "mean_pp": 0.0,
+    "ci95_pp": [
+     0.0,
+     0.0
+    ],
+    "up": 0,
+    "down": 0,
+    "same": 112,
+    "p_sign": 1.0
+   }
+  },
+  "greedy_accuracy_pp": {
+   "S": 75.0,
+   "T": 75.0,
+   "V": 75.0,
+   "V−": 75.0
+  },
+  "probes": {
+   "curve": {
+    "T": [
+     {
+      "k": 1,
+      "n": 112,
+      "acc": 0.75,
+      "valid_rate": 1.0,
+      "mean_H_finite": 0.0472,
+      "share_H_below_delta": 0.9911
+     },
+     {
+      "k": 2,
+      "n": 112,
+      "acc": 0.75,
+      "valid_rate": 1.0,
+      "mean_H_finite": 0.0073,
+      "share_H_below_delta": 0.9911
+     },
+     {
+      "k": 3,
+      "n": 112,
+      "acc": 0.7589,
+      "valid_rate": 1.0,
+      "mean_H_finite": 0.011,
+      "share_H_below_delta": 0.9821
+     },
+     {
+      "k": 4,
+      "n": 112,
+      "acc": 0.75,
+      "valid_rate": 1.0,
+      "mean_H_finite": 0.0054,
+      "share_H_below_delta": 0.9911
+     }
+    ],
+    "V": [
+     {
+      "k": 1,
+      "n": 112,
+      "acc": 0.75,
+      "valid_rate": 1.0,
+      "mean_H_finite": 0.0472,
+      "share_H_below_delta": 0.9911
+     },
+     {
+      "k": 2,
+      "n": 112,
+      "acc": 0.75,
+      "valid_rate": 1.0,
+      "mean_H_finite": 0.0005,
+      "share_H_below_delta": 1.0
+     },
+     {
+      "k": 3,
+      "n": 112,
+      "acc": 0.75,
+      "valid_rate": 1.0,
+      "mean_H_finite": 0.0003,
+      "share_H_below_delta": 1.0
+     },
+     {
+      "k": 4,
+      "n": 112,
+      "acc": 0.75,
+      "valid_rate": 1.0,
+      "mean_H_finite": 0.0004,
+      "share_H_below_delta": 1.0
+     }
+    ]
+   },
+   "step1_probe_text_equal_T_V": 112,
+   "n": 112
+  },
+  "steps": {
+   "T": [
+    {
+     "k": 1,
+     "n": 112,
+     "mean_len": 302.32,
+     "median_len": 206.0,
+     "end": {
+      "close": 112,
+      "eos": 0,
+      "cap": 0
+     },
+     "n_cap_hits": 0,
+     "n_empty": 0
+    },
+    {
+     "k": 2,
+     "n": 112,
+     "mean_len": 232.78,
+     "median_len": 90.5,
+     "end": {
+      "close": 100,
+      "eos": 0,
+      "cap": 12
+     },
+     "n_cap_hits": 12,
+     "n_empty": 0
+    },
+    {
+     "k": 3,
+     "n": 112,
+     "mean_len": 239.42,
+     "median_len": 90.5,
+     "end": {
+      "close": 98,
+      "eos": 0,
+      "cap": 14
+     },
+     "n_cap_hits": 14,
+     "n_empty": 0
+    },
+    {
+     "k": 4,
+     "n": 112,
+     "mean_len": 220.63,
+     "median_len": 76.5,
+     "end": {
+      "close": 98,
+      "eos": 0,
+      "cap": 14
+     },
+     "n_cap_hits": 14,
+     "n_empty": 0
+    }
+   ],
+   "V": [
+    {
+     "k": 1,
+     "n": 112,
+     "mean_len": 302.32,
+     "median_len": 206.0,
+     "end": {
+      "close": 112,
+      "eos": 0,
+      "cap": 0
+     },
+     "n_cap_hits": 0,
+     "n_empty": 0
+    },
+    {
+     "k": 2,
+     "n": 112,
+     "mean_len": 181.78,
+     "median_len": 113.0,
+     "end": {
+      "close": 109,
+      "eos": 0,
+      "cap": 3
+     },
+     "n_cap_hits": 3,
+     "n_empty": 0
+    },
+    {
+     "k": 3,
+     "n": 112,
+     "mean_len": 156.23,
+     "median_len": 93.5,
+     "end": {
+      "close": 108,
+      "eos": 0,
+      "cap": 4
+     },
+     "n_cap_hits": 4,
+     "n_empty": 0
+    },
+    {
+     "k": 4,
+     "n": 112,
+     "mean_len": 144.31,
+     "median_len": 88.5,
+     "end": {
+      "close": 107,
+      "eos": 0,
+      "cap": 5
+     },
+     "n_cap_hits": 5,
+     "n_empty": 0
+    }
+   ]
+  },
+  "repetition": {
+   "T": {
+    "per_step": [
+     {
+      "k": 2,
+      "n": 112,
+      "n_same_as_previous": 0,
+      "share": 0.0
+     },
+     {
+      "k": 3,
+      "n": 112,
+      "n_same_as_previous": 0,
+      "share": 0.0
+     },
+     {
+      "k": 4,
+      "n": 112,
+      "n_same_as_previous": 0,
+      "share": 0.0
+     }
+    ],
+    "n_questions_with_a_repeated_step": 0
+   },
+   "V": {
+    "per_step": [
+     {
+      "k": 2,
+      "n": 112,
+      "n_same_as_previous": 0,
+      "share": 0.0
+     },
+     {
+      "k": 3,
+      "n": 112,
+      "n_same_as_previous": 1,
+      "share": 0.0089
+     },
+     {
+      "k": 4,
+      "n": 112,
+      "n_same_as_previous": 5,
+      "share": 0.0446
+     }
+    ],
+    "n_questions_with_a_repeated_step": 5
+   }
+  },
+  "v_selection": [
+   {
+    "k": 1,
+    "n": 112,
+    "n_blocks": 112,
+    "n_no_block_empty_step": 0,
+    "median_n_sel": 193.0,
+    "median_m": 537.0,
+    "mean_n_sel_over_m": 0.6162,
+    "n_sel_zero": 0,
+    "n_sel_equals_m": 35
+   },
+   {
+    "k": 2,
+    "n": 112,
+    "n_blocks": 112,
+    "n_no_block_empty_step": 0,
+    "median_n_sel": 95.0,
+    "median_m": 537.0,
+    "mean_n_sel_over_m": 0.4496,
+    "n_sel_zero": 0,
+    "n_sel_equals_m": 20
+   },
+   {
+    "k": 3,
+    "n": 112,
+    "n_blocks": 112,
+    "n_no_block_empty_step": 0,
+    "median_n_sel": 79.0,
+    "median_m": 537.0,
+    "mean_n_sel_over_m": 0.4043,
+    "n_sel_zero": 0,
+    "n_sel_equals_m": 22
+   },
+   {
+    "k": 4,
+    "n": 112,
+    "n_blocks": 112,
+    "n_no_block_empty_step": 0,
+    "median_n_sel": 76.0,
+    "median_m": 537.0,
+    "mean_n_sel_over_m": 0.3759,
+    "n_sel_zero": 0,
+    "n_sel_equals_m": 17
+   }
+  ],
+  "delta_0.25_post_hoc": {
+   "T": {
+    "stop_step_counts": {
+     "1": 111,
+     "2": 1,
+     "3": 0,
+     "4": 0
+    },
+    "acc_at_stop": 0.75,
+    "acc_if_always_step1": 0.75,
+    "acc_if_always_step4": 0.75,
+    "n_continue_after_step1": 1
+   },
+   "V": {
+    "stop_step_counts": {
+     "1": 111,
+     "2": 1,
+     "3": 0,
+     "4": 0
+    },
+    "acc_at_stop": 0.75,
+    "acc_if_always_step1": 0.75,
+    "acc_if_always_step4": 0.75,
+    "n_continue_after_step1": 1
+   },
+   "V_stop-T_stop": {
+    "n": 112,
+    "mean_pp": 0.0,
+    "ci95_pp": [
+     0.0,
+     0.0
+    ],
+    "up": 0,
+    "down": 0,
+    "same": 112,
+    "p_sign": 1.0
+   },
+   "note": "single probe answers (not 3-sample means); the probe of steps 1-3 is read on the context BEFORE the image block, the one of step 4 on the final-answer context (T) / V- (V); post hoc, not a decision"
+  },
+  "all_wrong_in_main_run": {
+   "merged_file": "llm/final/merged.jsonl",
+   "n_all_wrong_in_analysed": 29,
+   "all_wrong": {
+    "n": 29,
+    "V-T": {
+     "n": 29,
+     "mean_pp": 0.0,
+     "ci95_pp": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "same": 29,
+     "p_sign": 1.0
+    },
+    "V-S": {
+     "n": 29,
+     "mean_pp": 0.0,
+     "ci95_pp": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "same": 29,
+     "p_sign": 1.0
+    },
+    "T-S": {
+     "n": 29,
+     "mean_pp": 0.0,
+     "ci95_pp": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "same": 29,
+     "p_sign": 1.0
+    },
+    "acc_pp": {
+     "S": 3.4483,
+     "T": 3.4483,
+     "V": 3.4483,
+     "V−": 3.4483
+    }
+   },
+   "rest": {
+    "n": 83,
+    "V-T": {
+     "n": 83,
+     "mean_pp": 0.0,
+     "ci95_pp": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "same": 83,
+     "p_sign": 1.0
+    },
+    "V-S": {
+     "n": 83,
+     "mean_pp": 0.0,
+     "ci95_pp": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "same": 83,
+     "p_sign": 1.0
+    },
+    "T-S": {
+     "n": 83,
+     "mean_pp": 0.0,
+     "ci95_pp": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "same": 83,
+     "p_sign": 1.0
+    },
+    "acc_pp": {
+     "S": 100.0,
+     "T": 100.0,
+     "V": 100.0,
+     "V−": 100.0
+    }
+   }
+  },
+  "question_type": {
+   "free_form": {
+    "n": 62,
+    "V-T": {
+     "n": 62,
+     "mean_pp": 0.0,
+     "ci95_pp": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "same": 62,
+     "p_sign": 1.0
+    },
+    "V-S": {
+     "n": 62,
+     "mean_pp": 0.0,
+     "ci95_pp": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "same": 62,
+     "p_sign": 1.0
+    },
+    "T-S": {
+     "n": 62,
+     "mean_pp": 0.0,
+     "ci95_pp": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "same": 62,
+     "p_sign": 1.0
+    },
+    "acc_pp": {
+     "S": 69.3548,
+     "T": 69.3548,
+     "V": 69.3548,
+     "V−": 69.3548
+    }
+   },
+   "multi_choice": {
+    "n": 50,
+    "V-T": {
+     "n": 50,
+     "mean_pp": 0.0,
+     "ci95_pp": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "same": 50,
+     "p_sign": 1.0
+    },
+    "V-S": {
+     "n": 50,
+     "mean_pp": 0.0,
+     "ci95_pp": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "same": 50,
+     "p_sign": 1.0
+    },
+    "T-S": {
+     "n": 50,
+     "mean_pp": 0.0,
+     "ci95_pp": [
+      0.0,
+      0.0
+     ],
+     "up": 0,
+     "down": 0,
+     "same": 50,
+     "p_sign": 1.0
+    },
+    "acc_pp": {
+     "S": 82.0,
+     "T": 82.0,
+     "V": 82.0,
+     "V−": 82.0
+    }
+   }
+  },
+  "recon_mismatch_excluded": {
+   "n_excluded": 3,
+   "n": 109,
+   "V-T": {
+    "n": 109,
+    "mean_pp": 0.0,
+    "ci95_pp": [
+     0.0,
+     0.0
+    ],
+    "up": 0,
+    "down": 0,
+    "same": 109,
+    "p_sign": 1.0
+   },
+   "V-S": {
+    "n": 109,
+    "mean_pp": 0.0,
+    "ci95_pp": [
+     0.0,
+     0.0
+    ],
+    "up": 0,
+    "down": 0,
+    "same": 109,
+    "p_sign": 1.0
+   },
+   "T-S": {
+    "n": 109,
+    "mean_pp": 0.0,
+    "ci95_pp": [
+     0.0,
+     0.0
+    ],
+    "up": 0,
+    "down": 0,
+    "same": 109,
+    "p_sign": 1.0
+   },
+   "V-Vminus": {
+    "n": 109,
+    "mean_pp": 0.0,
+    "ci95_pp": [
+     0.0,
+     0.0
+    ],
+    "up": 0,
+    "down": 0,
+    "same": 109,
+    "p_sign": 1.0
+   }
+  },
+  "end_of_step1": {
+   "close": 112,
+   "cap": 0,
+   "eos": 0
+  }
+ }
+}
