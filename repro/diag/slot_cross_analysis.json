@@ -1,0 +1,143 @@
+{
+ "files": [
+  "kaggle/runs/slot_cross_main/output/results/slot_cross_0.jsonl",
+  "kaggle/runs/slot_cross_main/output/results/slot_cross_1.jsonl"
+ ],
+ "ids_file": "diag/slot_cross_analysis_ids.json",
+ "coverage": {
+  "n_analysis": 396,
+  "n_used": 396,
+  "n_rows": 832,
+  "n_outside_analysis": 436,
+  "errors": [],
+  "n_missing": 0,
+  "code_versions": [
+   "7353d4fe352f"
+  ]
+ },
+ "decision": {
+  "G": {
+   "mean": 0.02197,
+   "ci95": [
+    0.0104,
+    0.03477
+   ]
+  },
+  "gate": false,
+  "sentence": "생각 뒤 문맥에서 그림을 빈 그림으로 바꿔도 정답 확률이 뚜렷이 바뀌지 않아, 이 진단은 정보가 부족하다."
+ },
+ "sentence": "생각 뒤 문맥에서 그림을 빈 그림으로 바꿔도 정답 확률이 뚜렷이 바뀌지 않아, 이 진단은 정보가 부족하다.",
+ "descriptive": {
+  "mean_p": {
+   "o-": 0.37539,
+   "b-": 0.35342,
+   "oo": 0.41843,
+   "ob": 0.40126,
+   "bo": 0.37936,
+   "bb": 0.36181
+  },
+  "oo - o-": {
+   "mean": 0.04303,
+   "ci95": [
+    0.02618,
+    0.0605
+   ]
+  },
+  "bo - b-": {
+   "mean": 0.02594,
+   "ci95": [
+    0.01034,
+    0.04244
+   ]
+  },
+  "step1_end": {
+   "close": 174,
+   "cap": 222,
+   "eos": 0
+  }
+ },
+ "by_question_type": {
+  "free_form": {
+   "n": 180,
+   "decision_quantities": {
+    "G": {
+     "mean": 0.0194,
+     "ci95": [
+      0.00804,
+      0.03342
+     ]
+    },
+    "gate": false,
+    "sentence": "생각 뒤 문맥에서 그림을 빈 그림으로 바꿔도 정답 확률이 뚜렷이 바뀌지 않아, 이 진단은 정보가 부족하다."
+   },
+   "mean_p": {
+    "o-": 0.12424,
+    "b-": 0.10484,
+    "oo": 0.19252,
+    "ob": 0.15678,
+    "bo": 0.14038,
+    "bb": 0.1069
+   },
+   "oo - o-": {
+    "mean": 0.06828,
+    "ci95": [
+     0.04163,
+     0.09692
+    ]
+   },
+   "bo - b-": {
+    "mean": 0.03554,
+    "ci95": [
+     0.01597,
+     0.05839
+    ]
+   },
+   "step1_end": {
+    "close": 110,
+    "cap": 70,
+    "eos": 0
+   }
+  },
+  "multi_choice": {
+   "n": 216,
+   "decision_quantities": {
+    "G": {
+     "mean": 0.02412,
+     "ci95": [
+      0.00576,
+      0.04421
+     ]
+    },
+    "gate": false,
+    "sentence": "생각 뒤 문맥에서 그림을 빈 그림으로 바꿔도 정답 확률이 뚜렷이 바뀌지 않아, 이 진단은 정보가 부족하다."
+   },
+   "mean_p": {
+    "o-": 0.58469,
+    "b-": 0.56057,
+    "oo": 0.60668,
+    "ob": 0.60499,
+    "bo": 0.57852,
+    "bb": 0.57424
+   },
+   "oo - o-": {
+    "mean": 0.02199,
+    "ci95": [
+     0.00152,
+     0.04336
+    ]
+   },
+   "bo - b-": {
+    "mean": 0.01795,
+    "ci95": [
+     -0.00451,
+     0.04165
+    ]
+   },
+   "step1_end": {
+    "close": 64,
+    "cap": 152,
+    "eos": 0
+   }
+  }
+ }
+}
