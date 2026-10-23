@@ -313,3 +313,18 @@ def test_make_analysis_ids_takes_the_first_n_of_every_shard():
     assert an.make_analysis_ids(main, 4, 2) == list('abcdefgh')
     assert an.make_analysis_ids(main, 2, 2) == list('abcd')
     assert an.make_analysis_ids(main, 4, 1) == list('abcd') and an.make_analysis_ids(main, 4, 9) == main
+
+
+def test_rerun_of_an_error_row_is_merged_and_the_builder_skips_only_ok_rows(tmp_path, monkeypatch):
+    ok, err = {'pid': '1', 'status': 'ok', 'x': 1}, {'pid': '1', 'status': 'error'}
+    f, g = tmp_path / 'a.jsonl', tmp_path / 'b.jsonl'
+    f.write_text(json.dumps(err) + '\n' + json.dumps({'pid': '2', 'status': 'ok'}) + '\n')
+    g.write_text(json.dumps(ok) + '\n')
+    R, _ = an.load([str(f), str(g)])
+    assert R['1'] == ok and R['2']['status'] == 'ok'
+    g.write_text(json.dumps(ok) + '\n' + json.dumps(ok) + '\n')
+    with pytest.raises(SystemExit):
+        an.load([str(f), str(g)])
+    monkeypatch.setattr(bb, 'HERE', tmp_path)
+    assert bb.main(['k', '--owner', 'me', '--skip-from', str(f)]) == 0
+    assert json.loads((tmp_path / 'runs/k/run_config.json').read_text())['n_skip'] == 1  # only the ok row of pid 2

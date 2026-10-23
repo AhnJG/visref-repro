@@ -60,16 +60,20 @@ def make_analysis_ids(main, shard_total, n_per_shard):
 
 
 def load(patterns):
-    """{pid: row}; a pid seen twice exits 1."""
-    R, files = {}, expand(patterns)
+    """{pid: row}. A pid seen twice (a re-run of an error row) is kept only when exactly one of its rows is 'ok' (that row is
+    used); otherwise exit 1."""
+    seen, files = {}, expand(patterns)
     for f in files:
         for line in Path(f).read_text().splitlines():
-            if not line.strip():
-                continue
-            row = json.loads(line)
-            if row['pid'] in R:
-                sys.exit(f'pid {row["pid"]} seen twice ({f})')
-            R[row['pid']] = row
+            if line.strip():
+                row = json.loads(line)
+                seen.setdefault(row['pid'], []).append(row)
+    R = {}
+    for pid, rows in seen.items():
+        ok = [x for x in rows if x.get('status') == 'ok']
+        if len(rows) > 1 and len(ok) != 1:
+            sys.exit(f'pid {pid} seen {len(rows)} times with {len(ok)} ok rows')
+        R[pid] = ok[0] if ok else rows[0]
     return R, files
 
 

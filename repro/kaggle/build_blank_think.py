@@ -92,7 +92,8 @@ def main(argv=None):
             data = (REPRO / f).read_bytes()
             z.writestr(f, data)
             sha[f] = hashlib.sha256(data).hexdigest()
-    skip = sorted({json.loads(l)['pid'] for f in a.skip_from for l in Path(f).read_text().splitlines() if l.strip()})
+    skip = sorted({r['pid'] for f in a.skip_from for l in Path(f).read_text().splitlines() if l.strip()
+                   for r in [json.loads(l)] if r.get('status') == 'ok'})  # error rows are re-run, never skipped
     run_args = ['--set', a.set, '--group', str(a.group)]
     run_args += ['--limit', str(a.limit)] if a.limit else []
     cfg = {'model': MODEL, 'model_rev': MODEL_REV, 'data_rev': DATA_REV, 'parquet': PARQUET, 'run_args': run_args,
