@@ -1,0 +1,52 @@
+{"event": "start", "code_version": "9370e1b79771", "set": "main", "todo": 227, "done": 0, "cfg": {"n_short": 16, "n_free": 16, "probe_cap": 16, "answer_cap": 1024, "probe_prompt": "\n\n\\boxed", "wait_text": "Wait, think more", "temperature": 0.6, "top_k": 50, "top_p": 0.95, "seed": 42, "cut_sep": "\n", "chunk": 1024, "batch_tokens": 72000, "group": 4, "max_num": 12}}
+FlashAttention2 is not installed.
+{"event": "fast_kv_check", "ok": true, "match_rows": [true, true]}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 65.8, "elapsed": 109, "left": 223, "peak_alloc_gb": 10.15}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 138.0, "elapsed": 247, "left": 219, "peak_alloc_gb": 10.38}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 107.1, "elapsed": 354, "left": 215, "peak_alloc_gb": 10.3}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 263.1, "elapsed": 617, "left": 211, "peak_alloc_gb": 10.53}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 99.6, "elapsed": 716, "left": 207, "peak_alloc_gb": 10.34}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 97.7, "elapsed": 814, "left": 203, "peak_alloc_gb": 10.53}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 62.0, "elapsed": 876, "left": 199, "peak_alloc_gb": 10.35}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 150.6, "elapsed": 1027, "left": 195, "peak_alloc_gb": 10.54}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 69.3, "elapsed": 1096, "left": 191, "peak_alloc_gb": 10.27}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 64.0, "elapsed": 1160, "left": 187, "peak_alloc_gb": 10.37}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 172.7, "elapsed": 1333, "left": 183, "peak_alloc_gb": 10.52}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 175.7, "elapsed": 1508, "left": 179, "peak_alloc_gb": 10.36}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 115.1, "elapsed": 1624, "left": 175, "peak_alloc_gb": 10.4}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 156.0, "elapsed": 1780, "left": 171, "peak_alloc_gb": 10.36}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 219.2, "elapsed": 1999, "left": 167, "peak_alloc_gb": 10.51}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 36.8, "elapsed": 2036, "left": 163, "peak_alloc_gb": 10.44}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 127.5, "elapsed": 2163, "left": 159, "peak_alloc_gb": 10.46}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 125.7, "elapsed": 2289, "left": 155, "peak_alloc_gb": 10.2}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 95.6, "elapsed": 2385, "left": 151, "peak_alloc_gb": 10.49}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 98.9, "elapsed": 2483, "left": 147, "peak_alloc_gb": 10.36}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 184.8, "elapsed": 2668, "left": 143, "peak_alloc_gb": 9.98}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 255.1, "elapsed": 2923, "left": 139, "peak_alloc_gb": 10.41}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 102.9, "elapsed": 3026, "left": 135, "peak_alloc_gb": 10.33}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 146.7, "elapsed": 3173, "left": 131, "peak_alloc_gb": 10.47}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 142.8, "elapsed": 3316, "left": 127, "peak_alloc_gb": 10.52}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 125.2, "elapsed": 3441, "left": 123, "peak_alloc_gb": 10.4}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 159.4, "elapsed": 3600, "left": 119, "peak_alloc_gb": 10.43}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 92.6, "elapsed": 3693, "left": 115, "peak_alloc_gb": 10.42}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 86.2, "elapsed": 3779, "left": 111, "peak_alloc_gb": 10.36}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 174.1, "elapsed": 3953, "left": 107, "peak_alloc_gb": 10.4}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 93.8, "elapsed": 4047, "left": 103, "peak_alloc_gb": 10.14}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 137.2, "elapsed": 4184, "left": 99, "peak_alloc_gb": 10.55}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 244.6, "elapsed": 4429, "left": 95, "peak_alloc_gb": 10.52}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 168.2, "elapsed": 4597, "left": 91, "peak_alloc_gb": 10.36}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 62.5, "elapsed": 4659, "left": 87, "peak_alloc_gb": 10.4}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 70.1, "elapsed": 4729, "left": 83, "peak_alloc_gb": 10.45}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 101.7, "elapsed": 4831, "left": 79, "peak_alloc_gb": 10.45}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 150.5, "elapsed": 4982, "left": 75, "peak_alloc_gb": 10.35}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 124.3, "elapsed": 5106, "left": 71, "peak_alloc_gb": 9.95}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 270.0, "elapsed": 5376, "left": 67, "peak_alloc_gb": 10.42}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 210.8, "elapsed": 5587, "left": 63, "peak_alloc_gb": 10.51}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 108.1, "elapsed": 5695, "left": 59, "peak_alloc_gb": 10.38}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 131.0, "elapsed": 5826, "left": 55, "peak_alloc_gb": 10.49}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 53.8, "elapsed": 5880, "left": 51, "peak_alloc_gb": 10.37}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 256.3, "elapsed": 6136, "left": 47, "peak_alloc_gb": 10.33}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 291.8, "elapsed": 6428, "left": 43, "peak_alloc_gb": 10.32}
+{"event": "group", "n": 4, "n_error": 0, "group_s": 282.1, "elapsed": 6710, "left": 39, "peak_alloc_gb": 10.22}
+{"event": "time_limit", "left": 39}
+{"event": "end", "elapsed": 6710, "n_error": 0}

@@ -1,0 +1,289 @@
+{
+ "files": [
+  "kaggle/runs/stop_form_main/output/results/stop_form_0.jsonl",
+  "kaggle/runs/stop_form_main/output/results/stop_form_1.jsonl"
+ ],
+ "ids_file": "diag/stop_form_analysis_ids.json",
+ "coverage": {
+  "n_analysis": 126,
+  "n_used": 126,
+  "n_rows": 372,
+  "n_outside_analysis": 246,
+  "errors": [],
+  "n_missing": 0,
+  "code_versions": [
+   "9370e1b79771"
+  ]
+ },
+ "decision": {
+  "n": 126,
+  "k_lo": 3,
+  "k_hi": 94,
+  "r_lo": 0.0238,
+  "r_lo_ci95": [
+   0.0049,
+   0.068
+  ],
+  "r_hi": 0.746,
+  "r_hi_ci95": [
+   0.6608,
+   0.8193
+  ],
+  "stored_vs_F_val_lo": {
+   "stop_stop": 121,
+   "stop_cont": 2,
+   "cont_stop": 2,
+   "cont_cont": 1
+  },
+  "b_new_continue": 2,
+  "c_new_stop": 2,
+  "p_sign": 1.0,
+  "sentence": "이 표본으로는 자유 답 값 빈도 추정량으로 이어 가는 비율이 10%를 넘는지 정하지 못했다."
+ },
+ "sentence": "이 표본으로는 자유 답 값 빈도 추정량으로 이어 가는 비율이 10%를 넘는지 정하지 못했다.",
+ "descriptive": {
+  "self": {
+   "n": 126,
+   "n_continue": {
+    "stored": 3,
+    "H1": 3,
+    "S_tok": 3,
+    "S_val_lo": 0,
+    "S_val_hi": 1,
+    "F_val_lo": 3,
+    "F_val_hi": 94,
+    "F_sum": 126,
+    "F_tok": 95
+   },
+   "n_continue_first8_free": {
+    "F_val_lo": 4,
+    "F_val_hi": 95,
+    "F_sum": 126,
+    "F_tok": 95
+   },
+   "stored_vs": {
+    "H1": {
+     "stop_stop": 123,
+     "stop_cont": 0,
+     "cont_stop": 0,
+     "cont_cont": 3
+    },
+    "S_tok": {
+     "stop_stop": 123,
+     "stop_cont": 0,
+     "cont_stop": 0,
+     "cont_cont": 3
+    },
+    "F_val_lo": {
+     "stop_stop": 121,
+     "stop_cont": 2,
+     "cont_stop": 2,
+     "cont_cont": 1
+    },
+    "F_val_hi": {
+     "stop_stop": 32,
+     "stop_cont": 91,
+     "cont_stop": 0,
+     "cont_cont": 3
+    },
+    "F_sum": {
+     "stop_stop": 0,
+     "stop_cont": 123,
+     "cont_stop": 0,
+     "cont_cont": 3
+    },
+    "F_tok": {
+     "stop_stop": 30,
+     "stop_cont": 93,
+     "cont_stop": 1,
+     "cont_cont": 2
+    }
+   },
+   "median": {
+    "H1": 2e-05,
+    "S_tok": 2e-05,
+    "S_val_lo": 0.0,
+    "S_val_hi": 0.0,
+    "F_val_lo": 0.0,
+    "F_val_hi": 0.68857,
+    "F_sum": 34.92767,
+    "F_tok": 0.45985
+   },
+   "short_invalid": 9,
+   "n_short": 2016,
+   "free_invalid": 598,
+   "free_cap": 53,
+   "free_no_box": 595,
+   "n_free": 2016,
+   "free_len_median": 72.0,
+   "n_questions_all_free_invalid": 4,
+   "majority_free_value_correct": {
+    "n": 122,
+    "correct": 91
+   }
+  },
+  "cut": null
+ },
+ "by_question_type": {
+  "free_form": {
+   "n": 71,
+   "n_continue": {
+    "stored": 2,
+    "H1": 2,
+    "S_tok": 2,
+    "S_val_lo": 0,
+    "S_val_hi": 1,
+    "F_val_lo": 3,
+    "F_val_hi": 56,
+    "F_sum": 71,
+    "F_tok": 44
+   },
+   "n_continue_first8_free": {
+    "F_val_lo": 4,
+    "F_val_hi": 55,
+    "F_sum": 71,
+    "F_tok": 43
+   },
+   "stored_vs": {
+    "H1": {
+     "stop_stop": 69,
+     "stop_cont": 0,
+     "cont_stop": 0,
+     "cont_cont": 2
+    },
+    "S_tok": {
+     "stop_stop": 69,
+     "stop_cont": 0,
+     "cont_stop": 0,
+     "cont_cont": 2
+    },
+    "F_val_lo": {
+     "stop_stop": 67,
+     "stop_cont": 2,
+     "cont_stop": 1,
+     "cont_cont": 1
+    },
+    "F_val_hi": {
+     "stop_stop": 15,
+     "stop_cont": 54,
+     "cont_stop": 0,
+     "cont_cont": 2
+    },
+    "F_sum": {
+     "stop_stop": 0,
+     "stop_cont": 69,
+     "cont_stop": 0,
+     "cont_cont": 2
+    },
+    "F_tok": {
+     "stop_stop": 26,
+     "stop_cont": 43,
+     "cont_stop": 1,
+     "cont_cont": 1
+    }
+   },
+   "median": {
+    "H1": 2e-05,
+    "S_tok": 2e-05,
+    "S_val_lo": 0.0,
+    "S_val_hi": 0.0,
+    "F_val_lo": 0.0,
+    "F_val_hi": 1.12404,
+    "F_sum": 18.2984,
+    "F_tok": 0.28999
+   },
+   "short_invalid": 9,
+   "n_short": 1136,
+   "free_invalid": 393,
+   "free_cap": 2,
+   "free_no_box": 392,
+   "n_free": 1136,
+   "free_len_median": 55.0,
+   "n_questions_all_free_invalid": 1,
+   "majority_free_value_correct": {
+    "n": 70,
+    "correct": 48
+   }
+  },
+  "multi_choice": {
+   "n": 55,
+   "n_continue": {
+    "stored": 1,
+    "H1": 1,
+    "S_tok": 1,
+    "S_val_lo": 0,
+    "S_val_hi": 0,
+    "F_val_lo": 0,
+    "F_val_hi": 38,
+    "F_sum": 55,
+    "F_tok": 51
+   },
+   "n_continue_first8_free": {
+    "F_val_lo": 0,
+    "F_val_hi": 40,
+    "F_sum": 55,
+    "F_tok": 52
+   },
+   "stored_vs": {
+    "H1": {
+     "stop_stop": 54,
+     "stop_cont": 0,
+     "cont_stop": 0,
+     "cont_cont": 1
+    },
+    "S_tok": {
+     "stop_stop": 54,
+     "stop_cont": 0,
+     "cont_stop": 0,
+     "cont_cont": 1
+    },
+    "F_val_lo": {
+     "stop_stop": 54,
+     "stop_cont": 0,
+     "cont_stop": 1,
+     "cont_cont": 0
+    },
+    "F_val_hi": {
+     "stop_stop": 17,
+     "stop_cont": 37,
+     "cont_stop": 0,
+     "cont_cont": 1
+    },
+    "F_sum": {
+     "stop_stop": 0,
+     "stop_cont": 54,
+     "cont_stop": 0,
+     "cont_cont": 1
+    },
+    "F_tok": {
+     "stop_stop": 4,
+     "stop_cont": 50,
+     "cont_stop": 0,
+     "cont_cont": 1
+    }
+   },
+   "median": {
+    "H1": 3e-05,
+    "S_tok": 3e-05,
+    "S_val_lo": 0.0,
+    "S_val_hi": 0.0,
+    "F_val_lo": 0.0,
+    "F_val_hi": 0.68857,
+    "F_sum": 79.85604,
+    "F_tok": 0.61021
+   },
+   "short_invalid": 0,
+   "n_short": 880,
+   "free_invalid": 205,
+   "free_cap": 51,
+   "free_no_box": 203,
+   "n_free": 880,
+   "free_len_median": 99.0,
+   "n_questions_all_free_invalid": 3,
+   "majority_free_value_correct": {
+    "n": 52,
+    "correct": 43
+   }
+  }
+ }
+}
