@@ -13,10 +13,10 @@ InternVL3.5-1B on the 1,000 MathVista *testmini* questions. Three methods are co
 
 ![ST, TSR and VisRef as run in this reproduction; orange notes mark settings we could not find in the paper](figures/method_overview.svg)
 
-> **Status (2026-10-19):** the main run and six follow-up experiments (A2–A4, A6–A8) are finished. A small descriptive
+> **Status (2026-10-23):** the main run and nine follow-up experiments (A2–A4, A6–A11) are finished. A small descriptive
 > diagnostic (does a re-inserted image move the answer probabilities at all? no new thinking is generated) found that the
 > image re-inserted before the answer is read only weakly and that the DPP selection does not move the answer more than
-> random tokens ([REPORT, Section 4.11](REPORT.md#411-image-sensitivity-check-does-the-model-read-re-inserted-image-tokens-reading-rules-fixed-before-the-results)). The newest follow-up, A8, did not confirm a gain from re-inserting the whole image before up to 2,048 more thinking tokens on the 297 questions where step 1 was cut and a method continued ([REPORT, Section 4.12](REPORT.md#412-full_think-the-whole-image-and-longer-thinking-after-a-cut-step-1-rule-fixed-before-the-results)); no result run is scheduled. What has not been run so far, and why, is in
+> random tokens ([REPORT, Section 4.11](REPORT.md#411-image-sensitivity-check-does-the-model-read-re-inserted-image-tokens-reading-rules-fixed-before-the-results)). The follow-up A8 did not confirm a gain from re-inserting the whole image before up to 2,048 more thinking tokens on the 297 questions where step 1 was cut and a method continued ([REPORT, Section 4.12](REPORT.md#412-full_think-the-whole-image-and-longer-thinking-after-a-cut-step-1-rule-fixed-before-the-results)). The latest, A11, continued thinking for up to four steps after a first step the model had closed itself; on the first 112 of these 334 questions all conditions agreed on the correctness of every answer, and an interim rule fixed in advance stopped the run there ([REPORT, Section 4.15](REPORT.md#415-closed_multistep-continuing-up-to-4-steps-after-a-first-step-the-model-closed-itself-rule-fixed-before-the-results)); no result run is scheduled. What has not been run so far, and why, is in
 > [REPORT, Section 5.4](REPORT.md#54-experiments-not-run).
 > Full report: **[REPORT.md](REPORT.md)**.
 
@@ -72,7 +72,7 @@ appears in the response. Differences are in percentage points (pp) with 95% conf
 > - Among the 713 questions where VisRef stopped after one step, the final answer contains another `</think>` in 352
 >   VisRef answers versus 67 ST answers on the same questions.
 >
-> These limits are why the follow-ups A2–A8 exist. A6 addressed the last two together: m tokens chosen with
+> These limits are why the follow-ups A2–A11 exist. A6 addressed the last two together: m tokens chosen with
 > last-layer vectors, wrapped in InternVL's image tags after `</think>`. It gave −1.0 pp (95% CI −3.1 to +1.0) against TSR
 > with the same answer prompt, and another `</think>` still appeared in 249 of 1,000 answers (TSR with the same prompt: 107)
 > ([REPORT, Section 4.6](REPORT.md#46-visref-imgtag-tagged-image-block-after-think-rule-fixed-before-the-results)).
@@ -82,6 +82,13 @@ appears in the response. Differences are in percentage points (pp) with 95% conf
 > A8 gave the model all image tokens of the question, or none, together with up to 2,048 more thinking tokens on the 297 questions where step 1 was cut and a
 > method continued: whole image − no image was −1.80 pp (95% CI −5.95 to +2.36; 31 questions better, 45 worse), so no gain was confirmed
 > ([REPORT, Section 4.12](REPORT.md#412-full_think-the-whole-image-and-longer-thinking-after-a-cut-step-1-rule-fixed-before-the-results)).
+> A11 took the 334 questions whose first step the model had closed itself and continued thinking for up to four steps, with or without
+> the selected image tokens after every step: on the first 112 questions VisRef − TSR and VisRef − answering at once each changed 0 questions
+> (0 better, 0 worse; 75.0% in every condition), so a gain was not confirmed there either, and an interim rule fixed in advance stopped the run at 112
+> ([REPORT, Section 4.15](REPORT.md#415-closed_multistep-continuing-up-to-4-steps-after-a-first-step-the-model-closed-itself-rule-fixed-before-the-results)).
+> Two probability-level tests did not change the picture: with the original image replaced by a blank one, re-inserting the question's image
+> brought back part of the probability of the right answer (A9, mostly in free-form questions), and no evidence was seen that removing the thumbnail tile
+> makes the probability gain of re-insertion larger (A10) ([REPORT, Sections 4.13 and 4.14](REPORT.md#413-recover_check-does-a-re-inserted-image-carry-information-when-the-image-slot-is-blank-rule-fixed-before-the-results)).
 > Splitting three paired runs into 16 fixed groups of questions found no group where VisRef was consistently better
 > ([REPORT, Section 4.9](REPORT.md#49-subgroup-reanalysis-of-the-three-paired-runs-grouping-fixed-before-it-was-computed)).
 
@@ -113,6 +120,9 @@ whether it comes from the paper, a cited work, official InternVL material or our
 | A6 | Does a tagged image block after `</think>` (tokens chosen with last-layer vectors) beat TSR with the same answer prompt? | four at once: (1) `<img>` … `</img>` tags with line breaks; (2) block after `</think>` when answering (A1: before it); (3) image vectors V for the selection also from the last layer (Z as in A4); (4) every answer starts after `\nFinal Answer:` | 1,000 | VisRef-imgtag − TSR with answer prompt: −1.0 pp | the four changes are tested only together |
 | A7 | Where both methods stopped after step 1, does thinking more with the selected image help? | from the stored first step, up to 512 more thinking tokens with no image, the selected image tokens or as many random image tokens, then a short answer | 691 | image − no image: 0.0 pp (step 1 closed by the model), −1.74 pp (step 1 cut) | only questions where both methods had stopped |
 | A8 | Where step 1 was cut and a method continued, does the whole image with up to 2,048 more thinking tokens help? | from the stored first step: the answer at once, up to 2,048 more thinking tokens with no image, or all image tokens of the question and then up to 2,048 more thinking tokens; then a short answer | 297 | whole image − no image: −1.80 pp | only questions whose step 1 was cut and where a method continued; more thinking was forced, no stop decision |
+| A9 | When the image slot holds a blank image, does re-inserting the question's image tokens bring back probability of the right answer? | nothing generated: the image in the prompt replaced by a grey blank image; after one short fixed sentence the question's image tokens are re-inserted; the probability of the right answer is read | 199 | the re-inserted image carried information: +0.088 in probability (95% CI +0.042 to +0.136) | a probability, not an accuracy; an artificial context; the recovery came from free-form questions |
+| A10 | Without the thumbnail tile, does re-inserting the selected image tokens raise the probability of the right answer more? | the thumbnail tile cut from the input; a new first step, then the selected image tokens re-inserted; the probability of the right answer is read | 160 | gate not passed: difference of the gains +0.006 (95% CI −0.011 to +0.024) | a probability, not an accuracy; one position after step 1 |
+| A11 | After a first step the model closed itself, does VisRef beat TSR when thinking continues for up to 4 steps? | from the stored first step: the answer at once, more thinking without image, or with the selected image tokens after every step; up to 4 steps, no stopping entropy; then a short answer | 112 of 334 | VisRef − TSR: 0 better, 0 worse (0.0 pp) | the number of steps was forced; the run stopped at 112 by a rule fixed in advance |
 <!-- /check -->
 
 ## Why our results may differ from the paper

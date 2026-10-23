@@ -10,7 +10,7 @@ InternVL3.5-1B 모델과 MathVista *testmini* 1,000문항으로 다시 실험했
 - **TSR** (textual self-reflection, 텍스트 자기 성찰): 생각이 끝날 때마다 "Wait, think more"를 붙여, 답이 충분히 확실해질 때까지 다시 생각하게 합니다.
 - **VisRef**: TSR과 같지만, 다시 생각하기 전에 이미지의 일부를 골라 reinject(다시 넣기)해 줍니다. 논문이 제안한 방법입니다.
 
-> **상태 (2026-10-19):** 본 실험과 후속 실험 6개(A2–A4, A6–A8)가 끝났습니다. 작은 진단(reinject한 이미지가 답 확률을 조금이라도 움직이는지; 새 생각은 만들지 않음)에서는 답 바로 앞에 reinject한 이미지를 모델이 약하게만 읽고, DPP로 고른 토큰이 같은 수의 무작위 토큰보다 답을 더 움직이지 않았습니다([REPORT 4.11절](REPORT.md#411-image-sensitivity-check-does-the-model-read-re-inserted-image-tokens-reading-rules-fixed-before-the-results)). 가장 나중에 끝난 A8에서는, 첫 thinking step이 잘리고 TSR이나 VisRef가 이어 생각한 297문항에서 visual token(이미지 토큰)을 전부 reinject하고 최대 2,048토큰 더 생각하게 해도 정답률이 오른다는 것을 확인하지 못했습니다([REPORT 4.12절](REPORT.md#412-full_think-the-whole-image-and-longer-thinking-after-a-cut-step-1-rule-fixed-before-the-results)). 결과를 내는 실행은 예정이 없습니다. 지금까지 하지 않은 실험과 그 이유는 [REPORT 5.4절](REPORT.md#54-experiments-not-run)에 있습니다.
+> **상태 (2026-10-23):** 본 실험과 후속 실험 9개(A2–A4, A6–A11)가 끝났습니다. 작은 진단(reinject한 이미지가 답 확률을 조금이라도 움직이는지; 새 생각은 만들지 않음)에서는 답 바로 앞에 reinject한 이미지를 모델이 약하게만 읽고, DPP로 고른 토큰이 같은 수의 무작위 토큰보다 답을 더 움직이지 않았습니다([REPORT 4.11절](REPORT.md#411-image-sensitivity-check-does-the-model-read-re-inserted-image-tokens-reading-rules-fixed-before-the-results)). A8에서는, 첫 thinking step이 잘리고 TSR이나 VisRef가 이어 생각한 297문항에서 visual token(이미지 토큰)을 전부 reinject하고 최대 2,048토큰 더 생각하게 해도 정답률이 오른다는 것을 확인하지 못했습니다([REPORT 4.12절](REPORT.md#412-full_think-the-whole-image-and-longer-thinking-after-a-cut-step-1-rule-fixed-before-the-results)). 가장 나중에 끝난 A11에서는 모델이 첫 thinking step을 스스로 닫은 334문항에서 4단계까지 더 생각하게 했고, 앞 112문항에서 모든 조건의 답 정오가 같아 미리 정한 중간 멈춤 규칙으로 멈췄습니다([REPORT 4.15절](REPORT.md#415-closed_multistep-continuing-up-to-4-steps-after-a-first-step-the-model-closed-itself-rule-fixed-before-the-results)). 결과를 내는 실행은 예정이 없습니다. 지금까지 하지 않은 실험과 그 이유는 [REPORT 5.4절](REPORT.md#54-experiments-not-run)에 있습니다.
 
 ## 읽는 순서
 
@@ -57,7 +57,7 @@ InternVL3.5-1B 모델과 MathVista *testmini* 1,000문항으로 다시 실험했
 > - reinject한 visual token은 논문이 thinking step마다 넣는 수(m)의 중앙값 약 1/5입니다(중앙값 0.199).
 > - VisRef가 한 단계 만에 멈춘 713문항에서, 최종 답에 `</think>`가 또 들어 있는 경우가 VisRef 352건, 같은 문항의 ST는 67건입니다.
 >
-> 이 한계 때문에 후속 실험 A2–A8이 있습니다. A6는 마지막 두 가지를 함께 다뤘습니다. 마지막 층 값으로 고른 visual token m개를
+> 이 한계 때문에 후속 실험 A2–A11이 있습니다. A6는 마지막 두 가지를 함께 다뤘습니다. 마지막 층 값으로 고른 visual token m개를
 > InternVL의 이미지 태그로 감싸 `</think>` 뒤에 넣었고, 같은 답 문구의 TSR보다 −1.0%p(95% 신뢰구간 −3.1 ~ +1.0)였습니다.
 > 최종 답의 `</think>` 재출력은 1,000문항 중 249건으로 여전히 남았습니다(같은 답 문구의 TSR은 107건)
 > ([REPORT 4.6절](REPORT.md#46-visref-imgtag-tagged-image-block-after-think-rule-fixed-before-the-results)).
@@ -65,6 +65,9 @@ InternVL3.5-1B 모델과 MathVista *testmini* 1,000문항으로 다시 실험했
 > 이미지 있음 − 없음은 두 묶음에서 0.0%p, −1.74%p로 이득이 없었습니다([REPORT 4.7절](REPORT.md#47-step1_think-more-thinking-where-both-methods-stopped-rule-fixed-before-the-results)).
 > A8에서는 첫 thinking step이 잘리고 한 방법이 이어 생각한 297문항에서, 이 문제의 visual token을 전부 넣거나 넣지 않고 최대 2,048토큰 더 생각하게 했습니다.
 > 이미지 전체 − 이미지 없음은 −1.80%p(95% 신뢰구간 −5.95 ~ +2.36, 좋아진 문항 31개, 나빠진 문항 45개)로, 이득을 확인하지 못했습니다([REPORT 4.12절](REPORT.md#412-full_think-the-whole-image-and-longer-thinking-after-a-cut-step-1-rule-fixed-before-the-results)).
+> A11에서는 모델이 첫 thinking step을 스스로 닫은 334문항에서, 단계마다 고른 visual token을 넣거나 넣지 않고 4단계까지 더 생각하게 했습니다.
+> 앞 112문항에서 VisRef − TSR과 VisRef − 바로 답 모두 바뀐 문항이 0개(좋아짐 0, 나빠짐 0, 네 조건 모두 75.0%)라 여기서도 이득을 확인하지 못했고, 미리 정한 중간 멈춤 규칙으로 112문항에서 멈췄습니다([REPORT 4.15절](REPORT.md#415-closed_multistep-continuing-up-to-4-steps-after-a-first-step-the-model-closed-itself-rule-fixed-before-the-results)).
+> 정답 확률만 읽은 두 시험도 그림을 바꾸지 않았습니다. 처음 그림을 회색 빈 그림으로 바꾸면 다시 넣은 이 문제의 그림이 정답 확률을 일부 되돌렸고(A9, 주로 자유형 문항), 썸네일 조각을 빼도 다시 넣은 그림의 정답 확률 이득이 커진다는 근거는 보이지 않았습니다(A10)([REPORT 4.13·4.14절](REPORT.md#413-recover_check-does-a-re-inserted-image-carry-information-when-the-image-slot-is-blank-rule-fixed-before-the-results)).
 > 짝지은 실행 세 개를 미리 정한 16개 문항 묶음으로 나눠 봐도, VisRef가 TSR보다 일관되게 나은 묶음은 없었습니다([REPORT 4.9절](REPORT.md#49-subgroup-reanalysis-of-the-three-paired-runs-grouping-fixed-before-it-was-computed)).
 
 - **판정 기준:** 95% 신뢰구간이 0을 빼고 논문 값을 포함하면 "어긋나지 않음", 논문 값을 빼면 "재현 안 됨", 0과 논문 값을 모두 포함하면 판단하지 않습니다. 판정 규칙은 중간
@@ -89,6 +92,9 @@ InternVL3.5-1B 모델과 MathVista *testmini* 1,000문항으로 다시 실험했
 | A6 | 고른 visual token을 태그로 감싸 `</think>` 뒤에 넣으면(마지막 층 값으로 고름) 같은 답 문구의 TSR보다 나은가? | 네 가지를 한꺼번에: (1) `<img>` … `</img>` 태그와 줄바꿈, (2) 답할 때 이미지 블록을 `</think>` 뒤에(A1: 앞에), (3) 고를 때 이미지 벡터 V도 마지막 층 값(Z는 A4와 같음), (4) 모든 답을 `\nFinal Answer:` 뒤에서 시작 | 1,000 | VisRef-imgtag − 답 문구 있는 TSR: −1.0%p | 네 가지를 함께만 시험해 어느 것의 효과인지 모름 |
 | A7 | 두 방법이 모두 첫 thinking step에서 멈춘 문항에서, 고른 이미지를 넣고 더 생각하게 하면? | 저장된 첫 thinking step에서 출발해 이미지 없이 / 고른 visual token을 넣고 / 같은 수의 무작위 visual token을 넣고 최대 512토큰 더 생각한 뒤 짧게 답함 | 691 | 이미지 있음 − 없음: 0.0%p(첫 thinking step을 모델이 스스로 닫음), −1.74%p(첫 thinking step이 잘림) | 두 방법이 이미 멈춘 문항만 대상 |
 | A8 | 첫 thinking step이 잘리고 한 방법이 이어 생각한 문항에서, 이미지 전체를 넣고 더 길게 생각하게 하면? | 저장된 첫 thinking step에서 출발해 바로 답함 / 이미지 없이 최대 2,048토큰 더 생각 / 이 문제의 visual token을 전부 넣고 최대 2,048토큰 더 생각한 뒤 짧게 답함 | 297 | 이미지 전체 − 이미지 없음: −1.80%p | 잘린 뒤 이어 생각한 문항만 대상; 더 생각하는 것을 강제해 멈춤 판단은 시험하지 못함 |
+| A9 | 처음 그림 자리가 회색 빈 그림일 때, 이 문제의 visual token을 다시 넣으면 정답 확률이 돌아오나? | 생성 없음: 프롬프트의 그림을 같은 크기의 회색 빈 그림으로 바꾸고, 짧은 고정 문장 뒤에 이 문제의 visual token을 다시 넣어 정답 확률을 읽음 | 199 | 다시 넣은 그림이 정보를 전달함: 정답 확률 +0.088(95% 신뢰구간 +0.042 ~ +0.136) | 정답률이 아니라 정답 확률; 인위적인 문맥; 회복은 자유형 문항에서 나옴 |
+| A10 | 썸네일 조각을 빼면, 고른 visual token을 다시 넣었을 때 정답 확률이 더 오르나? | 입력에서 썸네일 조각을 잘라 내고 첫 thinking step을 새로 쓴 뒤 고른 visual token을 다시 넣어 정답 확률을 읽음 | 160 | 관문 통과 못 함: 두 이득의 차이 +0.006(95% 신뢰구간 −0.011 ~ +0.024) | 정답률이 아니라 정답 확률; 첫 단계 뒤 한 자리만 잼 |
+| A11 | 첫 thinking step을 모델이 스스로 닫은 뒤 4단계까지 더 생각하게 하면 VisRef가 TSR보다 나은가? | 저장된 첫 thinking step에서 출발해 바로 답함 / 그림 없이 더 생각 / 단계마다 고른 visual token을 넣고 더 생각; 4단계까지, 멈춤 판단 없음; 짧게 답함 | 334 중 112 | VisRef − TSR: 좋아짐 0, 나빠짐 0(0.0%p) | 단계 수를 강제함; 미리 정한 규칙으로 112문항에서 멈춤 |
 <!-- /check -->
 
 ## 논문과 결과가 다를 수 있는 이유
