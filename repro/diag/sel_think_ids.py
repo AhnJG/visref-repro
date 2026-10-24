@@ -5,6 +5,7 @@
             sharded by index (i % shard_total) and the analysed questions are a prefix of each shard, fixed from the trial's
             timing before the main run (diag/analyze_blank_think.make_analysis_ids)
   trial     blank_think's 5 trial questions (diag/blank_think_ids.json 'trial')
+  memcheck  blank_think's memory-check question (the largest image), in trial
   n_visual, donor   from diag/blank_think_ids.json
   step1     {pid: {own, blank: {end, ids, sep_text}}}: the first steps blank_think generated and used (its result rows); sel_think
             does not generate step 1 again
@@ -45,7 +46,7 @@ def build(ids, analysis, rows):
     step1 = {p: {s: {k: rows[p]['step1'][s][k] for k in ('end', 'ids', 'sep_text')} for s in ('own', 'blank')} for p in pids}
     return {'experiment': 'sel_think', 'main': main, 'trial': trial, 'n_visual': {p: ids['n_visual'][p] for p in pids},
             'donor': {p: ids['donor'][p] for p in pids}, 'step1': step1,
-            'source': sorted({rows[p]['code_version'] for p in pids})}
+            'memcheck': ids['memcheck'], 'source': sorted({rows[p]['code_version'] for p in pids})}
 
 
 def text(doc):

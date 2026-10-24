@@ -42,6 +42,7 @@ def test_ids_file_equals_a_fresh_build_and_keeps_blank_thinks_lists_and_first_st
     a = json.loads(ids_mod.ANALYSIS.read_text())
     b = json.loads(ids_mod.IDS.read_text())
     assert d['main'] == a['analysis'] and len(d['main']) == 396 and d['trial'] == b['trial']
+    assert d['memcheck'] == b['memcheck'] == '865' and d['memcheck'] in d['trial'] and d['n_visual']['865'] == 3328
     rows = ids_mod.stored_rows(ids_mod.ROWS)
     for p in d['main'][:3] + d['trial']:
         for s in ('own', 'blank'):
@@ -66,9 +67,9 @@ def item(lm, pid='1', n=6, seed=0, z_own='abc', z_blank='xy', sep_blank='\n'):
 
 def prepared(lm, eng, **kw):
     it = item(lm, **kw)
-    it['z'], it['sep'] = {}, {}
+    it['z'], it['sep'], it['sep_text'] = {}, {}, {}
     for s in ('own', 'blank'):
-        it['z'][s], it['sep'][s], _ = st.stored_step(TOK, it['step1'][s])
+        it['z'][s], it['sep'][s], it['sep_text'][s] = st.stored_step(TOK, it['step1'][s])
     it['m'], it['sel'] = st.selections(it, eng, CFG)
     return it
 
@@ -78,8 +79,10 @@ def test_selections_follow_the_plan(lm):
     it = prepared(lm, eng, n=10)
     m = budget(10, 0.3)
     assert it['m'] == m == 3
-    assert it['sel']['own'] == select_tokens(it['vis'], eng.embed(TOK.encode('abc')), m)
-    assert it['sel']['blank'] == select_tokens(it['vis'], eng.embed(TOK.encode('xy')), m)
+    # Z = the last-layer states of the stored step in its own context (EF 1525, closed_multistep), not its input embeddings
+    for s, z in (('own', TOK.encode('abc')), ('blank', TOK.encode('xy'))):
+        Z = eng.last_hidden(torch.cat([it['prompt'][s], eng.embed(z)]), len(z))
+        assert Z.shape[0] == len(z) and it['sel'][s] == select_tokens(it['vis'], Z, m)
     assert it['sel']['rand'] == t1.random_sel('1', 42, 10, len(it['sel']['blank'])) == sorted(it['sel']['rand'])
     # the random tokens depend on the pid only, not on the image or the step text
     other = prepared(lm, eng, n=10, seed=5, z_blank='qrstuv')
@@ -93,18 +96,22 @@ def test_selections_follow_the_plan(lm):
 def test_contexts_follow_the_plan(lm):
     eng = Engine(lm)
     it = prepared(lm, eng, n=10)
-    c = st.contexts(it, eng, SP)
+    c = st.contexts(it, eng, TOK, SP)
     po = torch.cat([it['prompt']['own'], eng.embed(TOK.encode('abc'))])
     pb = torch.cat([it['prompt']['blank'], eng.embed(TOK.encode('xy\n'))])
-    w, v, s = eng.embed(SP['wait']), it['vis'], it['sel']
-    want = {'N_o': torch.cat([po, w]), 'D_o': torch.cat([po, v[s['own']], w]), 'F_o': torch.cat([po, v, w]),
-            'N_b': torch.cat([pb, w]), 'D_b': torch.cat([pb, v[s['blank']], w]), 'R_b': torch.cat([pb, v[s['rand']], w]),
-            'F_b': torch.cat([pb, v, w]), 'X_b': torch.cat([pb, it['vis_donor'], w])}
+    w, v, s, e, nl = eng.embed(SP['wait']), it['vis'], it['sel'], eng.embed, TOK.encode('\n')
+    # the closed_multistep block: a newline first only when the step text (+ separator) does not end with one
+    blk_o = lambda x: torch.cat([e(nl), e([SP['img_start']]), x, e([SP['img_end']] + nl)])  # noqa: E731  'abc' ends without \n
+    blk_b = lambda x: torch.cat([e([SP['img_start']]), x, e([SP['img_end']] + nl)])  # noqa: E731  'xy' + '\n' ends with one
+    want = {'N_o': torch.cat([po, w]), 'D_o': torch.cat([po, blk_o(v[s['own']]), w]), 'F_o': torch.cat([po, blk_o(v), w]),
+            'N_b': torch.cat([pb, w]), 'D_b': torch.cat([pb, blk_b(v[s['blank']]), w]),
+            'R_b': torch.cat([pb, blk_b(v[s['rand']]), w]), 'F_b': torch.cat([pb, blk_b(v), w]),
+            'X_b': torch.cat([pb, blk_b(it['vis_donor']), w])}
     assert set(c) == set(st.CONDS)
     for k in st.CONDS:
         assert torch.equal(c[k], want[k]), k
-    # untagged block, as blank_think's O and VisRef's raw-rank insertion (step1_think.inject_embeds 'bmain')
-    assert torch.equal(t1.inject_embeds(eng, TOK, SP, 'bmain', v, s['blank'], 'xy', '\n'), v[s['blank']])
+    # the same block as closed_multistep.v_block (the ② format of 2026-10-23)
+    assert torch.equal(st.v_block(eng, TOK, SP, v, s['blank'], 'xy', '\n'), blk_b(v[s['blank']]))
 
 
 def test_stored_step_keeps_the_ids_and_rebuilds_the_separator():
@@ -136,8 +143,8 @@ def test_run_group_is_deterministic_complete_and_seeded_as_planned(lm):
             assert row['n_sel']['rand'] == row['n_sel']['blank'] == len(row['sel']['blank'])
             assert row['recon']['blank'] == {'n_z': 2, 'n_sep': 1, 'end': 'cap'}
             # extra thinking of D_b: its context, generator seed_of(seed, pid, 'think')
-            ctx = torch.cat([x['prompt']['blank'], eng.embed(TOK.encode('xy\n')), x['vis'][x['sel']['blank']],
-                             eng.embed(SP['wait'])])
+            blk = torch.cat([eng.embed([SP['img_start']]), x['vis'][x['sel']['blank']], eng.embed([SP['img_end']] + TOK.encode('\n'))])
+            ctx = torch.cat([x['prompt']['blank'], eng.embed(TOK.encode('xy\n')), blk, eng.embed(SP['wait'])])
             g = torch.Generator().manual_seed(t1.seed_of(42, x['pid'], 'think'))
             r = gen([Request(ctx, frozenset({TE, EOS}), CFG['think_extra'], g)])[0]
             assert list(r.ids) == x['extra']['D_b']['ids']
@@ -195,12 +202,12 @@ def stub(lm, tmp_path, monkeypatch):
     monkeypatch.setattr(st, 'Engine', lambda lm_, t, k, p, fast_kv=True: Engine(lm_, t, k, p, fast_kv=False))
     step1 = {p: {'own': {'end': 'close', 'ids': TOK.encode('ab'), 'sep_text': ''},
                  'blank': {'end': 'cap', 'ids': TOK.encode('abc'), 'sep_text': '\n'}} for p in pids}
-    doc = {'main': ['1', '2', '3', '4'], 'trial': ['5'], 'n_visual': nvis,
+    doc = {'main': ['1', '2', '3', '4'], 'trial': ['5'], 'memcheck': '5', 'n_visual': nvis,
            'donor': {'1': '3', '2': '4', '3': '5', '4': '2', '5': '1'}, 'step1': step1}
     (tmp_path / 'ids.json').write_text(json.dumps(doc))
     out = tmp_path / 'res' / 'out.jsonl'
     args = ['--parquet', 'x', '--ids', str(tmp_path / 'ids.json'), '--out', str(out), '--think-extra', '5',
-            '--probe-cap', '4', '--n-t1', '2', '--batch-tokens', '4000', '--group', '2']
+            '--probe-cap', '4', '--n-t1', '2', '--batch-tokens', '4000', '--group', '2', '--step1-cap', '6']
     return out, args
 
 
@@ -214,6 +221,12 @@ def test_main_end_to_end_with_a_stub_model_and_resume_skips_ok_rows_only(lm, tmp
         assert res[0]['donor'] == '3' and res[0]['n_visual'] == 6 and res[0]['cfg']['chunk'] == 5 and res[0]['m'] == 1
         st.main(args)  # resume: nothing left
         assert len(out.read_text().splitlines()) == 4
+        # trial: the memory check on the memcheck question (own prompt 12 + 6 padded + block of all 6 tokens + Wait + 5)
+        o2 = tmp_path / 'res' / 'trial.jsonl'
+        st.main([x if x != str(out) else str(o2) for x in args] + ['--set', 'trial'])
+        mem = json.loads(Path(str(o2) + '.memcheck.json').read_text())
+        assert mem['pid'] == '5' and mem['last_hidden_n'] == 6 and mem['n_sel'] >= 1
+        assert mem['ctx_len'] == 12 + 6 + (1 + 1 + 6 + 1 + 1) + len(SP['wait']) + 5 and mem['generated_tokens'] in range(1, 9)
         # an error row in --out is run again on resume
         lines = out.read_text().splitlines()
         bad = {'pid': '2', 'status': 'error', 'stage': 'generate', 'error': 'x'}
