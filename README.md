@@ -13,11 +13,15 @@ InternVL3.5-1B on the 1,000 MathVista *testmini* questions. Three methods are co
 
 ![ST, TSR and VisRef as run in this reproduction; orange notes mark settings we could not find in the paper](figures/method_overview.svg)
 
-> **Status (2026-10-23):** the main run and nine follow-up experiments (A2–A4, A6–A11) are finished. A small descriptive
-> diagnostic (does a re-inserted image move the answer probabilities at all? no new thinking is generated) found that the
-> image re-inserted before the answer is read only weakly and that the DPP selection does not move the answer more than
-> random tokens ([REPORT, Section 4.11](REPORT.md#411-image-sensitivity-check-does-the-model-read-re-inserted-image-tokens-reading-rules-fixed-before-the-results)). The follow-up A8 did not confirm a gain from re-inserting the whole image before up to 2,048 more thinking tokens on the 297 questions where step 1 was cut and a method continued ([REPORT, Section 4.12](REPORT.md#412-full_think-the-whole-image-and-longer-thinking-after-a-cut-step-1-rule-fixed-before-the-results)). The latest, A11, continued thinking for up to four steps after a first step the model had closed itself; on the first 112 of these 334 questions all conditions agreed on the correctness of every answer, and an interim rule fixed in advance stopped the run there ([REPORT, Section 4.15](REPORT.md#415-closed_multistep-continuing-up-to-4-steps-after-a-first-step-the-model-closed-itself-rule-fixed-before-the-results)); no result run is scheduled. What has not been run so far, and why, is in
-> [REPORT, Section 5.4](REPORT.md#54-experiments-not-run).
+> **Status (2026-10-24):** the main run and thirteen follow-up experiments (A2–A4, A6–A15) are finished. With the original image
+> present, no variant showed a VisRef gain over TSR (A1–A11). With the prompt's image slot holding a blank image, re-inserting
+> the question's whole image after the first thinking step raised accuracy by 12.8 pp, while no change was confirmed with another question's image
+> (A12, [REPORT, Section 4.16](REPORT.md#416-blank_think-does-a-re-inserted-image-raise-accuracy-when-the-image-slot-is-blank-rule-fixed-before-the-results)):
+> re-inserted image tokens can be used when the image information is missing. There is no evidence that the DPP selection
+> beats as many random image tokens; a comparison of the two in the blank-slot context is running. A13–A15 (image slot after
+> thinking, a 4,096-token step limit, a stopping estimate from free answers) did not change this picture
+> ([REPORT, Sections 4.17–4.19](REPORT.md#417-slot_cross-after-generated-thinking-does-the-image-slot-of-the-prompt-still-matter-rule-fixed-before-the-results)).
+> What has not been run, and why, is in [REPORT, Section 5.4](REPORT.md#54-experiments-not-run).
 > Full report: **[REPORT.md](REPORT.md)**.
 
 ## How to read this repository
@@ -123,6 +127,10 @@ whether it comes from the paper, a cited work, official InternVL material or our
 | A9 | When the image slot holds a blank image, does re-inserting the question's image tokens bring back probability of the right answer? | nothing generated: the image in the prompt replaced by a grey blank image; after one short fixed sentence the question's image tokens are re-inserted; the probability of the right answer is read | 199 | the re-inserted image carried information: +0.088 in probability (95% CI +0.042 to +0.136) | a probability, not an accuracy; an artificial context; the recovery came from free-form questions |
 | A10 | Without the thumbnail tile, does re-inserting the selected image tokens raise the probability of the right answer more? | the thumbnail tile cut from the input; a new first step, then the selected image tokens re-inserted; the probability of the right answer is read | 160 | gate not passed: difference of the gains +0.006 (95% CI −0.011 to +0.024) | a probability, not an accuracy; one position after step 1 |
 | A11 | After a first step the model closed itself, does VisRef beat TSR when thinking continues for up to 4 steps? | from the stored first step: the answer at once, more thinking without image, or with the selected image tokens after every step; up to 4 steps, no stopping entropy; then a short answer | 112 of 334 | VisRef − TSR: 0 better, 0 worse (0.0 pp) | the number of steps was forced; the run stopped at 112 by a rule fixed in advance |
+| A12 | When the image slot holds a blank image, does re-inserting the question's image after step 1 raise accuracy through generation? | a new first step with the own or a grey blank image; then more thinking with no image, all of the question's image tokens or another question's | 396 | blank + own image − blank: +12.8 pp | artificial blank-image context; whole image, no selection |
+| A13 | After generated thinking, does the image in the prompt's slot still change the probability of the right answer? | probabilities only: image slot (original or blank) crossed with a block after the thinking | 396 | gate not met: +0.022 (needed 0.05) | a probability, not an accuracy |
+| A14 | Does a step limit of 4,096 instead of 1,024 tokens change ST accuracy? | the main-run code with both limits on the same questions | 42 | ST 4,096 − 1,024: 0.0 pp | 42 questions |
+| A15 | Do self-ended first steps continue if the stopping entropy comes from 16 free answers? | from the stored first step: 16 short and 16 free answers | 126 | undecided: 3 to 94 of 126 continue, 7 to 21 read without the box | our own estimator |
 <!-- /check -->
 
 ## Why our results may differ from the paper
@@ -132,6 +140,7 @@ We look for the cause in our implementation first ([REPORT, Section 4.1](REPORT.
 - **Fewer image tokens.** We re-insert about one fifth of the paper's m image tokens per step: with text token
   embeddings read as the model's input embeddings (our reading; the paper does not name the layer), the selection kernel
   has rank below m, and the greedy selection the paper cites stops there. A2, A4 and A6 tried ways around it; none showed a detectable gain over TSR.
+  Later follow-ups (A11 and the run in progress) select with the last-layer values of the thinking text, as decided on 2026-10-17.
 - **Our own settings.** The paper does not state how the stopping entropy is estimated, how the image is inserted,
   the token limits or how answers are extracted; we chose these in small checks ([REPORT, Section 2.6](REPORT.md#26-setting-checks-how-the-unstated-settings-were-chosen)).
   Those checks used questions that are also among the 1,000 evaluated ones.
