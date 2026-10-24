@@ -337,6 +337,19 @@ def test_builder(tmp_path, monkeypatch):
         assert f in z.namelist(), f
 
 
+def test_builder_bundles_only_this_kernels_first_steps():
+    doc = json.loads(ids_mod.OUT.read_text())
+    raw = ids_mod.OUT.read_bytes()
+    small, n = bs.slim_ids(raw, 'trial', 0, 0, 2)
+    d = json.loads(small)
+    assert set(d['step1']) == set(doc['trial']) and n == 5 and d['main'] == doc['main'] and d['donor'] == doc['donor']
+    small, n = bs.slim_ids(raw, 'main', 0, 2, 4)  # second kernel of two: shards 2 and 3
+    d = json.loads(small)
+    want = {p for j, p in enumerate(doc['main']) if j % 4 in (2, 3)}
+    assert set(d['step1']) == want and n == 362 and d['main'] == doc['main']
+    assert all(d['step1'][p] == doc['step1'][p] for p in list(want)[:5])
+
+
 def test_no_absolute_sandbox_paths_in_the_new_files():
     bad = ('/ho' + 'me/', '/t' + 'mp/', 'scratch' + 'pad', '/Us' + 'ers/')
     for f in ('diag/sel_think.py', 'diag/sel_think_ids.py', 'diag/analyze_sel_think.py', 'kaggle/build_sel_think.py',

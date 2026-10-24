@@ -4,7 +4,11 @@ kernel-metadata.json, run_config.json with the sha256 of every bundled file); no
 
 usage: python3 repro/kaggle/build_sel_think.py NAME [--set main|trial] [--limit 5] [--group 4] [--timeout 19800]
            [--shard-offset 0] [--shard-total 2] [--skip-from runs/EARLIER/output/results/sel_think_*.jsonl] [--owner USER]
-One diag/sel_think.py process per visible GPU i, with --shard (shard_offset + i)/shard_total. Outputs
+One diag/sel_think.py process per visible GPU i, with --shard (shard_offset + i)/shard_total.
+The bundled diag/sel_think_ids.json keeps every list (main, trial, n_visual, donor) but only the stored first steps of the questions
+this kernel runs (two GPUs: shards shard_offset and shard_offset + 1; the trial adds the memcheck question), so the notebook stays
+small enough for the Kaggle API (a 1.34 MB notebook was refused on 2026-10-24). run_config.json records the sha256 of the repository
+file and of the bundled copy. Outputs
 results/sel_think_{shard}.jsonl and log_{shard}.txt. Push / pull with kaggle_ctl.py.
 """
 import argparse
@@ -24,6 +28,27 @@ sys.path.insert(0, str(HERE))
 from build import DATA_REV, MODEL, MODEL_REV, PARQUET, new_run_dir  # noqa: E402  same pins as the main runs
 
 MIN_TIMEOUT_MAIN = 3600
+IDS = 'diag/sel_think_ids.json'
+GPUS = 2  # T4 x 2
+
+
+def needed_pids(doc, set_name, limit, shard_offset, shard_total, gpus=GPUS):
+    """The pids this kernel runs: index j of the set's list (first `limit`) with j % shard_total in its shards, + memcheck in trial."""
+    ids = [str(p) for p in doc[set_name]]
+    ids = ids[:limit] if limit else ids
+    shards = {(shard_offset + i) % shard_total for i in range(gpus)}
+    keep = {p for j, p in enumerate(ids) if j % shard_total in shards}
+    if set_name == 'trial' and doc.get('memcheck'):
+        keep.add(str(doc['memcheck']))
+    return keep
+
+
+def slim_ids(raw, set_name, limit, shard_offset, shard_total):
+    """The ids file with step1 kept only for this kernel's pids (lists unchanged, so shard indices are the same)."""
+    doc = json.loads(raw)
+    keep = needed_pids(doc, set_name, limit, shard_offset, shard_total)
+    doc['step1'] = {p: v for p, v in doc['step1'].items() if p in keep}
+    return (json.dumps(doc, separators=(',', ':')) + '\n').encode(), len(doc['step1'])
 CELL = r'''
 import os, sys, io, json, time, base64, zipfile, pathlib, subprocess
 T0 = time.time()
@@ -90,8 +115,13 @@ def main(argv=None):
     with zipfile.ZipFile(buf, 'w', zipfile.ZIP_DEFLATED) as z:
         for f in files:
             data = (REPRO / f).read_bytes()
+            if f == IDS:
+                sha[f + ' (repository)'] = hashlib.sha256(data).hexdigest()
+                data, n_step1 = slim_ids(data, a.set, a.limit, a.shard_offset, a.shard_total)
+                sha[f + ' (bundled, step1 of this kernel only)'] = hashlib.sha256(data).hexdigest()
+                sha[f + ' n_step1'] = n_step1
             z.writestr(f, data)
-            sha[f] = hashlib.sha256(data).hexdigest()
+            sha.setdefault(f, hashlib.sha256(data).hexdigest())
     skip = sorted({r['pid'] for f in a.skip_from for l in Path(f).read_text().splitlines() if l.strip()
                    for r in [json.loads(l)] if r.get('status') == 'ok'})  # error rows are re-run, never skipped
     run_args = ['--set', a.set, '--group', str(a.group)]
