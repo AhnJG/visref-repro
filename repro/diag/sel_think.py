@@ -4,8 +4,9 @@ code only, written before any result).
 Question: blank_think showed that ALL of the question's image tokens, put back after the first step when the prompt's image slots
 are blank, raise accuracy through generation. Do the tokens the current selection picks (greedy MAP dpp.select_tokens with
 Z = the last-layer hidden states of the step, V = the input image embeddings, m = floor(vis_frac * |V|), no filling; the author's
-selection of 2026-10-17 / 10-23, EF "동작 점검 계획" and closed_multistep) do the same, more than as many random tokens -- and does
-the same insertion do anything when the prompt holds the real image?
+selection of 2026-10-17 / 10-23, EF "동작 점검 계획" and closed_multistep) do the same, more than as many random tokens?
+Only the blank-prompt conditions are run (EF 2026-10-24 second pre-run revision: the own-prompt conditions were dropped to run more
+questions).
 
 Step 1 is NOT generated here: the own / blank first steps blank_think generated and used (diag/sel_think_ids.json 'step1', ids
 and separator text as stored) are rebuilt as they were. prefix_s = [prompt_s][z_1,s][sep_s]; prompt_blank = the prompt with the
@@ -13,22 +14,22 @@ image slots overwritten by the gray image's tokens (blank_think.fill_slots).
 Conditions (all: prefix_s [block] Wait, think more [z_2] -> close; block = closed_multistep.v_block: [\\n unless decode(z_1,s) +
 sep_s ends with one] <img> tokens </img> \\n, the format of every insertion here (EF 1905); V = the question's own image tokens,
 in their order):
-  N_o  own    nothing                   N_b  blank  nothing
-  D_o  own    V[sel_own]                D_b  blank  V[sel_blank]
-  F_o  own    V (all)                   R_b  blank  V[random, |sel_blank| tokens]  (step1_think.random_sel, a function of pid)
-                                        F_b  blank  V (all)
-                                        X_b  blank  the donor's tokens (all; same n_visual, ids file)
-sel_s = select_tokens(V, Z_s, budget(|V|, vis_frac)), Z_s = Engine.last_hidden([prompt_s][z_1,s], |z_1,s|): the step's last-layer
-states in its own context, as methods.py 'visref_hs' and closed_multistep do (no filling below m).
+  N_b  nothing
+  D_b  V[sel_blank]
+  R_b  V[random, |sel_blank| tokens]  (step1_think.random_sel, a function of pid)
+  F_b  V (all)
+  X_b  the donor's tokens (all; same n_visual, ids file)
+sel_blank = select_tokens(V, Z, budget(|V|, vis_frac)), Z = Engine.last_hidden([prompt_blank][z_1,blank], |z_1,blank|): the step's
+last-layer states in its own context, as methods.py 'visref_hs' and closed_multistep do (no filling below m).
 The extra thinking z_2 (<= think_extra tokens, stops at </think> / EOS) of every condition shares seed_of(seed, pid, 'think');
 close_thinking appends the </think>. Answers: '\\n\\n\\boxed', n_t1 samples at T=1 (seed_of(seed, pid, 'ans', j)) + 1 greedy,
 <= probe_cap tokens, stopped when the box closes, rule scorer v4 (as blank_think). No accuracy and no decision is computed here
 (diag/analyze_sel_think.py).
-Rows: pid, status 'ok', set, question_type, n_visual, donor, m, sel {own, blank: indices}, n_sel {own, blank}, recon, extra
+Rows: pid, status 'ok', set, question_type, n_visual, donor, m, sel {blank: indices}, n_sel {blank, rand}, recon, extra
 {cond: extra_record}, answers, n_correct, acc_t1, greedy, answer_gt, code_version, cfg, timing. A question that raises or returns
 non-finite logits gets {pid, status: 'error', ...}. A ChunkError stops the run. Resume: only 'ok' rows of --out are skipped.
 Trial mode (--set trial) also writes OUT.memcheck.json for the ids file's memcheck question (the largest image): last_hidden over
-its own prompt + step1_cap padded tokens (the selection's prefill), and a few tokens generated after own prompt + step1_cap + the
+its blank prompt + step1_cap padded tokens (the selection's prefill), and a few tokens generated after blank prompt + step1_cap + the
 block of ALL its image tokens + Wait + think_extra (the longest planned context); peak memory. Not part of any result.
 
   python3 diag/sel_think.py --parquet PQ --out results/sel_think_0.jsonl [--set main|trial] [--ids diag/sel_think_ids.json]
@@ -54,8 +55,9 @@ from visref.dpp import budget, select_tokens  # noqa: E402
 from visref.engine import Engine, Request  # noqa: E402
 from visref.scoring import SCORER_VERSION  # noqa: E402
 
-CONDS = ('N_o', 'D_o', 'F_o', 'N_b', 'D_b', 'R_b', 'F_b', 'X_b')
-SLOT = {c: 'own' if c.endswith('_o') else 'blank' for c in CONDS}
+CONDS = ('N_b', 'D_b', 'R_b', 'F_b', 'X_b')
+SIDES = ('blank',)  # the own-prompt conditions were dropped before any run (EF 2026-10-24)
+SLOT = {c: 'blank' for c in CONDS}
 DEFAULTS = dict(think_extra=1024, vis_frac=0.3, probe_prompt='\n\n\\boxed', wait_text='Wait, think more', probe_cap=16, n_t1=3,
                 temperature=0.6, top_k=50, top_p=0.95, seed=42, cut_sep='\n', chunk=0, batch_tokens=72000, group=4, max_num=12,
                 step1_cap=1024)  # step1_cap: the stored first steps' cap (blank_think think_cap), memory check only
@@ -92,12 +94,12 @@ def stored_step(tok, s):
 
 
 def selections(it, eng, cfg):
-    """{'own', 'blank', 'rand'}: indices into V. sel_s from the last-layer states of z_1,s in its own context; rand = as many as
-    sel_blank, a function of pid only."""
+    """{'blank', 'rand'}: indices into V. sel_blank from the last-layer states of z_1,blank in its own context; rand = as many
+    as sel_blank, a function of pid only."""
     vis = it['vis']
     m = budget(vis.shape[0], cfg['vis_frac'])
     sel = {}
-    for s in ('own', 'blank'):
+    for s in SIDES:
         z = it['z'][s]
         Z = eng.last_hidden(torch.cat([it['prompt'][s], eng.embed(z)], 0), len(z)) if z else None
         sel[s] = [int(i) for i in select_tokens(vis, Z, m)] if z else []
@@ -108,10 +110,10 @@ def selections(it, eng, cfg):
 def contexts(it, eng, tok, sp):
     """{cond: context before the extra thinking} from it['prompt'], it['z'], it['sep'], it['sep_text'], it['vis'], it['vis_donor'],
     it['sel']. Every insertion is a v_block; no block when the step text is empty (methods.py: `if ... and z`)."""
-    pre = {s: torch.cat([it['prompt'][s], eng.embed(it['z'][s] + it['sep'][s])], 0) for s in ('own', 'blank')}
+    pre = {s: torch.cat([it['prompt'][s], eng.embed(it['z'][s] + it['sep'][s])], 0) for s in SIDES}
     vis, sel = it['vis'], it['sel']
     every = list(range(int(vis.shape[0])))
-    src = {'D_o': (vis, sel['own']), 'F_o': (vis, every), 'D_b': (vis, sel['blank']), 'R_b': (vis, sel['rand']), 'F_b': (vis, every),
+    src = {'D_b': (vis, sel['blank']), 'R_b': (vis, sel['rand']), 'F_b': (vis, every),
            'X_b': (it['vis_donor'], list(range(int(it['vis_donor'].shape[0]))))}
     wait = eng.embed(sp['wait'])
     out = {}
@@ -134,7 +136,7 @@ def run_group(items, eng, tok, sp, cfg, generate, timing=None):
     t = time.time()
     for it in items:
         it.update(z={}, sep={}, sep_text={}, extra={}, answers={}, nonfinite=[])
-        for s in ('own', 'blank'):
+        for s in SIDES:
             it['z'][s], it['sep'][s], it['sep_text'][s] = stored_step(tok, it['step1'][s])
         it['m'], it['sel'] = selections(it, eng, cfg)
         it['ctx'] = contexts(it, eng, tok, sp)
@@ -190,9 +192,9 @@ def row_out(it, cfg, version, set_name):
     n_correct = {c: sum(a['correct'] for a in ans[c] if not a['greedy']) for c in CONDS}
     return {'pid': it['pid'], 'status': 'ok', 'set': set_name, 'question_type': it['row'].get('question_type'),
             'n_visual': int(it['vis'].shape[0]), 'donor': it['donor'], 'm': it['m'],
-            'sel': {s: [int(i) for i in it['sel'][s]] for s in ('own', 'blank')},
-            'n_sel': {s: len(it['sel'][s]) for s in ('own', 'blank', 'rand')},
-            'recon': {s: {'n_z': len(it['z'][s]), 'n_sep': len(it['sep'][s]), 'end': it['step1'][s]['end']} for s in ('own', 'blank')},
+            'sel': {s: [int(i) for i in it['sel'][s]] for s in SIDES},
+            'n_sel': {s: len(it['sel'][s]) for s in SIDES + ('rand',)},
+            'recon': {s: {'n_z': len(it['z'][s]), 'n_sep': len(it['sep'][s]), 'end': it['step1'][s]['end']} for s in SIDES},
             'code_version': version, 'scorer_version': SCORER_VERSION, 'cfg': dict(cfg), 'extra': it['extra'], 'answers': ans,
             'n_correct': n_correct, 'acc_t1': {c: n_correct[c] / cfg['n_t1'] for c in CONDS},
             'greedy': {c: next(a['correct'] for a in ans[c] if a['greedy']) for c in CONDS}, 'answer_gt': it['row']['answer'],
@@ -236,7 +238,7 @@ def process_group(pids, make_item, eng, tok, sp, cfg, generate, version, set_nam
 
 
 def memory_check(it, eng, tok, sp, cfg, generate):
-    """Peak memory of the selection prefill (own prompt + step1_cap) and of the longest planned context (own prompt + step1_cap +
+    """Peak memory of the selection prefill (blank prompt + step1_cap) and of the longest planned context (blank prompt + step1_cap +
     block of all image tokens + Wait + think_extra), padded with text."""
     pad_ids = tok.encode('a b c ', add_special_tokens=False)
     pad = lambda n: (pad_ids * (n // len(pad_ids) + 1))[:n]  # noqa: E731
@@ -247,11 +249,11 @@ def memory_check(it, eng, tok, sp, cfg, generate):
         torch.cuda.synchronize()
         torch.cuda.reset_peak_memory_stats()
     t = time.time()
-    Z = eng.last_hidden(torch.cat([it['prompt']['own'], eng.embed(z1)], 0), len(z1))
+    Z = eng.last_hidden(torch.cat([it['prompt']['blank'], eng.embed(z1)], 0), len(z1))
     sel = select_tokens(vis, Z, budget(vis.shape[0], cfg['vis_frac']))
     t_hidden = time.time() - t
     block = v_block(eng, tok, sp, vis, list(range(int(vis.shape[0]))), tok.decode(z1), '')
-    ctx = torch.cat([it['prompt']['own'], eng.embed(z1), block, eng.embed(sp['wait']), eng.embed(z2)], 0)
+    ctx = torch.cat([it['prompt']['blank'], eng.embed(z1), block, eng.embed(sp['wait']), eng.embed(z2)], 0)
     t = time.time()
     g = torch.Generator(device=device_of(eng)).manual_seed(seed_of(cfg['seed'], it['pid'], 'memcheck'))
     r = generate([Request(ctx, frozenset({sp['eos']}), min(8, cfg['chunk']), g)])[0]

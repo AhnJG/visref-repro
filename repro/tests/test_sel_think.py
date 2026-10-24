@@ -41,10 +41,11 @@ def test_ids_file_equals_a_fresh_build_and_keeps_blank_thinks_lists_and_first_st
     d = json.loads(ids_mod.OUT.read_text())
     a = json.loads(ids_mod.ANALYSIS.read_text())
     b = json.loads(ids_mod.IDS.read_text())
-    assert d['main'] == a['analysis'] and len(d['main']) == 396 and d['trial'] == b['trial']
-    assert d['memcheck'] == b['memcheck'] == '865' and d['memcheck'] in d['trial'] and d['n_visual']['865'] == 3328
     rows = ids_mod.stored_rows(ids_mod.ROWS)
-    for p in d['main'][:3] + d['trial']:
+    assert d['main'] == [p for p in b['main'] if p in rows] and len(d['main']) == 724 and d['trial'] == b['trial']
+    assert set(a['analysis']) <= set(d['main'])
+    assert d['memcheck'] == b['memcheck'] == '865' and d['memcheck'] in d['trial'] and d['n_visual']['865'] == 3328
+    for p in d['main'][:3] + d['main'][-3:] + d['trial']:
         for s in ('own', 'blank'):
             assert d['step1'][p][s] == {k: rows[p]['step1'][s][k] for k in ('end', 'ids', 'sep_text')}
             assert len(d['step1'][p][s]['ids']) == rows[p]['step1'][s]['len']
@@ -68,7 +69,7 @@ def item(lm, pid='1', n=6, seed=0, z_own='abc', z_blank='xy', sep_blank='\n'):
 def prepared(lm, eng, **kw):
     it = item(lm, **kw)
     it['z'], it['sep'], it['sep_text'] = {}, {}, {}
-    for s in ('own', 'blank'):
+    for s in st.SIDES:
         it['z'][s], it['sep'][s], it['sep_text'][s] = st.stored_step(TOK, it['step1'][s])
     it['m'], it['sel'] = st.selections(it, eng, CFG)
     return it
@@ -80,9 +81,9 @@ def test_selections_follow_the_plan(lm):
     m = budget(10, 0.3)
     assert it['m'] == m == 3
     # Z = the last-layer states of the stored step in its own context (EF 1525, closed_multistep), not its input embeddings
-    for s, z in (('own', TOK.encode('abc')), ('blank', TOK.encode('xy'))):
-        Z = eng.last_hidden(torch.cat([it['prompt'][s], eng.embed(z)]), len(z))
-        assert Z.shape[0] == len(z) and it['sel'][s] == select_tokens(it['vis'], Z, m)
+    z = TOK.encode('xy')
+    Z = eng.last_hidden(torch.cat([it['prompt']['blank'], eng.embed(z)]), len(z))
+    assert Z.shape[0] == len(z) and it['sel']['blank'] == select_tokens(it['vis'], Z, m) and set(it['sel']) == {'blank', 'rand'}
     assert it['sel']['rand'] == t1.random_sel('1', 42, 10, len(it['sel']['blank'])) == sorted(it['sel']['rand'])
     # the random tokens depend on the pid only, not on the image or the step text
     other = prepared(lm, eng, n=10, seed=5, z_blank='qrstuv')
@@ -97,14 +98,12 @@ def test_contexts_follow_the_plan(lm):
     eng = Engine(lm)
     it = prepared(lm, eng, n=10)
     c = st.contexts(it, eng, TOK, SP)
-    po = torch.cat([it['prompt']['own'], eng.embed(TOK.encode('abc'))])
     pb = torch.cat([it['prompt']['blank'], eng.embed(TOK.encode('xy\n'))])
     w, v, s, e, nl = eng.embed(SP['wait']), it['vis'], it['sel'], eng.embed, TOK.encode('\n')
     # the closed_multistep block: a newline first only when the step text (+ separator) does not end with one
-    blk_o = lambda x: torch.cat([e(nl), e([SP['img_start']]), x, e([SP['img_end']] + nl)])  # noqa: E731  'abc' ends without \n
     blk_b = lambda x: torch.cat([e([SP['img_start']]), x, e([SP['img_end']] + nl)])  # noqa: E731  'xy' + '\n' ends with one
-    want = {'N_o': torch.cat([po, w]), 'D_o': torch.cat([po, blk_o(v[s['own']]), w]), 'F_o': torch.cat([po, blk_o(v), w]),
-            'N_b': torch.cat([pb, w]), 'D_b': torch.cat([pb, blk_b(v[s['blank']]), w]),
+    assert torch.equal(st.v_block(eng, TOK, SP, v, [0], 'abc', ''), torch.cat([e(nl), blk_b(v[[0]])]))  # no trailing \n
+    want = {'N_b': torch.cat([pb, w]), 'D_b': torch.cat([pb, blk_b(v[s['blank']]), w]),
             'R_b': torch.cat([pb, blk_b(v[s['rand']]), w]), 'F_b': torch.cat([pb, blk_b(v), w]),
             'X_b': torch.cat([pb, blk_b(it['vis_donor']), w])}
     assert set(c) == set(st.CONDS)
@@ -166,7 +165,7 @@ def test_a_non_finite_generation_gives_an_error_row(lm):
         its = [item(lm, '1'), item(lm, '2', seed=1)]
         st.run_group(its, eng, TOK, SP, CFG, gen)
         r1, r2 = st.row_out(its[0], CFG, 'v', 'main'), st.row_out(its[1], CFG, 'v', 'main')
-        assert r1['status'] == 'error' and r1['nonfinite'] == ['N_o'] and r2['status'] == 'ok'
+        assert r1['status'] == 'error' and r1['nonfinite'] == ['N_b'] and r2['status'] == 'ok'
     finally:
         torch.set_grad_enabled(True)
 
@@ -249,12 +248,13 @@ def test_main_end_to_end_with_a_stub_model_and_resume_skips_ok_rows_only(lm, tmp
 # ---- analysis -------------------------------------------------------------------------------------------------------
 def fake_row(pid, n, qt='free_form'):
     return {'pid': pid, 'status': 'ok', 'question_type': qt, 'code_version': 'v', 'scorer_version': 4, 'cfg': {'n_t1': 3},
-            'n_visual': 100, 'm': 30, 'n_sel': {'own': 20, 'blank': 25, 'rand': 25}, 'n_correct': n,
+            'n_visual': 100, 'm': 30, 'n_sel': {'blank': 25, 'rand': 25}, 'n_correct': n,
             'greedy': {c: int(n[c] >= 2) for c in an.CONDS}, 'extra': {c: {'end': 'cap', 'len': 5} for c in an.CONDS}}
 
 
-def rows_with(k_gate, k1, k2, k3, n=100, down=()):
-    """n rows; the first k_gate questions F_b > N_b, k1 D_b > N_b, k2 D_b > R_b, k3 D_o > N_o (3 vs 0 correct); a name in
+def rows_with(k_gate, k1, k2, k3=0, n=100, down=()):
+    """n rows; the first k_gate questions F_b > N_b, k1 D_b > N_b, k2 D_b > R_b (3 vs 0 correct; k3 is unused since P3 was
+    dropped); a name in
     `down` flips that comparison's direction."""
     out = {}
     for i in range(n):
@@ -268,8 +268,6 @@ def rows_with(k_gate, k1, k2, k3, n=100, down=()):
         if i >= 50 and i - 50 < k2:  # separate questions so P1 and P2 do not share changed questions
             v['D_b'], v['R_b'] = hi2, lo2
             v['N_b'] = v['F_b'] = v['D_b']  # no change for P1 or the gate on these questions
-        if i < k3:
-            v['D_o'], v['N_o'] = (0, 3) if 'P3' in down else (3, 0)
         out[str(i)] = fake_row(str(i), v)
     return out
 
@@ -285,13 +283,13 @@ def test_gate_failure_gives_no_selection_sentence():
 
 def test_decisions_up_down_not_with_holm():
     res = run_an(rows_with(30, 20, 20, 0))
-    assert res['gate']['passes'] and [res['decision'][k]['result'] for k in an.PRIMARY] == ['UP', 'UP', 'NOT']
+    assert res['gate']['passes'] and [res['decision'][k]['result'] for k in an.PRIMARY] == ['UP', 'UP']
     assert res['sentences'][0].startswith(an.SENTENCES['P1']['UP']) and '(P1 20 : 0)' in res['sentences'][0]
-    res = run_an(rows_with(30, 20, 20, 20, down=('P2', 'P3')))
-    assert [res['decision'][k]['result'] for k in an.PRIMARY] == ['UP', 'DOWN', 'DOWN']
-    # 5 : 0 has p = 0.0625 unadjusted: never passes; Holm makes the smallest of three p count three times
+    res = run_an(rows_with(30, 20, 20, 20, down=('P2',)))
+    assert [res['decision'][k]['result'] for k in an.PRIMARY] == ['UP', 'DOWN']
+    # 6 : 0 has p = 0.03125 unadjusted; Holm over two comparisons makes the smallest count twice: 0.0625, not a pass
     res = run_an(rows_with(30, 6, 0, 0))
-    assert res['primary']['P1']['p_sign'] < 0.05 and res['decision']['P1']['p_holm'] == pytest.approx(3 * 2 / 2 ** 6, abs=1e-6)
+    assert res['primary']['P1']['p_sign'] < 0.05 and res['decision']['P1']['p_holm'] == pytest.approx(2 * 2 / 2 ** 6, abs=1e-6)
     assert res['decision']['P1']['result'] == 'NOT'
 
 
@@ -317,20 +315,13 @@ def test_hold_on_missing_or_error_rows():
     assert an.analyze(R, {'analysis': list(R)})['sentences'] == [an.HOLD]
 
 
-def test_interaction_is_the_difference_of_the_two_paired_differences():
-    R = rows_with(30, 0, 0, 0)  # F_b - N_b = +30 pp of 100 questions; own side all zero
-    res = run_an(R)
-    ia = res['descriptive']['interactions']['(F_b-N_b)-(F_o-N_o)']
-    assert ia['mean_pp'] == pytest.approx(30.0) and ia['up'] == 30 and ia['down'] == 0
-
-
 def test_agreement_with_blank_think():
     R = rows_with(30, 0, 0, 0, n=4)
-    bt = {p: {'n_correct': {'N': 0, 'O': 3 if int(p) < 2 else 0, 'X': 0, 'A': 1}} for p in R}
+    bt = {p: {'n_correct': {'N': 0, 'O': 3 if int(p) < 2 else 0, 'X': 0}} for p in R}
     res = an.analyze(R, {'analysis': list(R)}, bt=bt)
     ag = res['descriptive']['blank_think_agreement']
     assert ag['F_b~O'] == {'n': 4, 'equal': 2, 'sum_here': 12, 'sum_blank_think': 6}
-    assert ag['N_o~A']['equal'] == 0 and ag['N_b~N']['equal'] == 4
+    assert 'N_o~A' not in ag and ag['N_b~N']['equal'] == 4
 
 
 # ---- builder --------------------------------------------------------------------------------------------------------

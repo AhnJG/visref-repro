@@ -1,9 +1,11 @@
 """Question lists and stored first steps of `sel_think` (plan docs/EXPERIMENT_FLOW.md 2026-10-24 "실행 전 계획: 선택 토큰 생성
 대조", written before any result). Chosen from blank_think's fixed lists only (no correctness).
 
-  main      blank_think's 396 analysis questions (diag/blank_think_analysis_ids.json 'analysis'), in that order; the run is
-            sharded by index (i % shard_total) and the analysed questions are a prefix of each shard, fixed from the trial's
-            timing before the main run (diag/analyze_blank_think.make_analysis_ids)
+  main      every question of blank_think's main order (diag/blank_think_ids.json 'main') that has an ok blank_think_main row
+            (724; its 396 analysis questions and the 328 it ran beyond them), in that order (EF 2026-10-24 second pre-run revision:
+            more questions in place of the own-prompt conditions). The run is sharded by index (i % shard_total) and the analysed
+            questions are a prefix of each shard, fixed from the trial's timing before the main run
+            (diag/analyze_blank_think.make_analysis_ids)
   trial     blank_think's 5 trial questions (diag/blank_think_ids.json 'trial')
   memcheck  blank_think's memory-check question (the largest image), in trial
   n_visual, donor   from diag/blank_think_ids.json
@@ -38,7 +40,8 @@ def stored_rows(paths):
 
 
 def build(ids, analysis, rows):
-    main, trial = [str(p) for p in analysis['analysis']], [str(p) for p in ids['trial']]
+    main, trial = [str(p) for p in ids['main'] if str(p) in rows], [str(p) for p in ids['trial']]
+    assert set(analysis['analysis']) <= set(main), 'blank_think analysis questions missing'
     pids = main + trial
     assert len(set(pids)) == len(pids), 'main and trial overlap'
     missing = [p for p in pids if p not in rows]
