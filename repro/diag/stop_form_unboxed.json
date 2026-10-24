@@ -1,0 +1,128 @@
+{
+ "files": [
+  "kaggle/runs/stop_form_main/output/results/stop_form_0.jsonl",
+  "kaggle/runs/stop_form_main/output/results/stop_form_1.jsonl"
+ ],
+ "ids_file": "diag/stop_form_analysis_ids.json",
+ "n_analysis": 126,
+ "data_mismatch": [],
+ "check_old_valid_value_changed": 0,
+ "counts": {
+  "n_free": 2016,
+  "valid_old": 1418,
+  "valid_new": 1938,
+  "invalid_new_cap": 53,
+  "invalid_new_no_value": 25,
+  "questions_all_free_invalid": 0
+ },
+ "decision_exploratory": {
+  "n": 126,
+  "k_lo": 7,
+  "k_hi": 21,
+  "r_lo": 0.0556,
+  "r_lo_ci95": [
+   0.0226,
+   0.1111
+  ],
+  "r_hi": 0.1667,
+  "r_hi_ci95": [
+   0.1062,
+   0.2434
+  ],
+  "stored_vs_F_val_lo": {
+   "stop_stop": 119,
+   "stop_cont": 4,
+   "cont_stop": 0,
+   "cont_cont": 3
+  },
+  "b_new_continue": 4,
+  "c_new_stop": 0,
+  "p_sign": 0.125,
+  "sentence": "이 표본으로는 자유 답 값 빈도 추정량으로 이어 가는 비율이 10%를 넘는지 정하지 못했다."
+ },
+ "n_continue": {
+  "stored": 3,
+  "F_val_lo": 7,
+  "F_val_hi": 21
+ },
+ "descriptive": {
+  "n": 126,
+  "n_continue": {
+   "stored": 3,
+   "H1": 3,
+   "S_tok": 3,
+   "S_val_lo": 0,
+   "S_val_hi": 1,
+   "F_val_lo": 7,
+   "F_val_hi": 21,
+   "F_sum": 126,
+   "F_tok": 95
+  },
+  "n_continue_first8_free": {
+   "F_val_lo": 9,
+   "F_val_hi": 24,
+   "F_sum": 126,
+   "F_tok": 95
+  },
+  "stored_vs": {
+   "H1": {
+    "stop_stop": 123,
+    "stop_cont": 0,
+    "cont_stop": 0,
+    "cont_cont": 3
+   },
+   "S_tok": {
+    "stop_stop": 123,
+    "stop_cont": 0,
+    "cont_stop": 0,
+    "cont_cont": 3
+   },
+   "F_val_lo": {
+    "stop_stop": 119,
+    "stop_cont": 4,
+    "cont_stop": 0,
+    "cont_cont": 3
+   },
+   "F_val_hi": {
+    "stop_stop": 105,
+    "stop_cont": 18,
+    "cont_stop": 0,
+    "cont_cont": 3
+   },
+   "F_sum": {
+    "stop_stop": 0,
+    "stop_cont": 123,
+    "cont_stop": 0,
+    "cont_cont": 3
+   },
+   "F_tok": {
+    "stop_stop": 30,
+    "stop_cont": 93,
+    "cont_stop": 1,
+    "cont_cont": 2
+   }
+  },
+  "median": {
+   "H1": 2e-05,
+   "S_tok": 2e-05,
+   "S_val_lo": 0.0,
+   "S_val_hi": 0.0,
+   "F_val_lo": 0.0,
+   "F_val_hi": 0.0,
+   "F_sum": 34.92767,
+   "F_tok": 0.45985
+  },
+  "short_invalid": 9,
+  "n_short": 2016,
+  "free_invalid": 78,
+  "free_cap": 53,
+  "free_no_box": 595,
+  "n_free": 2016,
+  "free_len_median": 72.0,
+  "n_questions_all_free_invalid": 0,
+  "majority_free_value_correct": {
+   "n": 126,
+   "correct": 94
+  }
+ }
+}
