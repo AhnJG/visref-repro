@@ -10,7 +10,7 @@ InternVL3.5-1B 모델과 MathVista *testmini* 1,000문항으로 다시 실험했
 - **TSR** (textual self-reflection, 텍스트 자기 성찰): 생각이 끝날 때마다 "Wait, think more"를 붙여, 답이 충분히 확실해질 때까지 다시 생각하게 합니다.
 - **VisRef**: TSR과 같지만, 다시 생각하기 전에 이미지의 일부를 골라 reinject(다시 넣기)해 줍니다. 논문이 제안한 방법입니다.
 
-> **상태 (2026-10-24):** 본 실험과 후속 실험 13개(A2–A4, A6–A15)가 끝났습니다. 원래 그림이 있는 문맥에서는 어떤 변형도 VisRef가 TSR보다 나은 것을 보이지 않았습니다(A1–A11). 프롬프트의 그림 자리가 회색 빈 그림일 때, 첫 thinking step 뒤에 이 문항 그림 전체를 다시 넣으면 정답률이 12.8%p 올랐고, 다른 문항 그림에서는 정답률 변화를 확인하지 못했습니다(A12, [REPORT 4.16절](REPORT.md#416-blank_think-does-a-re-inserted-image-raise-accuracy-when-the-image-slot-is-blank-rule-fixed-before-the-results)). 즉 그림 정보가 빠졌을 때는 다시 넣은 visual token이 생성에 쓰입니다. DPP 선택이 같은 수의 무작위 토큰보다 낫다는 근거는 없고, 빈 그림 문맥에서 둘을 비교하는 실행이 진행 중입니다. A13–A15(생각 뒤 그림 자리, 단계 상한 4,096, 자유 답으로 잰 멈춤 엔트로피)는 이 그림을 바꾸지 않았습니다([REPORT 4.17–4.19절](REPORT.md#417-slot_cross-after-generated-thinking-does-the-image-slot-of-the-prompt-still-matter-rule-fixed-before-the-results)). 지금까지 하지 않은 실험과 그 이유는 [REPORT 5.4절](REPORT.md#54-experiments-not-run)에 있습니다.
+> **상태 (2026-10-25):** 본 실험과 후속 실험 14개(A2–A4, A6–A16)가 끝났습니다. 원래 그림이 있는 문맥에서는 어떤 변형도 VisRef가 TSR보다 나은 것을 보이지 않았습니다(A1–A11). 프롬프트의 그림 자리가 회색 빈 그림일 때, 첫 thinking step 뒤에 이 문항 그림 전체를 다시 넣으면 정답률이 12.8%p 올랐고, 다른 문항 그림에서는 정답률 변화를 확인하지 못했습니다(A12, [REPORT 4.16절](REPORT.md#416-blank_think-does-a-re-inserted-image-raise-accuracy-when-the-image-slot-is-blank-rule-fixed-before-the-results)). 즉 그림 정보가 빠졌을 때는 다시 넣은 visual token이 생성에 쓰입니다. 같은 문맥에서 DPP 선택으로 고른 토큰만 넣어도 정답률이 6.9%p 올랐지만(좋아짐 99, 나빠짐 40), 같은 수의 무작위 토큰과의 차이는 확인하지 못했습니다(+2.0%p, 95% 신뢰구간 −0.9 ~ +4.8, 84 대 66; A16, [REPORT 4.20절](REPORT.md#420-sel_think-with-a-blank-image-slot-do-the-dpp-selected-image-tokens-raise-accuracy-rule-fixed-before-the-results)). A13–A15(생각 뒤 그림 자리, 단계 상한 4,096, 자유 답으로 잰 멈춤 엔트로피)는 이 그림을 바꾸지 않았습니다([REPORT 4.17–4.19절](REPORT.md#417-slot_cross-after-generated-thinking-does-the-image-slot-of-the-prompt-still-matter-rule-fixed-before-the-results)). 지금까지 하지 않은 실험과 그 이유는 [REPORT 5.4절](REPORT.md#54-experiments-not-run)에 있습니다.
 
 ## 읽는 순서
 
@@ -99,6 +99,7 @@ InternVL3.5-1B 모델과 MathVista *testmini* 1,000문항으로 다시 실험했
 | A13 | 생각을 생성한 뒤에도 프롬프트 그림 자리의 그림이 정답 확률을 바꾸나? | 생성 없이 확률만: 그림 자리(원래 / 빈 그림) × 생각 뒤 블록(없음 / 이 그림 / 빈 그림) | 396 | 관문 통과 못 함: +0.022(기준 0.05) | 정답률이 아니라 확률 |
 | A14 | 단계 상한을 1,024에서 4,096토큰으로 올리면 ST 정답률이 바뀌나? | 본 실험 코드를 두 상한으로 같은 문항에 실행 | 42 | ST 4,096 − 1,024: 0.0%p | 42문항 |
 | A15 | 멈춤 엔트로피를 자유 답 16개로 재면 스스로 끝낸 첫 step이 이어 가나? | 저장된 첫 thinking step에서 짧은 답 16개와 자유 답 16개 | 126 | 정하지 못함: 126 중 3 ~ 94 이어 감, 상자 없이 읽으면 7 ~ 21 | 우리가 정한 추정량 |
+| A16 | 그림 자리가 빈 그림일 때, DPP로 고른 visual token만 넣어도 정답률이 오르나? 같은 수의 무작위 토큰보다 더 오르나? | A12의 저장된 빈 그림 첫 thinking step에서 그림 없이 / DPP 선택 / 같은 수 무작위 / 그림 전체 / 다른 문항 그림 전체를 태그 블록으로 넣고 더 생각한 뒤 짧게 답함 | 724 | DPP − 없음: +6.9%p; DPP − 무작위: +2.0%p, 확인 못 함 | 인위적인 빈 그림 문맥 |
 <!-- /check -->
 
 ## 논문과 결과가 다를 수 있는 이유

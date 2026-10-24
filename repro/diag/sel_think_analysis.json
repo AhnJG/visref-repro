@@ -1,0 +1,376 @@
+{
+ "files": [
+  "kaggle/runs/sel_think_main_a/output/results/sel_think_0.jsonl",
+  "kaggle/runs/sel_think_main_a/output/results/sel_think_1.jsonl",
+  "kaggle/runs/sel_think_main_b/output/results/sel_think_2.jsonl",
+  "kaggle/runs/sel_think_main_b/output/results/sel_think_3.jsonl"
+ ],
+ "ids_file": "diag/sel_think_analysis_ids.json",
+ "coverage": {
+  "n_analysis": 724,
+  "n_used": 724,
+  "n_rows": 724,
+  "n_outside_analysis": 0,
+  "errors": [],
+  "n_missing": 0,
+  "code_versions": [
+   "54c769d6b1cf"
+  ],
+  "scorer_versions": [
+   "v4_mc_empty_wrong"
+  ]
+ },
+ "n_t1": 3,
+ "gate_pp": 5.0,
+ "gate": {
+  "F_b-N_b": {
+   "n": 724,
+   "mean_pp": 15.9761,
+   "ci95_pp": [
+    12.8913,
+    19.1989
+   ],
+   "up": 170,
+   "down": 39,
+   "same": 515,
+   "p_sign": 0.0
+  },
+  "passes": true
+ },
+ "primary": {
+  "P1": {
+   "n": 724,
+   "mean_pp": 6.86,
+   "ci95_pp": [
+    4.2818,
+    9.4843
+   ],
+   "up": 99,
+   "down": 40,
+   "same": 585,
+   "p_sign": 1e-06
+  },
+  "P2": {
+   "n": 724,
+   "mean_pp": 1.9797,
+   "ci95_pp": [
+    -0.8748,
+    4.7882
+   ],
+   "up": 84,
+   "down": 66,
+   "same": 574,
+   "p_sign": 0.164907
+  }
+ },
+ "decision": {
+  "P1": {
+   "result": "UP",
+   "p_holm": 1e-06
+  },
+  "P2": {
+   "result": "NOT",
+   "p_holm": 0.164907
+  }
+ },
+ "sentences": [
+  "빈 그림 문맥에서, VisRef 선택(DPP)으로 고른 토큰만 다시 넣어도 생성을 거친 정답률이 올랐다(탐색). (P1 99 : 40)",
+  "빈 그림 문맥에서 DPP 선택과 같은 수 무작위 선택의 정답률 차이는 확인하지 못했다. (P2 84 : 66)"
+ ],
+ "descriptive": {
+  "accuracy_pct": {
+   "N_b": 33.1031,
+   "D_b": 39.9632,
+   "R_b": 37.9834,
+   "F_b": 49.0792,
+   "X_b": 32.7348
+  },
+  "pairs": {
+   "F_b-D_b": {
+    "n": 724,
+    "mean_pp": 9.116,
+    "ci95_pp": [
+     6.1694,
+     12.0626
+    ],
+    "up": 129,
+    "down": 57,
+    "same": 538,
+    "p_sign": 0.0
+   },
+   "R_b-N_b": {
+    "n": 724,
+    "mean_pp": 4.8803,
+    "ci95_pp": [
+     2.6243,
+     7.1823
+    ],
+    "up": 79,
+    "down": 40,
+    "same": 605,
+    "p_sign": 0.000445
+   },
+   "X_b-N_b": {
+    "n": 724,
+    "mean_pp": -0.3683,
+    "ci95_pp": [
+     -1.9797,
+     1.1971
+    ],
+    "up": 37,
+    "down": 34,
+    "same": 653,
+    "p_sign": 0.812589
+   },
+   "F_b-X_b": {
+    "n": 724,
+    "mean_pp": 16.3444,
+    "ci95_pp": [
+     13.3517,
+     19.4291
+    ],
+    "up": 167,
+    "down": 40,
+    "same": 517,
+    "p_sign": 0.0
+   }
+  },
+  "greedy": {
+   "F_b-N_b": {
+    "n": 724,
+    "mean_pp": 16.4365,
+    "ci95_pp": [
+     13.2597,
+     19.7514
+    ],
+    "up": 141,
+    "down": 22,
+    "same": 561,
+    "p_sign": 0.0
+   },
+   "P1": {
+    "n": 724,
+    "mean_pp": 6.6298,
+    "ci95_pp": [
+     4.0055,
+     9.2541
+    ],
+    "up": 72,
+    "down": 24,
+    "same": 628,
+    "p_sign": 1e-06
+   },
+   "P2": {
+    "n": 724,
+    "mean_pp": 2.6243,
+    "ci95_pp": [
+     -0.2762,
+     5.663
+    ],
+    "up": 69,
+    "down": 50,
+    "same": 605,
+    "p_sign": 0.098524
+   },
+   "F_b-D_b": {
+    "n": 724,
+    "mean_pp": 9.8066,
+    "ci95_pp": [
+     6.768,
+     12.9834
+    ],
+    "up": 103,
+    "down": 32,
+    "same": 589,
+    "p_sign": 0.0
+   },
+   "R_b-N_b": {
+    "n": 724,
+    "mean_pp": 4.0055,
+    "ci95_pp": [
+     1.6575,
+     6.3536
+    ],
+    "up": 54,
+    "down": 25,
+    "same": 645,
+    "p_sign": 0.001466
+   },
+   "X_b-N_b": {
+    "n": 724,
+    "mean_pp": -0.6906,
+    "ci95_pp": [
+     -2.4862,
+     0.9669
+    ],
+    "up": 18,
+    "down": 23,
+    "same": 683,
+    "p_sign": 0.532709
+   },
+   "F_b-X_b": {
+    "n": 724,
+    "mean_pp": 17.1271,
+    "ci95_pp": [
+     13.9503,
+     20.442
+    ],
+    "up": 145,
+    "down": 21,
+    "same": 558,
+    "p_sign": 0.0
+   }
+  },
+  "selection": {
+   "median_m": 537.0,
+   "median_n_sel_blank": 360.5,
+   "n_sel_below_m_blank": 330,
+   "median_share_of_V_blank": 0.2969
+  },
+  "extra_ends": {
+   "N_b": {
+    "cap": 393,
+    "close": 331,
+    "median_len": 1024.0
+   },
+   "D_b": {
+    "cap": 469,
+    "close": 255,
+    "median_len": 1024.0
+   },
+   "R_b": {
+    "cap": 439,
+    "close": 285,
+    "median_len": 1024.0
+   },
+   "F_b": {
+    "cap": 483,
+    "close": 241,
+    "median_len": 1024.0
+   },
+   "X_b": {
+    "cap": 402,
+    "close": 322,
+    "median_len": 1024.0
+   }
+  },
+  "by_question_type": {
+   "free_form": {
+    "n": 325,
+    "accuracy_pct": {
+     "N_b": 8.0,
+     "D_b": 23.6923,
+     "R_b": 17.4359,
+     "F_b": 36.2051,
+     "X_b": 8.0
+    },
+    "pairs": {
+     "F_b-N_b": {
+      "n": 325,
+      "mean_pp": 28.2051,
+      "ci95_pp": [
+       23.2821,
+       33.1282
+      ],
+      "up": 108,
+      "down": 6,
+      "same": 211,
+      "p_sign": 0.0
+     },
+     "P1": {
+      "n": 325,
+      "mean_pp": 15.6923,
+      "ci95_pp": [
+       11.5897,
+       19.8974
+      ],
+      "up": 59,
+      "down": 6,
+      "same": 260,
+      "p_sign": 0.0
+     },
+     "P2": {
+      "n": 325,
+      "mean_pp": 6.2564,
+      "ci95_pp": [
+       1.5385,
+       11.0769
+      ],
+      "up": 45,
+      "down": 27,
+      "same": 253,
+      "p_sign": 0.044371
+     }
+    }
+   },
+   "multi_choice": {
+    "n": 399,
+    "accuracy_pct": {
+     "N_b": 53.5505,
+     "D_b": 53.2164,
+     "R_b": 54.7201,
+     "F_b": 59.5656,
+     "X_b": 52.8822
+    },
+    "pairs": {
+     "F_b-N_b": {
+      "n": 399,
+      "mean_pp": 6.015,
+      "ci95_pp": [
+       2.4227,
+       9.7744
+      ],
+      "up": 62,
+      "down": 33,
+      "same": 304,
+      "p_sign": 0.003833
+     },
+     "P1": {
+      "n": 399,
+      "mean_pp": -0.3342,
+      "ci95_pp": [
+       -3.2581,
+       2.6734
+      ],
+      "up": 40,
+      "down": 34,
+      "same": 325,
+      "p_sign": 0.561381
+     },
+     "P2": {
+      "n": 399,
+      "mean_pp": -1.5038,
+      "ci95_pp": [
+       -4.8454,
+       1.8379
+      ],
+      "up": 39,
+      "down": 39,
+      "same": 321,
+      "p_sign": 1.0
+     }
+    }
+   }
+  },
+  "blank_think_agreement": {
+   "N_b~N": {
+    "n": 724,
+    "equal": 673,
+    "sum_here": 719,
+    "sum_blank_think": 734
+   },
+   "F_b~O": {
+    "n": 724,
+    "equal": 577,
+    "sum_here": 1066,
+    "sum_blank_think": 1018
+   },
+   "X_b~X": {
+    "n": 724,
+    "equal": 667,
+    "sum_here": 711,
+    "sum_blank_think": 716
+   }
+  }
+ }
+}

@@ -1,0 +1,50 @@
+{"event": "start", "code_version": "54c769d6b1cf", "set": "main", "todo": 181, "done": 0, "cfg": {"think_extra": 1024, "vis_frac": 0.3, "probe_prompt": "\n\n\\boxed", "wait_text": "Wait, think more", "probe_cap": 16, "n_t1": 3, "temperature": 0.6, "top_k": 50, "top_p": 0.95, "seed": 42, "cut_sep": "\n", "chunk": 1024, "batch_tokens": 72000, "group": 4, "max_num": 12, "step1_cap": 1024}}
+FlashAttention2 is not installed.
+{"event": "fast_kv_check", "ok": true, "match_rows": [true, true]}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 6.7, "select_s": 6.3, "extra_s": 170.0, "answers_s": 83.3, "group_s": 266.3, "elapsed": 311, "left": 177, "peak_alloc_gb": 10.81, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 9.7, "select_s": 8.1, "extra_s": 157.2, "answers_s": 92.1, "group_s": 267.1, "elapsed": 578, "left": 173, "peak_alloc_gb": 10.91, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 10.5, "select_s": 8.4, "extra_s": 213.1, "answers_s": 106.6, "group_s": 338.6, "elapsed": 917, "left": 169, "peak_alloc_gb": 10.92, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 5.9, "select_s": 5.1, "extra_s": 142.3, "answers_s": 68.2, "group_s": 221.5, "elapsed": 1138, "left": 165, "peak_alloc_gb": 10.65, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 2.6, "select_s": 2.4, "extra_s": 97.6, "answers_s": 36.6, "group_s": 139.3, "elapsed": 1278, "left": 161, "peak_alloc_gb": 10.68, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 11.2, "select_s": 9.0, "extra_s": 219.8, "answers_s": 110.3, "group_s": 350.4, "elapsed": 1628, "left": 157, "peak_alloc_gb": 10.94, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 4.7, "select_s": 4.2, "extra_s": 76.6, "answers_s": 51.6, "group_s": 137.1, "elapsed": 1765, "left": 153, "peak_alloc_gb": 10.71, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 4.2, "select_s": 4.0, "extra_s": 119.8, "answers_s": 59.3, "group_s": 187.3, "elapsed": 1952, "left": 149, "peak_alloc_gb": 10.51, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 9.3, "select_s": 8.0, "extra_s": 146.4, "answers_s": 86.9, "group_s": 250.6, "elapsed": 2203, "left": 145, "peak_alloc_gb": 10.79, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 8.2, "select_s": 7.9, "extra_s": 185.4, "answers_s": 98.1, "group_s": 299.5, "elapsed": 2502, "left": 141, "peak_alloc_gb": 10.84, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 10.9, "select_s": 8.8, "extra_s": 155.3, "answers_s": 100.0, "group_s": 275.0, "elapsed": 2778, "left": 137, "peak_alloc_gb": 10.97, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 9.6, "select_s": 9.7, "extra_s": 176.3, "answers_s": 99.9, "group_s": 295.4, "elapsed": 3073, "left": 133, "peak_alloc_gb": 10.88, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 11.9, "select_s": 10.2, "extra_s": 221.6, "answers_s": 121.4, "group_s": 365.2, "elapsed": 3438, "left": 129, "peak_alloc_gb": 10.99, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 2.9, "select_s": 3.0, "extra_s": 121.5, "answers_s": 41.8, "group_s": 169.2, "elapsed": 3607, "left": 125, "peak_alloc_gb": 10.67, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 11.2, "select_s": 8.9, "extra_s": 143.2, "answers_s": 102.6, "group_s": 265.9, "elapsed": 3873, "left": 121, "peak_alloc_gb": 10.93, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 7.3, "select_s": 5.5, "extra_s": 140.1, "answers_s": 75.2, "group_s": 228.0, "elapsed": 4101, "left": 117, "peak_alloc_gb": 10.74, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 7.7, "select_s": 6.9, "extra_s": 152.7, "answers_s": 81.8, "group_s": 249.2, "elapsed": 4350, "left": 113, "peak_alloc_gb": 10.79, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 8.9, "select_s": 6.6, "extra_s": 124.9, "answers_s": 74.2, "group_s": 214.7, "elapsed": 4565, "left": 109, "peak_alloc_gb": 10.82, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 5.7, "select_s": 5.1, "extra_s": 139.7, "answers_s": 64.3, "group_s": 214.9, "elapsed": 4780, "left": 105, "peak_alloc_gb": 10.61, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 10.8, "select_s": 8.6, "extra_s": 163.0, "answers_s": 99.2, "group_s": 281.6, "elapsed": 5061, "left": 101, "peak_alloc_gb": 10.9, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 6.8, "select_s": 6.4, "extra_s": 142.2, "answers_s": 71.8, "group_s": 227.2, "elapsed": 5289, "left": 97, "peak_alloc_gb": 10.65, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 8.8, "select_s": 6.8, "extra_s": 131.2, "answers_s": 72.0, "group_s": 218.9, "elapsed": 5508, "left": 93, "peak_alloc_gb": 10.77, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 8.9, "select_s": 7.2, "extra_s": 157.8, "answers_s": 90.2, "group_s": 264.1, "elapsed": 5772, "left": 89, "peak_alloc_gb": 10.8, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 9.5, "select_s": 8.1, "extra_s": 160.0, "answers_s": 94.5, "group_s": 272.2, "elapsed": 6044, "left": 85, "peak_alloc_gb": 10.85, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 5.7, "select_s": 5.5, "extra_s": 165.4, "answers_s": 79.2, "group_s": 255.7, "elapsed": 6300, "left": 81, "peak_alloc_gb": 10.76, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 5.6, "select_s": 4.9, "extra_s": 126.8, "answers_s": 57.8, "group_s": 195.1, "elapsed": 6495, "left": 77, "peak_alloc_gb": 10.4, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 12.1, "select_s": 10.0, "extra_s": 231.8, "answers_s": 127.2, "group_s": 381.1, "elapsed": 6876, "left": 73, "peak_alloc_gb": 11.06, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 4.7, "select_s": 3.8, "extra_s": 128.7, "answers_s": 55.6, "group_s": 192.9, "elapsed": 7069, "left": 69, "peak_alloc_gb": 10.69, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 8.6, "select_s": 7.7, "extra_s": 147.6, "answers_s": 84.3, "group_s": 248.2, "elapsed": 7317, "left": 65, "peak_alloc_gb": 10.83, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 7.2, "select_s": 5.7, "extra_s": 154.4, "answers_s": 73.4, "group_s": 240.8, "elapsed": 7558, "left": 61, "peak_alloc_gb": 10.82, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 9.3, "select_s": 7.8, "extra_s": 174.4, "answers_s": 96.0, "group_s": 287.4, "elapsed": 7845, "left": 57, "peak_alloc_gb": 10.86, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 7.1, "select_s": 6.0, "extra_s": 148.0, "answers_s": 77.0, "group_s": 238.1, "elapsed": 8083, "left": 53, "peak_alloc_gb": 10.87, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 10.4, "select_s": 9.1, "extra_s": 162.3, "answers_s": 99.9, "group_s": 281.8, "elapsed": 8365, "left": 49, "peak_alloc_gb": 10.74, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 10.4, "select_s": 8.9, "extra_s": 223.9, "answers_s": 111.3, "group_s": 354.5, "elapsed": 8719, "left": 45, "peak_alloc_gb": 10.96, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 8.5, "select_s": 8.2, "extra_s": 179.5, "answers_s": 94.1, "group_s": 290.3, "elapsed": 9010, "left": 41, "peak_alloc_gb": 10.85, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 4.7, "select_s": 3.5, "extra_s": 116.9, "answers_s": 52.7, "group_s": 177.8, "elapsed": 9187, "left": 37, "peak_alloc_gb": 10.66, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 8.0, "select_s": 7.1, "extra_s": 196.4, "answers_s": 91.5, "group_s": 303.0, "elapsed": 9490, "left": 33, "peak_alloc_gb": 10.84, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 6.2, "select_s": 4.7, "extra_s": 132.6, "answers_s": 64.7, "group_s": 208.2, "elapsed": 9699, "left": 29, "peak_alloc_gb": 10.7, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 8.4, "select_s": 6.6, "extra_s": 162.6, "answers_s": 86.1, "group_s": 263.7, "elapsed": 9962, "left": 25, "peak_alloc_gb": 10.77, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 8.8, "select_s": 7.2, "extra_s": 164.2, "answers_s": 92.9, "group_s": 273.0, "elapsed": 10235, "left": 21, "peak_alloc_gb": 10.84, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 9.9, "select_s": 8.3, "extra_s": 144.4, "answers_s": 89.2, "group_s": 251.8, "elapsed": 10487, "left": 17, "peak_alloc_gb": 10.82, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 7.2, "select_s": 5.5, "extra_s": 153.8, "answers_s": 75.7, "group_s": 242.2, "elapsed": 10729, "left": 13, "peak_alloc_gb": 10.84, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 7.2, "select_s": 5.1, "extra_s": 136.2, "answers_s": 64.6, "group_s": 213.1, "elapsed": 10942, "left": 9, "peak_alloc_gb": 10.75, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 8.4, "select_s": 7.2, "extra_s": 160.5, "answers_s": 84.6, "group_s": 260.7, "elapsed": 11203, "left": 5, "peak_alloc_gb": 10.53, "max_rss_gb": 5.94}
+{"event": "group", "n": 4, "n_error": 0, "encode_s": 9.0, "select_s": 7.4, "extra_s": 128.9, "answers_s": 86.7, "group_s": 232.0, "elapsed": 11435, "left": 1, "peak_alloc_gb": 10.62, "max_rss_gb": 5.94}
+{"event": "group", "n": 1, "n_error": 0, "encode_s": 3.5, "select_s": 2.8, "extra_s": 69.5, "answers_s": 37.0, "group_s": 112.8, "elapsed": 11548, "left": 0, "peak_alloc_gb": 10.54, "max_rss_gb": 5.94}
+{"event": "end", "elapsed": 11548, "n_error": 0, "peak_alloc_gb": 11.06, "max_rss_gb": 5.94}
