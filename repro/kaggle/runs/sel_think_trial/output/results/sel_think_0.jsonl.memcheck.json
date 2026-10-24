@@ -1,0 +1,12 @@
+{
+ "pid": "865",
+ "n_visual": 3328,
+ "last_hidden_n": 1024,
+ "n_sel": 703,
+ "ctx_len": 8890,
+ "generated_tokens": 8,
+ "last_hidden_s": 3.15,
+ "generate_s": 3.02,
+ "peak_alloc_gb": 4.5,
+ "peak_reserved_gb": 10.68
+}
