@@ -10,7 +10,7 @@ InternVL3.5-1B 모델과 MathVista *testmini* 1,000문항으로 다시 실험했
 - **TSR** (textual self-reflection, 텍스트 자기 성찰): 생각이 끝날 때마다 "Wait, think more"를 붙여, 답이 충분히 확실해질 때까지 다시 생각하게 합니다.
 - **VisRef**: TSR과 같지만, 다시 생각하기 전에 이미지의 일부를 골라 reinject(다시 넣기)해 줍니다. 논문이 제안한 방법입니다.
 
-> **상태 (2026-10-25):** 본 실험과 후속 실험 14개(A2–A4, A6–A16)가 끝났습니다. 원래 그림이 있는 문맥에서는 어떤 변형도 VisRef가 TSR보다 나은 것을 보이지 않았습니다(A1–A11). 프롬프트의 그림 자리가 회색 빈 그림일 때, 첫 thinking step 뒤에 이 문항 그림 전체를 다시 넣으면 정답률이 12.8%p 올랐고, 다른 문항 그림에서는 정답률 변화를 확인하지 못했습니다(A12, [REPORT 4.16절](REPORT.md#416-blank_think-does-a-re-inserted-image-raise-accuracy-when-the-image-slot-is-blank-rule-fixed-before-the-results)). 즉 그림 정보가 빠졌을 때는 다시 넣은 visual token이 생성에 쓰입니다. 같은 문맥에서 DPP 선택으로 고른 토큰만 넣어도 정답률이 6.9%p 올랐지만(좋아짐 99, 나빠짐 40), 같은 수의 무작위 토큰과의 차이는 확인하지 못했습니다(+2.0%p, 95% 신뢰구간 −0.9 ~ +4.8, 84 대 66; A16, [REPORT 4.20절](REPORT.md#420-sel_think-with-a-blank-image-slot-do-the-dpp-selected-image-tokens-raise-accuracy-rule-fixed-before-the-results)). A13–A15(생각 뒤 그림 자리, 단계 상한 4,096, 자유 답으로 잰 멈춤 엔트로피)는 이 그림을 바꾸지 않았습니다([REPORT 4.17–4.19절](REPORT.md#417-slot_cross-after-generated-thinking-does-the-image-slot-of-the-prompt-still-matter-rule-fixed-before-the-results)). 지금까지 하지 않은 실험과 그 이유는 [REPORT 5.4절](REPORT.md#54-experiments-not-run)에 있습니다.
+> **상태 (2026-10-25):** 본 실험과 후속 실험 14개(A2–A4, A6–A16)가 끝났습니다. 원래 그림이 있는 문맥에서는 어떤 변형도 VisRef가 TSR보다 나은 것을 보이지 않았습니다(A1–A11). 프롬프트의 그림 자리가 회색 빈 그림일 때, 첫 thinking step 뒤에 이 문항 그림 전체를 다시 넣으면 정답률이 12.8%p 올랐고, 다른 문항 그림에서는 정답률 변화를 확인하지 못했습니다(A12, [REPORT 4.16절](REPORT.md#416-blank_think-does-a-re-inserted-image-raise-accuracy-when-the-image-slot-is-blank-rule-fixed-before-the-results)). 즉 그림 정보가 빠졌을 때는 다시 넣은 visual token이 생성에 쓰입니다. 같은 문맥에서 DPP 선택으로 고른 토큰만 넣어도 정답률이 6.9%p 올랐지만(좋아짐 99, 나빠짐 40), 같은 수의 무작위 토큰과의 차이는 확인하지 못했습니다(+2.0%p, 95% 신뢰구간 −0.9 ~ +4.8, 84 대 66; A16, [REPORT 4.20절](REPORT.md#420-sel_think-with-a-blank-image-slot-do-the-dpp-selected-image-tokens-raise-accuracy-rule-fixed-before-the-results)). A13–A15(생각 뒤 그림 자리, 단계 상한 4,096, 자유 답으로 잰 멈춤 엔트로피)는 이 그림을 바꾸지 않았습니다([REPORT 4.17–4.19절](REPORT.md#417-slot_cross-after-generated-thinking-does-the-image-slot-of-the-prompt-still-matter-rule-fixed-before-the-results)). 지금은 추가 실험을 멈춘 상태이며, 논문이 밝히지 않은 설정([REPORT 5.3절](REPORT.md#53-open-questions-about-the-papers-setup))에 대한 새 정보가 생기면 이어 갑니다. 지금까지 하지 않은 실험과 그 이유는 [REPORT 5.4절](REPORT.md#54-experiments-not-run)에 있습니다.
 
 ## 읽는 순서
 
@@ -106,7 +106,7 @@ InternVL3.5-1B 모델과 MathVista *testmini* 1,000문항으로 다시 실험했
 
 먼저 우리 구현의 차이를 의심합니다([REPORT 4.1절](REPORT.md#41-cause-analysis-after-the-results)).
 
-- **visual token 수:** 논문이 정한 수(m)의 약 1/5만 reinject했습니다. 텍스트 토큰을 모델의 입력 임베딩으로 읽으면(우리의 해석이며 논문은 층을 밝히지 않음) 선택 커널의 랭크가 m보다 작고, 논문이 인용한 greedy 선택이 거기서 멈추기 때문입니다. A2, A4, A6에서 이를 피하는 방법을 시험했고, 어느 것도 TSR보다 나은 효과가 검출되지 않았습니다. 이후 후속 실험(A11과 진행 중인 실행)은 2026-10-17 결정대로 생각 글의 마지막 층 값으로 고릅니다.
+- **visual token 수:** 논문이 정한 수(m)의 약 1/5만 reinject했습니다. 텍스트 토큰을 모델의 입력 임베딩으로 읽으면(우리의 해석이며 논문은 층을 밝히지 않음) 선택 커널의 랭크가 m보다 작고, 논문이 인용한 greedy 선택이 거기서 멈추기 때문입니다. A2, A4, A6에서 이를 피하는 방법을 시험했고, 어느 것도 TSR보다 나은 효과가 검출되지 않았습니다. 이후 후속 실험(A11과 A16)은 2026-10-17 결정대로 생각 글의 마지막 층 값으로 고릅니다.
 - **우리가 정한 설정:** 멈추는 시점 계산법, 이미지를 넣는 형식, 토큰 상한, 답 추출 방법은 논문에 없어 작은 시험으로 정했습니다. 이 시험에 쓴 문항은 최종 1,000문항에도 들어 있습니다.
 - **높은 정확도:** 우리 정확도가 논문보다 8~12%p 높고(우리 57.8 / 60.1 / 60.0 %, 논문 46.1 / 48.5 / 52.0 %), InternVL3.5-1B 공식 점수에 가깝습니다. 이유는 밝히지 못했습니다.
 - **한 가지 조건:** 모델 크기 하나, 벤치마크 하나, 시드 하나입니다.

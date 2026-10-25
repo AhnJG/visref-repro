@@ -22,7 +22,8 @@ InternVL3.5-1B on the 1,000 MathVista *testmini* questions. Three methods are co
 > was not confirmed (+2.0 pp, 95% CI −0.9 to +4.8; 84 : 66; A16, [REPORT, Section 4.20](REPORT.md#420-sel_think-with-a-blank-image-slot-do-the-dpp-selected-image-tokens-raise-accuracy-rule-fixed-before-the-results)). A13–A15 (image slot after
 > thinking, a 4,096-token step limit, a stopping estimate from free answers) did not change this picture
 > ([REPORT, Sections 4.17–4.19](REPORT.md#417-slot_cross-after-generated-thinking-does-the-image-slot-of-the-prompt-still-matter-rule-fixed-before-the-results)).
-> What has not been run, and why, is in [REPORT, Section 5.4](REPORT.md#54-experiments-not-run).
+> Experiments are paused for now; they will continue if new information on the settings the paper does not state
+> ([REPORT, Section 5.3](REPORT.md#53-open-questions-about-the-papers-setup)) becomes available. What has not been run, and why, is in [REPORT, Section 5.4](REPORT.md#54-experiments-not-run).
 > Full report: **[REPORT.md](REPORT.md)**.
 
 ## How to read this repository
@@ -142,7 +143,7 @@ We look for the cause in our implementation first ([REPORT, Section 4.1](REPORT.
 - **Fewer image tokens.** We re-insert about one fifth of the paper's m image tokens per step: with text token
   embeddings read as the model's input embeddings (our reading; the paper does not name the layer), the selection kernel
   has rank below m, and the greedy selection the paper cites stops there. A2, A4 and A6 tried ways around it; none showed a detectable gain over TSR.
-  Later follow-ups (A11 and the run in progress) select with the last-layer values of the thinking text, as decided on 2026-10-17.
+  Later follow-ups (A11 and A16) select with the last-layer values of the thinking text, as decided on 2026-10-17.
 - **Our own settings.** The paper does not state how the stopping entropy is estimated, how the image is inserted,
   the token limits or how answers are extracted; we chose these in small checks ([REPORT, Section 2.6](REPORT.md#26-setting-checks-how-the-unstated-settings-were-chosen)).
   Those checks used questions that are also among the 1,000 evaluated ones.

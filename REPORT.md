@@ -787,7 +787,7 @@ Details that the paper and the works it cites leave open, and that we set oursel
 
 ### 5.4 Experiments not run
 
-These experiments were planned or considered and have not been run (status of 2026-10-25, after A16; entries of 2026-10-18 to 2026-10-25 in `docs/EXPERIMENT_FLOW.md`). Further experiments are still being considered; any new one will get its decision rule before it runs.
+These experiments were planned or considered and have not been run (status of 2026-10-25, after A16; entries of 2026-10-18 to 2026-10-25 in `docs/EXPERIMENT_FLOW.md`). GPU experiments stopped after A16 (2026-10-25). The experiments in this table will be reconsidered if new information on the settings listed in Section 5.3 becomes available, and any new one will get its decision rule before it runs.
 
 | Experiment | Why it was not run |
 |---|---|
@@ -801,7 +801,7 @@ These experiments were planned or considered and have not been run (status of 20
 | A11 on the remaining 222 of the 334 closed questions | The interim rule fixed before the results stopped the run at 112 questions (0 questions where V and T differed; Section 4.15). |
 | A11 with random image tokens, or with more than four steps | Not run; with no question changed at four steps there was no gain to attribute to the selection. |
 | The same implementation on InternVL3.5-8B (the paper's Table 1 row) | On two T4 GPUs the 8B model has to be split over both cards; with the earlier code a run of two questions per method (R31) was still incomplete after about 3,834 s (entry of 2026-10-07), and no larger GPU was used. A review before running (2026-10-24) also found little room and power: the paper's ST is about 10 pp below the official 8B score (68.1 against 78.4), as its 1B ST is about 13 pp below ours and the official score, so our 8B ST would likely lie near the paper's VisRef; and about 320 paired questions would still detect only about 5–8 pp. |
-| Matching the paper's operating point (an evaluation setting that gives ST 46.1 %) | Counting unfinished answers wrong already brings our ST and TSR near the paper's, and VisRef − TSR stays between −0.9 and +1.0 pp under all four answer-handling variants (Section 4.4). |
+| Matching the paper's operating point (an evaluation setting that gives ST 46.1 %) | Counting unfinished answers wrong already brings our ST and TSR near the paper's, and VisRef − TSR stays between −0.9 and +1.0 pp under all four answer-handling variants (Section 4.4). These variants change only the scoring, not the generation; matching the generation would need the paper's step limit and its handling of cut steps, which it does not state, and several 1,000-question reruns. |
 | A14 on more questions; A15 with more questions under the same validity rule | Fixed in advance for A14 (no change confirmed); for A15 the box requirement, not the sample size, kept the decision open. |
 
 ## 6. Limitations
