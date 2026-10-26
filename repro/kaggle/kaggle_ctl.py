@@ -3,7 +3,7 @@
   python3 repro/kaggle/kaggle_ctl.py push NAME
   python3 repro/kaggle/kaggle_ctl.py status NAME
   python3 repro/kaggle/kaggle_ctl.py pull NAME
-Credentials: <repo>/kaggle.json (never printed).
+Credentials: <repo>/kaggle.json if present, else the Kaggle default ~/.kaggle/kaggle.json (never printed).
 """
 import json
 import os
@@ -16,7 +16,8 @@ ROOT = HERE.parent.parent
 
 
 def api():
-    os.environ['KAGGLE_CONFIG_DIR'] = str(ROOT)
+    if (ROOT / 'kaggle.json').exists():
+        os.environ['KAGGLE_CONFIG_DIR'] = str(ROOT)
     from kaggle.api.kaggle_api_extended import KaggleApi
     k = KaggleApi()
     k.authenticate()

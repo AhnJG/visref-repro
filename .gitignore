@@ -17,3 +17,6 @@ build/
 # re-scored copies of run rows (rebuilt by rescore.py / diag/analyze_hs.py rows)
 repro/llm/*/rows_v*.jsonl
 repro/kaggle/runs/*/output/*.log
+# local Kaggle push/status records (pushed time, API response)
+repro/kaggle/runs/*/push.json
+repro/kaggle/runs/*/status.json
