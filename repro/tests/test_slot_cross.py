@@ -107,7 +107,7 @@ def rows_from(n, **means):
     return R
 
 
-def test_gate_and_codex_counterexample():
+def test_gate_counterexample():
     R = rows_from(100, o_=0.12, b_=0.10)  # gate difference 0.02 < 0.05
     assert an.analyze(R, {'analysis': list(R)})['sentence'] == an.VERDICT_NO_INFO
     # the review's counterexample: gate passes, D > 0, but both recoveries are negative -> never "되살렸다"
