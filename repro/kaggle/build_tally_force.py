@@ -44,7 +44,7 @@ CFG = json.loads(base64.b64decode('{cfg}').decode())
 subprocess.run([sys.executable, '-m', 'pip', 'install', '-q', 'transformers==4.55.0'], check=True)
 zipfile.ZipFile(io.BytesIO(base64.b64decode('{bundle}'))).extractall(SRC)
 from huggingface_hub import hf_hub_download, snapshot_download
-DATA_DIR = W / 'data'
+DATA_DIR = pathlib.Path.home() / 'tallyqa_data'  # outside /kaggle/working, so the parquet files are not part of the kernel output
 for shard in CFG['needed_shards']:
     hf_hub_download('vikhyatk/tallyqa-test', f'data/test-{{shard:05d}}-of-00019.parquet', repo_type='dataset', revision=CFG['tally_rev'], local_dir=DATA_DIR)
 snapshot_download(CFG['model'], revision=CFG['model_rev'])

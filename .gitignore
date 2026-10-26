@@ -20,3 +20,5 @@ repro/kaggle/runs/*/output/*.log
 # local Kaggle push/status records (pushed time, API response)
 repro/kaggle/runs/*/push.json
 repro/kaggle/runs/*/status.json
+# parquet copies a kernel kept in its output (tally_force_trial)
+repro/kaggle/runs/*/output/data/

@@ -349,6 +349,7 @@ def test_builder(tmp_path, monkeypatch):
     assert "'diag/tally_force.py'" in src
     assert "'vikhyatk/tallyqa-test'" in src
     assert "'diag/tally_force_ids.json'" in src
+    assert "DATA_DIR = pathlib.Path.home() / 'tallyqa_data'" in src  # data stays out of the kernel output (/kaggle/working)
 
     # only the data files of this kernel's questions (first 5 of the trial list, both GPU shards, + memcheck) are downloaded
     doc = json.loads((REPRO / 'diag/tally_force_ids.json').read_text())
