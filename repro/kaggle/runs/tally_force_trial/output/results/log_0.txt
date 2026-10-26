@@ -1,0 +1,7 @@
+{"event": "start", "code_version": "55bf26aa598e", "set": "trial", "todo": 5, "done": 0, "cfg": {"think_cap": 1024, "think_extra": 1024, "vis_frac": 0.3, "probe_prompt": "\n\n\\boxed", "wait_text": "Wait, think more", "probe_cap": 16, "n_t1": 3, "temperature": 0.6, "top_k": 50, "top_p": 0.95, "seed": 42, "cut_sep": "\n", "chunk": 1024, "batch_tokens": 72000, "group": 4, "max_num": 12}}
+FlashAttention2 is not installed.
+{"event": "fast_kv_check", "ok": true, "match_rows": [true, true]}
+{"event": "group", "n": 4, "n_error": 0, "answers_s": 30.1, "encode_s": 4.7, "extra_s": 59.5, "select_s": 9.0, "step1_s": 52.0, "group_s": 155.2, "elapsed": 193, "left": 1, "peak_alloc_gb": 10.48, "max_rss_gb": 5.45}
+{"event": "group", "n": 1, "n_error": 0, "answers_s": 3.6, "encode_s": 0.7, "extra_s": 47.1, "select_s": 0.9, "step1_s": 6.4, "group_s": 58.7, "elapsed": 251, "left": 0, "peak_alloc_gb": 5.2, "max_rss_gb": 5.45}
+{"event": "memcheck", "pid": "17-1274-0", "n_visual": 1792, "last_hidden_n": 1024, "n_sel": 537, "ctx_len": 5816, "generated_tokens": 8, "last_hidden_s": 1.67, "generate_s": 2.45, "peak_alloc_gb": 3.94, "peak_reserved_gb": 10.54}
+{"event": "end", "elapsed": 256, "n_error": 0, "peak_alloc_gb": 10.48, "max_rss_gb": 5.45}

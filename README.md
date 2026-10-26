@@ -13,7 +13,7 @@ InternVL3.5-1B on the 1,000 MathVista *testmini* questions. Three methods are co
 
 ![ST, TSR and VisRef as run in this reproduction; orange notes mark settings we could not find in the paper](figures/method_overview.svg)
 
-> **Status (2026-10-25):** the main run and fourteen follow-up experiments (A2–A4, A6–A16) are finished. With the original image
+> **Status (2026-10-27):** the main run and fifteen follow-up experiments (A2–A4, A6–A17) are finished. With the original image
 > present, no variant showed a VisRef gain over TSR (A1–A11). With the prompt's image slot holding a blank image, re-inserting
 > the question's whole image after the first thinking step raised accuracy by 12.8 pp, while no change was confirmed with another question's image
 > (A12, [REPORT, Section 4.16](REPORT.md#416-blank_think-does-a-re-inserted-image-raise-accuracy-when-the-image-slot-is-blank-rule-fixed-before-the-results)):
@@ -22,6 +22,9 @@ InternVL3.5-1B on the 1,000 MathVista *testmini* questions. Three methods are co
 > was not confirmed (+2.0 pp, 95% CI −0.9 to +4.8; 84 : 66; A16, [REPORT, Section 4.20](REPORT.md#420-sel_think-with-a-blank-image-slot-do-the-dpp-selected-image-tokens-raise-accuracy-rule-fixed-before-the-results)). A13–A15 (image slot after
 > thinking, a 4,096-token step limit, a stopping estimate from free answers) did not change this picture
 > ([REPORT, Sections 4.17–4.19](REPORT.md#417-slot_cross-after-generated-thinking-does-the-image-slot-of-the-prompt-still-matter-rule-fixed-before-the-results)).
+> On a second benchmark (602 TallyQA complex counting questions, original image present, thinking forced to continue once),
+> re-inserting the DPP selection did not change accuracy by a confirmed amount (−0.22 pp, 95% CI −1.55 to +1.16; 13 : 20;
+> A17, [REPORT, Section 4.21](REPORT.md#421-tally_force-on-tallyqa-does-re-inserting-the-dpp-selection-help-when-thinking-is-forced-to-continue-once-rule-fixed-before-the-results)).
 > Experiments are paused for now; they will continue if new information on the settings the paper does not state
 > ([REPORT, Section 5.3](REPORT.md#53-open-questions-about-the-papers-setup)) becomes available. What has not been run, and why, is in [REPORT, Section 5.4](REPORT.md#54-experiments-not-run).
 > Full report: **[REPORT.md](REPORT.md)**.
@@ -134,6 +137,7 @@ whether it comes from the paper, a cited work, official InternVL material or our
 | A14 | Does a step limit of 4,096 instead of 1,024 tokens change ST accuracy? | the main-run code with both limits on the same questions | 42 | ST 4,096 − 1,024: 0.0 pp | 42 questions |
 | A15 | Do self-ended first steps continue if the stopping entropy comes from 16 free answers? | from the stored first step: 16 short and 16 free answers | 126 | undecided: 3 to 94 of 126 continue, 7 to 21 read without the box | our own estimator |
 | A16 | When the image slot holds a blank image, do only the DPP-selected image tokens raise accuracy, and more than as many random tokens? | A12's stored blank-image first step; then more thinking with no image, the DPP selection, as many random tokens, the whole image or another question's image, each as a tagged block | 724 | DPP − none: +6.9 pp; DPP − random: +2.0 pp, not confirmed | artificial blank-image context |
+| A17 | On TallyQA complex counting, with the original image present, does re-inserting the DPP selection help when thinking is forced to continue once? | new benchmark; a new first step, then one more thinking pass with no re-insertion or with the DPP selection as a tagged block | 602 | DPP − none: −0.22 pp, not confirmed | forced continuation, not the paper's algorithm |
 <!-- /check -->
 
 ## Why our results may differ from the paper
@@ -143,7 +147,7 @@ We look for the cause in our implementation first ([REPORT, Section 4.1](REPORT.
 - **Fewer image tokens.** We re-insert about one fifth of the paper's m image tokens per step: with text token
   embeddings read as the model's input embeddings (our reading; the paper does not name the layer), the selection kernel
   has rank below m, and the greedy selection the paper cites stops there. A2, A4 and A6 tried ways around it; none showed a detectable gain over TSR.
-  Later follow-ups (A11 and A16) select with the last-layer values of the thinking text, as decided on 2026-10-17.
+  Later follow-ups (A11, A16 and A17) select with the last-layer values of the thinking text, as decided on 2026-10-17.
 - **Our own settings.** The paper does not state how the stopping entropy is estimated, how the image is inserted,
   the token limits or how answers are extracted; we chose these in small checks ([REPORT, Section 2.6](REPORT.md#26-setting-checks-how-the-unstated-settings-were-chosen)).
   Those checks used questions that are also among the 1,000 evaluated ones.

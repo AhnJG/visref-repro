@@ -1,0 +1,47 @@
+{
+  "verdict": "NOT",
+  "n_target": 602,
+  "n_used": 602,
+  "missing": [],
+  "errors": [],
+  "up": 13,
+  "down": 20,
+  "same": 569,
+  "changed_ratio": "13:20",
+  "p_sign": 0.296206368599087,
+  "diff_D_minus_N_pp": -0.22148394241417496,
+  "ci95_pp": [
+    -1.550387596899225,
+    1.1627906976744187
+  ],
+  "descriptive": {
+    "greedy_acc": {
+      "N": 0.5249169435215947,
+      "D": 0.526578073089701
+    },
+    "step1_ends": {
+      "cap": 159,
+      "close": 439,
+      "eos": 4
+    },
+    "diff_by_step1_end_pp": {
+      "cap": 0.20964360587002098,
+      "close": -0.37965072133637057,
+      "eos": 0.0
+    },
+    "invalid_rate": {
+      "N": 0.0,
+      "D": 0.0
+    },
+    "n_sel_dist": {
+      "median": 181.0,
+      "mean": 326.1046511627907,
+      "min": 23,
+      "max": 994
+    }
+  },
+  "files": [
+    "kaggle/runs/tally_force_main/output/results/tally_force_0.jsonl",
+    "kaggle/runs/tally_force_main/output/results/tally_force_1.jsonl"
+  ]
+}

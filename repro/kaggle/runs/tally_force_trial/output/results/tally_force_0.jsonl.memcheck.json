@@ -1,0 +1,12 @@
+{
+ "pid": "17-1274-0",
+ "n_visual": 1792,
+ "last_hidden_n": 1024,
+ "n_sel": 537,
+ "ctx_len": 5816,
+ "generated_tokens": 8,
+ "last_hidden_s": 1.67,
+ "generate_s": 2.45,
+ "peak_alloc_gb": 3.94,
+ "peak_reserved_gb": 10.54
+}
