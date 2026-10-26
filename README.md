@@ -69,7 +69,7 @@ appears in the response. Differences are in percentage points (pp) with 95% conf
 - **In short:** TSR's gain over ST (+2.3 pp) is compatible with the paper's +2.4, but in our runs part of it probably comes
   from continuing thinking that was cut at the token limit. We did not confirm VisRef's additional gain over TSR in our
   InternVL3.5-1B implementation. VisRef − ST is smaller than in the paper and not significant after the correction for
-  two comparisons fixed in advance (Holm p = 0.067).
+  two comparisons (Holm p = 0.067), fixed before the final analysis after a look at the first 392 questions (REPORT, Section 2.4).
 
 > **What this run tested**
 > - The first thinking step hit the 1,024-token limit in 641 of the 1,000 questions, so most extra steps continue a
@@ -137,7 +137,7 @@ whether it comes from the paper, a cited work, official InternVL material or our
 | A14 | Does a step limit of 4,096 instead of 1,024 tokens change ST accuracy? | the main-run code with both limits on the same questions | 42 | ST 4,096 − 1,024: 0.0 pp | 42 questions |
 | A15 | Do self-ended first steps continue if the stopping entropy comes from 16 free answers? | from the stored first step: 16 short and 16 free answers | 126 | undecided: 3 to 94 of 126 continue, 7 to 21 read without the box | our own estimator |
 | A16 | When the image slot holds a blank image, do only the DPP-selected image tokens raise accuracy, and more than as many random tokens? | A12's stored blank-image first step; then more thinking with no image, the DPP selection, as many random tokens, the whole image or another question's image, each as a tagged block | 724 | DPP − none: +6.9 pp; DPP − random: +2.0 pp, not confirmed | artificial blank-image context |
-| A17 | On TallyQA complex counting, with the original image present, does re-inserting the DPP selection help when thinking is forced to continue once? | new benchmark; a new first step, then one more thinking pass with no re-insertion or with the DPP selection as a tagged block | 602 | DPP − none: −0.22 pp, not confirmed | forced continuation, not the paper's algorithm |
+| A17 | On TallyQA complex counting, with the original image present, does re-inserting the DPP selection help when thinking is forced to continue once? | new benchmark; a new first step, then one more thinking pass with no re-insertion or with the DPP selection as a tagged block | 602 | DPP − none: −0.22 pp, not confirmed | forced continuation, not the paper's algorithm; the selection reached a median of 181 of m = 537 tokens |
 <!-- /check -->
 
 ## Why our results may differ from the paper
