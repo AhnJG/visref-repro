@@ -20,7 +20,7 @@
 <rect class="surface" x="0" y="0" width="1060" height="430" rx="10"/>
 <rect class="frame" x="0.5" y="0.5" width="1059" height="429" rx="10"/>
 <text x="24" y="34" class="ink" font-size="16" text-anchor="start" font-weight="600">ST, TSR and VisRef as run in this reproduction</text>
-<text x="24" y="54" class="ink2" font-size="12" text-anchor="start">Algorithm 1 of the paper, InternVL3.5-1B. The three methods share the first thinking step (same seed).</text>
+<text x="24" y="54" class="ink2" font-size="12" text-anchor="start">Algorithm 1 of the paper, InternVL3.5-1B, main run (A1). The three methods share the first thinking step (same seed).</text>
 <path class="edge" d="M250,128 V84 H961.0 V127" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
 <text x="605.5" y="78" class="ink2" font-size="12" text-anchor="middle">ST: one thinking step, then the answer</text>
 <path class="edge" d="M330,128 V108 H688 V127" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>

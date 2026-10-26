@@ -35,7 +35,7 @@
 
 <g text-anchor="middle">
   <text x="74" y="173" class="ink" font-size="13" font-weight="600">MathVista</text>
-  <text x="74" y="191" class="ink2" font-size="11">question, image, answer</text>
+  <text x="74" y="191" class="ink2" font-size="10">question, image, answer</text>
   <text x="228" y="173" class="ink mono" font-size="13" font-weight="600">model.py</text>
   <text x="228" y="191" class="ink2" font-size="11">builds the model input</text>
   <text x="435" y="173" class="ink mono" font-size="13" font-weight="600">methods.py</text>
@@ -46,7 +46,7 @@
   <text x="435" y="269" class="ink2" font-size="11">generates tokens, entropy</text>
   <text x="620" y="173" class="ink mono" font-size="13" font-weight="600">scoring.py</text>
   <text x="620" y="191" class="ink2" font-size="11">extracts, scores</text>
-  <text x="781" y="173" class="ink mono" font-size="13" font-weight="600">results_*.jsonl</text>
+  <text x="781" y="173" class="ink mono" font-size="12" font-weight="600">results_*.jsonl</text>
   <text x="781" y="191" class="ink2" font-size="11">one line per row</text>
 </g>
 
@@ -61,7 +61,7 @@
   <line x1="448" y1="116" x2="448" y2="148"/>
 </g>
 <g font-size="11">
-  <text x="324" y="170" class="ink2" text-anchor="middle">embeddings</text>
+  <text x="324" y="170" class="ink2" text-anchor="middle" font-size="10">embeddings</text>
   <text x="534" y="170" class="ink2" text-anchor="middle">answer</text>
   <text x="414" y="222" class="ink2" text-anchor="end">Request (context)</text>
   <text x="456" y="222" class="ink2">Result (tokens)</text>
