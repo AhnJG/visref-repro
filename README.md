@@ -9,22 +9,21 @@ InternVL3.5-1B on the 1,000 MathVista *testmini* questions. Three methods are co
 - **ST** (standard thinking): the model thinks once, then answers.
 - **TSR** (textual self-reflection): after each thinking step, "Wait, think more" makes the model think again, until
   its answer is certain enough.
-- **VisRef**: like TSR, but before each new step a selected part of the image is inserted again.
+- **VisRef**: like TSR, but before each new step a selected subset of the image's token vectors (not a crop) is inserted again.
 
 ![ST, TSR and VisRef as run in this reproduction; orange notes mark settings we could not find in the paper](figures/method_overview.svg)
 
-> **Status (2026-10-27):** the main run and fifteen follow-up experiments (A2–A4, A6–A17) are finished. With the original image
-> present, no variant showed a VisRef gain over TSR (A1–A11). With the prompt's image slot holding a blank image, re-inserting
-> the question's whole image after the first thinking step raised accuracy by 12.8 pp, while no change was confirmed with another question's image
-> (A12, [REPORT, Section 4.16](REPORT.md#416-blank_think-does-a-re-inserted-image-raise-accuracy-when-the-image-slot-is-blank-rule-fixed-before-the-results)):
-> re-inserted image tokens can be used when the image information is missing. In the same context, only the tokens chosen by the
-> DPP selection raised accuracy by 6.9 pp (99 questions better, 40 worse), but a difference from as many random tokens of the image
-> was not confirmed (+2.0 pp, 95% CI −0.9 to +4.8; 84 : 66; A16, [REPORT, Section 4.20](REPORT.md#420-sel_think-with-a-blank-image-slot-do-the-dpp-selected-image-tokens-raise-accuracy-rule-fixed-before-the-results)). A13–A15 (image slot after
-> thinking, a 4,096-token step limit, a stopping estimate from free answers) did not change this picture
-> ([REPORT, Sections 4.17–4.19](REPORT.md#417-slot_cross-after-generated-thinking-does-the-image-slot-of-the-prompt-still-matter-rule-fixed-before-the-results)).
-> On a second benchmark (602 TallyQA complex counting questions, original image present, thinking forced to continue once),
-> re-inserting the DPP selection did not change accuracy by a confirmed amount (−0.22 pp, 95% CI −1.55 to +1.16; 13 : 20;
-> A17, [REPORT, Section 4.21](REPORT.md#421-tally_force-on-tallyqa-does-re-inserting-the-dpp-selection-help-when-thinking-is-forced-to-continue-once-rule-fixed-before-the-results)).
+> **Status (2026-10-27):** On all 1,000 questions, VisRef − TSR was −0.1 pp (95% CI −2.0 to +1.7; paper +3.5 pp), so we did
+> not confirm VisRef's additional gain over TSR. In this main run the selection re-inserted only about one fifth of the paper's
+> m image tokens per step; when it chose with the model's last-layer vectors for the thinking text, it reached m (median
+> injected/m 1.0), and VisRef − TSR was still +0.24 pp (95% CI −2.38 to +3.10, 839 questions; A4). What remains almost untested
+> is the paper's situation, a finished step after which the model is still uncertain: thinking went on after a step the model
+> had closed itself in only 4 (TSR) and 5 (VisRef) of the 334 questions whose first step it closed. Fifteen follow-up experiments (A2–A4, A6–A17, table below) are finished. In those
+> with the original image present, re-inserted image tokens brought no confirmed gain (in accuracy: A2–A4, A6–A8, A11, and A17
+> on a second benchmark, TallyQA; in answer probability: A10). With a blank image in the prompt's image slot, re-inserting the
+> question's whole image after the first thinking step raised accuracy by 12.8 pp (A12, [REPORT, Section 4.16](REPORT.md#416-blank_think-does-a-re-inserted-image-raise-accuracy-when-the-image-slot-is-blank-rule-fixed-before-the-results)),
+> so the re-insertion path itself works; in that context the DPP-selected tokens raised accuracy by 6.9 pp, but not by a confirmed
+> amount more than as many random tokens (+2.0 pp, 95% CI −0.9 to +4.8; A16, [REPORT, Section 4.20](REPORT.md#420-sel_think-with-a-blank-image-slot-do-the-dpp-selected-image-tokens-raise-accuracy-rule-fixed-before-the-results)).
 > Experiments are paused for now; they will continue if new information on the settings the paper does not state
 > ([REPORT, Section 5.3](REPORT.md#53-open-questions-about-the-papers-setup)) becomes available. What has not been run, and why, is in [REPORT, Section 5.4](REPORT.md#54-experiments-not-run).
 > Full report: **[REPORT.md](REPORT.md)**.
@@ -34,12 +33,13 @@ InternVL3.5-1B on the 1,000 MathVista *testmini* questions. Three methods are co
 | | When | Read |
 |---|---|---|
 | 1 | First: results and main limitations | this README |
-| 2 | What was tested and what was concluded | [REPORT.md](REPORT.md): Summary and Section 1.1 (every experiment in one table), then Sections 3–4 (results, causes) and 6 (limitations) |
-| 3 | How a setting the paper does not state was chosen | REPORT Sections 2.1 and 2.6; the evidence for each decision: [docs/IMPLEMENTATION_CHOICES.md](docs/IMPLEMENTATION_CHOICES.md) (Korean; start with its summary table) |
-| 4 | When and why something was decided | [docs/EXPERIMENT_FLOW.md](docs/EXPERIMENT_FLOW.md) (Korean dated log; start with its stage summary) |
-| 5 | Checking a number | [`results/`](results) for the tables, `repro/kaggle/runs/` for the raw outputs, `make check` (see Reproduce) |
-| 6 | Checking a quote cited by line number (e.g. `LAY L900` = line 900 of our text copy of the paper) | [docs/SOURCES.md](docs/SOURCES.md) |
-| 7 | Running it again or reading the code | [docs/REPRODUCE.md](docs/REPRODUCE.md) and the code map under Reproduce |
+| 2 | Checking our implementation: each setting the paper does not state, our choice, what was tested later, what is still open; the exact prompt and one real question step by step | [REPORT, Section 5.3](REPORT.md#53-open-questions-about-the-papers-setup) (one table); [docs/TRACE.md](docs/TRACE.md) |
+| 3 | What was tested and what was concluded | [REPORT.md](REPORT.md): Summary and Section 1.1 (every experiment in one table), then Sections 3–4 (results, causes) and 6 (limitations) |
+| 4 | How a setting the paper does not state was chosen | REPORT Sections 2.1 and 2.6; the evidence for each decision: [docs/IMPLEMENTATION_CHOICES.md](docs/IMPLEMENTATION_CHOICES.md) (Korean; start with its summary table) |
+| 5 | When and why something was decided | [docs/EXPERIMENT_FLOW.md](docs/EXPERIMENT_FLOW.md) (Korean dated log; start with its stage summary) |
+| 6 | Checking a number | [`results/`](results) for the tables, `repro/kaggle/runs/` for the raw outputs, `make check` (see Reproduce) |
+| 7 | Checking a quote cited by line number (e.g. `LAY L900` = line 900 of our text copy of the paper) | [docs/SOURCES.md](docs/SOURCES.md) |
+| 8 | Running it again or reading the code | [docs/REPRODUCE.md](docs/REPRODUCE.md) and the code map under Reproduce |
 
 Every file location: [REPORT, Section 7](REPORT.md#7-where-to-find-things).
 
@@ -73,32 +73,22 @@ appears in the response. Differences are in percentage points (pp) with 95% conf
 
 > **What this run tested**
 > - The first thinking step hit the 1,024-token limit in 641 of the 1,000 questions, so most extra steps continue a
->   cut step.
-> - After a step that the model closed itself, the stopping entropy was at or above its threshold (0.25) in only 7 of
->   359 TSR checks and 35 of 398 VisRef checks, so the model went on thinking almost only after a cut.
-> - The re-inserted image tokens were a median of about one fifth of m, the number the paper re-inserts per step
->   (median 0.199).
-> - Among the 713 questions where VisRef stopped after one step, the final answer contains another `</think>` in 352
->   VisRef answers versus 67 ST answers on the same questions.
+>   cut step. (A14 raised the limit to 4,096 on 42 questions: ST accuracy did not change, and 43% of first steps were still cut.)
+> - After a step that the model closed itself, thinking went on in only 4 (TSR) and 5 (VisRef) of the 334 questions whose
+>   first step it closed. Counted over all closed steps, the stopping entropy was at or above its threshold (0.25) at 7 of 359
+>   TSR steps and 35 of 398 VisRef steps (3 of the 35 were already at the 10-step limit). So the model went on thinking almost
+>   only after a cut. (A11 forced up to four more steps after a closed first step on 112 questions: no question changed;
+>   A15, a stopping estimate from 16 free answers, left the decision undecided.)
+> - The re-inserted image tokens were about one fifth of m, the number the paper re-inserts per step (median injected/m
+>   0.199; median 129 injected tokens, median m 537). A4 and A6 later injected m tokens, chosen with last-layer vectors,
+>   without a confirmed gain over TSR (+0.24 and −1.0 pp).
+> - Among the 713 questions where VisRef stopped after one step, the final answer contains another `</think>` (the model
+>   answers, closes its thinking again and answers a second time) in 352 VisRef answers versus 67 ST answers on the same questions. (A6's tagged block after `</think>` still gave
+>   249 of 1,000, against 107 for TSR with the same answer prompt.)
 >
-> These limits are why the follow-ups A2–A11 exist. A6 addressed the last two together: m tokens chosen with
-> last-layer vectors, wrapped in InternVL's image tags after `</think>`. It gave −1.0 pp (95% CI −3.1 to +1.0) against TSR
-> with the same answer prompt, and another `</think>` still appeared in 249 of 1,000 answers (TSR with the same prompt: 107)
-> ([REPORT, Section 4.6](REPORT.md#46-visref-imgtag-tagged-image-block-after-think-rule-fixed-before-the-results)).
-> A7 made the model think up to 512 more tokens, with or without the selected image, on the 691 questions where both
-> methods had stopped after step 1: image − no image was 0.0 pp and −1.74 pp in the two groups tested, so no gain
-> ([REPORT, Section 4.7](REPORT.md#47-step1_think-more-thinking-where-both-methods-stopped-rule-fixed-before-the-results)).
-> A8 gave the model all image tokens of the question, or none, together with up to 2,048 more thinking tokens on the 297 questions where step 1 was cut and a
-> method continued: whole image − no image was −1.80 pp (95% CI −5.95 to +2.36; 31 questions better, 45 worse), so no gain was confirmed
-> ([REPORT, Section 4.12](REPORT.md#412-full_think-the-whole-image-and-longer-thinking-after-a-cut-step-1-rule-fixed-before-the-results)).
-> A11 took the 334 questions whose first step the model had closed itself and continued thinking for up to four steps, with or without
-> the selected image tokens after every step: on the first 112 questions VisRef − TSR and VisRef − answering at once each changed 0 questions
-> (0 better, 0 worse; 75.0% in every condition), so a gain was not confirmed there either, and an interim rule fixed in advance stopped the run at 112
-> ([REPORT, Section 4.15](REPORT.md#415-closed_multistep-continuing-up-to-4-steps-after-a-first-step-the-model-closed-itself-rule-fixed-before-the-results)).
-> Two probability-level tests did not change the picture: with the original image replaced by a blank one, re-inserting the question's image
-> brought back part of the probability of the right answer (A9, mostly in free-form questions), and no evidence was seen that removing the thumbnail tile
-> makes the probability gain of re-insertion larger (A10) ([REPORT, Sections 4.13 and 4.14](REPORT.md#413-recover_check-does-a-re-inserted-image-carry-information-when-the-image-slot-is-blank-rule-fixed-before-the-results)).
-> Splitting three paired runs into 16 fixed groups of questions found no group where VisRef was consistently better
+> These limits are why the follow-ups exist; each row of the table below changes one or more of them, and
+> [REPORT, Section 4.10](REPORT.md#410-reading-across-the-follow-ups) reads them together. Splitting three paired runs into 16
+> fixed groups of questions found no group where VisRef was consistently better
 > ([REPORT, Section 4.9](REPORT.md#49-subgroup-reanalysis-of-the-three-paired-runs-grouping-fixed-before-it-was-computed)).
 
 ![How the main run ran: number of thinking steps per method, how each step ended, injected image tokens relative to m](figures/main_run_steps.svg)
@@ -107,7 +97,7 @@ appears in the response. Differences are in percentage points (pp) with 95% conf
   reproduced* = our 95% CI excludes the paper's difference; if the CI contains both 0 and the paper's difference, no
   conclusion is drawn. These rules were fixed after we had looked at partial results
   (392 and 759 questions), so for the main run they were not fixed before all results ([REPORT, Section 2.4](REPORT.md#24-when-the-decision-rules-were-fixed)).
-- **What 1,000 questions can show:** a paired difference of about 2.6 pp or more (80% power), so a gain of the paper's
+- **What 1,000 questions can show:** a paired difference of about 2.6 to 2.9 pp or more (80% power), so a gain of the paper's
   size (+3.5 pp) would have been visible; gains of 1–2 pp cannot be ruled out. Running the same condition again moved
   accuracy by about 0.3–0.5 pp ([REPORT, Section 3.4](REPORT.md#34-what-these-samples-can-detect)).
 
@@ -117,6 +107,9 @@ appears in the response. Differences are in percentage points (pp) with 95% conf
 before the results). **Setting checks** chose the settings the paper does not state; how each one was chosen, and
 whether it comes from the paper, a cited work, official InternVL material or our own choice, is in
 [REPORT, Section 2.6](REPORT.md#26-setting-checks-how-the-unstated-settings-were-chosen).
+Terms in the table: *m* is the number of image tokens the paper re-inserts per step (30% of the question's image tokens);
+the *DPP selection* picks which image tokens to re-insert by comparing *Z*, the vectors of the thinking tokens, with *V*, the
+vectors of the image tokens ([REPORT, Section 1.2](REPORT.md#12-terms)).
 
 <!-- check:glance -->
 | | Question | Changed from the main run (A1) | Questions | Result | Main limitation |
@@ -147,13 +140,19 @@ We look for the cause in our implementation first ([REPORT, Section 4.1](REPORT.
 - **Fewer image tokens.** We re-insert about one fifth of the paper's m image tokens per step: with text token
   embeddings read as the model's input embeddings (our reading; the paper does not name the layer), the selection kernel
   has rank below m, and the greedy selection the paper cites stops there. A2, A4 and A6 tried ways around it; none showed a detectable gain over TSR.
-  Later follow-ups (A11, A16 and A17) select with the last-layer values of the thinking text, as decided on 2026-10-17.
+  Later follow-ups (A11, A16 and A17) select with the last-layer values of the thinking text.
 - **Our own settings.** The paper does not state how the stopping entropy is estimated, how the image is inserted,
   the token limits or how answers are extracted; we chose these in small checks ([REPORT, Section 2.6](REPORT.md#26-setting-checks-how-the-unstated-settings-were-chosen)).
+  Follow-ups changed some of them only in part: one tagged insertion format (A6, −1.0 pp), a 4,096-token step limit on
+  42 questions (A14, ST unchanged), a stopping estimate from 16 free answers (A15, undecided); under every answer-scoring
+  variant tried, VisRef − TSR stays between −0.9 and +1.0 pp.
   Those checks used questions that are also among the 1,000 evaluated ones.
 - **Higher accuracies.** Our accuracies are 8–12 pp above the paper's (57.8 / 60.1 / 60.0 % against 46.1 / 48.5 / 52.0 %), close to the official InternVL3.5-1B score;
   we have not found the reason ([REPORT, Section 4.4](REPORT.md#44-comparison-with-other-numbers-in-the-paper-after-the-results)).
-- **One setting.** One model size, one benchmark, one seed.
+- **One setting.** One model size, one main benchmark, one seed (a second benchmark, TallyQA, only in one forced test, A17).
+
+Every setting the paper does not state, with our choice, what later experiments tested and what is still open, is in one
+table: [REPORT, Section 5.3](REPORT.md#53-open-questions-about-the-papers-setup).
 
 ## Reproduce
 
